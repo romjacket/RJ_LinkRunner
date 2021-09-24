@@ -518,7 +518,7 @@ Send {LCtrl Down}&{LAlt Down}&K
 Send {LCtrl Up}&{LAlt Up}
 if (Logging = 1)
 	{
-		FileAppend,`ntestout="%testout%"`nplayerargs=:"%player1%"%player2t%:1njoycount="%joycount%",%A_ScriptDir%\log.txt
+		FileAppend,cmdoutput:`n%plfp%[%linkoptions%|%plarg%]in"%pldr%"`ntestout="%testout%"`nplayerargs=:"%player1%"%player2t%:1njoycount="%joycount%",%A_ScriptDir%\log.txt
 	}
 ExitApp
 
