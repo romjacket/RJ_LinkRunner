@@ -41,10 +41,13 @@ ifnotexist,%save%
 			else {
 			nam= 
 			}
-		goto, DOWNLOADIT
+		if Msgbox,Retry
+			{
+			goto, DOWNLOADIT
+			}
 	}
 splitpath,A_AhkPath,,AHKLOC
-Loop,%AHKLOC%\*.exe,R
+Loop,files,%AHKLOC%\*.exe,R
 	{
 		if (A_LoopFileName = "Ahk2Exe.exe")
 			{
@@ -52,7 +55,7 @@ Loop,%AHKLOC%\*.exe,R
 				splitpath,AHKEXE,AHKEXN,AHKEXEPATH
 				break
 			}
-Loop,%AHKLOC%\*.bin,R
+Loop,files,%AHKLOC%\*.bin,R
 	{
 		if (A_LoopFileName = "Unicode 64-bit.bin")
 			{
@@ -61,6 +64,7 @@ Loop,%AHKLOC%\*.bin,R
 			}
 		}	
 	}
+msgbox,,,%AHKEXE%`n%BINFILE%`n"%AHKLOC%"
 RUnWait,"%AHKEXE%" /in "%HEREDIR%\RJ_LinkRunner.ahk" /icon "RJ_LinkRunner.ico" /bin "%BINFILE%" /out "%HEREDIR%\RJ_LinkRunner.exe",%HEREDIR%,hide
 ToolTip,building Setup
 RUnWait,"%AHKEXE%" /in "%HEREDIR%\Setup.ahk" /icon "RJ_Setup.ico" /bin "%BINFILE%" /out "%HEREDIR%\Setup.exe",%HEREDIR%,hide
@@ -144,6 +148,6 @@ DownloadFile(UrlToFile, _SaveFileAs, Overwrite := True, UseProgressBar := True) 
 
 Unz(sZip, sUnz)
 	{
-    psh  := ComObjCreate("Shell.Application")
-    psh.Namespace( sUnz ).CopyHere( psh.Namespace( sZip ).items, 4|16 )
+		psh  := ComObjCreate("Shell.Application")
+		psh.Namespace( sUnz ).CopyHere( psh.Namespace( sZip ).items, 4|16 )
 	}

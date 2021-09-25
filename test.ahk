@@ -1,0 +1,1 @@
+run, C:\users\romja\documents\rjdb\antimicro_!.cmd "C:\Users\romja\OneDrive\Documents\RJDB\profiles\Unepic\Unepic.gamecontroller.amgp"
