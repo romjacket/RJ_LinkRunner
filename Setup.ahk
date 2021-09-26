@@ -15,6 +15,9 @@ gosub,RECREATEJOY
 gosub, DDPOPS
 GUIVARS= ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWR|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_Profiles|GAME_Directory|SOURCE_DirButton|SOURCE_DirectoryT|REMSRC|Keyboard_Mapper|Player1_Template|Player2_Template|MediaCenter_Profile|MultiMonitor_Tool|MM_Game_Config|MM_MediaCenter_Config|Borderless_Gaming_Program|Borderless_Gaming_Database|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP
 STDVARS= KeyBoard_Mapper|MediaCenter_Profile|Player1_Template|Player2_Template|MultiMonitor_Tool|MM_MEDIACENTER_Config|MM_Game_Config|BorderLess_Gaming_Program|BorderLess_Gaming_Database|extapp|Game_Directory|Game_Profiles|RJDB_Location|Source_Directory|Mapper_Extension|1_Pre|2_Pre|3_Pre|1_Post|2_Post|3_Post|switchcmd|switchback
+DDTA= <$This_prog$><Monitor><Mapper>
+DDTB= <Monitor><$This_prog$><Mapper>
+DDTC= <$This_prog$><Monitor><Mapper>
 ifnotexist,RJDB.ini
 gosub,INITALL
 gosub, popgui
@@ -44,7 +47,10 @@ if (GMLNK = 1)
 	{
 		lnkget= checked
 	}
-
+ifinstring,1_Pre,"W<"
+prestatus= checked
+ifinstring,1_Post,"W<"
+poststatus= checked
 ; Create the ListView and its columns via Gui Add:
 Gui, Add, Button, x310 y8 vButtonClear gButtonClear hidden disabled, Clear List
 Gui, Font, Bold
@@ -82,7 +88,7 @@ GUi, Add, Checkbox, x184 y152 vGMLNK gGMLNK %lnkget% %lnkenbl%,Lnk
 Gui, Add, Radio, x80 y32 vUPDTSC gUPDTSC, Overwrite
 Gui, Add, Radio, x168 y32 vOVERWR gOVERWR checked, Update
 Gui, Font, Bold
-Gui, Add, Button, x238 y578 h18 vRESET gRESET,RESET
+Gui, Add, Button, x12 y578 h18 vRESET gRESET,R
 Gui, Font, Normal
 Gui, Add, Checkbox, x24 y30 h14 vEnableLogging gEnableLogging %loget%, Log
 
@@ -165,15 +171,19 @@ Gui, Font, Bold
 Gui, Add, Button, x20 y512 w36 h21 vPREAPP gPREAPP ,PRE
 Gui, Font, Normal
 Gui, Add, DropDownList, x64 y512 w204 vPREDD gPREDD Right,%prelist%
-Gui, Add, Text, x64 y534 h12,<Pre-Launch Programs>
-Gui, Add, Button, x270 y512 w12 h12 vDELPREAPP gDELPREAPP ,X
+Gui, Add, Text, x64 y534 h12 w230 vPREDDT,<Pre-Launch Programs>
+Gui, Add, Checkbox, x270 y521 w12 h12 vPreWait gPreWait %prestatus%,
+Gui, Add, Text, x270 y535 h12,wait
+Gui, Add, Button, x284 y520 w12 h12 vDELPREAPP gDELPREAPP ,X
 
 Gui, Font, Bold
 Gui, Add, Button, x20 y544 w36 h21 vPOSTAPP gPOSTAPP,PST
 Gui, Font, Normal
 Gui, Add, DropDownList, x64 y548 w204 vPostDD gPostDD Right,%postlist%
-Gui, Add, Text, x64 y570 h12,<Post-Launch Programs>
-Gui, Add, Button, x270 y544 w12 h12 vDELPOSTAPP gDELPOSTAPP ,X
+Gui, Add, Text, x64 y570 h12 w230 vPOSTDDT,<Post-Launch Programs>
+Gui, Add, Checkbox, x270 y551 w12 h12 vPostWait gPostWait %poststatus%,X
+Gui, Add, Text, x270 y565 h12,
+Gui, Add, Button, x284 y552 w12 h12 vDELPOSTAPP gDELPOSTAPP ,X
 
 
 Gui, Font, Bold
@@ -297,61 +307,82 @@ Borderless_Gaming_Database:gui,submit,nohideFileSelectFile,Borderless_Gaming_D
 stringreplace,Borderless_Gaming_Database,Borderless_Gaming_Database,%A_Space%,`%,Allguicontrol,,Borderless_Gaming_Database,<Borderless_Gaming_Database}return
 
 PREAPP:PreList= 
-gui,submit,nohideFileSelectFile,PREAPPT,3,%flflt%,Select Fileif ((PREAPPT <> "")&& !instr(PREAPPT,"<")){PREAPP= %PREAPPT%
+gui,submit,nohide
+guicontrolget,fbd,,PREDD
+guicontrolget,PreWait,,PreWait
+stringsplit,dkz,fbd,<
+orderPRE= %dkz1%
+prewl=
+if (prewait = 1)
+	{
+		prewl= W
+	}
+iniread,inn,%RJDB_CONFIG%,CONFIG,%orderPRE%_Pre
+if (inn = "ERROR") 
+	{
+		inn= 
+	}FileSelectFile,PREAPPT,3,%flflt%,Select Fileif (PREAPPT <> ""){PREAPP= %PREAPPT%
+iniwrite,%dkf1%%prewl%<%PREAPP%,%RJDB_Config%,CONFIG,%dkf1%_Pre
 iniread,cftst,%RJDB_Config%,CONFIG
-knum= 
-Loop,parse,cftst,`n`r
+Loop,3
     {
-        stringsplit,dkd,A_LoopField,=
-        ifinstring,dkd1,_Pre
-            {
-                stringreplace,dkv,A_LoopField,%dkd1%=,,
-                if (dkv = "")
-                    {
-                        continue
-                    }
-                knum+=1
-                %knum%_Pre= dkv
-                if (knum = 1)
-                    {
-                        PreList.= dkv . "||"
-                        continue
-                    }
-                PreList.= dkv . "|"
-            }
-    }
-knum+=1
-%knum%_Pre= %PREAPP%
-PreList.= PREAPP . "|"iniwrite,%PreList%,%RJDB_Config%,CONFIG,%knum%_Preguicontrol,,PREDD,|%PreList%}else {}return
-
-POSTAPP:gui,submit,nohideFileSelectFile,POSTAPPT,3,%flflt%,Select Fileif ((POSTAPPT <> "")&& !instr(POSTAPPT,"<"))	{		POSTAPP= %POSTAPPT%		iniread,cftst,%RJDB_Config%,CONFIG
-		knum=
-		PostList=
-		Loop,parse,cftst,`n`r
+		iniread,cftsv,%RJDB_Config%,CONFIG,%A_Index%_Pre
+        stringsplit,cftst,cftsv,<
+		if instr(cftst1,"W")
 			{
-				stringsplit,dkd,A_LoopField,=
-				ifinstring,dkd1,_Post
-					{
-						stringreplace,dkv,A_LoopField,%dkd1%=,,
-						if (dkv = "")
-							{
-								continue
-							}
-						knum+=1
-						%knum%_Post= dkv
-						if (knum = 1)
-							{
-								PostList.= dkv . "||"
-								continue
-							}
-						PostList.= dkv . "|"
-					}
+				dkc= %A_Index%W<
 			}
-		knum+=1
-		%knum%_Post= %PostAPP% 
-		PostList.= POSTAPP . "|"
-		iniwrite,%PostList%,%RJDB_Config%,CONFIG,%knum%_Post
-		guicontrol,,PostDD,|%PostList%	}else {}return
+        if (A_Index = OrderPre)
+			{
+				Prelist.= cftst2 . "||"
+			}
+		Prelist:= cftst2 . "|"
+		iniwrite,%dkc%%cftst2%,%RJDB_Config%,CONFIG,%A_Index%_Pre
+     }
+guicontrol,,PreDD,|%PreList%
+}return
+
+POSTAPP:
+PostList= 
+gui,submit,nohide
+guicontrolget,fbd,,POSTDD
+guicontrolget,PostWait,,PostWait
+stringsplit,dkz,fbd,<
+orderPOST= %dkz1%
+postwl=
+if (postwait = 1)
+	{
+		postwl= W
+	}
+iniread,inn,%RJDB_CONFIG%,CONFIG,%orderPOST%_Post
+if (inn = "ERROR") 
+	{
+		inn= 
+	}
+FileSelectFile,POSTAPPT,3,%flflt%,Select File
+if (POSTAPPT <> "")
+{
+POSTAPP= %POSTAPPT%
+iniwrite,%dkf1%%postwl%<%POSTAPP%,%RJDB_Config%,CONFIG,%dkf1%_Post
+iniread,cftst,%RJDB_Config%,CONFIG
+Loop,3
+    {
+		iniread,cftsv,%RJDB_Config%,CONFIG,%A_Index%_Post
+        stringsplit,cftst,cftsv,<
+		if instr(cftst1,"W")
+			{
+				dkc= %A_Index%W<
+			}
+        if (A_Index = OrderPost)
+			{
+				Postlist.= cftst2 . "||"
+			}
+		Postlist:= cftst2 . "|"
+		iniwrite,%dkc%%cftst2%,%RJDB_Config%,CONFIG,%A_Index%_Post		
+     } 
+guicontrol,,PostDD,|%PostList%
+}
+return
 
 REMSRC:
 gui,submit,nohide
@@ -392,87 +423,126 @@ return
 
 DELPREAPP:gui,submit,nohide
 guicontrolget,DELPreDD,,PreDD
-iniread,cftst,%RJDB_Config%,CONFIG
-knum=
+stringsplit,dxb,DELPreDD,<
+stringleft,dxn,dxb1,1
+iniWrite,%dxn%<,%RJDB_Config%,CONFIG,%dxn%_Pre
 PreList= 
-Loop,parse,cftst,`n`r
-    {
-        stringsplit,dkd,A_LoopField,=
-        ifinstring,dkd1,_Pre
-            {
-                stringreplace,dkv,A_LoopField,%dkd1%=,,
-                if (dkv = "")
-                    {
-                        continue
-                    }
-                if (dkv = DELPreDD)
-                    {
-                         continue
-                    }
-                knum+=1
-                %knum%_Pre:= dkv
-                if (knum = 1)
-                    {
-                        PreList.= dkv . "||"
-						iniwrite,%dkv%,%RJDB_Config%,CONFIG,%knum%_Pre
-                        continue
-                    }
-                PreList.= dkv . "|"
-                iniwrite,%dkv%,%RJDB_Config%,CONFIG,%knum%_Pre
-            }
-    }
-if (prelist = "")
+Loop,3
 	{
-		Loop,10
-		iniwrite,%nul%,%RJDB_Config%,CONFIG,%A_Index%_Pre
+		if (A_Index = dxn)
+			{
+				PreList.= dxn . "<" . "||"
+			}
+		else {
+			iniread,daa,%RJDB_Config%,CONFIG,%A_Index%_Pre
+			stringsplit,dxx,daa,<
+			stringleft,dxg,dxx1,1
+			PreList.= dxx1 . "<" . %dxx% .  "|"
+		}	
+		
 	}
 guicontrol,,PreDD,|%PreList%    
 return
 
-DELPOSTAPP:gui,submit,nohideguicontrolget,DELPOSTDD,,POSTDD
-iniread,cftst,%RJDB_Config%,CONFIG
-knum=
-PostList=
-Loop,parse,cftst,`n`r
-    {
-        stringsplit,dkd,A_LoopField,=
-        ifinstring,dkd1,_Post
-            {
-                stringreplace,dkv,A_LoopField,%dkd1%=,,
-                if (dkv = "")
-                    {
-                        continue
-                    }
-                if (dkv = DELPOSTDD)
-                    {
-                         continue
-                    }
-                knum+=1
-                %knum%_Post:= dkv
-                if (knum = 1)
-                    {
-                        PostList.= dkv . "||"
-						iniwrite,%dkv%,%RJDB_Config%,CONFIG,%knum%_Post
-                        continue
-                    }
-                   iniwrite,%dkv%,%RJDB_Config%,CONFIG,%knum%_Post
-               	  PostList.= dkv . "|"
-            }
-    }
-if (postlist = "")
+DELPOSTAPP:gui,submit,nohide
+guicontrolget,DELPostDD,,PostDD
+stringsplit,dxb,DELPostDD,<
+stringleft,dxn,dxb1,1
+iniWrite,%dxn%<,%RJDB_Config%,CONFIG,%dxn%_Post
+PostList= 
+Loop,3
 	{
-		Loop,10
-		iniwrite,%nul%,%RJDB_Config%,CONFIG,%A_Index%_Post
+		if (A_Index = dxn)
+			{
+				PostList.= dxn . "<" . "||"
+			}
+		else {
+			iniread,daa,%RJDB_Config%,CONFIG,%A_Index%_Post
+			stringsplit,dxx,daa,<
+			stringleft,dxg,dxx1,1
+			PostList.= dxx1 . "<" . %dxx% .  "|"
+		}	
+		
 	}
 guicontrol,,PostDD,|%PostList%    
 return
 
+POSTWAIT:
+postwt= 
+gui,submit,nohide
+guicontrolget,postwait,,postwait
+if (postwait = 1)
+	{
+		postwt= W
+	}
+guicontrolget,postdd,,PoSTDD
+stringsplit,lls,postdd,<
+stringleft,aae,lls1,1
+iniwrite,%aae%%postwt%<%lls2%,%RJDB_CONFIG%,CONFIG,%aae%_PoST
+return
+
+
+PREWAIT:
+PREwt= 
+gui,submit,nohide
+guicontrolget,PREwait,,PREwait
+if (PREwait = 1)
+	{
+		PRprewt= W
+	}
+guicontrolget,dd,,PREDD
+stringsplit,lls,predd,<
+stringleft,aae,lls1,1
+iniwrite,%aae%%postwt%<%lls2%,%RJDB_CONFIG%,CONFIG,%aae%_PoST
+return
+
+
 PREDD:
 gui,submit,nohide
+guicontrolget,predd,,PreDD
+stringleft,nos,predd,1
+guicontrol,,Prewait,0
+if (nos = 1)
+	{
+		guicontrol,,PREDDT,%DDTA%<game.exe>
+	}
+if (nos = 2)
+	{
+		guicontrol,,PREDDT,%DDTB%<game.exe>
+	}
+if (nos = 3)
+	{
+		guicontrol,,PREDDT,%DDTC%<game.exe>
+	}
+
+if instr(postdd,"W<")
+	{
+		guicontrol,,Prewait,1
+	}
 return
 
 POSTDD:
 gui,submit,nohide
+guicontrolget,postdd,,postDD
+stringLeft,nos,postdd,1
+guicontrol,,postwait,0
+if (nos = 1)
+	{
+		guicontrol,,POSTDDT,<game.exe>%DDTC%
+	}
+if (nos = 2)
+	{
+		guicontrol,,POSTDDT,<game.exe>%DDTB%
+	}
+if (nos = 3)
+	{
+		guicontrol,,POSTDDT,<game.exe>%DDTA%
+	}
+
+if instr(postdd,"W<")
+	{
+		guicontrol,,Postwait,1
+	}
 return
 
 INITALL:
@@ -499,6 +569,10 @@ ifMsgbox,Yes
         filedelete,Player2.gamecontroller.amgp
         gosub,RECREATEJOY
         goto,popgui
+		LV_Delete()
+		guicontrol,,SOURCE,%SOURCE_Directory%
+		guicontrol,,PreDD,|1<||2<|3<
+		guicontrol,,PostDD,|1<||2<|3<
     }
 return    
 
@@ -520,6 +594,12 @@ return
 
 popgui:
 FileRead,rjdb,RJDB.ini
+Prelist=
+PostStatus=
+postlist= 
+PostStatus=
+PREDDT=
+POSTDDT=
 Loop,parse,rjdb,`r`n
     {
         if (A_LoopField = "")
@@ -547,9 +627,35 @@ Loop,parse,rjdb,`r`n
             {
                 val= %val%T
             }
+		if instr(val,"_Pre")
+			{
+				stringleft,vpnm,val,1
+				if (vpnm = 1)
+					{
+						PREDDT.= prtv . "||"
+						Prelist.= prtv . "||"
+						continue
+					}
+				PREDDT.= prtvd . "|"
+				Prelist.= prtvd . "|"
+			}
+		if instr(val,"_Post")
+			{
+				stringleft,vpnm,val,1
+				if (vpnm = 1)
+					{
+						POSTDDT.= prtv . "||"
+						Postlist.= prtv . "||"
+						continue
+					}
+				POSTDDT.= prtvd . "|"
+				Postlist.= prtvd . "|"
+			}
         if (resetting = 1)
             {
                 guicontrol,,%val%T,%prtvd%
+                guicontrol,,PREDDT,<Pre-Launch Programs>
+                guicontrol,,POSTDDT,<$This_Prog$><Mapper><Monitor>
 				guicontrol,hide,ButtonCreate
 				guicontrol,disable,ButtonCreate
 				guicontrol,disable,ButtonClear
@@ -794,10 +900,16 @@ Loop,parse,GUIVARS,|
 	{
 		guicontrol,enable,%A_LoopField%
 	}
+Gui, +Resize	
 SB_SetText("Completed Aquisition")	
 Return	
 
-
+GuiSize:  ; Expand or shrink the ListView in response to the user's resizing of the window.
+if (A_EventInfo = 1)  ; The window has been minimized. No action needed.
+    return
+; Otherwise, the window has been resized or maximized. Resize the ListView to match.
+GuiControl, Move, MyListView, % "W" . (A_GuiWidth - 20) . " H" . (A_GuiHeight - 40)
+return
 
 ButtonCreate:
 SB_SetText("Creating Custom ShortCuts")
@@ -817,8 +929,7 @@ Loop
 		LV_GetText(curtxtn, RowNumber,1)
 		LV_GetText(curpth, RowNumber,3)
 		stringreplace,fullisx,fullist,%curpth%\%curtxtn%|,,All
-	}
-msgbox,,,:%fullist%:`n"%fullisx%"	
+	}	
 stringsplit,fullstn,fullist,|
 Loop,%fullstn0%
 	{

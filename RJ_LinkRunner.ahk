@@ -260,6 +260,16 @@ ifnotexist, %mediacenter_profile_2%
 	{
 		Filecopy,%mediacenter_Template%,%mediacenter_profile_2%
 	}
+stringsplit,prestk,1_Pre,<
+if (prestk2 <> "")
+	{
+		if instr(prestk1,"W")
+			{
+				RunWait,%prestk2%,,preapid
+				goto,nonmres
+			}
+		Run,%prestk2%,,preapid	
+	}
 nonmres:
 FileRead,bgm,%Borderless_Gaming_Database%
 if (instr(bgm,gmnamex)&& fileexist(Borderless_Gaming_Program)or instr(bgm,gmname)&& fileexist(Borderless_Gaming_Program))
@@ -330,6 +340,17 @@ Loop, %WindowList%
 	}
 Send {LCtrl Down}&{LAlt Down}&B	
 Send {LCtrl Up}&{LAlt Up}
+stringsplit,prestk,2_Pre,<
+if (prestk2 <> "")
+	{
+		if instr(prestk1,"W")
+			{
+				RunWait,%prestk2%,,prebpid
+				goto,premapper
+			}
+		Run,%prestk2%,,prebpid	
+	}
+premapper:	
 if (Mapper <> "")
 	{
 		if (JMap = "antimicro")
@@ -362,6 +383,16 @@ if (Mapper <> "")
 				Sleep,500
 			}
 	}
+stringsplit,prestk,3_Pre,<
+if (prestk2 <> "")
+	{
+		if instr(prestk1,"W")
+			{
+				RunWait,%prestk2%,,precpid
+				goto,begin
+			}
+		Run,%prestk2%,,precpid	
+	}	
 begin:
 if (nrx > 2)
 	{
@@ -402,7 +433,17 @@ givup:
 Quitout:
 process,exist,%mapapp%
 mperl= %errorlevel%
-
+stringsplit,prestk,1_Post,<
+if (prestk2 <> "")
+	{
+		if instr(prestk1,"W")
+			{
+				RunWait,%prestk2%,,postapid
+				goto,postmapper
+			}
+		Run,%prestk2%,,postapid	
+	}
+postmapper:	
 if (JMap = "antimicro")
 	{		
 		gosub, AmicroTest
@@ -427,6 +468,17 @@ Loop,5
 process,close, %dcls%
 process, close, %pfile%
 Run, taskkill /f /im "%plnkn%*",,hide
+stringsplit,prestk,2_Post,<
+if (prestk2 <> "")
+	{
+		if instr(prestk1,"W")
+			{
+				RunWait,%prestk2%,,postbpid
+				goto,postmonitor
+			}
+		Run,%prestk2%,,postbpid	
+	}
+postmonitor:
 if (MonitorMode > 0)
 	{
 		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(MM_Game_Config)&& fileexist(MM_MediaCenter_Config))
@@ -500,6 +552,17 @@ Loop,20
 	}
 Send {LCtrl Down}&{LAlt Down}&K
 Send {LCtrl Up}&{LAlt Up}
+stringsplit,prestk,3_Post,<
+if (prestk2 <> "")
+	{
+		if instr(prestk1,"W")
+			{
+				RunWait,%prestk2%,,postcpid
+				goto,loggingout
+			}
+		Run,%prestk2%,,postcpid	
+	}
+loggingout:	
 if (Logging = 1)
 	{
 		FileAppend,Run="%plfp%[%linkoptions%|%plarg%]in%pldr%"`nkeyboard=|%Keyboard_Mapper% "%player1%"%player2t%|`njoycount1="%joycnt%"`n%Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%`njoycount2=%joucount%`n`n,%A_ScriptDir%\log.txt
