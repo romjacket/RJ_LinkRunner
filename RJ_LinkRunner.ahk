@@ -250,7 +250,16 @@ if player2=
 ifnotexist,%player2%
 	{
 		Filecopy,%Player2_Template%,%player2%
-	}	
+	}
+if (mediacenter_profile_2 = "")
+	{
+		splitpath,mediacenter_profile,,,,mcp2
+		mediacenter_profile_2= %mcp2%2.%mapper_extension%
+	}
+ifnotexist, %mediacenter_profile_2%
+	{
+		Filecopy,%mediacenter_Template%,%mediacenter_profile_2%
+	}
 nonmres:
 FileRead,bgm,%Borderless_Gaming_Database%
 if (instr(bgm,gmnamex)&& fileexist(Borderless_Gaming_Program)or instr(bgm,gmname)&& fileexist(Borderless_Gaming_Program))
@@ -314,50 +323,6 @@ if (MonitorMode > 0)
 sleep, 1200
 Mapper_Extension:= % Mapper_Extension
 
-joycount=
-joycnt=
-if (JMap = "antimicro")
-	{
-		retrycmdl:
-		process,close,antimicro.exe
-		testoutn+=1
-		splitpath,antimicro_executable,mapperx,mapperp
-		retrnj= "%Antimicro_executable%" -l
-		testout:= CmdRet(retrnj)
-		Sleep,600
-		if ((testout = "")&&(testoutn < 3))
-			{
-				goto, retrycmdl
-			}
-		Loop,parse,testout,`n`r
-			{
-				if (A_LoopField = "")
-					{
-						continue
-					}
-				ifinstring,A_LoopField,Game Controller: Yes
-					{
-						joycount+=1
-					}
-			}
-		player1t:= A_Space . "" . player1 . ""
-		player2t:= A_Space . "" . player2 . ""
-		pro1:= "--tray" . A_Space . "--hidden" . A_Space . "--profile-controller" . A_Space . "1" . A_Space . "--profile" . A_Space . player1t
-		pro2:= A_Space . "--next" . A_Space . "--profile-controller" . A_Space . "2" . A_Space . "--profile" . player2t
-				
-		stringreplace,mcp2,mediacenter_profile,gamecontroller.amgp,,
-		if (mediacenter_profile_2 = "")
-			{
-				mediacenter_profile_2= %mcp2%2.%mapper_extension%
-			}
-		mediacenter_profile_2t:=  A_Space . "" . mediacenter_profile_2 . ""
-		if (joycount < 2)
-			{
-				pro2= 
-				player2t=
-				mediacenter_profile_2t= 
-			}
-	}
 WinGet, WindowList, List
 Loop, %WindowList%
 	{
@@ -368,9 +333,23 @@ Send {LCtrl Up}&{LAlt Up}
 if (Mapper <> "")
 	{
 		if (JMap = "antimicro")
-			{Run, "%Keyboard_Mapper%" --unload,%mapperp%,hide,iaout
+			{
+				unload:= "" . antimicro_executable . "" . A_Space . "--unload"
+				Run, %unload%,%mapperp%,hide
+				process,close,antimicro.exe
+				sleep,600
+				joycount=
+				joycnt=
+				gosub, AmicroTest	
+				joycnt= %joycount%					
+				player2n= "%player2%"
+				player2t:= A_Space . player2n
+				if (joycount < 2)
+					{
+						player2t=
+					}
 			}
-		Run, "%Keyboard_Mapper%" "%player1%"%player2t%,%mapperp%,hide,iaout
+		Run,%Keyboard_Mapper% "%player1%"%player2t%
 		Sleep,600
 		Loop,5
 			{
@@ -425,11 +404,16 @@ process,exist,%mapapp%
 mperl= %errorlevel%
 
 if (JMap = "antimicro")
-	{
-		process,close,antimicro.exe
-		Run, "%Keyboard_Mapper%" --unload,,hide
+	{		
+		gosub, AmicroTest
+		mediacenter_profile_2n= "%mediacenter_profile_2%"
+		mediacenter_profile_2t:=  A_Space . "" . mediacenter_profile_2n . ""
+		if (joycount < 2)
+			{
+				mediacenter_profile_2t=
+			}
 	}
-Run, "%Keyboard_Mapper%" "%MediaCenter_Profile%"%MediaCenter_Profile_2t%,%mapperp%,hide,kbmp
+Run, %Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%,,hide,kbmp
 Loop,5
 	{
 		Process,Exist,%mapln%
@@ -518,10 +502,38 @@ Send {LCtrl Down}&{LAlt Down}&K
 Send {LCtrl Up}&{LAlt Up}
 if (Logging = 1)
 	{
-		FileAppend,cmdoutput:`n%plfp%[%linkoptions%|%plarg%]in"%pldr%"`ntestout="%testout%"`nplayerargs=:"%player1%"%player2t%:1njoycount="%joycount%",%A_ScriptDir%\log.txt
+		FileAppend,Run="%plfp%[%linkoptions%|%plarg%]in%pldr%"`nkeyboard=|%Keyboard_Mapper% "%player1%"%player2t%|`njoycount1="%joycnt%"`n%Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%`njoycount2=%joucount%`n`n,%A_ScriptDir%\log.txt
 	}
 ExitApp
 
+AmicroTest:
+process,close,antimicro.exe
+Run, %unload%,%mapperp%,hide
+sleep, 600
+retrycmdb:
+process,close,antimicro.exe
+testoutn+=1
+splitpath,antimicro_executable,mapperx,mapperp
+retrnj= "%Antimicro_executable%" -l
+testout:= CmdRet(retrnj)
+Sleep,600
+Joycount= 
+if ((testout = "")&&(testoutn < 3))
+	{
+		goto, retrycmdb
+	}
+Loop,parse,testout,`n`r
+	{
+		if (A_LoopField = "")
+			{
+				continue
+			}
+		ifinstring,A_LoopField,Game Controller: Yes
+			{
+				joycount+=1
+			}
+	}
+return	
 
 CmdRet(sCmd, callBackFuncObj := "", encoding := "")
 	{
@@ -558,8 +570,7 @@ CmdRet(sCmd, callBackFuncObj := "", encoding := "")
 	   DllCall("CloseHandle", "Ptr", hPipeRead)
 	   Return sOutput
 	}
-
-
+	
 /*
 if ((Mapper <> "")or(mperl <> 0))
 	{

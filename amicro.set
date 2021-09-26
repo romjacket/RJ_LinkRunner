@@ -1,5 +1,4 @@
 set pro1=%1%
-if "%~1%" == "--unload" start "" "[AMICRO]" --unload&exit /b
-if "%~2" neq "" set pro2= --next --profile-controller 2 --profile %2%
-taskkill /f /im antimicro.exe
+set pro2= --next --profile-controller 2 --profile %2%
+if ("%2%" == "") set pro2= 
 start "" "[AMICRO]" --tray --hidden --profile-controller 1 --profile %pro1%%pro2%

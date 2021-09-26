@@ -3,13 +3,16 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ToolTip,building LinkRunner
-FileDelete,NewOsk.exe
 #SingleInstance Force
+Send, {LCtrl Down}{f12}
+Send, {LCtrl Up}
 FileDelete,RJ_LinkRunner.exe
+FileDelete,NewOSK.exe
 FileDelete,Setup.exe
+FileDelete,Source_Builder.exe
 iniread,URLFILEX,RJDB.ini,CONFIG,remotebinaries
 DOWNLOADIT:
-iniread,URLFILE,RJDB.ini,CONFIG,remotebinaries%nam%
+iniread,URLFILE,RJxDB.ini,CONFIG,remotebinaries%nam%
 if (URLFILE = "") or (URLFILE = "ERROR")
 	{
 		URLFILE= %URLFILEX%
@@ -17,11 +20,20 @@ if (URLFILE = "") or (URLFILE = "ERROR")
 	}
 splitpath,A_ScriptFullPath,scriptfilename,HEREDIR
 save= %HEREDIR%\Binaries.zip
+ifexist,%save%
+	{
+		Msgbox,260,Redownload,Download the Binaries.zip file again?`noriginal will be renamed ".bak",5
+		ifmsgbox,No
+			{
+				goto, EXTRACTING
+			}
+	}
 DownloadFile(URLFILE,save,False,True)
 ;UrlDownloadToFile,%URLFILE%,%save%
+EXTRACTING:
 ToolTip, 
 Sleep, 500
-ifexist,%save%
+if (fileexist(save)&& !fileexist("multimonitortool.exe"))
 	{
 		ToolTip, Extracting...
 		Unz(save,HEREDIR)
@@ -64,12 +76,15 @@ Loop,files,%AHKLOC%\*.bin,R
 			}
 		}	
 	}
-msgbox,,,%AHKEXE%`n%BINFILE%`n"%AHKLOC%"
 RUnWait,"%AHKEXE%" /in "%HEREDIR%\RJ_LinkRunner.ahk" /icon "RJ_LinkRunner.ico" /bin "%BINFILE%" /out "%HEREDIR%\RJ_LinkRunner.exe",%HEREDIR%,hide
-ToolTip,building Setup
+ToolTip,Compiling Setup
 RUnWait,"%AHKEXE%" /in "%HEREDIR%\Setup.ahk" /icon "RJ_Setup.ico" /bin "%BINFILE%" /out "%HEREDIR%\Setup.exe",%HEREDIR%,hide
-ToolTip,Building NewOSK
+ToolTip,Compiling NewOSK
 RUnWait,"%AHKEXE%" /in "%HEREDIR%\NewOSK.ahk" /icon "NewOSK.ico" /bin "%BINFILE%" /out "%HEREDIR%\NewOSK.exe",%HEREDIR%,hide
+ToolTip,Compiling Source Builder
+RUnWait,"%AHKEXE%" /in "%HEREDIR%\build.ahk" /icon "Source_Builder.ico" /bin "%BINFILE%" /out "%HEREDIR%\Source_Builder.exe",%HEREDIR%,hide
+
+
 ToolTip,complete
 sleep,2000
 exitapp
