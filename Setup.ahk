@@ -86,7 +86,7 @@ Gui, Add, Radio, x30 y32 vSCONLY gSCONLY, Lnk Only
 Gui, Add, Radio, x95 y32 vEXEONLY gEXEONLY, Exe Only
 Gui, Add, Radio, x175 y32 vBOTHSRCH gBOTHSRCH checked, Exe+Lnk
 Gui, Font, Bold
-Gui, Add, Button, x12 y578 h18 vRESET gRESET,R
+Gui, Add, Button, x18 y578 h18 vRESET gRESET,R
 Gui, Font, Normal
 Gui, Add, Checkbox, x24 y8 h14 vEnableLogging gEnableLogging %loget%, Log
 
@@ -177,7 +177,7 @@ Gui, Add, Button, x20 y512 w36 h21 vPREAPP gPREAPP ,PRE
 Gui, Font, Normal
 Gui, Add, DropDownList, x64 y512 w204 vPREDD gPREDD Right,%prelist%
 Gui, Add, Text, x64 y534 h12 w230 vPREDDT,<Pre-Launch Programs>
-Gui, Add, Checkbox, x270 y519 w12 h12 vPreWait gPreWait %prestatus%,
+Gui, Add, Checkbox, x270 y513 w12 h12 vPreWait gPreWait %prestatus%,
 Gui, Add, Text, x270 y535 h12,wait
 Gui, Add, Button, x285 y520 w14 h14 vDELPREAPP gDELPREAPP ,X
 
@@ -186,9 +186,9 @@ Gui, Add, Button, x20 y550 w36 h21 vPOSTAPP gPOSTAPP,PST
 Gui, Font, Normal
 Gui, Add, DropDownList, x64 y552 w204 vPostDD gPostDD Right,%postlist%
 Gui, Add, Text, x64 y574 h12 w230 vPOSTDDT,<Post-Launch Programs>
-Gui, Add, Checkbox, x270 y549 w12 h12 vPostWait gPostWait %poststatus%,X
+Gui, Add, Checkbox, x270 y553 w12 h12 vPostWait gPostWait %poststatus%
 Gui, Add, Text, x270 y565 h12,
-Gui, Add, Button, x285 y552 w14 h14 vDELPOSTAPP gDELPOSTAPP ,X
+Gui, Add, Button, x285 y557 w14 h14 vDELPOSTAPP gDELPOSTAPP ,X
 
 
 Gui, Font, Bold
@@ -216,19 +216,76 @@ ExitApp
 
 ; End of the GUI section
 
-RJDB_Config:gui,submit,nohideFileSelectFile,RJDB_ConfigT,3,%flflt%,Select Fileif ((RJDB_ConfigT <> "")&& !instr(RJDB_ConfigT,"<")){RJDB_Config= %RJDB_ConfigT%iniwrite,%RJDB_Config%,%RJDB_Config%,GENERAL,RJDB_Configstringreplace,RJDB_ConfigT,RJDB_ConfigT,%A_Space%,`%,Allguicontrol,,RJDB_ConfigT,%RJDB_Config%}else {stringreplace,RJDB_ConfigT,RJDB_ConfigT,%A_Space%,`%,Allguicontrol,,RJDB_ConfigT,<RJDB_Config
-}return
+RJDB_Config:
+gui,submit,nohide
+FileSelectFile,RJDB_ConfigT,3,%flflt%,Select File
+if ((RJDB_ConfigT <> "")&& !instr(RJDB_ConfigT,"<"))
+{
+RJDB_Config= %RJDB_ConfigT%
+iniwrite,%RJDB_Config%,%RJDB_Config%,GENERAL,RJDB_Config
+stringreplace,RJDB_ConfigT,RJDB_ConfigT,%A_Space%,`%,All
+guicontrol,,RJDB_ConfigT,%RJDB_Config%
+}
+else {
+stringreplace,RJDB_ConfigT,RJDB_ConfigT,%A_Space%,`%,All
+guicontrol,,RJDB_ConfigT,<RJDB_Config
+}
+return
 
-RJDB_Location:gui,submit,nohideFileSelectFolder,RJDB_LocationT,%fldflt%,3,Select Folderif ((RJDB_LocationT <> "")&& !instr(RJDB_LocationT,"<")){RJDB_Location= %RJDB_LocationT%iniwrite,%RJDB_Location%,%RJDB_Config%,GENERAL,RJDB_Locationstringreplace,RJDB_LocationT,RJDB_LocationT,%A_Space%,`%,Allguicontrol,,RJDB_LocationT,%RJDB_Location%}else {stringreplace,RJDB_LocationT,RJDB_LocationT,%A_Space%,`%,Allguicontrol,,RJDB_LocationT,<RJDB_Location
-}return
+RJDB_Location:
+gui,submit,nohide
+FileSelectFolder,RJDB_LocationT,%fldflt%,3,Select Folder
+if ((RJDB_LocationT <> "")&& !instr(RJDB_LocationT,"<"))
+{
+RJDB_Location= %RJDB_LocationT%
+iniwrite,%RJDB_Location%,%RJDB_Config%,GENERAL,RJDB_Location
+stringreplace,RJDB_LocationT,RJDB_LocationT,%A_Space%,`%,All
+guicontrol,,RJDB_LocationT,%RJDB_Location%
+}
+else {
+stringreplace,RJDB_LocationT,RJDB_LocationT,%A_Space%,`%,All
+guicontrol,,RJDB_LocationT,<RJDB_Location
+}
+return
 
-GAME_Profiles:gui,submit,nohideFileSelectFolder,GAME_ProfilesT,%fldflt%,3,Select Folderif ((GAME_ProfilesT <> "")&& !instr(GAME_ProfilesT,"<")){GAME_Profiles= %GAME_ProfilesT%iniwrite,%GAME_Profiles%,%RJDB_Config%,GENERAL,GAME_Profilesstringreplace,GAME_ProfilesT,GAME_ProfilesT,%A_Space%,`%,Allguicontrol,,GAME_ProfilesT,%GAME_Profiles%}else {stringreplace,GAME_ProfilesT,GAME_ProfilesT,%A_Space%,`%,Allguicontrol,,GAME_ProfilesT,<GAME_Profiles
-}return
+GAME_Profiles:
+gui,submit,nohide
+FileSelectFolder,GAME_ProfilesT,%fldflt%,3,Select Folder
+if ((GAME_ProfilesT <> "")&& !instr(GAME_ProfilesT,"<"))
+{
+GAME_Profiles= %GAME_ProfilesT%
+iniwrite,%GAME_Profiles%,%RJDB_Config%,GENERAL,GAME_Profiles
+stringreplace,GAME_ProfilesT,GAME_ProfilesT,%A_Space%,`%,All
+guicontrol,,GAME_ProfilesT,%GAME_Profiles%
+}
+else {
+stringreplace,GAME_ProfilesT,GAME_ProfilesT,%A_Space%,`%,All
+guicontrol,,GAME_ProfilesT,<GAME_Profiles
+}
+return
 
-GAME_Directory:gui,submit,nohideFileSelectFolder,GAME_DirectoryT,%fldflt%,3,Select Folderif ((GAME_DirectoryT <> "")&& !instr(GAME_DirectoryT,"<")){GAME_Directory= %GAME_DirectoryT%iniwrite,%GAME_Directory%,%RJDB_Config%,GENERAL,GAME_Directorystringreplace,GAME_DirectoryT,GAME_DirectoryT,%A_Space%,`%,Allguicontrol,,GAME_DirectoryT,%GAME_Directory%}else {stringreplace,GAME_DirectoryT,GAME_DirectoryT,%A_Space%,`%,Allguicontrol,,GAME_DirectoryT,<GAME_Directory
-}return
+GAME_Directory:
+gui,submit,nohide
+FileSelectFolder,GAME_DirectoryT,%fldflt%,3,Select Folder
+if ((GAME_DirectoryT <> "")&& !instr(GAME_DirectoryT,"<"))
+{
+GAME_Directory= %GAME_DirectoryT%
+iniwrite,%GAME_Directory%,%RJDB_Config%,GENERAL,GAME_Directory
+stringreplace,GAME_DirectoryT,GAME_DirectoryT,%A_Space%,`%,All
+guicontrol,,GAME_DirectoryT,%GAME_Directory%
+}
+else {
+stringreplace,GAME_DirectoryT,GAME_DirectoryT,%A_Space%,`%,All
+guicontrol,,GAME_DirectoryT,<GAME_Directory
+}
+return
 
-Source_DirButton:gui,submit,nohideFileSelectFolder,Source_DirectoryT,%fldflt%,3,Select Folderif ((Source_DirectoryT <> "")&& !instr(Source_DirectoryT,"<"))	{		Source_DirectoryX= %Source_DirectoryT%
+Source_DirButton:
+gui,submit,nohide
+FileSelectFolder,Source_DirectoryT,%fldflt%,3,Select Folder
+if ((Source_DirectoryT <> "")&& !instr(Source_DirectoryT,"<"))
+	{
+		Source_DirectoryX= %Source_DirectoryT%
 		IniRead,SRCDIRS,%RJDB_CONFIG%,GENERAL,Source_Directory
 		rnum= 
 		srcdira:= SOURCE_DIRECTORYT . "||"
@@ -244,12 +301,26 @@ Source_DirButton:gui,submit,nohideFileSelectFolder,Source_DirectoryT,%fldflt%,
 						continue
 					}
 				srcdira.= pkrs . "|"
-			}SOURCE_DIRECTORY= %scrdira%
-iniwrite,%srcdira%,%RJDB_Config%,GENERAL,Source_Directorystringreplace,CURDP,Source_DirectoryX,%A_Space%,`%,Allguicontrol,,Source_DirectoryT,|%srcdira%
-guicontrol,,CURDP,%CURDP%}return
+			}
+SOURCE_DIRECTORY= %scrdira%
+iniwrite,%srcdira%,%RJDB_Config%,GENERAL,Source_Directory
+stringreplace,CURDP,Source_DirectoryX,%A_Space%,`%,All
+guicontrol,,Source_DirectoryT,|%srcdira%
+guicontrol,,CURDP,%CURDP%
+}
+return
 
-Keyboard_Mapper:gui,submit,nohideFileSelectFile,Keyboard_MapperT,3,Antimicro,Select File,*.exeif ((Keyboard_MapperT <> "")&& !instr(Keyboard_MapperT,"<")){Keyboard_Mappern= %Keyboard_MapperT%}else {
-stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,Allguicontrol,,Keyboard_MapperT,<Keyboard_Mapper}
+Keyboard_Mapper:
+gui,submit,nohide
+FileSelectFile,Keyboard_MapperT,3,Antimicro,Select File,*.exe
+if ((Keyboard_MapperT <> "")&& !instr(Keyboard_MapperT,"<"))
+{
+Keyboard_Mappern= %Keyboard_MapperT%
+}
+else {
+stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
+guicontrol,,Keyboard_MapperT,<Keyboard_Mapper
+}
 Mapper= 
 if instr(Keyboard_Mappern,"Antimicro")
 	{
@@ -273,21 +344,74 @@ if instr(Keyboard_Mappern,"Antimicro")
 		else {
 			iniwrite,%Keyboard_Mapper%,%RJDB_Config%,GENERAL,Keyboard_Mapper
 		}	
-stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,Allguicontrol,,Keyboard_MapperT,%Keyboard_Mapper%
-iniwrite,%A_ScriptDir%\Antimicro_!.cmd,%RJDB_Config%,GENERAL,Keyboard_Mapperreturn
+stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
+guicontrol,,Keyboard_MapperT,%Keyboard_Mapper%
+iniwrite,%A_ScriptDir%\Antimicro_!.cmd,%RJDB_Config%,GENERAL,Keyboard_Mapper
+return
 
-Player1_Template:gui,submit,nohideFileSelectFile,Player1_TemplateT,3,,Select Fileif ((Player1_TemplateT <> "")&& !instr(Player1_TemplateT,"<")){Player1_Template= %Player1_TemplateT%iniwrite,%Player1_Template%,%RJDB_Config%,GENERAL,Player1_Templatestringreplace,Player1_TemplateT,Player1_TemplateT,%A_Space%,`%,Allguicontrol,,Player1_TemplateT,%Player1_TemplateT%}else {
-stringreplace,Player1_TemplateT,Player1_TemplateT,%A_Space%,`%,Allguicontrol,,Player1_TemplateT,<Player1_Template}return
+Player1_Template:
+gui,submit,nohide
+FileSelectFile,Player1_TemplateT,3,,Select File
+if ((Player1_TemplateT <> "")&& !instr(Player1_TemplateT,"<"))
+{
+Player1_Template= %Player1_TemplateT%
+iniwrite,%Player1_Template%,%RJDB_Config%,GENERAL,Player1_Template
+stringreplace,Player1_TemplateT,Player1_TemplateT,%A_Space%,`%,All
+guicontrol,,Player1_TemplateT,%Player1_TemplateT%
+}
+else {
+stringreplace,Player1_TemplateT,Player1_TemplateT,%A_Space%,`%,All
+guicontrol,,Player1_TemplateT,<Player1_Template
+}
+return
 
-Player2_Template:gui,submit,nohideFileSelectFile,Player2_TemplateT,3,,Select Fileif ((Player2_TemplateT <> "")&& !instr(Player2_TemplateT,"<")){Player2_Template= %Player2_TemplateT%iniwrite,%Player2_Template%,%RJDB_Config%,GENERAL,Player2_Templatestringreplace,Player2_TemplateT,Player2_TemplateT,%A_Space%,`%,Allguicontrol,,Player2_TemplateT,%Player2_TemplateT%}else {
-stringreplace,Player2_TemplateT,Player2_TemplateT,%A_Space%,`%,Allguicontrol,,Player2_TemplateT,<Player2_Template}return
+Player2_Template:
+gui,submit,nohide
+FileSelectFile,Player2_TemplateT,3,,Select File
+if ((Player2_TemplateT <> "")&& !instr(Player2_TemplateT,"<"))
+{
+Player2_Template= %Player2_TemplateT%
+iniwrite,%Player2_Template%,%RJDB_Config%,GENERAL,Player2_Template
+stringreplace,Player2_TemplateT,Player2_TemplateT,%A_Space%,`%,All
+guicontrol,,Player2_TemplateT,%Player2_TemplateT%
+}
+else {
+stringreplace,Player2_TemplateT,Player2_TemplateT,%A_Space%,`%,All
+guicontrol,,Player2_TemplateT,<Player2_Template
+}
+return
 
-MediaCenter_Profile:gui,submit,nohideFileSelectFile,MediaCenter_ProfileT,3,,Select Fileif ((MediaCenter_ProfileT <> "")&& !instr(MediaCenter_ProfileT,"<")){MediaCenter_Profile= %MediaCenter_ProfileT%iniwrite,%MediaCenter_Profile%,%RJDB_Config%,GENERAL,MediaCenter_Profile
-iniwrite,%MediaCenter_Profile%,%RJDB_Config%,GENERAL,MediaCenter2_Profilestringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,Allguicontrol,,MediaCenter_ProfileT,%MediaCenter_ProfileT%}else {
-stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,Allguicontrol,,MediaCenter_ProfileT,<MediaCenter_Profile}return
+MediaCenter_Profile:
+gui,submit,nohide
+FileSelectFile,MediaCenter_ProfileT,3,,Select File
+if ((MediaCenter_ProfileT <> "")&& !instr(MediaCenter_ProfileT,"<"))
+{
+MediaCenter_Profile= %MediaCenter_ProfileT%
+iniwrite,%MediaCenter_Profile%,%RJDB_Config%,GENERAL,MediaCenter_Profile
+iniwrite,%MediaCenter_Profile%,%RJDB_Config%,GENERAL,MediaCenter2_Profile
+stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
+guicontrol,,MediaCenter_ProfileT,%MediaCenter_ProfileT%
+}
+else {
+stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
+guicontrol,,MediaCenter_ProfileT,<MediaCenter_Profile
+}
+return
 
-MultiMonitor_Tool:gui,submit,nohideFileSelectFile,MultiMonitor_ToolT,3,,Select File,multimonitor*.exeif ((MultiMonitor_ToolT <> "")&& !instr(MultiMonitor_ToolT,"<")){MultiMonitor_Tool= %MultiMonitor_ToolT%iniwrite,%MultiMonitor_Tool%,%RJDB_Config%,GENERAL,MultiMonitor_Toolstringreplace,MultiMonitor_ToolT,MultiMonitor_ToolT,%A_Space%,`%,Allguicontrol,,MultiMonitor_ToolT,%MultiMonitor_ToolT%}else {
-stringreplace,MultiMonitor_ToolT,MultiMonitor_ToolT,%A_Space%,`%,Allguicontrol,,MultiMonitor_ToolT,<MultiMonitor_Tool}
+MultiMonitor_Tool:
+gui,submit,nohide
+FileSelectFile,MultiMonitor_ToolT,3,,Select File,multimonitor*.exe
+if ((MultiMonitor_ToolT <> "")&& !instr(MultiMonitor_ToolT,"<"))
+{
+MultiMonitor_Tool= %MultiMonitor_ToolT%
+iniwrite,%MultiMonitor_Tool%,%RJDB_Config%,GENERAL,MultiMonitor_Tool
+stringreplace,MultiMonitor_ToolT,MultiMonitor_ToolT,%A_Space%,`%,All
+guicontrol,,MultiMonitor_ToolT,%MultiMonitor_ToolT%
+}
+else {
+stringreplace,MultiMonitor_ToolT,MultiMonitor_ToolT,%A_Space%,`%,All
+guicontrol,,MultiMonitor_ToolT,<MultiMonitor_Tool
+}
 if ((MM_Game_Config = "")or(MM_Mediacenter_Config = ""))
     {
         msgbox,4,Setup,Setup the Multimonitor Tool now?
@@ -295,23 +419,77 @@ if ((MM_Game_Config = "")or(MM_Mediacenter_Config = ""))
             {
                 gosub, MMSETUP
             }
-    }return
+    }
+return
 
-MM_GAME_Config:gui,submit,nohideFileSelectFile,MM_GAME_ConfigT,3,,Select File,*.cfgif ((MM_GAME_ConfigT <> "")&& !instr(MM_GAME_ConfigT,"<")){MM_GAME_Config= %MM_GAME_ConfigT%iniwrite,%MM_GAME_Config%,%RJDB_Config%,GENERAL,MM_GAME_Configiniwrite,2,%RJDB_Config%,GENERAL,MonitorMode
-stringreplace,MM_GAME_ConfigT,MM_GAME_ConfigT,%A_Space%,`%,Allguicontrol,,MM_GAME_ConfigT,%MM_GAME_ConfigT%}else {
-stringreplace,MM_GAME_Config,MM_GAME_Config,%A_Space%,`%,Allguicontrol,,MM_GAME_Config,<MM_GAME_Config}return
+MM_GAME_Config:
+gui,submit,nohide
+FileSelectFile,MM_GAME_ConfigT,3,,Select File,*.cfg
+if ((MM_GAME_ConfigT <> "")&& !instr(MM_GAME_ConfigT,"<"))
+{
+MM_GAME_Config= %MM_GAME_ConfigT%
+iniwrite,%MM_GAME_Config%,%RJDB_Config%,GENERAL,MM_GAME_Config
+iniwrite,2,%RJDB_Config%,GENERAL,MonitorMode
+stringreplace,MM_GAME_ConfigT,MM_GAME_ConfigT,%A_Space%,`%,All
+guicontrol,,MM_GAME_ConfigT,%MM_GAME_ConfigT%
+}
+else {
+stringreplace,MM_GAME_Config,MM_GAME_Config,%A_Space%,`%,All
+guicontrol,,MM_GAME_Config,<MM_GAME_Config
+}
+return
 
-MM_MediaCenter_Config:gui,submit,nohideFileSelectFile,MM_MediaCenter_ConfigT,3,,Select File,*.cfgif ((MM_MediaCenter_ConfigT <> "")&& !instr(MM_MediaCenter_ConfigT,"<")){MM_MediaCenter_Config= %MM_MediaCenter_ConfigT%iniwrite,%MM_MediaCenter_Config%,%RJDB_Config%,GENERAL,MM_MediaCenter_Config
-iniwrite,2,%RJDB_Config%,GENERAL,MonitorModestringreplace,MM_MediaCenter_ConfigT,MM_MediaCenter_ConfigT,%A_Space%,`%,Allguicontrol,,MM_MediaCenter_ConfigT,%MM_MediaCenter_ConfigT%}else {
-stringreplace,MM_MediaCenter_Config,MM_MediaCenter_Config,%A_Space%,`%,Allguicontrol,,MM_MediaCenter_Config,<MM_MediaCenter_Config}return
+MM_MediaCenter_Config:
+gui,submit,nohide
+FileSelectFile,MM_MediaCenter_ConfigT,3,,Select File,*.cfg
+if ((MM_MediaCenter_ConfigT <> "")&& !instr(MM_MediaCenter_ConfigT,"<"))
+{
+MM_MediaCenter_Config= %MM_MediaCenter_ConfigT%
+iniwrite,%MM_MediaCenter_Config%,%RJDB_Config%,GENERAL,MM_MediaCenter_Config
+iniwrite,2,%RJDB_Config%,GENERAL,MonitorMode
+stringreplace,MM_MediaCenter_ConfigT,MM_MediaCenter_ConfigT,%A_Space%,`%,All
+guicontrol,,MM_MediaCenter_ConfigT,%MM_MediaCenter_ConfigT%
+}
+else {
+stringreplace,MM_MediaCenter_Config,MM_MediaCenter_Config,%A_Space%,`%,All
+guicontrol,,MM_MediaCenter_Config,<MM_MediaCenter_Config
+}
+return
 
-Borderless_Gaming_Program:gui,submit,nohideFileSelectFile,Borderless_Gaming_ProgramT,3,Borderless Gaming,Select File,*.exeif ((Borderless_Gaming_ProgramT <> "")&& !instr(Borderless_Gaming_ProgramT,"<")){Borderless_Gaming_Program= %Borderless_Gaming_ProgramT%iniwrite,%Borderless_Gaming_Program%,%RJDB_Config%,GENERAL,Borderless_Gaming_Programstringreplace,Borderless_Gaming_ProgramT,Borderless_Gaming_ProgramT,%A_Space%,`%,Allguicontrol,,Borderless_Gaming_ProgramT,%Borderless_Gaming_ProgramT%}else {
-stringreplace,Borderless_Gaming_ProgramT,Borderless_Gaming_ProgramT,%A_Space%,`%,Allguicontrol,,Borderless_Gaming_ProgramT,<Borderless_Gaming_Program}return
+Borderless_Gaming_Program:
+gui,submit,nohide
+FileSelectFile,Borderless_Gaming_ProgramT,3,Borderless Gaming,Select File,*.exe
+if ((Borderless_Gaming_ProgramT <> "")&& !instr(Borderless_Gaming_ProgramT,"<"))
+{
+Borderless_Gaming_Program= %Borderless_Gaming_ProgramT%
+iniwrite,%Borderless_Gaming_Program%,%RJDB_Config%,GENERAL,Borderless_Gaming_Program
+stringreplace,Borderless_Gaming_ProgramT,Borderless_Gaming_ProgramT,%A_Space%,`%,All
+guicontrol,,Borderless_Gaming_ProgramT,%Borderless_Gaming_ProgramT%
+}
+else {
+stringreplace,Borderless_Gaming_ProgramT,Borderless_Gaming_ProgramT,%A_Space%,`%,All
+guicontrol,,Borderless_Gaming_ProgramT,<Borderless_Gaming_Program
+}
+return
 
-Borderless_Gaming_Database:gui,submit,nohideFileSelectFile,Borderless_Gaming_DatabaseT,3,%A_Appdata%\Andrew Sampson\Borderless Gaming,Select File,config.binif ((Borderless_Gaming_DatabaseT <> "")&& !instr(Borderless_Gaming_DatabaseT,"<")){Borderless_Gaming_Database= %Borderless_Gaming_DatabaseT%iniwrite,%Borderless_Gaming_Database%,%RJDB_Config%,GENERAL,Borderless_Gaming_Databasestringreplace,Borderless_Gaming_DatabaseT,Borderless_Gaming_DatabaseT,%A_Space%,`%,Allguicontrol,,Borderless_Gaming_DatabaseT,%Borderless_Gaming_DatabaseT%}else {
-stringreplace,Borderless_Gaming_Database,Borderless_Gaming_Database,%A_Space%,`%,Allguicontrol,,Borderless_Gaming_Database,<Borderless_Gaming_Database}return
+Borderless_Gaming_Database:
+gui,submit,nohide
+FileSelectFile,Borderless_Gaming_DatabaseT,3,%A_Appdata%\Andrew Sampson\Borderless Gaming,Select File,config.bin
+if ((Borderless_Gaming_DatabaseT <> "")&& !instr(Borderless_Gaming_DatabaseT,"<"))
+{
+Borderless_Gaming_Database= %Borderless_Gaming_DatabaseT%
+iniwrite,%Borderless_Gaming_Database%,%RJDB_Config%,GENERAL,Borderless_Gaming_Database
+stringreplace,Borderless_Gaming_DatabaseT,Borderless_Gaming_DatabaseT,%A_Space%,`%,All
+guicontrol,,Borderless_Gaming_DatabaseT,%Borderless_Gaming_DatabaseT%
+}
+else {
+stringreplace,Borderless_Gaming_Database,Borderless_Gaming_Database,%A_Space%,`%,All
+guicontrol,,Borderless_Gaming_Database,<Borderless_Gaming_Database
+}
+return
 
-PREAPP:PreList= 
+PREAPP:
+PreList= 
 gui,submit,nohide
 guicontrolget,fbd,,PREDD
 guicontrolget,PreWait,,PreWait
@@ -326,7 +504,11 @@ iniread,inn,%RJDB_CONFIG%,CONFIG,%orderPRE%_Pre
 if (inn = "ERROR") 
 	{
 		inn= 
-	}FileSelectFile,PREAPPT,3,%flflt%,Select Fileif (PREAPPT <> ""){PREAPP= %PREAPPT%
+	}
+FileSelectFile,PREAPPT,3,%flflt%,Select File
+if (PREAPPT <> "")
+{
+PREAPP= %PREAPPT%
 iniwrite,%dkf1%%prewl%<%PREAPP%,%RJDB_Config%,CONFIG,%dkf1%_Pre
 iniread,cftst,%RJDB_Config%,CONFIG
 Loop,3
@@ -345,7 +527,8 @@ Loop,3
 		iniwrite,%dkc%%cftst2%,%RJDB_Config%,CONFIG,%A_Index%_Pre
      }
 guicontrol,,PreDD,|%PreList%
-}return
+}
+return
 
 POSTAPP:
 PostList= 
@@ -426,7 +609,8 @@ guicontrolget,CURDP,,SOURCE_DIRECTORYT
 guicontrol,,CURDP,%CURDP%
 return
 
-DELPREAPP:gui,submit,nohide
+DELPREAPP:
+gui,submit,nohide
 guicontrolget,DELPreDD,,PreDD
 stringsplit,dxb,DELPreDD,<
 stringleft,dxn,dxb1,1
@@ -449,7 +633,8 @@ Loop,3
 guicontrol,,PreDD,|%PreList%    
 return
 
-DELPOSTAPP:gui,submit,nohide
+DELPOSTAPP:
+gui,submit,nohide
 guicontrolget,DELPostDD,,PostDD
 stringsplit,dxb,DELPostDD,<
 stringleft,dxn,dxb1,1
@@ -481,7 +666,7 @@ filextns= lnk
 return
 
 BOTHSRCH:
-filextns= exe|lnk
+filextns= exe|lnk|_lnk_
 return
 
 POSTWAIT:
@@ -876,7 +1061,7 @@ Loop,parse,SOURCE_DIRECTORY,|
 						FileExt= exe	
 						FileName := A_LoopFileFullPath  ; Must save it to a writable variable for use below.
 						filez:= A_LoopFileSizeKB	
-						if (A_LoopFileExt = "lnk")
+						if ((A_LoopFileExt = "lnk")or(A_LoopFileExt = "_lnk_"))
 							{
 								FileGetShortcut, %A_LoopFileFullPath%,FileSCName,OutDir,OutArgs,OutDescription,OutIcon,IconNumber,OutRunState
 								FileGetSize,filez,%FileName%
@@ -951,6 +1136,8 @@ stringsplit,fullstn,fullist,|
 gmnames:=
 Loop,%fullstn0%
 	{
+		fnd64=	
+		fnd32=	
 		prn= % fullstn%A_Index%
 		splitpath,prn,prnmx,OutDir,prnxtn,gmnamex
         OutRunState= 1
@@ -958,43 +1145,48 @@ Loop,%fullstn0%
         OutDescription= %gmnamex%
 		gmnamer= %gmnamex%
 		splitpath,outdir,outdnam,outdmnd,outmpxtn,outdmnd
-		IF (1 = 1)
+		Stringreplace,gfnamex,prn,%Source_Directory%\,,All
+		gmnxi2= 
+		stringsplit,gmnxi,gfnamex,\
+		if ((prnxtn <> gmnxi1)&& !instr(gmnxi1,outdnam))
 			{
-				Stringreplace,gfnamex,prn,G:\Games\,,All
-				stringsplit,gmnxi,gfnamex,\
 				gmnamex= %gmnxi1%
 				gmnamer= %gmnxi1%|
 				gmnameD= %gmnxi1%|
 			}
-			
-				iter:= 
-				if instr(gmnames,gmnamer)
+		if ((prn = "")or(gmnamer = ""))
+			{
+				continue
+			}
+		iter:= 
+		;;msgbox,,,%gmnames%`n%gmnamer%
+		if instr(gmnames,gmnamer)
+			{
+				Loop, %GAME_Profiles%\%GMNAMED%\%GMNAME%*.lnk
 					{
-						Loop,%GAME_Profiles%\%GMNAMED%\%GMNAME%*.lnk
+						if (instr(outdnam,"exe64")or instr(outdnam,"Win64")or instr(outdnam,"x64")or instr(GMNAMEX,"Win64")or instr(GMNAMEX,"x64"))
 							{
-								if (instr(outdnam,"exe64")or instr(outdnam,"Win64")or instr(outdnam,"x64")or instr(GMNAMEX,"Win64")or instr(GMNAMEX,"x64"))
-									{
-										gmnamex= %gmnamex% x64									
-									}
-								if (instr(outdnam,"exe32")or instr(outdnam,"Win32")or instr(outdnam,"x86")or instr(GMNAMEX,"Win32")or instr(GMNAMEX,"x86"))
-									{
-										gmnamex= %gmnamex% x32									
-									}
-									else {
-										iter+=1
-										ifinstring,gmnamex,%A_Space%[0
-											{
-												stringtrimRight,gmnamex,gmnamex,4
-											}
-										gmnamex= %gmnamex% [0%iter%]
-									}
+								gmnamex= %gmnamex% x64									
 							}
-						gmnames.= gmnamex . "|"
+						if (instr(outdnam,"exe32")or instr(outdnam,"Win32")or instr(outdnam,"x86")or instr(GMNAMEX,"Win32")or instr(GMNAMEX,"x86"))
+							{
+								gmnamex= %gmnamex% x32									
+							}
+							else {
+								iter+=1
+								ifinstring,gmnamex,%A_Space%[0
+									{
+										stringtrimRight,gmnamex,gmnamex,4
+									}
+								gmnamex= %gmnamex% [0%iter%]
+							}
 					}
-						else {
-							gmnames.= gmnamex . "|"		
-							}	
-		if (prnxtn = "lnk")
+				gmnames.= gmnamex . "|"
+			}
+			else {
+					gmnames.= gmnamex . "|"
+				}	
+		if ((prnxtn = "lnk")or(prnxtn = "_lnk_"))
 			{
 				FileGetShortcut, %prn%,OutTarget,OutDir,OutArgs,OutDescription,OutIcon,IconNumber,OutRunState
 				splitpath,prn,,,,linkname
@@ -1048,10 +1240,35 @@ Loop,%fullstn0%
 				StringReplace,gmnamex,gmnamex,Launch-,,All
 				StringReplace,gmnamex,gmnamex,Launch_,,All
 				StringReplace,gmnamex,gmnamex,WIN64,,All
+				if (errorlevel <> 0)
+					{
+						fnd64= 1
+					}
+				StringReplace,gmnamex,gmnamex,x86,,All
+				if (errorlevel <> 0)
+					{
+						fnd32= 1
+					}
 				StringReplace,gmnamex,gmnamex,WIN32,,All
+				if (errorlevel <> 0)
+					{
+						fnd32= 1
+					}
 				StringReplace,gmnamex,gmnamex,%A_Space%x64,,All
+				if (errorlevel <> 0)
+					{
+						fnd64= 1
+					}
 				StringReplace,gmnamex,gmnamex,x-64,,All
+				if (errorlevel <> 0)
+					{
+						fnd64= 1
+					}
 				StringReplace,gmnamex,gmnamex,_x64,,All
+				if (errorlevel <> 0)
+					{
+						fnd64= 1
+					}
 				Stringleft,chka,gmnamex,1
 				StringRight,chkb,gmnamex,1
 				gmnamed= %gmnamex%
@@ -1115,7 +1332,7 @@ Loop,%fullstn0%
 								linktarget= %GAME_Directory%\%gmnamex%.lnk
 								linkproxy= %GAME_PROFILES%\%GMNAMED%\%gmnamex%.lnk
 								if (OVERWRT = 1)
-									{
+								 		{
 										FileDelete,%linkproxy%									
 									}
 								if !fileexist(linkproxy)
@@ -1129,10 +1346,10 @@ Loop,%fullstn0%
 								FileCreateShortcut, %RJDB_LOCATION%\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%linkproxy%`"%OutArgs%, %gmnamex%, %OutTarget%,, %IconNumber%, %OutRunState%
 							}
                         Filecopy,%GAME_Directory%\%gmnamex%.lnk,%GAME_PROFILES%\%GMNAMED%\%gmnamex%.lnk,%OVERWRT%	
-                        Filecopy,%prvv%,%GAME_PROFILES%\%GMNAMED%\_%gmnamex%.lnk_,%OVERWRT%
+                        Filecopy,%prvv%,%GAME_PROFILES%\%GMNAMED%\%gmnamex%._lnk_,%OVERWRT%
                         if (GMCONF = 1)
                             {
-                                Player1x= %GAME_PROFILES%\%GMNAMED%\%GMNAMEX%.%Mapper_Extension%
+								Player1x= %GAME_PROFILES%\%GMNAMED%\%GMNAMEX%.%Mapper_Extension%
                                 Player2x= %GAME_PROFILES%\%GMNAMED%\%GMNAMEX%_2.%Mapper_Extension%
                                 if ((OVERWR = 1)or !fileexist(gamecfg))
                                     {
@@ -1157,7 +1374,7 @@ Loop,%fullstn0%
                                                             }
                                                     }
                                             }
-                                    }
+                                    }								
                                 fileread,amcf,%RJDB_CONFIG%
                                 Loop,parse,amcf,`n`r
                                     {
@@ -1190,10 +1407,22 @@ Loop,%fullstn0%
                                                                 {
                                                                     iniwrite,%vb%,%gamecfg%,%section%,%an1%
                                                                 }
-                                                        }	
+                                                        	}	
                                                     }
                                             }
                                     }
+								DeskMon= %GAME_PROFILES%\%GMNAMED%\Desktop.cfg
+                                if ((OVERWR = 1)or !fileexist(DeskMon)&& fileexist(MM_MediaCenter_Config))
+                                    {
+										filecopy, %MM_MediaCenter_Config%,%DeskMon%,%OVERWR%
+										iniwrite,%DeskMon%,%gamecfg%,GENERAL,MM_MediaCenter_Config
+									}
+                                GameMon= %GAME_PROFILES%\%GMNAMED%\Game.cfg	
+                                if ((OVERWR = 1)or !fileexist(GameMon)&& fileexist(MM_Game_Config))
+                                    {
+										filecopy, %MM_GAME_Config%,%GameMon%,%OVERWR%
+										iniwrite,%GameMon%,%gamecfg%,GENERAL,MM_Game_Config
+									}
                             }
 					}
 				if (GMJOY = 1)
@@ -1214,7 +1443,7 @@ Loop,%fullstn0%
 									}
 							}
 						Filecopy,%Player2_Template%,%player2X%,%OVERWRT%	
-						if ((errorlevel = 0)or fileexist(player12))
+						if ((errorlevel = 0)or fileexist(player2x))
 							{
 								if (OVERWRT = 1)
 									{

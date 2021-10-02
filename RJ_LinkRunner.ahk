@@ -290,8 +290,37 @@ process, close, %pfile%
 
 if (MonitorMode > 0)
 	{
-		
-		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(MM_Game_Config)&& fileexist(MM_MediaCenter_Config))
+		DeskMon= %GAME_PROFILES%\%GMNAMED%\Desktop.cfg
+		if (!fileexist(DeskMon)&& fileexist(MM_MediaCenter_Config)&&(DeskMon <> MM_MediaCenter_Config))
+			{
+				filecopy,%MM_MediaCenter_Config%,%DeskMon%
+				if (errorlevel <> 0)
+					{
+						MM_MediaCenter_Config= %DeskMon%
+					}
+			}
+		else {
+			if fileexist(DeskMon)
+				{
+					MM_MediaCenter_Config= %DeskMon%
+				}
+			}
+		GameMon= %GAME_PROFILES%\%GMNAMED%\Game.cfg
+		if (!fileexist(GameMon)&& fileexist(MM_Game_Config)&&(GameMon <> MM_Game_Config))
+			{
+				filecopy,%MM_Game_Config%,%GameMon%
+				if (errorlevel <> 0)
+					{
+						MM_Game_Config= %GameMon%
+					}
+			}
+		else {
+			if fileexist(GameMon)
+				{
+					MM_Game_Config= %GameMon%
+				}
+			}
+		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(GameMon)&& fileexist(DeskMon))
 			{
 				switchcmd= /LoadConfig "%MM_Game_Config%"
 				switchback= /LoadConfig "%MM_MEDIACENTER_Config%"
@@ -457,6 +486,7 @@ if (MonitorMode > 0)
 	{
 		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(MM_Game_Config)&& fileexist(MM_MediaCenter_Config))
 			{
+				Run, %MultiMonitor_Tool% /SaveConfig "%MM_GameConfig%",%mmpath%,hide,dsplo
 				Run, %MultiMonitor_Tool% %switchback%,%mmpath%,hide,dsplo
 			}
 		else {

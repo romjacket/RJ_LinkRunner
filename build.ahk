@@ -3,7 +3,7 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ToolTip,building LinkRunner
-#SingleInstance Force
+#SingleInstance Force``
 Send, {LCtrl Down}{f12}
 Send, {LCtrl Up}
 FileDelete,RJ_LinkRunner.exe
@@ -76,14 +76,29 @@ Loop,files,%AHKLOC%\*.bin,R
 			}
 		}	
 	}
-RUnWait,"%AHKEXE%" /in "%HEREDIR%\RJ_LinkRunner.ahk" /icon "RJ_LinkRunner.ico" /bin "%BINFILE%" /out "%HEREDIR%\RJ_LinkRunner.exe",%HEREDIR%,hide
+RunWait,"%AHKEXE%" /in "%HEREDIR%\RJ_LinkRunner.ahk" /icon "RJ_LinkRunner.ico" /bin "%BINFILE%" /out "%HEREDIR%\RJ_LinkRunner.exe",%HEREDIR%,hide
+if (errorlevel <> 0)
+	{
+		Msgbox,,,LinkRunner Build Failed	
+	}
 ToolTip,Compiling Setup
-RUnWait,"%AHKEXE%" /in "%HEREDIR%\Setup.ahk" /icon "RJ_Setup.ico" /bin "%BINFILE%" /out "%HEREDIR%\Setup.exe",%HEREDIR%,hide
+RunWait,"%AHKEXE%" /in "%HEREDIR%\Setup.ahk" /icon "RJ_Setup.ico" /bin "%BINFILE%" /out "%HEREDIR%\Setup.exe",%HEREDIR%,hide
+if (errorlevel <> 0)
+	{
+		Msgbox,,,Setup Build Failed	
+	}
 ToolTip,Compiling NewOSK
-RUnWait,"%AHKEXE%" /in "%HEREDIR%\NewOSK.ahk" /icon "NewOSK.ico" /bin "%BINFILE%" /out "%HEREDIR%\NewOSK.exe",%HEREDIR%,hide
+RunWait,"%AHKEXE%" /in "%HEREDIR%\NewOSK.ahk" /icon "NewOSK.ico" /bin "%BINFILE%" /out "%HEREDIR%\NewOSK.exe",%HEREDIR%,hide
+if (errorlevel <> 0)
+	{
+		Msgbox,,,NewOSK Build Failed	
+	}
 ToolTip,Compiling Source Builder
-RUnWait,"%AHKEXE%" /in "%HEREDIR%\build.ahk" /icon "Source_Builder.ico" /bin "%BINFILE%" /out "%HEREDIR%\Source_Builder.exe",%HEREDIR%,hide
-
+RunWait,"%AHKEXE%" /in "%HEREDIR%\build.ahk" /icon "Source_Builder.ico" /bin "%BINFILE%" /out "%HEREDIR%\Source_Builder.exe",%HEREDIR%,hide
+if (errorlevel <> 0)
+	{
+		Msgbox,,,Builder Build Failed	
+	}
 
 ToolTip,complete
 sleep,2000
@@ -91,42 +106,42 @@ exitapp
 esc::
 exitapp
 DownloadFile(UrlToFile, _SaveFileAs, Overwrite := True, UseProgressBar := True) {
-		FinalSize= 
-	
-      If (!Overwrite && FileExist(_SaveFileAs))
-		  {
-			FileSelectFile, _SaveFileAs,S, %_SaveFileAs%
-			if !_SaveFileAs 
-			  return
-		  }
+	FinalSize= 
 
-      If (UseProgressBar) {
-          
-            SaveFileAs := _SaveFileAs
-          
-            try WebRequest := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-			catch {
-			}
-          
-            try WebRequest.Open("HEAD", UrlToFile)
-            catch {
-			}
-			try WebRequest.Send()
-			catch {
-			}
-          
-			try FinalSize := WebRequest.GetResponseHeader("Content-Length") 
-			catch {
-				FinalSize := 1
-			}
-			SetTimer, DownloadFileFunction_UpdateProgressBar, 100
-		
- 
-      }   
-      UrlDownloadToFile, %UrlToFile%, %_SaveFileAs%
-    If (UseProgressBar) {
-		ToolTip,
-      }
+  If (!Overwrite && FileExist(_SaveFileAs))
+	  {
+		FileSelectFile, _SaveFileAs,S, %_SaveFileAs%
+		if !_SaveFileAs 
+		  return
+	  }
+
+  If (UseProgressBar) {
+	  
+		SaveFileAs := _SaveFileAs
+	  
+		try WebRequest := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+		catch {
+		}
+	  
+		try WebRequest.Open("HEAD", UrlToFile)
+		catch {
+		}
+		try WebRequest.Send()
+		catch {
+		}
+	  
+		try FinalSize := WebRequest.GetResponseHeader("Content-Length") 
+		catch {
+			FinalSize := 1
+		}
+		SetTimer, DownloadFileFunction_UpdateProgressBar, 100
+	
+
+  }   
+  UrlDownloadToFile, %UrlToFile%, %_SaveFileAs%
+If (UseProgressBar) {
+	ToolTip,
+  }
 
       DownloadFileFunction_UpdateProgressBar:
     
