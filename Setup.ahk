@@ -13,7 +13,8 @@ ifnotexist,Antimicro_!.cmd
     }
 gosub,RECREATEJOY
 gosub, DDPOPS
-GUIVARS= ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWR|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_Profiles|GAME_Directory|SOURCE_DirButton|SOURCE_DirectoryT|REMSRC|Keyboard_Mapper|Player1_Template|Player2_Template|MediaCenter_Profile|MultiMonitor_Tool|MM_Game_Config|MM_MediaCenter_Config|Borderless_Gaming_Program|Borderless_Gaming_Database|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP
+filextns= exe|lnk
+GUIVARS= PostWait|PewWait|SCONLY|EXEONLY|BOTHSRCH|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWR|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_Profiles|GAME_Directory|SOURCE_DirButton|SOURCE_DirectoryT|REMSRC|Keyboard_Mapper|Player1_Template|Player2_Template|MediaCenter_Profile|MultiMonitor_Tool|MM_Game_Config|MM_MediaCenter_Config|Borderless_Gaming_Program|Borderless_Gaming_Database|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP
 STDVARS= KeyBoard_Mapper|MediaCenter_Profile|Player1_Template|Player2_Template|MultiMonitor_Tool|MM_MEDIACENTER_Config|MM_Game_Config|BorderLess_Gaming_Program|BorderLess_Gaming_Database|extapp|Game_Directory|Game_Profiles|RJDB_Location|Source_Directory|Mapper_Extension|1_Pre|2_Pre|3_Pre|1_Post|2_Post|3_Post|switchcmd|switchback
 DDTA= <$This_prog$><Monitor><Mapper>
 DDTB= <Monitor><$This_prog$><Mapper>
@@ -56,7 +57,7 @@ Gui, Add, Button, x310 y8 vButtonClear gButtonClear hidden disabled, Clear List
 Gui, Font, Bold
 Gui, Add, Button, x560 y8 vButtonCreate gButtonCreate hidden disabled,CREATE
 Gui, Font, Normal
-Gui, Add, ListView, x310 y35 h560 w340 vMyListView gMyListView Checked hidden, Name|Type|Directory/Location|Size (KB)
+Gui, Add, ListView, r44 x310 y35 h560 w340 vMyListView gMyListView Checked hidden, Name|Type|Directory/Location|Size (KB)
 LV_ModifyCol(3, "Integer")  ; For sorting, indicate that the Size column is an integer.
 
 ; Create an ImageList so that the ListView can display some icons:
@@ -80,17 +81,14 @@ Gui Add, GroupBox, x16 y441 w283 h70,
 Gui Add, GroupBox, x16 y505 w283 h94,
 Gui, Font, Bold
 Gui, Add, Button, x241 y24 w45 h25 vPOPULATE gPOPULATE,GO>
-GUi, Add, Checkbox, x36 y132 h14 vCREFLD gCREFLD %fldrget% %fldrenbl%, Folders
 Gui, Font, Normal
-GUi, Add, Checkbox, x80 y152 vGMCONF gGMCONF %cfgget% %cfgenbl%,Cfg
-GUi, Add, Checkbox, x136 y152 vGMJOY gGMJOY %Joyget% %joyenbl%,Joy
-GUi, Add, Checkbox, x184 y152 vGMLNK gGMLNK %lnkget% %lnkenbl%,Lnk
-Gui, Add, Radio, x80 y32 vUPDTSC gUPDTSC, Overwrite
-Gui, Add, Radio, x168 y32 vOVERWR gOVERWR checked, Update
+Gui, Add, Radio, x30 y32 vSCONLY gSCONLY, Lnk Only
+Gui, Add, Radio, x95 y32 vEXEONLY gEXEONLY, Exe Only
+Gui, Add, Radio, x175 y32 vBOTHSRCH gBOTHSRCH checked, Exe+Lnk
 Gui, Font, Bold
 Gui, Add, Button, x12 y578 h18 vRESET gRESET,R
 Gui, Font, Normal
-Gui, Add, Checkbox, x24 y30 h14 vEnableLogging gEnableLogging %loget%, Log
+Gui, Add, Checkbox, x24 y8 h14 vEnableLogging gEnableLogging %loget%, Log
 
 Gui, Font, Bold
 Gui, Add, Button, x24 y56 w36 h21 vSOURCE_DirButton gSOURCE_DirButton,SRC
@@ -105,6 +103,13 @@ Gui, Add, Button, x24 y104 w36 h21 vGAME_Directory gGAME_Directory,OUT
 Gui, Add, Text, x64 y96 w222 h14 vGAME_DirectoryT Disabled Right,"<%GAME_DirectoryT%"
 Gui, Font, Normal
 Gui, Add, Text, x84 y110 h14,<Shortcut Output Directory>
+
+GUi, Add, Checkbox, x36 y132 h14 vCREFLD gCREFLD %fldrget% %fldrenbl%, Folders
+GUi, Add, Checkbox, x80 y152 vGMCONF gGMCONF %cfgget% %cfgenbl%,Cfg
+GUi, Add, Checkbox, x136 y152 vGMJOY gGMJOY %Joyget% %joyenbl%,Joy
+GUi, Add, Checkbox, x184 y152 vGMLNK gGMLNK %lnkget% %lnkenbl%,Lnk
+Gui, Add, Radio, x95 y132 vUPDTSC gUPDTSC, Overwrite
+Gui, Add, Radio, x168 y132 vOVERWR gOVERWR checked, Update
 
 Gui, Font, Bold
 Gui, Add, Button, x21 y176 w36 h21 vGAME_Profiles gGAME_Profiles,GPD
@@ -172,18 +177,18 @@ Gui, Add, Button, x20 y512 w36 h21 vPREAPP gPREAPP ,PRE
 Gui, Font, Normal
 Gui, Add, DropDownList, x64 y512 w204 vPREDD gPREDD Right,%prelist%
 Gui, Add, Text, x64 y534 h12 w230 vPREDDT,<Pre-Launch Programs>
-Gui, Add, Checkbox, x270 y521 w12 h12 vPreWait gPreWait %prestatus%,
+Gui, Add, Checkbox, x270 y519 w12 h12 vPreWait gPreWait %prestatus%,
 Gui, Add, Text, x270 y535 h12,wait
-Gui, Add, Button, x284 y520 w12 h12 vDELPREAPP gDELPREAPP ,X
+Gui, Add, Button, x285 y520 w14 h14 vDELPREAPP gDELPREAPP ,X
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y544 w36 h21 vPOSTAPP gPOSTAPP,PST
+Gui, Add, Button, x20 y550 w36 h21 vPOSTAPP gPOSTAPP,PST
 Gui, Font, Normal
-Gui, Add, DropDownList, x64 y548 w204 vPostDD gPostDD Right,%postlist%
-Gui, Add, Text, x64 y570 h12 w230 vPOSTDDT,<Post-Launch Programs>
-Gui, Add, Checkbox, x270 y551 w12 h12 vPostWait gPostWait %poststatus%,X
+Gui, Add, DropDownList, x64 y552 w204 vPostDD gPostDD Right,%postlist%
+Gui, Add, Text, x64 y574 h12 w230 vPOSTDDT,<Post-Launch Programs>
+Gui, Add, Checkbox, x270 y549 w12 h12 vPostWait gPostWait %poststatus%,X
 Gui, Add, Text, x270 y565 h12,
-Gui, Add, Button, x284 y552 w12 h12 vDELPOSTAPP gDELPOSTAPP ,X
+Gui, Add, Button, x285 y552 w14 h14 vDELPOSTAPP gDELPOSTAPP ,X
 
 
 Gui, Font, Bold
@@ -465,6 +470,18 @@ Loop,3
 		
 	}
 guicontrol,,PostDD,|%PostList%    
+return
+
+EXEONLY:
+filextns= exe
+return
+
+SCONLY:
+filextns= lnk
+return
+
+BOTHSRCH:
+filextns= exe|lnk
 return
 
 POSTWAIT:
@@ -844,7 +861,7 @@ Loop,parse,SOURCE_DIRECTORY,|
 			{
 				continue
 			}
-		filextns= exe|lnk	
+			
 		Loop,parse,filextns,|
 			{
 				fsext= %A_LoopField%
@@ -852,7 +869,7 @@ Loop,parse,SOURCE_DIRECTORY,|
 				VarSetCapacity(sfi, sfi_size)
 				loop, Files, %SRCLOOP%\*.%fsext%,R
 					{
-						if (instr(A_LoopFileName,"setup")or instr(A_LoopFileName,"install")or instr(A_LoopFileName,"reshade")or instr(A_LoopFileName,"vcredist")or instr(A_LoopFileName,"vc_redist")or instr(A_LoopFileName,"unins")or instr(A_LoopFileName,"crashhandler")or instr(A_LoopFileName,"dotnet")or instr(A_LoopFileName,"directx"))
+						if (instr(A_LoopFileName,"setup")or instr(A_LoopFileName,"crashreporter")or instr(A_LoopFileName,"install")or instr(A_LoopFileName,"reshade")or instr(A_LoopFileName,"vcredist")or instr(A_LoopFileName,"vc_redist")or instr(A_LoopFileName,"unins")or instr(A_LoopFileName,"crashhandler")or instr(A_LoopFileName,"dotnet")or instr(A_LoopFileName,"directx")or instr(A_LoopFileName,"patch")or instr(A_LoopFileName,"crack"))
 							{
 								continue
 							}
@@ -931,13 +948,52 @@ Loop
 		stringreplace,fullisx,fullist,%curpth%\%curtxtn%|,,All
 	}	
 stringsplit,fullstn,fullist,|
+gmnames:=
 Loop,%fullstn0%
 	{
 		prn= % fullstn%A_Index%
 		splitpath,prn,prnmx,OutDir,prnxtn,gmnamex
-        OutDescription= %gmnamex%
         OutRunState= 1
         OutTarget= %prn%
+        OutDescription= %gmnamex%
+		gmnamer= %gmnamex%
+		splitpath,outdir,outdnam,outdmnd,outmpxtn,outdmnd
+		IF (1 = 1)
+			{
+				Stringreplace,gfnamex,prn,G:\Games\,,All
+				stringsplit,gmnxi,gfnamex,\
+				gmnamex= %gmnxi1%
+				gmnamer= %gmnxi1%|
+				gmnameD= %gmnxi1%|
+			}
+			
+				iter:= 
+				if instr(gmnames,gmnamer)
+					{
+						Loop,%GAME_Profiles%\%GMNAMED%\%GMNAME%*.lnk
+							{
+								if (instr(outdnam,"exe64")or instr(outdnam,"Win64")or instr(outdnam,"x64")or instr(GMNAMEX,"Win64")or instr(GMNAMEX,"x64"))
+									{
+										gmnamex= %gmnamex% x64									
+									}
+								if (instr(outdnam,"exe32")or instr(outdnam,"Win32")or instr(outdnam,"x86")or instr(GMNAMEX,"Win32")or instr(GMNAMEX,"x86"))
+									{
+										gmnamex= %gmnamex% x32									
+									}
+									else {
+										iter+=1
+										ifinstring,gmnamex,%A_Space%[0
+											{
+												stringtrimRight,gmnamex,gmnamex,4
+											}
+										gmnamex= %gmnamex% [0%iter%]
+									}
+							}
+						gmnames.= gmnamex . "|"
+					}
+						else {
+							gmnames.= gmnamex . "|"		
+							}	
 		if (prnxtn = "lnk")
 			{
 				FileGetShortcut, %prn%,OutTarget,OutDir,OutArgs,OutDescription,OutIcon,IconNumber,OutRunState
@@ -998,10 +1054,12 @@ Loop,%fullstn0%
 				StringReplace,gmnamex,gmnamex,_x64,,All
 				Stringleft,chka,gmnamex,1
 				StringRight,chkb,gmnamex,1
+				gmnamed= %gmnamex%
 				Loop,4
 					{
 						if ((chka = "_")or (chka = "-")or (chka = ".") or (chka = "%A_Space%"))
 							{
+								stringtrimleft,gmnamed,gmnamed,1
 								stringtrimleft,gmnamex,gmnamex,1
 								stringtrimleft,OutArgs,OutArgs,1
 							}			
@@ -1009,11 +1067,13 @@ Loop,%fullstn0%
 				if (gmnamex = "")
 					{
 						gmnamex= %gmname%
+						gmnamed= %gmnameX%
 					}
 				Loop,4
 					{
 						if ((chkb = "_")or (chkb = "-")or (chkb = ".") or (chkb = "%A_Space%"))
 							{
+								stringtrimright,gmnamed,gmnamed,1
 								stringtrimright,gmnamex,gmnamex,1
 								stringtrimright,OutArgs,OutArgs,1
 							}
@@ -1021,17 +1081,18 @@ Loop,%fullstn0%
 				if (gmnamex = "")
 					{
 						gmnamex= %gmname%
+						gmnamed= %gmnameX%
 					}
 				IF (OutArgs <> "")
 						{
 							OutArgs:= A_Space . OutArgs
 						}
 				;;UntOuch= C:\Users\romja\extranious\NoMon\%gmname%.lnk
-				sidn= %Game_Profiles%\%gmnamex%\
-				gamecfg= %A_ScriptDir%\profiles\%GMNAMEX%\game.ini
+				sidn= %Game_Profiles%\%gmnameD%\
+				gamecfg= %A_ScriptDir%\profiles\%GMNAMED%\game.ini
 				if (CREFLD = 1)
 					{
-						FileCreateDir, %Game_Profiles%\%gmnamex%
+						FileCreateDir, %Game_Profiles%\%gmnamed%
 					}
 				else {
 					if ((CREFLD = 0)&& !fileExist(sidn))
@@ -1042,30 +1103,37 @@ Loop,%fullstn0%
 				if (GMLNK = 1)
 					{
 						linktarget= %GAME_Directory%\%gmnamex%.lnk
+						linkproxy= %prn%
+						if ((OVERWRT = 1)&&(prnxtn = "lnk"))
+							{
+								FileDelete,%linktarget%
+							}							
 						if (prnxtn = "exe")
 							{
-								prvv= %GAME_PROFILES%\%GMNAMEX%\%gmnamex%.lnk
-								if !fileexist(prvv)
+								OutArgs= 
+								prvv= %GAME_PROFILES%\%GMNAMED%\%gmnamex%.lnk
+								linktarget= %GAME_Directory%\%gmnamex%.lnk
+								linkproxy= %GAME_PROFILES%\%GMNAMED%\%gmnamex%.lnk
+								if (OVERWRT = 1)
 									{
-										FileCreateShortcut,%prn%,%linkproxy%,%outdir%,%OutArgs%,%OutDescription%, %OutTarget%,, %IconNumber%, %OutRunState%
+										FileDelete,%linkproxy%									
+									}
+								if !fileexist(linkproxy)
+									{
+										;;msgbox,,,FileCreateShortcut|%prn%|%linkproxy%|%outdir%|%OutArgs%|%OutDescription%| %OutTarget%|| %IconNumber%| %OutRunState%
+										FileCreateShortcut,%prn%,%linkproxy%,%outdir%,%OutArgs%,%gmnamex%, %OutTarget%,, %IconNumber%, %OutRunState%
 									}
 							}
-						if (OVERWRT = 1)
+						ifnotexist,%linktarget%
 							{
-								FileCreateShortcut, %RJDB_LOCATION%\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%OutDir%\%prnmx%`"%OutArgs%, %OutDescription%, %OutTarget%,, %IconNumber%, %OutRunState%
+								FileCreateShortcut, %RJDB_LOCATION%\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%linkproxy%`"%OutArgs%, %gmnamex%, %OutTarget%,, %IconNumber%, %OutRunState%
 							}
-						else {
-								ifnotexist,%GAME_Directory%\%gmnamex%.lnk
-									{
-										FileCreateShortcut, %RJDB_LOCATION%\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%OutDir%\%prnmx%`"%OutArgs%, %OutDescription%, %OutTarget%,, %IconNumber%, %OutRunState%
-									}
-								}
-                        Filecopy,%GAME_Directory%\%gmnamex%.lnk,%GAME_PROFILES%\%GMNAMEX%\%gmnamex%.lnk,%OVERWRT%	
-                        Filecopy,%prvv%,%GAME_PROFILES%\%GMNAMEX%\_%gmnamex%.lnk_,%OVERWRT%
+                        Filecopy,%GAME_Directory%\%gmnamex%.lnk,%GAME_PROFILES%\%GMNAMED%\%gmnamex%.lnk,%OVERWRT%	
+                        Filecopy,%prvv%,%GAME_PROFILES%\%GMNAMED%\_%gmnamex%.lnk_,%OVERWRT%
                         if (GMCONF = 1)
                             {
-                                Player1x= %GAME_PROFILES%\%GMNAMEX%\%GMNAMEX%.%Mapper_Extension%
-                                Player2x= %GAME_PROFILES%\%GMNAMEX%\%GMNAMEX%_2.%Mapper_Extension%
+                                Player1x= %GAME_PROFILES%\%GMNAMED%\%GMNAMEX%.%Mapper_Extension%
+                                Player2x= %GAME_PROFILES%\%GMNAMED%\%GMNAMEX%_2.%Mapper_Extension%
                                 if ((OVERWR = 1)or !fileexist(gamecfg))
                                     {
                                         Filecopy,%RJDB_Config%,%gamecfg%,%OVERWRT%

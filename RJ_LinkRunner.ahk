@@ -38,11 +38,11 @@ Loop,parse,sect,|
 				continue
 			}
 		section= %A_LoopField%
-		IniRead,rjtbl,RJDB.ini,%section%
+		IniRead,rjtbl,%inif%,%section%
 		Loop,parse,rjtbl,`n`r
 			{
 				stringsplit,fi,A_LoopField,=
-				iniread,vi,RJDB.ini,%section%,%fi1%
+				iniread,vi,%inif%,%section%,%fi1%
 				if (vi = "ERROR")
 					{
 						vi= 
@@ -287,32 +287,6 @@ if (instr(bgm,gmnamex)&& fileexist(Borderless_Gaming_Program)or instr(bgm,gmname
 			}
 	}
 process, close, %pfile%
-Loop,6
-	{
-		xpgl:= % extapp%A_Index%d
-		xpg:= % %A_Index%_pre
-		if (xpg <> "")
-			{
-				xpgloc=
-				hap= 
-				stringreplace,xpg,xpg,!h!,,All
-				if (errorlevel = 0)
-					{
-						hap= hide
-					}
-				stringsplit,nvn,xpg,|
-				xpg= %nvn1%
-				xpa= %nvn2%
-				stringreplace,xpg,xpg,#@#,,All
-				if (errorlevel = 0)
-					{
-						splitpath,xpg,,xpgloc				
-						RunWait,%xpg% %apa%,%xpgloc%,%hap%,hp_%A_index%
-						continue
-					}
-				Run, %xpg% %xpa%,%xpgl%,%hap%,hp%A_index%
-			}
-	}
 
 if (MonitorMode > 0)
 	{
@@ -488,32 +462,6 @@ if (MonitorMode > 0)
 		else {
 			Run, %Multimonitor_Tool%,%mmpath%,hide,dsplo
 		}	
-	}
-Loop,20
-	{
-		apgl:= % extapp%A_Index%d
-		apg:= % %A_Index%_post
-		if (apg <> "")
-			{
-				apgloc=
-				hap= 
-				stringreplace,apg,apg,!h!,,All
-				if (errorlevel = 0)
-					{
-						hap= hide
-					}
-				stringsplit,nvn,apg,|
-				apg= %nvn1%
-				apa= %nvn2%
-				stringreplace,apg,apg,#@#,,All
-				if (errorlevel = 0)
-					{
-						splitpath,apg,,apgloc				
-						RunWait,%apg% %apa%,%apgloc%,%hap%,hp_%A_index%
-						continue
-					}
-				Run, %apg% %apa%,%apgl%,%hap%,hp%A_index%
-			}
 	}
 iniwrite,%MONITORMODE%,%inif%,GENERAL,MonitorMode
 iniwrite,%disprogw%,%inif%,GENERAL,disprogw
