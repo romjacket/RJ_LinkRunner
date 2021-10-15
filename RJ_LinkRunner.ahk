@@ -354,7 +354,7 @@ if (prestk2 <> "")
 		Run,%prestk2%,,prebpid	
 	}
 premapper:	
-if (Mapper <> "")
+if (Mapper > 0)
 	{
 		if (JMap = "antimicro")
 			{
@@ -411,13 +411,45 @@ if (instr,bgm,gmname)
 	}
 	
 bgl:	
+apchkn=
+if (exe_list <> "")
+	{
+		appcheck:
+		sleep, 1000
+		Loop,parse,exe_list,|
+			{
+				apchkn+=1
+				if (A_LoopField = "")
+					{
+						continue
+					}
+				process,exist,%A_LoopField%
+				erahkpid= %errorlevel%
+				if (erahkpid <> 0)
+					{
+						break
+					}
+				if (apchkn < 10)
+					{
+						goto,appcheck
+					}
+			}
+	}
+if (exe_list <> "")
+	{	
+		WinActivate
+		process,WaitClose,%erahkpid%
+		goto, appclosed
+	}
 WinWait, ahk_pid %dcls%
 WinActivate
 Process,waitclose,%DCLS%
-if (nerlv = 1234)
+
+AppClosed:
+if ((nerlv = 1234)or(gii = 1))
 	{
+		msgbox,,,what
 		goto, givup
-		return
 	}
 	
 nrx+=1
@@ -427,12 +459,20 @@ return
 Ctrl & f2::
 process,close,%dcls%
 process, close, %pfile%
+if (exe_list <> "")
+	{
+		Loop,parse,exe_list,|
+			{
+				process,close,%A_LoopField%
+			}
+	}
 dcls= 
 nrx=
 return
 
 Ctrl & f12::
 givup:
+gii= 1
 Quitout:
 process,exist,%mapapp%
 mperl= %errorlevel%
@@ -444,32 +484,44 @@ if (prestk2 <> "")
 				RunWait,%prestk2%,,postapid
 				goto,postmapper
 			}
-		Run,%prestk2%,,postapid	
+		Run,%prestk2%,,postapid
 	}
 postmapper:	
-if (JMap = "antimicro")
-	{		
-		gosub, AmicroTest
-		mediacenter_profile_2n= "%mediacenter_profile_2%"
-		mediacenter_profile_2t:=  A_Space . "" . mediacenter_profile_2n . ""
-		if (joycount < 2)
-			{
-				mediacenter_profile_2t=
-			}
-	}
-Run, %Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%,,hide,kbmp
-Loop,5
+if (Mapper > 0)
 	{
-		Process,Exist,%mapln%
-		if (errorlevel <> 0)
-			{
-				enfd= %errorlevel%
-				break
+		if (JMap = "antimicro")
+			{		
+				gosub, AmicroTest
+				mediacenter_profile_2n= "%mediacenter_profile_2%"
+				mediacenter_profile_2t:=  A_Space . "" . mediacenter_profile_2n . ""
+				if (joycount < 2)
+					{
+						mediacenter_profile_2t=
+					}
 			}
-		Sleep,500
+		Run, %Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%,,hide,kbmp
+		Loop,5
+			{
+				Process,Exist,%mapln%
+				if (errorlevel <> 0)
+					{
+						enfd= %errorlevel%
+						break
+					}
+				Sleep,500
+			}
 	}
+process,close, %erahkpid%
 process,close, %dcls%
 process, close, %pfile%
+if (exe_list <> "")
+	{
+		Loop,parse,exe_list,|
+			{
+				process,close,%A_LoopField%
+			}
+	}
+
 Run, taskkill /f /im "%plnkn%*",,hide
 stringsplit,prestk,2_Post,<
 if (prestk2 <> "")
