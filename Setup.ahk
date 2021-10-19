@@ -1135,28 +1135,61 @@ Loop,parse,SOURCE_DIRECTORY,|
 					{
 						excl= 
 						lvachk= +Check
-						FileExt= exe	
 						FileName := A_LoopFileFullPath  ; Must save it to a writable variable for use below.
 						filez:= A_LoopFileSizeKB	
-						splitpath,FileName,FileNM,FilePath,,filtn
+						splitpath,FileName,FileNM,FilePath,FileExt,filtn
 						splitpath,FilePath,filpn,filpdir,,filpjn
-						stringreplace,simpath,FileName,%SCRLOOP%\,,
-						Loop,parse,absol,`r`n
+						stringreplace,simpath,FilePath,%SCRLOOP%\,,
+						splitpath,simpath,simpn,simpdir
+						/*
+						if (filpn <> simpn)
 							{
-								if (A_LoopField = "")
+								xeinh= 
+								sinc= 
+								Loop,parse,simpdir,\
+									{
+										sinc+=1
+										if ((A_LoopField = ""))or((A_LoopField = simpn)&&(A_Index = 1))
+											{
+												continue
+											}
+										xeinh.= A_LoopField . "\"
+									}
+								if ((xeinh = "\")or(xeinh = ""))or((xein = simpn)&&(sinc > 1))
+									{
+										simploc= %filpn%\%FileNM%
+									}
+									else {
+										simploc= %xeinh%\%simpn%\%FileNM%	
+									}
+							}
+						*/	
+						if (FilePath <> SCRLOOP)
+							{
+								simploc= %simpn%\%filpn%\%FileNM%
+								if (simpn = filpn)
+									{
+										simploc= %filpn%\%FileNM%
+									}
+								Loop,parse,absol,`r`n
+									{
+										if (A_LoopField = "")
+											{
+												continue
+											}
+										if instr(simploc,A_LoopField)
+											{
+												omitd.= filenm . "|" . simploc . "`n"
+												excl= 1
+												break
+											}
+									}
+								if (excl = 1)
 									{
 										continue
 									}
-								if instr(FileNM,A_LoopField)
-									{
-										excl= 1
-										break
-									}
 							}
-						if (excl = 1)
-							{
-								continue
-							}
+						PostDirChk:	
 						if ((A_LoopFileExt = "lnk")or(A_LoopFileExt = "_lnk_"))
 							{
 								FileGetShortcut, %FileName%,FileSCName,OutDir,OutArgs,OutDescription,OutIcon,IconNumber,OutRunState
@@ -1169,7 +1202,7 @@ Loop,parse,SOURCE_DIRECTORY,|
 									{
 										continue
 									}
-								if (instr(FileName,A_LoopField)&& !instr(filpn,A_LoopField))
+								if (instr(simploc,A_LoopField)&& !instr(filpn,A_LoopField))
 									{
 										lvachk=
 										simpnk.= FileName . "`n"
@@ -1206,6 +1239,7 @@ Loop,parse,SOURCE_DIRECTORY,|
 					}
 			}
 	}	
+fileappend,%omitd%,log.txt	
 Loop,parse,simpnk,`r`n
 	{
 		if (A_LoopField = "")
