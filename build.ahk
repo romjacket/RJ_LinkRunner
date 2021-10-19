@@ -22,12 +22,14 @@ splitpath,A_ScriptFullPath,scriptfilename,HEREDIR
 save= %HEREDIR%\Binaries.zip
 ifexist,%save%
 	{
-		Msgbox,260,Redownload,Download the Binaries.zip file again?`noriginal will be renamed ".bak",5
-		ifmsgbox,No
+		Msgbox,260,Redownload,Download the Binaries.zip file again?`noriginal will be renamed ".bak",3
+		ifmsgbox,yes
 			{
-				goto, EXTRACTING
+				gosub,DOWNBIN
 			}
+		goto, EXTRACTING
 	}
+DOWNBIN:	
 DownloadFile(URLFILE,save,False,True)
 ;UrlDownloadToFile,%URLFILE%,%save%
 EXTRACTING:
