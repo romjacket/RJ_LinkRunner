@@ -1278,7 +1278,8 @@ Loop,parse,SOURCE_DIRECTORY,|
 					}
 			}
 	}	
-;fileappend,[OMITTED]`n%omitd%`n`n[RE-INCLUDED]`n,log.txt	
+if (enablelogging = 1)
+fileappend,[OMITTED]`n%omitd%`n`n[RE-INCLUDED]`n,log.txt	
 Loop,parse,simpnk,`r`n
 	{
 		if (A_LoopField = "")
@@ -1308,7 +1309,8 @@ Loop,parse,simpnk,`r`n
 						stringreplace,jtst,fltsmp,%rplt%,,UseErrorLevel
 						if (errorlevel = 0)
 							{
-								;fileappend,%fenx%|`n,log.txt
+								if (enablelogging = 1)
+								fileappend,%fenx%|`n,log.txt
 								LV_Add(lvachk,fenf, fenxtn, fendir, 0)
 								SOURCEDLIST.= fenf . "|" . fenxtn . "|" fendir . "|" . 0 . "`n"
 								fullist.= fenx . "|"
@@ -1372,6 +1374,7 @@ guicontrolget,OVERWRT,,OVERWRT
 guicontrolget,GMLNK,,GMLNK
 guicontrolget,INCLALTS,,INCLALTS
 guicontrolget,KILLCHK,,KILLCHK
+guicontrolget,EnableLogging,,EnableLogging
 complist:= LVGetCheckedItems("SysListView321", "RJ_Setup")
 if (fullist = complist)
 	{
@@ -1638,7 +1641,7 @@ Loop,%fullstn0%
 							{
 								continue
 							}
-						if instr(gmnamex,A_LoopField)
+						if (instr(refname,A_LoopField)or instr(gmnamex,A_LoopField))
 							{
 								priority+=-1
 								break
@@ -1650,7 +1653,6 @@ Loop,%fullstn0%
 				renum= 
 				rn= 
 				fp= 
-				tot:=
 				tot+=-20
 				poscnt:= 0
 				if instr(exlist,posb)
@@ -1660,7 +1662,7 @@ Loop,%fullstn0%
 						nm= 
 						Loop,%expa0%
 							{	
-								fp= 
+								fp= 0
 								fn:= A_Index + 1
 								fu:= % expa%A_index%
 								if (fu = "")
@@ -1677,7 +1679,7 @@ Loop,%fullstn0%
 											}
 									}
 							}
-						if (priority > tot)
+						if (priority >= tot)
 							{
 								renum= 1
 							}
@@ -1802,7 +1804,8 @@ Loop,%fullstn0%
 						}	
 					}
 				stringtrimright,subfldrepn,subfldrep,1
-				;fileappend,%rn%==%subfldrep%%gmnamed%|%gmnamex%(%renum%):%tot%<!%priority%!`n,log.txt
+				if (enablelogging = 1)
+				fileappend,%rn%==%subfldrep%%gmnamed%|%gmnamex%(%renum%):%tot%<!%priority%!`n,log.txt
 				GMon= %subfldrep%%gmnamex%_Game.cfg
 				DMon= %subfldrep%%gmnamex%_Desktop.cfg
 				gamecfgn= %subfldrep%%gmnamex%.ini	
