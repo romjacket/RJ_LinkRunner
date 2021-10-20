@@ -1965,11 +1965,27 @@ Loop,%fullstn0%
 										Loop,files,%OutDir%\*.exe,R
 											{
 												splitpath,A_LoopFileFullPath,tmpfn,tmpfd,,tmpfo
-												if (instr(absol,tmpfo)or (A_LoopFileName = prnmx))
+												abson= 
+												Loop,parse,absol,`r`n
+													{
+														if (A_LoopField = "")
+															{
+																abson= 1
+																continue
+															}
+														if instr(A_LoopField,tmpfo)
+															{
+																continue
+															}
+													}
+												if (A_LoopFileName = prnmx)
 													{
 														continue
 													}
-												klist.= A_LoopFileName . "|"
+												if (abson = "")
+													{
+														klist.= A_LoopFileName . "|"
+													}
 											}
 										if (klist <> "")
 											{
