@@ -1635,7 +1635,7 @@ Loop,%fullstn0%
 								break
 							}
 					}
-				Loop,parse,unlike,|
+				Loop,parse,unlike,`r`n
 					{
 						if (A_LoopField = "")
 							{
@@ -1653,7 +1653,7 @@ Loop,%fullstn0%
 				renum= 
 				rn= 
 				fp= 
-				tot+=-20
+				tot:=-20
 				poscnt:= 0
 				if instr(exlist,posb)
 					{
