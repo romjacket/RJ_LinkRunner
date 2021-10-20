@@ -1278,7 +1278,7 @@ Loop,parse,SOURCE_DIRECTORY,|
 					}
 			}
 	}	
-fileappend,[OMITTED]`n%omitd%`n`n[RE-INCLUDED]`n,log.txt	
+;fileappend,[OMITTED]`n%omitd%`n`n[RE-INCLUDED]`n,log.txt	
 Loop,parse,simpnk,`r`n
 	{
 		if (A_LoopField = "")
@@ -1308,7 +1308,7 @@ Loop,parse,simpnk,`r`n
 						stringreplace,jtst,fltsmp,%rplt%,,UseErrorLevel
 						if (errorlevel = 0)
 							{
-								fileappend,%fenx%|`n,log.txt
+								;fileappend,%fenx%|`n,log.txt
 								LV_Add(lvachk,fenf, fenxtn, fendir, 0)
 								SOURCEDLIST.= fenf . "|" . fenxtn . "|" fendir . "|" . 0 . "`n"
 								fullist.= fenx . "|"
@@ -1385,6 +1385,7 @@ stringsplit,fullstn,fullist,|
 gmnames= |
 gmnameds= |
 gmnamed=
+exlist= 
 fullstx= %fullstn%
 Loop,%fullstn0%
 	{
@@ -1426,7 +1427,6 @@ Loop,%fullstn0%
 					}
 				gmname= %gmnamex%
 				cursrc=
-				exlist= 
 				tlevel= %outdir%
 				Loop,parse,Source_directory,|
 					{
@@ -1561,7 +1561,6 @@ Loop,%fullstn0%
 						gmnamedx= |%topdirec%|
 					}
 				priority:= 0
-				fileappend,%topdirec%#%gfnamex%#[%gmnamecm%]#$%gmnamfcm%$###,log.txt
 				if (topdirec = gmnamed)
 					{
 						;goto, SUBDCHK
@@ -1803,7 +1802,7 @@ Loop,%fullstn0%
 						}	
 					}
 				stringtrimright,subfldrepn,subfldrep,1
-				fileappend,%subfldrep%%gmnamed%|%gmnamex%(%renum%):!%priority%!`n,log.txt
+				;fileappend,%rn%==%subfldrep%%gmnamed%|%gmnamex%(%renum%):%tot%<!%priority%!`n,log.txt
 				GMon= %subfldrep%%gmnamex%_Game.cfg
 				DMon= %subfldrep%%gmnamex%_Desktop.cfg
 				gamecfgn= %subfldrep%%gmnamex%.ini	
