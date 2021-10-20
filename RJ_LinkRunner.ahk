@@ -270,9 +270,16 @@ if (prestk2 <> "")
 			}
 		Run,%prestk2%,,preapid	
 	}
+acwchk=
+GMGDBCHK= %gmnamex%	
+if !fileexist(Borderless_Gaming_Program)
+	{
+		bgpon= 1
+		goto,pgmonchk
+	}
 nonmres:
 FileRead,bgm,%Borderless_Gaming_Database%
-if (instr(bgm,gmnamex)&& fileexist(Borderless_Gaming_Program)or instr(bgm,gmname)&& fileexist(Borderless_Gaming_Program))
+if (instr(bgm,GMGDBCHK)&& fileexist(Borderless_Gaming_Program))or (instr(bgm,gmname)&& fileexist(Borderless_Gaming_Program))
 	{
 		splitpath,Borderless_Gaming_Program,bgmexe,BGMLOC
 			{
@@ -284,10 +291,14 @@ if (instr(bgm,gmnamex)&& fileexist(Borderless_Gaming_Program)or instr(bgm,gmname
 					else {
 						bgpid= %errorlevel%
 					}
+				if (acwchk = 1)
+					{
+						return
+					}
 			}
 	}
 process, close, %pfile%
-
+pgmonchk:
 if (MonitorMode > 0)
 	{
 		DeskMon= %GAME_PROFILES%\%GMNAMED%\Desktop.cfg
@@ -405,7 +416,7 @@ Run, %plfp%%linkoptions%%plarg%,%pldr%,max UseErrorLevel,dcls
 nerlv= %errorlevel%
 Process, Exist, %bgmexe%
 goto, bgl
-if (instr,bgm,gmname)
+if (instr(bgm,gmname)or instr(bgm,GMGDBCHK))
 	{
 		Run, %bgaming%,%BGMLOC%,,bgpid
 	}
@@ -438,11 +449,25 @@ if (exe_list <> "")
 if (exe_list <> "")
 	{	
 		WinActivate
+		WinGetActiveTitle,GMGDBCHK
+		if ((GMGDBCHK <> gmname)&&(bgpon = 1))
+			{
+				acwchk= 1
+				gosub,nonmres
+				acwchk= 
+			}
 		process,WaitClose,%erahkpid%
 		goto, appclosed
 	}
 WinWait, ahk_pid %dcls%
 WinActivate
+WinGetActiveTitle,GMGDBCHK
+if ((GMGDBCHK <> gmname)&&(bgpon = 1))
+	{
+		acwchk= 1
+		gosub,nonmres
+		acwchk= 
+	}
 Process,waitclose,%DCLS%
 
 AppClosed:

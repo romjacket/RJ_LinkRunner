@@ -30,7 +30,7 @@ priorb= |Launcher32|Launcherx86|Launcher32bit|Launcher32|Launchx86|Launch32|
 prioraa= |win64|x64|64bit|64bits|64|x8664|bin64|bin64bit|windowsx64|windows64|binx64|exex64|exe64|binariesx64|binaries64|binariesx8664|
 priorbb= |win32|32bit|32bits|x8632|x86|x8632bit|32|windows32|windows32|bin32|windowsx86|bin32bit|binx86|bin32|exex86|exe32|binariesx86|binaries32|binariesx86|
 undir= |%A_WinDir%|%A_Programfiles%|%A_Programs%|%A_AppDataCommon%|%A_AppData%|%A_Desktop%|%A_DesktopCommon%|%A_StartMenu%|%A_StartMenuCommon%|%A_Startup%|%A_StartupCommon%|%A_Temp%|
-GUIVARS= PostWait|PreWait|SCONLY|EXEONLY|BOTHSRCH|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_Profiles|GAME_Directory|SOURCE_DirButton|SOURCE_DirectoryT|REMSRC|Keyboard_Mapper|Player1_Template|Player2_Template|MediaCenter_Profile|MultiMonitor_Tool|MM_Game_Config|MM_MediaCenter_Config|Borderless_Gaming_Program|Borderless_Gaming_Database|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS
+GUIVARS= PostWait|PreWait|SCONLY|EXEONLY|BOTHSRCH|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_Profiles|GAME_Directory|SOURCE_DirButton|SOURCE_DirectoryT|REMSRC|Keyboard_Mapper|Player1_Template|Player2_Template|MediaCenter_Profile|MultiMonitor_Tool|MM_Game_Config|MM_MediaCenter_Config|Borderless_Gaming_Program|Borderless_Gaming_Database|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS|SELALLBUT|SELNONEBUT
 STDVARS= KeyBoard_Mapper|MediaCenter_Profile|Player1_Template|Player2_Template|MultiMonitor_Tool|MM_MEDIACENTER_Config|MM_Game_Config|BorderLess_Gaming_Program|BorderLess_Gaming_Database|extapp|Game_Directory|Game_Profiles|RJDB_Location|Source_Directory|Mapper_Extension|1_Pre|2_Pre|3_Pre|1_Post|2_Post|3_Post|switchcmd|switchback
 DDTA= <$This_prog$><Monitor><Mapper>
 DDTB= <Monitor><$This_prog$><Mapper>
@@ -70,6 +70,11 @@ ifinstring,1_Post,"W<"
 poststatus= checked
 ; Create the ListView and its columns via Gui Add:
 Gui, Add, Button, x310 y8 vButtonClear gButtonClear hidden disabled, Clear List
+Gui, Add, Text, x380 y3 h12, Select
+Gui, Add, Button, x370 y16 vSELALLBUT gSELALLBUT hidden, All
+Gui, Add, Button, x390 y16 vSELNONEBUT gSELNONEBUT hidden, None
+Gui, Add, Edit, x435 y12 w100,
+Gui, Add, Button, x535 y12 w14 h14,X
 Gui, Font, Bold
 Gui, Add, Button, x560 y8 vButtonCreate gButtonCreate hidden disabled,CREATE
 Gui, Font, Normal
@@ -220,6 +225,7 @@ Gui, Add, Button, x20 y96 w36 h21 vRJDB_Location gRJDB_Location hidden disabled,
 Gui, Add, Text,  x64 y96 w222 h14 vRJDB_LocationT  hidden disabled Right,"<%RJDB_LocationT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y110 w222 h14  hidden disabled,<Application Directory>
+Gui, Add, Button, x240 y588 h14 w14 vOPNLOG gOPNLOG,O
 Gui, Add, Checkbox, x260 y588 h14 vEnableLogging gEnableLogging %loget%, Log
 
 Gui, Add, StatusBar, x0 y546 w314 h28 vRJStatus, Status Bar
@@ -298,6 +304,18 @@ guicontrol,,GAME_DirectoryT,<GAME_Directory
 }
 return
 
+SELALLBUT:
+gui,submit,nohide
+Gui, ListView, MyListView
+LV_Modify(0, "+Check") 
+return
+
+SELNONEBUT:
+gui,submit,nohide
+Gui, ListView, MyListView
+LV_Modify(0, "-Check") 
+return
+
 Source_DirButton:
 gui,submit,nohide
 FileSelectFolder,Source_DirectoryT,%fldflt%,3,Select Folder
@@ -325,6 +343,8 @@ if ((Source_DirectoryT <> "")&& !instr(Source_DirectoryT,"<"))
 					}
 				srcdira.= pkrs . "|"
 			}
+SOURCEDLIST=			
+			
 SOURCE_DIRECTORY= %scrdira%
 iniwrite,%srcdira%,%RJDB_Config%,GENERAL,Source_Directory
 stringreplace,CURDP,Source_DirectoryX,%A_Space%,`%,All
@@ -824,8 +844,16 @@ guicontrolget,EnableLogging,,EnableLogging
 iniwrite,%EnableLogging%,%RJDB_Config%,GENERAL,Logging
 return
 
-
-
+OPNLOG:
+gui,submit,NoHide
+if fileexist("log.txt")
+	{
+		Run,Notepad log.txt,
+	}
+else {
+	SB_SetText("no log exists")
+}
+return
 INITAMIC:
 fileread,amictmp,amicro.set
 FileDelete,Antimicro_!.cmd
@@ -1239,7 +1267,7 @@ Loop,parse,SOURCE_DIRECTORY,|
 					}
 			}
 	}	
-fileappend,%omitd%,log.txt	
+fileappend,[OMITTED]`n%omitd%`n`n[RE-INCLUDED]`n,log.txt	
 Loop,parse,simpnk,`r`n
 	{
 		if (A_LoopField = "")
@@ -1269,6 +1297,7 @@ Loop,parse,simpnk,`r`n
 						stringreplace,jtst,fltsmp,%rplt%,,UseErrorLevel
 						if (errorlevel = 0)
 							{
+								fileappend,%fenx%|`n,log.txt
 								LV_Add(lvachk,fenf, fenxtn, fendir, 0)
 								SOURCEDLIST.= fenf . "|" . fenxtn . "|" fendir . "|" . 0 . "`n"
 								fullist.= fenx . "|"
@@ -1282,6 +1311,9 @@ REPOP:
 Guicontrol,Show,MyListView	
 Guicontrol,Show,ButtonCreate
 Guicontrol,Show,ButtonClear
+Guicontrol,Show,SELALLBUT
+Guicontrol,Show,SELNONEBUT
+
 
 GuiControl, +Redraw, MyListView  ; Re-enable redrawing (it was disabled above).
 LV_ModifyCol(1, 140) ; Make the Size column at little wider to reveal its header.
@@ -1699,7 +1731,10 @@ Loop,%fullstn0%
 								;subfldrep= %poscnt%_More\
 								subfldrep= alternates\
 								substfldrc= %poscnt%_More\%gmname%_[0%poscntx%]
-								gmnamex= %gmname%_[0%poscnt%]
+								if (INCLALTS = "")
+									{
+										gmnamex= %gmname%_[0%poscnt%]									
+									}
 								/*
 								Loop,files,%GAME_PROFILES%\%GMNAMED%\*_More,D
 									{
@@ -1742,7 +1777,10 @@ Loop,%fullstn0%
 						else {
 							subfldrep= 
 							;gmnamex= %gmname%_[0%poscntx%]
-							gmnamex= %gmnamed%
+							if (INCLALTS = "")
+								{
+									gmnamex= %gmnamed%
+								}
 						}	
 					}
 				stringtrimright,subfldrepn,subfldrep,1
@@ -1985,6 +2023,7 @@ ButtonClear:
 LV_Delete()  ; Clear the ListView, but keep icon cache intact for simplicity.
 SOURCEDLIST= 
 fileDelete,continue.db
+guicontrol,show,REINDEX
 return
 
 MyListView:
@@ -2057,3 +2096,4 @@ LVGetCheckedItems(cN,wN) {
     }
     Return ChkItems
 }
+
