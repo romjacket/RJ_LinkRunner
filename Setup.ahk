@@ -111,7 +111,7 @@ Gui, Font, Bold
 Gui, Add, Button, x18 y578 h18 vRESET gRESET,R
 Gui, Font, Normal
 Gui, Add, Checkbox, x40 y14 h14 vKILLCHK gKILLCHK checked,Kill-List
-Gui, Add, Checkbox, x108 y14 h14 vINCLALTS gINCLALTS checked,Include Alts
+Gui, Add, Checkbox, x108 y14 h14 vINCLALTS gINCLALTS,Include Alts
 
 Gui, Font, Bold
 Gui, Add, Button, x24 y56 w36 h21 vSOURCE_DirButton gSOURCE_DirButton,SRC
@@ -1097,6 +1097,8 @@ SOURCEDLIST=
 fullist= 
 filedelete,continue.db
 guicontrol,hide,REINDEX
+Gui,Listview,MyListView
+LV_Delete()
 POPULATE:
 if (!Fileexist(GAME_Directory)or !FileExist(Game_Profiles))
     {
@@ -1164,11 +1166,15 @@ Loop,parse,SOURCE_DIRECTORY,|
 						excl= 
 						lvachk= +Check
 						FileName := A_LoopFileFullPath  ; Must save it to a writable variable for use below.
-						filez:= A_LoopFileSizeKB	
+						filez:= A_LoopFileSizeKB
 						splitpath,FileName,FileNM,FilePath,FileExt,filtn
 						splitpath,FilePath,filpn,filpdir,,filpjn
 						stringreplace,simpath,FilePath,%SCRLOOP%\,,
+						stringreplace,trukpath,filpdir,%SCRLOOP%\,,
 						splitpath,simpath,simpn,simpdir
+						splitpath,trukpath,truknm,farpth
+						splitpath,farpth,farnm,
+						
 						/*
 						if (filpn <> simpn)
 							{
@@ -1192,30 +1198,35 @@ Loop,parse,SOURCE_DIRECTORY,|
 									}
 							}
 						*/	
+						simploc= %simpath%\%FileNM%
 						if (FilePath <> SCRLOOP)
 							{
-								simploc= %simpn%\%filpn%\%FileNM%
-								if (simpn = filpn)
+								simploc= %filpn%\%FileNM%
+								if ((truknm <> filpn)&&(truknm <> ""))
 									{
-										simploc= %filpn%\%FileNM%
+										simploc= %truknm%\%filpn%\%FileNM%
 									}
-								Loop,parse,absol,`r`n
+								if ((farpth <> "")&&(farnm <> truknm))
 									{
-										if (A_LoopField = "")
-											{
-												continue
-											}
-										if instr(simploc,A_LoopField)
-											{
-												omitd.= filenm . "|" . simploc . "`n"
-												excl= 1
-												break
-											}
+										simploc= %farnm%\%truknm%\%filpn%\%FileNM%
 									}
-								if (excl = 1)
+							}
+						Loop,parse,absol,`r`n
+							{
+								if (A_LoopField = "")
 									{
 										continue
 									}
+								if instr(simploc,A_LoopField)
+									{
+										omitd.= filenm . "|" . simploc . "`n"
+										excl= 1
+										break
+									}
+							}
+						if (excl = 1)
+							{
+								continue
 							}
 						PostDirChk:	
 						if ((A_LoopFileExt = "lnk")or(A_LoopFileExt = "_lnk_"))
@@ -1415,6 +1426,7 @@ Loop,%fullstn0%
 					}
 				gmname= %gmnamex%
 				cursrc=
+				exlist= 
 				tlevel= %outdir%
 				Loop,parse,Source_directory,|
 					{
@@ -1427,9 +1439,13 @@ Loop,%fullstn0%
 								cursrc= %A_LoopField%
 								break
 							}
-						cursrp=|	
-						stringreplace,undirs,undir,|%cursrc%|,,
 					}
+				IF (cursrc = "")
+					{
+						continue
+					}
+				cursrp=|	
+				stringreplace,undirs,undir,|%cursrc%|,,
 				Stringreplace,gfnamex,outdir,%cursrc%\,,All
 				
 				realpth= \%gfnamex%\
@@ -1466,11 +1482,14 @@ Loop,%fullstn0%
 				exlthis= |%gmnamex%|
 				if instr(exclfls,gmnamedx)
 					{
-						gmnamex= %gmnamed%
+						gmnamex= %gmnamex%!
 					}
 				if (topdirec = gmnamed)
 					{
 						mattop= %gmnamedv%
+						invar= %gmnamed%
+						gosub, CleanVar
+						gmnamecm= %invarx%
 						goto, TOPFIN
 					}
 				topreduc=
@@ -1542,7 +1561,7 @@ Loop,%fullstn0%
 						gmnamedx= |%topdirec%|
 					}
 				priority:= 0
-				fileappend,%topdirec%##%gfnamex%###,log.txt
+				fileappend,%topdirec%#%gfnamex%#[%gmnamecm%]#$%gmnamfcm%$###,log.txt
 				if (topdirec = gmnamed)
 					{
 						;goto, SUBDCHK
@@ -1559,7 +1578,7 @@ Loop,%fullstn0%
 					{
 						priority:= 6
 					}
-				SUBDCHK:	
+				SUBDCHK:
 				if instr(priorb,gmnamedx)
 					{						
 						priority:= 7
@@ -2084,6 +2103,7 @@ Loop
 return
 
 LVGetCheckedItems(cN,wN) {
+	noen= \|
     ControlGet, LVItems, List,, % cN, % wN
     Pos:=!Pos,Item:=Object()
     While Pos
@@ -2092,7 +2112,11 @@ LVGetCheckedItems(cN,wN) {
         SendMessage, 0x102c, A_Index-1, 0x2000, % cN, % wN
         ChekItems:=(ErrorLevel ? Item[A_Index-1] "`n" : "")
 		stringsplit,dbb,ChekItems,%A_Tab%
-		ChkItems.= dbb3 . "\" . dbb1 . "|"
+		fprnt:= dbb3 . "\" . dbb1 . "|"
+		if (!instr(ChkItems,fprnt)&&(fprnt <> noen))
+			{
+				ChkItems.= dbb3 . "\" . dbb1 . "|"
+			}
     }
     Return ChkItems
 }
