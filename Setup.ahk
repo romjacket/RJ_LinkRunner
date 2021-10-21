@@ -4,6 +4,7 @@ SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
 RJDB_Config= RJDB.ini
+filedelete,log.txt
 FileCreateDir,Launchers
 FileCreateDir,profiles
 FileCreateDir,Shortcuts
@@ -29,8 +30,16 @@ priora= |Launcher64|Launcherx64|Launcherx8664|Launcher64bit|Launcher64|Launchx64
 priorb= |Launcher32|Launcherx86|Launcher32bit|Launcher32|Launchx86|Launch32|
 prioraa= |win64|x64|64bit|64bits|64|x8664|bin64|bin64bit|windowsx64|windows64|binx64|exex64|exe64|binariesx64|binaries64|binariesx8664|
 priorbb= |win32|32bit|32bits|x8632|x86|x8632bit|32|windows32|windows32|bin32|windowsx86|bin32bit|binx86|bin32|exex86|exe32|binariesx86|binaries32|binariesx86|
+ProgramFilesX86 := A_ProgramFiles . (A_PtrSize=8 ? " (x86)" : "")
+progdirs= %A_ProgramFiles%|%ProgramW6432%|%ProgramFilesX86%|%A_MyDocuments%|
+remProgdirs= Program Files|Program Files (x86)|ProgramData|%A_username%
+steamhome= Steam\SteamApps\common
+dralbet= c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|
+GogQuery= GOG|G.O.G|GOG Games
+GenQuery= Games|juegos|spellen|Spiele|Jeux|Giochi|игры
+AllQuery:= GogQuery . | . "Origin" . "|" . "Epic" . steamhome 
 undir= |%A_WinDir%|%A_Programfiles%|%A_Programs%|%A_AppDataCommon%|%A_AppData%|%A_Desktop%|%A_DesktopCommon%|%A_StartMenu%|%A_StartMenuCommon%|%A_Startup%|%A_StartupCommon%|%A_Temp%|
-GUIVARS= PostWait|PreWait|SCONLY|EXEONLY|BOTHSRCH|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_Profiles|GAME_Directory|SOURCE_DirButton|SOURCE_DirectoryT|REMSRC|Keyboard_Mapper|Player1_Template|Player2_Template|MediaCenter_Profile|MultiMonitor_Tool|MM_Game_Config|MM_MediaCenter_Config|Borderless_Gaming_Program|Borderless_Gaming_Database|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS|SELALLBUT|SELNONEBUT
+GUIVARS= PostWait|PreWait|SCONLY|EXEONLY|BOTHSRCH|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_ProfB|GAME_DirB|SOURCE_DirB|SOURCE_DirectoryT|REMSRC|Keyboard_MapB|Player1_TempB|Player2_TempB|MediaCenter_ProfB|MultiMonitor_Tool|MM_Game_CfgB|MM_MediaCenter_CfgB|BGM_ProgB|BGP_DataB|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS|SELALLBUT|SELNONEBUT
 STDVARS= KeyBoard_Mapper|MediaCenter_Profile|Player1_Template|Player2_Template|MultiMonitor_Tool|MM_MEDIACENTER_Config|MM_Game_Config|BorderLess_Gaming_Program|BorderLess_Gaming_Database|extapp|Game_Directory|Game_Profiles|RJDB_Location|Source_Directory|Mapper_Extension|1_Pre|2_Pre|3_Pre|1_Post|2_Post|3_Post|switchcmd|switchback
 DDTA= <$This_prog$><Monitor><Mapper>
 DDTB= <Monitor><$This_prog$><Mapper>
@@ -64,10 +73,14 @@ if (GMLNK = 1)
 	{
 		lnkget= checked
 	}
-ifinstring,1_Pre,"W<"
-prestatus= checked
-ifinstring,1_Post,"W<"
-poststatus= checked
+if instr(1_PreT,"W<")
+	{
+		prestatus= checked
+	}
+if instr(1_PostT,"W<")
+	{
+		poststatus= checked
+	}
 ; Create the ListView and its columns via Gui Add:
 Gui, Add, Button, x310 y8 vButtonClear gButtonClear hidden disabled, Clear List
 Gui, Add, Text, x380 y3 h12, Select
@@ -108,13 +121,13 @@ Gui, Add, Radio, x30 y32 vSCONLY gSCONLY, Lnk Only
 Gui, Add, Radio, x95 y32 vEXEONLY gEXEONLY checked, Exe Only
 Gui, Add, Radio, x175 y32 vBOTHSRCH gBOTHSRCH, Exe+Lnk
 Gui, Font, Bold
-Gui, Add, Button, x18 y578 h18 vRESET gRESET,R
+Gui, Add, Button, x18 y588 h16 w16 vRESET gRESET,R
 Gui, Font, Normal
 Gui, Add, Checkbox, x40 y14 h14 vKILLCHK gKILLCHK checked,Kill-List
 Gui, Add, Checkbox, x108 y14 h14 vINCLALTS gINCLALTS,Include Alts
 
 Gui, Font, Bold
-Gui, Add, Button, x24 y56 w36 h21 vSOURCE_DirButton gSOURCE_DirButton,SRC
+Gui, Add, Button, x24 y56 w36 h21 vSOURCE_DirB gSOURCE_DirB,SRC
 ;;Gui, Add, Text,  x64 y192 w222 h14 vSOURCE_DirectoryT Disabled Right,"<%SOURCE_DirectoryT%"
 Gui, Font, Normal
 Gui, Add, DropDownList, x64 y56 w190 vSOURCE_DirectoryT gSOURCE_DirectoryDD,%SOURCE_Directory%
@@ -122,7 +135,7 @@ Gui, Add, Button, x271 y61 w15 h15 vREMSRC gREMSRC,X
 Gui, Add, Text, x73 y80 h14 vCURDP Right,<Game Exe/Lnk Source Directories>
 
 Gui, Font, Bold
-Gui, Add, Button, x24 y104 w36 h21 vGAME_Directory gGAME_Directory,OUT
+Gui, Add, Button, x24 y104 w36 h21 vGame_DirB gGame_DirB,OUT
 Gui, Add, Text, x64 y96 w222 h14 vGAME_DirectoryT Disabled Right,"<%GAME_DirectoryT%"
 Gui, Font, Normal
 Gui, Add, Text, x84 y110 h14,<Shortcut Output Directory>
@@ -135,62 +148,62 @@ Gui, Add, Radio, x95 y132 vOVERWRT gUPDTSC, Overwrite
 Gui, Add, Radio, x168 y132 vUPDTSC gOVERWRT checked, Update
 
 Gui, Font, Bold
-Gui, Add, Button, x21 y176 w36 h21 vGAME_Profiles gGAME_Profiles,GPD
+Gui, Add, Button, x21 y176 w36 h21 vGame_ProfB gGame_ProfB,GPD
 Gui, Add, Text, x64 y171 w222 h14 vGAME_ProfilesT Disabled Right,"<%GAME_ProfilesT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y185 w222 h14,<Game Profiles Directory>
 Gui, Font, Bold
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y224 w36 h21 vKeyboard_Mapper gKeyboard_Mapper,KBM
+Gui, Add, Button, x20 y224 w36 h21 vKeyboard_MapB gKeyboard_MapB,KBM
 Gui, Add, Text,  x64 y224 w222 h14 vKeyboard_MapperT Disabled Right,"<%Keyboard_MapperT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y238 w222 h14,<Keyboard Mapper Program>
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y256 w36 h21 vPlayer1_Template gPlayer1_Template,PL1
+Gui, Add, Button, x20 y256 w36 h21 vPlayer1_TempB gPlayer1_TempB,PL1
 Gui, Add, Text,  x64 y256 w222 h14 vPlayer1_TemplateT Disabled Right,"<%Player1_TemplateT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y270 w222 h14,.....Template Profile for Player 1>
 Gui, Font, Bold
 
-Gui, Add, Button, x20 y288 w36 h21 vPlayer2_Template gPlayer2_Template,PL2
+Gui, Add, Button, x20 y288 w36 h21 vPlayer2_TempB gPlayer2_TempB,PL2
 Gui, Add, Text,  x64 y288 w222 h14 vPlayer2_TemplateT Disabled Right,"<%Player2_TemplateT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y302 w222 h14,.....Template Profile for Player 2>
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y320 w36 h21 vMediaCenter_Profile gMediaCenter_Profile,MCP
+Gui, Add, Button, x20 y320 w36 h21 vMediaCenter_ProfB gMediaCenter_ProfB,MCP
 Gui, Add, Text,  x64 y320 w222 h14 vMediaCenter_ProfileT Disabled Right,"<%MediaCenter_ProfileT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y334 w222 h14,.....Template Profile for MediaCenter/Desktop>
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y352 w36 h21 vMultiMonitor_Tool gMultiMonitor_Tool,MMT
+Gui, Add, Button, x20 y352 w36 h21 vMM_ToolB gMM_ToolB,MMT
 Gui, Add, Text,  x64 y354 w222 h14 vMultiMonitor_ToolT Disabled Right,"<%MultiMonitor_ToolT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y368 w222 h14,<Multimonitor Program>
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y384 w36 h21 vMM_Game_Config gMM_Game_Config,GMC
+Gui, Add, Button, x20 y384 w36 h21 vMM_Game_CfgB gMM_Game_CfgB,GMC
 Gui, Add, Text,  x64 y384 w222 h14 vMM_Game_ConfigT Disabled Right,"<%MM_Game_ConfigT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y398 w222 h14,.....Gaming Configuration File>
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y416 w36 h21 vMM_MediaCenter_Config gMM_MediaCenter_Config,DMC
+Gui, Add, Button, x20 y416 w36 h21 vMM_MediaCenter_CfgB gMM_MediaCenter_CfgB,DMC
 Gui, Add, Text,  x64 y416 w222 h14 vMM_MediaCenter_ConfigT Disabled Right,"<%MM_MediaCenter_ConfigT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y430 w234 h14,.....MediaCenter/Desktop Configuration File>
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y448 w36 h21 vBorderless_Gaming_Program gBorderless_Gaming_Program,BGP
+Gui, Add, Button, x20 y448 w36 h21 vBGM_ProgB gBGM_ProgB,BGP
 Gui, Add, Text,  x64 y448 w222 h14 vBorderless_Gaming_ProgramT Disabled Right,"<%Borderless_Gaming_ProgramT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y462 w222 h14,<Borderless Gaming Program>
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y480 w36 h21 vBorderless_Gaming_Database gBorderless_Gaming_Database,BGD
+Gui, Add, Button, x20 y480 w36 h21 vBGP_DataB gBGP_DataB,BGD
 Gui, Add, Text, x64 y480 w222 h14 vBorderless_Gaming_DatabaseT Disabled Right,"<%Borderless_Gaming_DatabaseT%"
 Gui, Font, Normal
 Gui, Add, Text, x64 y494 w222 h14,.....Borderless Gaming Database>
@@ -198,7 +211,8 @@ Gui, Add, Text, x64 y494 w222 h14,.....Borderless Gaming Database>
 Gui, Font, Bold
 Gui, Add, Button, x20 y512 w36 h21 vPREAPP gPREAPP ,PRE
 Gui, Font, Normal
-Gui, Add, DropDownList, x64 y512 w204 vPREDD gPREDD Right,%prelist%
+Gui, Add, Text, x60 y514 h12 vPRETNUM,1
+Gui, Add, DropDownList, x70 y512 w198 vPREDD gPREDD Right,%prelist%
 Gui, Add, Text, x64 y534 h12 w230 vPREDDT,<Pre-Launch Programs>
 Gui, Add, Checkbox, x270 y513 w12 h12 vPreWait gPreWait %prestatus%,
 Gui, Add, Text, x270 y535 h12,wait
@@ -207,7 +221,8 @@ Gui, Add, Button, x285 y520 w14 h14 vDELPREAPP gDELPREAPP ,X
 Gui, Font, Bold
 Gui, Add, Button, x20 y550 w36 h21 vPOSTAPP gPOSTAPP,PST
 Gui, Font, Normal
-Gui, Add, DropDownList, x64 y552 w204 vPostDD gPostDD Right,%postlist%
+Gui, Add, Text, x60 y552 h12 vPOSTDNUM,1
+Gui, Add, DropDownList, x70 y552 w198 vPostDD gPostDD Right,%postlist%
 Gui, Add, Text, x64 y574 h12 w230 vPOSTDDT,<Post-Launch Programs>
 Gui, Add, Checkbox, x270 y553 w12 h12 vPostWait gPostWait %poststatus%
 Gui, Add, Text, x270 y565 h12,
@@ -272,7 +287,7 @@ guicontrol,,RJDB_LocationT,<RJDB_Location
 }
 return
 
-GAME_Profiles:
+Game_ProfB:
 gui,submit,nohide
 FileSelectFolder,GAME_ProfilesT,%fldflt%,3,Select Folder
 if ((GAME_ProfilesT <> "")&& !instr(GAME_ProfilesT,"<"))
@@ -288,7 +303,7 @@ guicontrol,,GAME_ProfilesT,<GAME_Profiles
 }
 return
 
-GAME_Directory:
+Game_DirB:
 gui,submit,nohide
 FileSelectFolder,GAME_DirectoryT,%fldflt%,3,Select Folder
 if ((GAME_DirectoryT <> "")&& !instr(GAME_DirectoryT,"<"))
@@ -316,7 +331,7 @@ Gui, ListView, MyListView
 LV_Modify(0, "-Check") 
 return
 
-Source_DirButton:
+SOURCE_DirB:
 gui,submit,nohide
 FileSelectFolder,Source_DirectoryT,%fldflt%,3,Select Folder
 if ((Source_DirectoryT <> "")&& !instr(Source_DirectoryT,"<"))
@@ -353,7 +368,7 @@ guicontrol,,CURDP,%CURDP%
 }
 return
 
-Keyboard_Mapper:
+Keyboard_MapB:
 gui,submit,nohide
 FileSelectFile,Keyboard_MapperT,3,Antimicro,Select File,*.exe
 if ((Keyboard_MapperT <> "")&& !instr(Keyboard_MapperT,"<"))
@@ -392,7 +407,7 @@ guicontrol,,Keyboard_MapperT,%Keyboard_Mapper%
 iniwrite,%A_ScriptDir%\Antimicro_!.cmd,%RJDB_Config%,GENERAL,Keyboard_Mapper
 return
 
-Player1_Template:
+Player1_TempB:
 gui,submit,nohide
 FileSelectFile,Player1_TemplateT,3,,Select File
 if ((Player1_TemplateT <> "")&& !instr(Player1_TemplateT,"<"))
@@ -408,7 +423,7 @@ guicontrol,,Player1_TemplateT,<Player1_Template
 }
 return
 
-Player2_Template:
+Player2_TempB:
 gui,submit,nohide
 FileSelectFile,Player2_TemplateT,3,,Select File
 if ((Player2_TemplateT <> "")&& !instr(Player2_TemplateT,"<"))
@@ -424,7 +439,7 @@ guicontrol,,Player2_TemplateT,<Player2_Template
 }
 return
 
-MediaCenter_Profile:
+MediaCenter_ProfB:
 gui,submit,nohide
 FileSelectFile,MediaCenter_ProfileT,3,,Select File
 if ((MediaCenter_ProfileT <> "")&& !instr(MediaCenter_ProfileT,"<"))
@@ -441,7 +456,7 @@ guicontrol,,MediaCenter_ProfileT,<MediaCenter_Profile
 }
 return
 
-MultiMonitor_Tool:
+MM_ToolB:
 gui,submit,nohide
 FileSelectFile,MultiMonitor_ToolT,3,,Select File,multimonitor*.exe
 if ((MultiMonitor_ToolT <> "")&& !instr(MultiMonitor_ToolT,"<"))
@@ -463,10 +478,21 @@ if ((MM_Game_Config = "")or(MM_Mediacenter_Config = ""))
                 gosub, MMSETUP
             }
     }
+	
 return
 
-MM_GAME_Config:
+MM_Game_CfgB:
 gui,submit,nohide
+guicontrolget,gmcfg,,MM_Game_ConfigT
+if (!fileexist("Game.cfg")or !fileexist(gmcfg))
+	{
+		 msgbox,4,Setup,Setup the Multimonitor Tool now?
+        ifmsgbox,yes
+            {
+                gosub, MMSETUP
+            }
+	}
+
 FileSelectFile,MM_GAME_ConfigT,3,,Select File,*.cfg
 if ((MM_GAME_ConfigT <> "")&& !instr(MM_GAME_ConfigT,"<"))
 {
@@ -478,12 +504,21 @@ guicontrol,,MM_GAME_ConfigT,%MM_GAME_ConfigT%
 }
 else {
 stringreplace,MM_GAME_Config,MM_GAME_Config,%A_Space%,`%,All
-guicontrol,,MM_GAME_Config,<MM_GAME_Config
+guicontrol,,MM_GAME_ConfigT,<MM_GAME_Config
 }
 return
 
-MM_MediaCenter_Config:
+MM_MediaCenter_CfgB:
 gui,submit,nohide
+guicontrolget,dtcfg,,MM_MediaCenter_ConfigT
+if (!fileexist("Desktop.cfg")or !fileexist(dtcfg))
+	{
+		 msgbox,4,Setup,Setup the Multimonitor Tool now?
+        ifmsgbox,yes
+            {
+                gosub, MMSETUP
+            }
+	}
 FileSelectFile,MM_MediaCenter_ConfigT,3,,Select File,*.cfg
 if ((MM_MediaCenter_ConfigT <> "")&& !instr(MM_MediaCenter_ConfigT,"<"))
 {
@@ -495,11 +530,11 @@ guicontrol,,MM_MediaCenter_ConfigT,%MM_MediaCenter_ConfigT%
 }
 else {
 stringreplace,MM_MediaCenter_Config,MM_MediaCenter_Config,%A_Space%,`%,All
-guicontrol,,MM_MediaCenter_Config,<MM_MediaCenter_Config
+guicontrol,,MM_MediaCenter_ConfigT,<MM_MediaCenter_Config
 }
 return
 
-Borderless_Gaming_Program:
+BGM_ProgB:
 gui,submit,nohide
 FileSelectFile,Borderless_Gaming_ProgramT,3,Borderless Gaming,Select File,*.exe
 if ((Borderless_Gaming_ProgramT <> "")&& !instr(Borderless_Gaming_ProgramT,"<"))
@@ -515,7 +550,7 @@ guicontrol,,Borderless_Gaming_ProgramT,<Borderless_Gaming_Program
 }
 return
 
-Borderless_Gaming_Database:
+BGP_DataB:
 gui,submit,nohide
 FileSelectFile,Borderless_Gaming_DatabaseT,3,%A_Appdata%\Andrew Sampson\Borderless Gaming,Select File,config.bin
 if ((Borderless_Gaming_DatabaseT <> "")&& !instr(Borderless_Gaming_DatabaseT,"<"))
@@ -527,92 +562,98 @@ guicontrol,,Borderless_Gaming_DatabaseT,%Borderless_Gaming_DatabaseT%
 }
 else {
 stringreplace,Borderless_Gaming_Database,Borderless_Gaming_Database,%A_Space%,`%,All
-guicontrol,,Borderless_Gaming_Database,<Borderless_Gaming_Database
+guicontrol,,Borderless_Gaming_DatabaseT,<Borderless_Gaming_Database
 }
 return
 
+PostAPP:
+gui,submit,nohide
+guicontrolget,fbd,,PostDD
+guicontrolget,fbdnum,,PosTdNUM
+guicontrolget,PostWait,,PostWait
+Postwl=
+if (Postwait = 1)
+	{
+		Postwl= W
+	}
+iniread,inn,%RJDB_CONFIG%,CONFIG,%fbdnum%_Post
+if (inn = A_SPace)
+	{
+		inn:= A_Space
+	}
+FileSelectFile,PostAPPT,35,%flflt%,Select File
+if (PostAPPT <> "")
+	{
+		PostAPP= %PostAPPT%
+		PostList= |
+		Loop,3
+			{
+				iniread,cftsv,%RJDB_Config%,CONFIG,%A_Index%_Post
+				stringsplit,cftst,cftsv,<
+				if (A_Index = fbdnum)
+					{
+						iniwrite,%fbdnum%%Postwl%<%PostAPP%,%RJDB_Config%,CONFIG,%fbdnum%_Post
+						Postlist.= fbdnum . Postwl . "<" . PostAPP . "|"
+						if (A_Index = 1)
+							{
+								PostList.= "|"
+							}
+						continue
+					}
+				Postlist.= cftsv . "|"
+				if (A_Index = 1)
+					{
+						PostList.= "|"
+					}
+			 } 
+		guicontrol,,PostDD,%PostList%
+		guicontrol,,POSTDNUM,1
+	}
+return
+
 PREAPP:
-PreList= 
 gui,submit,nohide
 guicontrolget,fbd,,PREDD
+guicontrolget,fbdnum,,PRETNUM
 guicontrolget,PreWait,,PreWait
-stringsplit,dkz,fbd,<
-orderPRE= %dkz1%
 prewl=
 if (prewait = 1)
 	{
 		prewl= W
 	}
-iniread,inn,%RJDB_CONFIG%,CONFIG,%orderPRE%_Pre
-if (inn = "ERROR") 
+iniread,inn,%RJDB_CONFIG%,CONFIG,%fbdnum%_Pre
+if (inn = A_SPace)
 	{
-		inn= 
+		inn:= A_Space
 	}
-FileSelectFile,PREAPPT,3,%flflt%,Select File
+FileSelectFile,PREAPPT,35,%flflt%,Select File
 if (PREAPPT <> "")
-{
-PREAPP= %PREAPPT%
-iniwrite,%dkf1%%prewl%<%PREAPP%,%RJDB_Config%,CONFIG,%dkf1%_Pre
-iniread,cftst,%RJDB_Config%,CONFIG
-Loop,3
-    {
-		iniread,cftsv,%RJDB_Config%,CONFIG,%A_Index%_Pre
-        stringsplit,cftst,cftsv,<
-		if instr(cftst1,"W")
-			{
-				dkc= %A_Index%W<
-			}
-        if (A_Index = OrderPre)
-			{
-				Prelist.= cftst2 . "||"
-			}
-		Prelist:= cftst2 . "|"
-		iniwrite,%dkc%%cftst2%,%RJDB_Config%,CONFIG,%A_Index%_Pre
-     }
-guicontrol,,PreDD,|%PreList%
-}
-return
-
-POSTAPP:
-PostList= 
-gui,submit,nohide
-guicontrolget,fbd,,POSTDD
-guicontrolget,PostWait,,PostWait
-stringsplit,dkz,fbd,<
-orderPOST= %dkz1%
-postwl=
-if (postwait = 1)
 	{
-		postwl= W
-	}
-iniread,inn,%RJDB_CONFIG%,CONFIG,%orderPOST%_Post
-if (inn = "ERROR") 
-	{
-		inn= 
-	}
-FileSelectFile,POSTAPPT,3,%flflt%,Select File
-if (POSTAPPT <> "")
-{
-POSTAPP= %POSTAPPT%
-iniwrite,%dkf1%%postwl%<%POSTAPP%,%RJDB_Config%,CONFIG,%dkf1%_Post
-iniread,cftst,%RJDB_Config%,CONFIG
-Loop,3
-    {
-		iniread,cftsv,%RJDB_Config%,CONFIG,%A_Index%_Post
-        stringsplit,cftst,cftsv,<
-		if instr(cftst1,"W")
+		PREAPP= %PREAPPT%
+		PreList= |
+		Loop,3
 			{
-				dkc= %A_Index%W<
-			}
-        if (A_Index = OrderPost)
-			{
-				Postlist.= cftst2 . "||"
-			}
-		Postlist:= cftst2 . "|"
-		iniwrite,%dkc%%cftst2%,%RJDB_Config%,CONFIG,%A_Index%_Post		
-     } 
-guicontrol,,PostDD,|%PostList%
-}
+				iniread,cftsv,%RJDB_Config%,CONFIG,%A_Index%_Pre
+				stringsplit,cftst,cftsv,<
+				if (A_Index = fbdnum)
+					{
+						iniwrite,%fbdnum%%prewl%<%PREAPP%,%RJDB_Config%,CONFIG,%fbdnum%_Pre
+						PreList.= fbdnum . prewl . "<" . PREAPP . "|"
+						if (A_Index = 1)
+							{
+								PreList.= "|"
+							}
+						continue
+					}
+				PreList.= cftsv . "|"
+				if (A_Index = 1)
+					{
+						PreList.= "|"
+					}
+			 } 
+		guicontrol,,PreDD,%PreList%
+		guicontrol,,PRETNUM,1
+	}
 return
 
 REMSRC:
@@ -662,53 +703,78 @@ guicontrolget,CURDP,,SOURCE_DIRECTORYT
 guicontrol,,CURDP,%CURDP%
 return
 
+DELpostAPP:
+gui,submit,nohide
+guicontrolget,DELpostDD,,postDD
+stringsplit,dxb,DELpostDD,<
+stringreplace,dxn,dxb1,W,,
+iniWrite,%dxn%<,%RJDB_Config%,CONFIG,%dxn%_post
+postList= |
+postWaitn= 
+Loop,3
+	{
+		if (A_Index = dxn)
+			{
+				postList.= dxn . "<" "|"
+				if (A_Index = 1)
+					{
+						postlist.= "|"
+					}
+				continue
+			}
+		iniread,daa,%RJDB_Config%,CONFIG,%A_Index%_post
+		postList.= daa . "|"	
+		if (A_Index = 1)
+			{
+				stringsplit,dant,daa,<
+				if instr(dant1,"W")
+					{
+						postWaitn= 1
+					}
+				postList.= "|"
+			}		
+	}
+guicontrol,,postDD,%postList%
+guicontrol,,postWAIT,%postwaitn%
+guicontrol,,postDNUM,1
+return
+
 DELPREAPP:
 gui,submit,nohide
 guicontrolget,DELPreDD,,PreDD
 stringsplit,dxb,DELPreDD,<
-stringleft,dxn,dxb1,1
+stringreplace,dxn,dxb1,W,,
 iniWrite,%dxn%<,%RJDB_Config%,CONFIG,%dxn%_Pre
-PreList= 
+PreList= |
+PreWaitn= 
 Loop,3
 	{
 		if (A_Index = dxn)
 			{
-				PreList.= dxn . "<" . "||"
+				PreList.= dxn . "<" "|"
+				if (A_Index = 1)
+					{
+						Prelist.= "|"
+					}
+				continue
 			}
-		else {
-			iniread,daa,%RJDB_Config%,CONFIG,%A_Index%_Pre
-			stringsplit,dxx,daa,<
-			stringleft,dxg,dxx1,1
-			PreList.= dxx1 . "<" . %dxx% .  "|"
-		}	
-		
+		iniread,daa,%RJDB_Config%,CONFIG,%A_Index%_Pre
+		PreList.= daa . "|"	
+		if (A_Index = 1)
+			{
+				stringsplit,dant,daa,<
+				if instr(dant1,"W")
+					{
+						PreWaitn= 1
+					}
+				PreList.= "|"
+			}		
 	}
-guicontrol,,PreDD,|%PreList%    
+guicontrol,,PreDD,%PreList%
+guicontrol,,PreWAIT,%prewaitn%
+guicontrol,,PRETNUM,1
 return
 
-DELPOSTAPP:
-gui,submit,nohide
-guicontrolget,DELPostDD,,PostDD
-stringsplit,dxb,DELPostDD,<
-stringleft,dxn,dxb1,1
-iniWrite,%dxn%<,%RJDB_Config%,CONFIG,%dxn%_Post
-PostList= 
-Loop,3
-	{
-		if (A_Index = dxn)
-			{
-				PostList.= dxn . "<" . "||"
-			}
-		else {
-			iniread,daa,%RJDB_Config%,CONFIG,%A_Index%_Post
-			stringsplit,dxx,daa,<
-			stringleft,dxg,dxx1,1
-			PostList.= dxx1 . "<" . %dxx% .  "|"
-		}	
-		
-	}
-guicontrol,,PostDD,|%PostList%    
-return
 
 EXEONLY:
 filextns= exe
@@ -722,33 +788,71 @@ BOTHSRCH:
 filextns= exe|lnk|_lnk_
 return
 
-POSTWAIT:
-postwt= 
-gui,submit,nohide
-guicontrolget,postwait,,postwait
-if (postwait = 1)
-	{
-		postwt= W
-	}
-guicontrolget,postdd,,PoSTDD
-stringsplit,lls,postdd,<
-stringleft,aae,lls1,1
-iniwrite,%aae%%postwt%<%lls2%,%RJDB_CONFIG%,CONFIG,%aae%_PoST
-return
-
-
 PREWAIT:
-PREwt= 
+PREwl= 
 gui,submit,nohide
+guicontrolget,fbdnum,,PRETNUM
 guicontrolget,PREwait,,PREwait
 if (PREwait = 1)
 	{
-		PRprewt= W
+		prewl= W
 	}
 guicontrolget,dd,,PREDD
-stringsplit,lls,predd,<
-stringleft,aae,lls1,1
-iniwrite,%aae%%postwt%<%lls2%,%RJDB_CONFIG%,CONFIG,%aae%_PoST
+stringsplit,ddn,dd,<
+stringreplace,ddn1,ddn1,W,,
+if ((ddn2 = A_Space) or (ddn2 = ""))
+	{
+		ddn2:= 
+		prewl= 
+	}
+PreList= |
+Loop,3
+	{
+		iniread,cftsv,%RJDB_Config%,CONFIG,%A_Index%_Pre
+		stringsplit,cftst,cftsv,<
+		if (A_Index = fbdnum)
+			{
+				iniwrite,%fbdnum%%prewl%<%cftst2%,%RJDB_Config%,CONFIG,%fbdnum%_Pre
+				PreList.= fbdnum . prewl . "<" . cftst2 . "||"
+				continue
+			}
+		PreList.= cftsv . "|"
+	 } 	
+guicontrol,,PREDD,%PreList%
+return
+
+
+postWAIT:
+postwl= 
+gui,submit,nohide
+guicontrolget,fbdnum,,postDNUM
+guicontrolget,postwait,,postwait
+if (postwait = 1)
+	{
+		postwl= W
+	}
+guicontrolget,dd,,postDD
+stringsplit,ddn,dd,<
+stringreplace,ddn1,ddn1,W,,
+if ((ddn2 = A_Space) or (ddn2 = ""))
+	{
+		ddn2:= 
+		postwl= 
+	}
+postList= |
+Loop,3
+	{
+		iniread,cftsv,%RJDB_Config%,CONFIG,%A_Index%_post
+		stringsplit,cftst,cftsv,<
+		if (A_Index = fbdnum)
+			{
+				iniwrite,%fbdnum%%postwl%<%cftst2%,%RJDB_Config%,CONFIG,%fbdnum%_post
+				postList.= fbdnum . postwl . "<" . cftst2 . "||"
+				continue
+			}
+		postList.= cftsv . "|"
+	 } 	
+guicontrol,,postDD,%postList%
 return
 
 avnix:
@@ -759,52 +863,58 @@ ifnotinstring,gmnames,%newavinx%|
 	}
 return
 
+postDD:
+gui,submit,nohide
+guicontrolget,postdd,,postDD
+stringsplit,povr,postdd,<
+if instr(povr1,1)
+	{
+		guicontrol,,postDDT,%DDTA%<game.exe>
+	}
+if instr(povr1,2)
+	{
+		guicontrol,,postDDT,%DDTB%<game.exe>
+	}
+if instr(povr1,3)
+	{
+		guicontrol,,postDDT,%DDTC%<game.exe>
+	}
+if instr(povr1,"W")
+	{
+		guicontrol,,postwait,1
+	}
+	else {
+		guicontrol,,postwait,0
+		}
+stringreplace,postDNUM,povr1,W,,
+guicontrol,,postDNUM,%postDNUM%
+return
+
 PREDD:
 gui,submit,nohide
 guicontrolget,predd,,PreDD
-stringleft,nos,predd,1
-guicontrol,,Prewait,0
-if (nos = 1)
+stringsplit,povr,predd,<
+if instr(povr1,1)
 	{
 		guicontrol,,PREDDT,%DDTA%<game.exe>
 	}
-if (nos = 2)
+if instr(povr1,2)
 	{
 		guicontrol,,PREDDT,%DDTB%<game.exe>
 	}
-if (nos = 3)
+if instr(povr1,3)
 	{
 		guicontrol,,PREDDT,%DDTC%<game.exe>
 	}
-
-if instr(postdd,"W<")
+if instr(povr1,"W")
 	{
 		guicontrol,,Prewait,1
 	}
-return
-
-POSTDD:
-gui,submit,nohide
-guicontrolget,postdd,,postDD
-stringLeft,nos,postdd,1
-guicontrol,,postwait,0
-if (nos = 1)
-	{
-		guicontrol,,POSTDDT,<game.exe>%DDTC%
-	}
-if (nos = 2)
-	{
-		guicontrol,,POSTDDT,<game.exe>%DDTB%
-	}
-if (nos = 3)
-	{
-		guicontrol,,POSTDDT,<game.exe>%DDTA%
-	}
-
-if instr(postdd,"W<")
-	{
-		guicontrol,,Postwait,1
-	}
+	else {
+		guicontrol,,Prewait,0
+		}
+stringreplace,PRETNUM,povr1,W,,
+guicontrol,,PRETNUM,%PRETNUM%
 return
 
 INITALL:
@@ -813,6 +923,7 @@ Loop,parse,STDVARS,|
     {
         %A_LoopField%=
     }
+initz= 1	
 stringreplace,RJTMP,RJTMP,[LOCV],%A_ScriptDir%,All
 FileDelete,RJDB.ini
 FileAppend,%RJTMP%,RJDB.ini
@@ -854,12 +965,202 @@ else {
 	SB_SetText("no log exists")
 }
 return
+
 INITAMIC:
 fileread,amictmp,amicro.set
 FileDelete,Antimicro_!.cmd
 stringreplace,amictmp,amictmp,[AMICRO],%A_ScriptDir%\Antimicro\Antimicro.exe,
 fileappend,%amictmp%,Antimicro_!.cmd
 Antimicro_Executable= %A_ScriptDir%\Antimicro\Antimicro.exe
+return
+
+
+INITQUERY:
+CONCAT_ROOT=
+GENERIC_ROOT=
+Loop,parse,dralbet,|
+	{
+		srchdrl= %A_LoopField%:
+		Loop,parse,GenQuery,|
+			{
+				GNCHK= %srchdrl%\%A_LoopField%
+				if fileexist(GNCHK)
+					{
+						Loop,files,%GNCHK%,D
+							{
+								Loop,parse,AllQuery,|
+									{
+										ALLCHK= %A_LoopFileFullPath%\%A_LoopField%
+									}
+								if (fileexist(ALLCHK)&& !instr(CONCAT_ROOT,ALLCHK))
+									{
+										CONCAT_ROOT.= ALLCHK . "|"
+										GENERIC_ROOT.= ALLCHK . "|"
+									}
+							}
+						if !instr(CONCAT_ROOT,GNCHK)
+							{
+								CONCAT_ROOT.= GNCHK . "|"
+								GENERIC_ROOT.= GNCHK . "|"
+							}
+					}
+			}
+	}
+	
+STEAM_ROOT=
+Loop,parse,progdirs
+	{
+		srclocd= %A_LoopField%
+		Loop,Files,%srclocd%,D
+			{
+				if instr(A_LoopFileName,"Steam")
+					{
+						Loop,files,%A_LoopFileFullPath%,D
+							{
+								if instr(A_LoopFileName,"apps")
+									{
+										Loop,files,%A_LoopFileFullPath%,D
+											{
+												if (A_LoopFilename = "common")
+													{
+														CONCAT_ROOT.= A_LoopFileFullPath . "|"
+														STEAM_ROOT.= A_LoopFileFullPath . "|"
+														break
+													}
+											}
+									}
+							}
+					}
+			}
+	}
+Loop,parse,dralbet,|
+	{
+		srclocd= %A_LoopField%:
+		if instr(A_LoopFileName,"Steam")
+					{
+						Loop,files,%A_LoopFileFullPath%,D
+							{
+								if instr(A_LoopFileName,"apps")
+									{
+										Loop,files,%A_LoopFileFullPath%,D
+											{
+												if ((A_LoopFilename = "common")&& !instr(STEAM_ROOT,A_LoopField))
+													{														
+														CONCAT_ROOT.= A_LoopFileFullPath . "|"
+														STEAM_ROOT.= A_LoopFileFullPath . "|"
+														break
+													}
+											}
+									}
+							}
+					}
+	}
+	
+	
+GOGROOT= 
+
+Loop,parse,progdirs
+	{
+		srclocd= %A_LoopField%
+		Loop,Files,%srclocd%,D
+			{
+				gogchkd= %A_LoopFileFullPath%
+				Loop,parse,gogquery,|
+					{
+						gogchkh= %gogchkd%\%A_LoopField%
+						if (fileexist(gogchkh)&& !instr(CONCAT_ROOT,gogchkh))
+							{
+								CONCAT_ROOT.= gogchkh . "|"
+								GOG_ROOT.= gogchkh . "|"
+								break
+							}
+					}
+			}
+	}	
+Loop,parse,dralbet,|
+	{
+		srchdrl= %A_LoopField%:
+		Loop,parse,remProgdirs,|
+			{
+				Loop,files,%srchdrl%\%A_LoopField%,D
+					{
+						gogchkd= %A_LoopFileFullPath%
+						Loop,parse,gogquery,|
+							{
+								gogchkh= %gogchkd%\%A_LoopField%
+								if (fileexist(gogchkh)&& !instr(CONCAT_ROOT,gogchkh))
+									{
+										CONCAT_ROOT.= gogchkh . "|"
+										GOG_ROOT.= gogchkh . "|"
+										break
+									}
+							}
+					}
+				
+			}
+	}
+	
+ORIGINROOT= 
+
+Loop,parse,progdirs
+	{
+		srclocd= %A_LoopField%
+		Loop,Files,%srclocd%,D
+			{
+				Loop,files,%A_LoopFileFullPath%,D
+					{
+						if (instr(A_LoopFileName,"Origin")&& !instr(CONCAT_ROOT,A_LoopFileName))
+							{
+								CONCAT_ROOT.= ORIGINchkh . "|"										
+								ORIGIN_ROOT.= ORIGINchkh . "|"										
+							}
+					}
+			}
+	}	
+Loop,parse,dralbet,|
+	{
+		srchdrl= %A_LoopField%:
+		Loop,parse,remProgdirs,|
+			{
+				Loop,files,%srchdrl%\%A_LoopField%,D
+					{
+						ORIGINchkd= %A_LoopFileFullPath%
+						if instr(A_LoopFileName,"Origin")
+							{
+								Anorigin= %A_LoopFileFullPath%\Origin.exe
+								if (fileexist(Anorigin)&& !instr(CONCAT_ROOT,A_LoopFileFullPath))
+									{
+										ORIGIN_ROOT.= ORIGINchkh . "|"
+									}
+							}
+					}
+				
+			}
+	}		
+if (CONCAT_ROOT <> "")
+	{
+		pl=
+		SOURCE_Directory= %CONCAT_ROOT%
+		Loop,parse,CONCAT_ROOT,|
+			{
+				if (A_LoopField = "")
+					{
+						continue
+					}
+				pl+=1
+				if (pl = 1)
+					{
+						sourc_t:= A_LoopField . "||"
+						continue
+					}
+				sourc_t.= A_LoopField . "|"
+				
+			}
+		stringtrimRight,sourc_t,sourc_t,1
+		stringtrimRight,Source_directory,Source_directory,1
+		iniwrite,%Source_directory%,%RJDB_Config%,GENERAL,SOURCE_DIRECTORY
+		SOURCE_DIRECTORY= %sourc_t%
+	}
 return
 
 popgui:
@@ -870,6 +1171,67 @@ postlist=
 PostStatus=
 PREDDT=
 POSTDDT=
+iniread,RJDBSECTS,RJDB.ini
+Loop,parse,RJDBSECTS,`r`n
+	{
+		if (A_LoopField = "")
+			{
+				continue
+			}
+		iniread,sectp,RJDB.ini,%A_LoopField%
+		Loop,parse,sectp,`r`n
+			{
+				if (A_LoopField = "")
+					{
+						continue
+					}
+				stringsplit,kval,A_LoopField,=
+				val= %kval1%
+				stringreplace,trval,A_LoopField,%kval1%=
+				if (trval = "")
+					{
+						trval= %kval1%
+					}
+				%val%:= trval	
+				stringreplace,trvald,trval,%A_Space%,`%,All	
+				%kval1%T:= trvald
+				if instr(kval1,"_post")
+					{
+						postlist.= trval . "|"
+						if (kval1 = "1_post")
+							{
+								postlist.= "|"
+							}
+					}
+				
+				if instr(kval1,"_Pre")
+					{
+						Prelist.= trval . "|"
+						if (kval1 = "1_Pre")
+							{
+								Prelist.= "|"
+							}
+					}	
+				if (resetting = 1)
+					{
+						guicontrol,,%kval1%T,%trval%
+					}
+			}
+	}
+if (resetting = 1)
+	{
+		guicontrol,,PREDDT,<Pre-Launch Programs>
+		guicontrol,,POSTDDT,<$This_Prog$><Mapper><Monitor>
+		guicontrol,hide,ButtonCreate
+		guicontrol,disable,ButtonCreate
+		guicontrol,disable,ButtonClear
+		guicontrol,hide,ButtonClear
+		guicontrol,hide,MyListView
+		guicontrol,disable,MyListView
+		GuiControl, Move, MyListView, w0
+		Gui, Show, Autosize
+	}	
+	/*
 Loop,parse,rjdb,`r`n
     {
         if (A_LoopField = "")
@@ -936,8 +1298,15 @@ Loop,parse,rjdb,`r`n
 				Gui, Show, Autosize
             }
     }
+	*/
+Srcdeflt= %A_ScriptDir%\Shortcuts
 Iniread,Source_Directory,%RJDB_Config%,GENERAL,Source_Directory
-guicontrol,,Sourcd_DirectoryT,|%Source_Directory%
+if ((Source_Directory = Srcdeflt)or (resetting = 1) or (initz = 1))
+	{
+		gosub, INITQUERY
+	}
+initz= 
+guicontrol,,Source_DirectoryT,%Source_Directory%
 resetting= 
 return
 
@@ -983,13 +1352,14 @@ MMSETUP:
 Msgbox,,Default Desktop Config,Configure your monitor/s as you would have them for your`nMediaCenter or Desktop`nthen click "OK"
 ifmsgbox,OK
     {
-        FileMove,Mediacenter.cfg,MediaCenter.cfg.bak
-        RunWait, %comspec% /c "" "%multimonitor_tool%" /SaveConfig "%A_ScriptDir%\Mediacenter.cfg",%A_ScriptDir%,hide
-        ifexist,Mediacenter.cfg
+        FileMove,Desktop.cfg,Desktop.cfg.bak
+        RunWait, %comspec% /c "" "%multimonitor_tool%" /SaveConfig "%A_ScriptDir%\Desktop.cfg",%A_ScriptDir%,hide
+        ifexist,Desktop.cfg
             {
                 Msgbox,,Success,The current monitor configuration will be used for your Mediacenter or desktop
-                iniwrite,%A_ScriptDir%\Mediacenter.cfg,%RJDB_Config%,GENERAL,MM_MEDIACENTER_Config
-                iniwrite,/LoadConfig "%A_ScriptDir%\Mediacenter.cfg",%RJDB_Config%,CONFIG,switchback
+                iniwrite,%A_ScriptDir%\Desktop.cfg,%RJDB_Config%,GENERAL,MM_MEDIACENTER_Config
+                iniwrite,/LoadConfig "%A_ScriptDir%\Desktop.cfg",%RJDB_Config%,CONFIG,switchback
+				guicontrol,,MM_Mediacenter_ConfigT,Desktop.cfg
             }
            else {
             Msgbox,,Failure,The current monitor configuration could not be saved
@@ -998,13 +1368,14 @@ ifmsgbox,OK
 Msgbox,,Default Game Config,Configure your monitor/s as you would have them for your`nGames or Emulators`nthen click "OK"
 ifmsgbox,OK
     {
-        FileMove,Gaming.cfg,Gaming.cfg.bak
-        RunWait, %comspec% /c "" "%multimonitor_tool%" /SaveConfig "%A_ScriptDir%\Gaming.cfg",%A_ScriptDir%,hide
-        ifexist,Gaming.cfg
+        FileMove,Game.cfg,Game.cfg.bak
+        RunWait, %comspec% /c "" "%multimonitor_tool%" /SaveConfig "%A_ScriptDir%\Game.cfg",%A_ScriptDir%,hide
+        ifexist,Game.cfg
             {
                 Msgbox,,Success,The current monitor configuration will be used for your Games or Emulators
-                iniwrite,%A_ScriptDir%\Gaming.cfg,%RJDB_Config%,GENERAL,MM_Game_Config
-                iniwrite,/LoadConfig "%A_ScriptDir%\Gaming.cfg",%RJDB_Config%,CONFIG,switchcmd
+                iniwrite,%A_ScriptDir%\Game.cfg,%RJDB_Config%,GENERAL,MM_Game_Config
+                iniwrite,/LoadConfig "%A_ScriptDir%\Game.cfg",%RJDB_Config%,CONFIG,switchcmd
+				guicontrol,,MM_Game_ConfigT,Game.cfg
             }
     }
    else {
@@ -1095,6 +1466,7 @@ return
 REINDEX:
 SOURCEDLIST= 
 fullist= 
+filedelete,simpth.db
 filedelete,continue.db
 guicontrol,hide,REINDEX
 Gui,Listview,MyListView
