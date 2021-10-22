@@ -31,18 +31,18 @@ if ((plink = "") or !fileExist(plink) or (scextn = ""))
 if (GetKeyState("Alt")&&(scextn = "exe"))
 	{
 		CreateSetup= 1
-		iniread,Game_Profiles,RJDB.ini,GENERAL,Game_Profiles
+		iniread,Game_Profilex,RJDB.ini,GENERAL,Game_Profiles
 		iniread,mapper_extension,RJDB.ini,GENERAL,mapper_extension
 		iniread,Game_Directory,RJDB.ini,GENERAL,Game_Directory
-		FileCreateDir,%Game_Profiles%\%gmname%
+		FileCreateDir,%Game_Profilex%\%gmname%
 		if (errorlevel = 0)
 			{
-				Game_Profiles= %Game_Profiles%\%gmname%
-				FileCopy,Player1.%mapper_extension%,%GameProfiles%
-				FileCopy,Player2.%mapper_extension%,%GameProfiles%
-				Filecopy,Game.cfg,%GameProfiles%
-				Filecopy,Desk.cfg,%GameProfiles%
-				Filecopy,Mediacenter.%mapper_extension%,%GameProfiles%
+				Game_Profiles= %Game_Profilex%\%gmname%
+				FileCopy,Player1.%mapper_extension%,%GameProfiles%\Player1.%mapper_extension%
+				FileCopy,Player2.%mapper_extension%,%GameProfiles%\Player1.%mapper_extension%
+				Filecopy,Game.cfg,%GameProfiles%\Game.cfg
+				Filecopy,Desk.cfg,%GameProfiles%\Desk.cfg
+				Filecopy,Mediacenter.%mapper_extension%,%GameProfiles%\Mediacenter.%mapper_extension%
 				FileCopy,RJDB.ini,%GameProfiles%\Game.ini
 				iniwrite,%GameProfiles%\Desk.cfg,%GameProfiles%\Game.ini,GENERAL,MM_MEDIACENTER_Config
 				iniwrite,%GameProfiles%\Game.cfg,%GameProfiles%\Game.ini,GENERAL,MM_Game_Config
