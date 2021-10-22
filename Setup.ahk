@@ -22,20 +22,25 @@ Loop %0%
 	}
 splitpath,plink,scname,scpath,scextn,gmname,gmd
 CFGDIR= %SCPATH%
+RJDB_Config= RJDB.ini
 if (scextn = "lnk")
 	{
 		FileGetShortcut,%plink%,inscname,inscpth,chkargl
 		if instr(inscname,"linkrunner")
 			{
 				splitpath,chkargl,chkargxe,chkargpth
-				msgbox,,,%chkargpth%
+				CFGDIR= %CHKARGPTH%
+				RJDB_Config= %CFGDIR%\RJDB.ini
 			}
 		
+	}
+	else {
+		CFGDIR= %A_ScriptDir%
+		RJDB_Config= RJDB.ini
 	}
 
 if ((plink = "") or !fileExist(plink) or (scextn = ""))
 	{
-		RJDB_Config= RJDB.ini
 		filedelete,log.txt
 		FileCreateDir,Launchers
 		FileCreateDir,profiles
@@ -298,32 +303,32 @@ RJDB_Config:
 gui,submit,nohide
 FileSelectFile,RJDB_ConfigT,3,%flflt%,Select File
 if ((RJDB_ConfigT <> "")&& !instr(RJDB_ConfigT,"<"))
-{
-RJDB_Config= %RJDB_ConfigT%
-iniwrite,%RJDB_Config%,%RJDB_Config%,GENERAL,RJDB_Config
-stringreplace,RJDB_ConfigT,RJDB_ConfigT,%A_Space%,`%,All
-guicontrol,,RJDB_ConfigT,%RJDB_Config%
-}
-else {
-stringreplace,RJDB_ConfigT,RJDB_ConfigT,%A_Space%,`%,All
-guicontrol,,RJDB_ConfigT,<RJDB_Config
-}
+	{
+		RJDB_Config= %RJDB_ConfigT%
+		iniwrite,%RJDB_Config%,%RJDB_Config%,GENERAL,RJDB_Config
+		stringreplace,RJDB_ConfigT,RJDB_ConfigT,%A_Space%,`%,All
+		guicontrol,,RJDB_ConfigT,%RJDB_Config%
+	}
+	else {
+		stringreplace,RJDB_ConfigT,RJDB_ConfigT,%A_Space%,`%,All
+		guicontrol,,RJDB_ConfigT,<RJDB_Config
+	}
 return
 
 RJDB_Location:
 gui,submit,nohide
 FileSelectFolder,RJDB_LocationT,%fldflt%,3,Select Folder
 if ((RJDB_LocationT <> "")&& !instr(RJDB_LocationT,"<"))
-{
-RJDB_Location= %RJDB_LocationT%
-iniwrite,%RJDB_Location%,%RJDB_Config%,GENERAL,RJDB_Location
-stringreplace,RJDB_LocationT,RJDB_LocationT,%A_Space%,`%,All
-guicontrol,,RJDB_LocationT,%RJDB_Location%
-}
-else {
-stringreplace,RJDB_LocationT,RJDB_LocationT,%A_Space%,`%,All
-guicontrol,,RJDB_LocationT,<RJDB_Location
-}
+	{
+		RJDB_Location= %RJDB_LocationT%
+		iniwrite,%RJDB_Location%,%RJDB_Config%,GENERAL,RJDB_Location
+		stringreplace,RJDB_LocationT,RJDB_LocationT,%A_Space%,`%,All
+		guicontrol,,RJDB_LocationT,%RJDB_Location%
+	}
+	else {
+		stringreplace,RJDB_LocationT,RJDB_LocationT,%A_Space%,`%,All
+		guicontrol,,RJDB_LocationT,<RJDB_Location
+	}
 return
 
 
@@ -332,32 +337,32 @@ Game_ProfB:
 gui,submit,nohide
 FileSelectFolder,GAME_ProfilesT,%fldflt%,3,Select Folder
 if ((GAME_ProfilesT <> "")&& !instr(GAME_ProfilesT,"<"))
-{
-GAME_Profiles= %GAME_ProfilesT%
-iniwrite,%GAME_Profiles%,%RJDB_Config%,GENERAL,GAME_Profiles
-stringreplace,GAME_ProfilesT,GAME_ProfilesT,%A_Space%,`%,All
-guicontrol,,GAME_ProfilesT,%GAME_Profiles%
-}
-else {
-stringreplace,GAME_ProfilesT,GAME_ProfilesT,%A_Space%,`%,All
-guicontrol,,GAME_ProfilesT,<GAME_Profiles
-}
+	{
+		GAME_Profiles= %GAME_ProfilesT%
+		iniwrite,%GAME_Profiles%,%RJDB_Config%,GENERAL,GAME_Profiles
+		stringreplace,GAME_ProfilesT,GAME_ProfilesT,%A_Space%,`%,All
+		guicontrol,,GAME_ProfilesT,%GAME_Profiles%
+	}
+	else {
+		stringreplace,GAME_ProfilesT,GAME_ProfilesT,%A_Space%,`%,All
+		guicontrol,,GAME_ProfilesT,<GAME_Profiles
+	}
 return
 
 Game_DirB:
 gui,submit,nohide
 FileSelectFolder,GAME_DirectoryT,%fldflt%,3,Select Folder
 if ((GAME_DirectoryT <> "")&& !instr(GAME_DirectoryT,"<"))
-{
-GAME_Directory= %GAME_DirectoryT%
-iniwrite,%GAME_Directory%,%RJDB_Config%,GENERAL,GAME_Directory
-stringreplace,GAME_DirectoryT,GAME_DirectoryT,%A_Space%,`%,All
-guicontrol,,GAME_DirectoryT,%GAME_Directory%
-}
-else {
-stringreplace,GAME_DirectoryT,GAME_DirectoryT,%A_Space%,`%,All
-guicontrol,,GAME_DirectoryT,<GAME_Directory
-}
+	{
+		GAME_Directory= %GAME_DirectoryT%
+		iniwrite,%GAME_Directory%,%RJDB_Config%,GENERAL,GAME_Directory
+		stringreplace,GAME_DirectoryT,GAME_DirectoryT,%A_Space%,`%,All
+		guicontrol,,GAME_DirectoryT,%GAME_Directory%
+	}
+	else {
+		stringreplace,GAME_DirectoryT,GAME_DirectoryT,%A_Space%,`%,All
+		guicontrol,,GAME_DirectoryT,<GAME_Directory
+	}
 return
 
 SELALLBUT:
@@ -401,14 +406,13 @@ if ((Source_DirectoryT <> "")&& !instr(Source_DirectoryT,"<"))
 					}
 				srcdira.= pkrs . "|"
 			}
-SOURCEDLIST=			
-			
-SOURCE_DIRECTORY= %scrdira%
-iniwrite,%srcdira%,%RJDB_Config%,GENERAL,Source_Directory
-stringreplace,CURDP,Source_DirectoryX,%A_Space%,`%,All
-guicontrol,,Source_DirectoryT,|%srcdira%
-guicontrol,,CURDP,%CURDP%
-}
+		SOURCEDLIST=					
+		SOURCE_DIRECTORY= %scrdira%
+		iniwrite,%srcdira%,%RJDB_Config%,GENERAL,Source_Directory
+		stringreplace,CURDP,Source_DirectoryX,%A_Space%,`%,All
+		guicontrol,,Source_DirectoryT,|%srcdira%
+		guicontrol,,CURDP,%CURDP%
+	}
 return
 
 Keyboard_MapBDisable:
@@ -416,16 +420,42 @@ return
 
 Keyboard_MapB:
 gui,submit,nohide
-FileSelectFile,Keyboard_MapperT,3,Antimicro,Select File,*.exe
+kbmdefloc= %A_Scriptdir%
+if fileexist(Programfilesx86 . "\" . "Antimicro")
+	{
+		kbmdefloc= %programfilesx86%\Antimicro
+	}
+FileSelectFile,Keyboard_MapperT,35,%kbmdefloc%,Select File,*.exe
 if ((Keyboard_MapperT <> "")&& !instr(Keyboard_MapperT,"<"))
-{
-Keyboard_Mappern= %Keyboard_MapperT%
-}
-else {
-stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
-guicontrol,,Keyboard_MapperT,<Keyboard_Mapper
-}
+	{
+		Keyboard_Mappern= %Keyboard_MapperT%
+	}
+	else {
+		stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
+		guicontrol,,Keyboard_MapperT,<Keyboard_Mapper
+	}
 Mapper= 
+if instr(Keyboard_Mappern,"Xpadder")
+	{
+		Mapper= 1
+		iniwrite,1,%RJDB_Config%,GENERAL,Mapper
+		iniwrite,Xpadder,%RJDB_Config%,JOYSTICKS,Jmap
+		iniwrite,xpadderprofile,%RJDB_Config%,JOYSTICKS,Mapper_Extension
+        fileread,amcjp,xallgames.set,
+        xpadder_executable=%keyboard_mappern%
+        Keyboard_Mapper=%xpadder_executable%
+        iniwrite,%Keyboard_Mapper%,%RJDB_Config%,GENERAL,Keyboard_Mapper
+        iniwrite,antimicro.exe,%RJDB_Config%,GENERAL,Antimicro_executable
+		stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
+		guicontrol,,Keyboard_MapperT,%Keyboard_Mapper%
+		guicontrol,,Player1_TemplateT,%A_ScriptDir%\Player1.xpadderprofile
+		guicontrol,,Player2_TemplateT,%A_ScriptDir%\Player2.xpadderprofile
+		guicontrol,,MediaCenter_ProfileT,%A_ScriptDir%\MediaCenter.xpadderprofile
+		iniwrite,%A_ScriptDir%\Player1.xpadderprofile,%RJDB_CONFIG%,GENERAL,Player1_Template
+		iniwrite,%A_ScriptDir%\Player1.xpadderprofile,%RJDB_CONFIG%,GENERAL,Player2_Template
+		iniwrite,%A_ScriptDir%\Desktop.xpadderprofile,%RJDB_CONFIG%,GENERAL,MediaCenter_Profile
+	}
+	
 if instr(Keyboard_Mappern,"Antimicro")
 	{
 		Mapper= 1
@@ -444,6 +474,12 @@ if instr(Keyboard_Mappern,"Antimicro")
         Keyboard_Mapper=%A_ScriptDir%\Antimicro_!.cmd
         iniwrite,%Keyboard_Mapper%,%RJDB_Config%,GENERAL,Keyboard_Mapper
         iniwrite,%Keyboard_Mappern%,%RJDB_Config%,GENERAL,Antimicro_executable
+		guicontrol,,Player1_TemplateT,%A_ScriptDir%\Player1.gamecontroller.amgp
+		guicontrol,,Player2_TemplateT,%A_ScriptDir%\Player2.gamecontroller.amgp
+		guicontrol,,MediaCenter_ProfileT,%A_ScriptDir%\MediaCenter.gamecontroller.amgp
+		iniwrite,%A_ScriptDir%\Player1.gamecontroller.amgp,%RJDB_CONFIG%,GENERAL,Player1_Template
+		iniwrite,%A_ScriptDir%\Player1.gamecontroller.amgp,%RJDB_CONFIG%,GENERAL,Player2_Template
+		iniwrite,%A_ScriptDir%\MediaCenter.gamecontroller.amgp,%RJDB_CONFIG%,GENERAL,MediaCenter_Profile
     }
 		else {
 			iniwrite,%Keyboard_Mapper%,%RJDB_Config%,GENERAL,Keyboard_Mapper
@@ -457,32 +493,32 @@ Player1_TempB:
 gui,submit,nohide
 FileSelectFile,Player1_TemplateT,3,,Select File
 if ((Player1_TemplateT <> "")&& !instr(Player1_TemplateT,"<"))
-{
-Player1_Template= %Player1_TemplateT%
-iniwrite,%Player1_Template%,%RJDB_Config%,GENERAL,Player1_Template
-stringreplace,Player1_TemplateT,Player1_TemplateT,%A_Space%,`%,All
-guicontrol,,Player1_TemplateT,%Player1_TemplateT%
-}
-else {
-stringreplace,Player1_TemplateT,Player1_TemplateT,%A_Space%,`%,All
-guicontrol,,Player1_TemplateT,<Player1_Template
-}
+	{
+		Player1_Template= %Player1_TemplateT%
+		iniwrite,%Player1_Template%,%RJDB_Config%,GENERAL,Player1_Template
+		stringreplace,Player1_TemplateT,Player1_TemplateT,%A_Space%,`%,All
+		guicontrol,,Player1_TemplateT,%Player1_TemplateT%
+	}
+	else {
+		stringreplace,Player1_TemplateT,Player1_TemplateT,%A_Space%,`%,All
+		guicontrol,,Player1_TemplateT,<Player1_Template
+	}
 return
 
 Player2_TempB:
 gui,submit,nohide
 FileSelectFile,Player2_TemplateT,3,,Select File
 if ((Player2_TemplateT <> "")&& !instr(Player2_TemplateT,"<"))
-{
-Player2_Template= %Player2_TemplateT%
-iniwrite,%Player2_Template%,%RJDB_Config%,GENERAL,Player2_Template
-stringreplace,Player2_TemplateT,Player2_TemplateT,%A_Space%,`%,All
-guicontrol,,Player2_TemplateT,%Player2_TemplateT%
-}
-else {
-stringreplace,Player2_TemplateT,Player2_TemplateT,%A_Space%,`%,All
-guicontrol,,Player2_TemplateT,<Player2_Template
-}
+	{
+		Player2_Template= %Player2_TemplateT%
+		iniwrite,%Player2_Template%,%RJDB_Config%,GENERAL,Player2_Template
+		stringreplace,Player2_TemplateT,Player2_TemplateT,%A_Space%,`%,All
+		guicontrol,,Player2_TemplateT,%Player2_TemplateT%
+	}
+	else {
+		stringreplace,Player2_TemplateT,Player2_TemplateT,%A_Space%,`%,All
+		guicontrol,,Player2_TemplateT,<Player2_Template
+	}
 return
 
 MediaCenter_ProfB:
@@ -496,10 +532,10 @@ if ((MediaCenter_ProfileT <> "")&& !instr(MediaCenter_ProfileT,"<"))
 		stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
 		guicontrol,,MediaCenter_ProfileT,%MediaCenter_ProfileT%
 	}
-		else {
-			stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
-			guicontrol,,MediaCenter_ProfileT,<MediaCenter_Profile
-		}
+	else {
+		stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
+		guicontrol,,MediaCenter_ProfileT,<MediaCenter_Profile
+	}
 return
 MM_ToolBDisable:
 return
@@ -523,7 +559,8 @@ if ((MM_Game_Config = "")or(MM_Mediacenter_Config = ""))
         msgbox,4,Setup,Setup the Multimonitor Tool now?
         ifmsgbox,yes
             {
-                gosub, MMSETUP
+                gosub, MMSETUPD
+                gosub, MMSETUPG
             }
     }
 	
@@ -532,54 +569,63 @@ return
 MM_Game_CfgB:
 gui,submit,nohide
 guicontrolget,gmcfg,,MM_Game_ConfigT
-if (!fileexist("Game.cfg")or !fileexist(gmcfg))
+if (!fileexist(CFGDIR . "\" . "Game.cfg")or !fileexist(gmcfg))
 	{
 		 msgbox,4,Setup,Setup the Multimonitor Tool now?
         ifmsgbox,yes
             {
-                gosub, MMSETUP
+                gosub, MMSETUPG
+				setupmm= 1
             }
 	}
-
-FileSelectFile,MM_GAME_ConfigT,3,,Select File,*.cfg
-if ((MM_GAME_ConfigT <> "")&& !instr(MM_GAME_ConfigT,"<"))
+if ((setupmm = "")or !fileexist(CFGDIR . "\" . "Game.cfg"))
 	{
-		MM_GAME_Config= %MM_GAME_ConfigT%
-		iniwrite,%MM_GAME_Config%,%RJDB_Config%,GENERAL,MM_GAME_Config
-		iniwrite,2,%RJDB_Config%,GENERAL,MonitorMode
-		stringreplace,MM_GAME_ConfigT,MM_GAME_ConfigT,%A_Space%,`%,All
-		guicontrol,,MM_GAME_ConfigT,%MM_GAME_ConfigT%
+		FileSelectFile,MM_GAME_ConfigT,3,,Select File,*.cfg
+		if ((MM_GAME_ConfigT <> "")&& !instr(MM_GAME_ConfigT,"<"))
+			{
+				MM_GAME_Config= %MM_GAME_ConfigT%
+				iniwrite,%MM_GAME_Config%,%RJDB_Config%,GENERAL,MM_GAME_Config
+				iniwrite,2,%RJDB_Config%,GENERAL,MonitorMode
+				stringreplace,MM_GAME_ConfigT,MM_GAME_ConfigT,%A_Space%,`%,All
+				guicontrol,,MM_GAME_ConfigT,%MM_GAME_ConfigT%
+			}
+			else {
+				stringreplace,MM_GAME_Config,MM_GAME_Config,%A_Space%,`%,All
+				guicontrol,,MM_GAME_ConfigT,<MM_GAME_Config
+			}
 	}
-	else {
-		stringreplace,MM_GAME_Config,MM_GAME_Config,%A_Space%,`%,All
-		guicontrol,,MM_GAME_ConfigT,<MM_GAME_Config
-	}
+setupmm= 	
 return
 
 MM_MediaCenter_CfgB:
 gui,submit,nohide
 guicontrolget,dtcfg,,MM_MediaCenter_ConfigT
-if (!fileexist("Desktop.cfg")or !fileexist(dtcfg))
+if (!fileexist(CFGDIR . "\" . "Desktop.cfg")or !fileexist(dtcfg))
 	{
 		 msgbox,4,Setup,Setup the Multimonitor Tool now?
         ifmsgbox,yes
             {
-                gosub, MMSETUP
+                gosub, MMSETUPD
+				setupmm= 1
             }
 	}
-FileSelectFile,MM_MediaCenter_ConfigT,3,,Select File,*.cfg
-if ((MM_MediaCenter_ConfigT <> "")&& !instr(MM_MediaCenter_ConfigT,"<"))
-{
-MM_MediaCenter_Config= %MM_MediaCenter_ConfigT%
-iniwrite,%MM_MediaCenter_Config%,%RJDB_Config%,GENERAL,MM_MediaCenter_Config
-iniwrite,2,%RJDB_Config%,GENERAL,MonitorMode
-stringreplace,MM_MediaCenter_ConfigT,MM_MediaCenter_ConfigT,%A_Space%,`%,All
-guicontrol,,MM_MediaCenter_ConfigT,%MM_MediaCenter_ConfigT%
-}
-else {
-stringreplace,MM_MediaCenter_Config,MM_MediaCenter_Config,%A_Space%,`%,All
-guicontrol,,MM_MediaCenter_ConfigT,<MM_MediaCenter_Config
-}
+if ((setupmm = "")or !fileexist(CFGDIR . "\" . "Desktop.cfg"))	
+	{
+		FileSelectFile,MM_MediaCenter_ConfigT,3,,Select File,*.cfg
+		if ((MM_MediaCenter_ConfigT <> "")&& !instr(MM_MediaCenter_ConfigT,"<"))
+			{
+				MM_MediaCenter_Config= %MM_MediaCenter_ConfigT%
+				iniwrite,%MM_MediaCenter_Config%,%RJDB_Config%,GENERAL,MM_MediaCenter_Config
+				iniwrite,2,%RJDB_Config%,GENERAL,MonitorMode
+				stringreplace,MM_MediaCenter_ConfigT,MM_MediaCenter_ConfigT,%A_Space%,`%,All
+				guicontrol,,MM_MediaCenter_ConfigT,%MM_MediaCenter_ConfigT%
+			}
+			else {
+				stringreplace,MM_MediaCenter_Config,MM_MediaCenter_Config,%A_Space%,`%,All
+				guicontrol,,MM_MediaCenter_ConfigT,<MM_MediaCenter_Config
+			}
+	}
+setupmm= 	
 return
 
 BGM_ProgBDisable:
@@ -590,32 +636,32 @@ BGM_ProgB:
 gui,submit,nohide
 FileSelectFile,Borderless_Gaming_ProgramT,3,Borderless Gaming,Select File,*.exe
 if ((Borderless_Gaming_ProgramT <> "")&& !instr(Borderless_Gaming_ProgramT,"<"))
-{
-Borderless_Gaming_Program= %Borderless_Gaming_ProgramT%
-iniwrite,%Borderless_Gaming_Program%,%RJDB_Config%,GENERAL,Borderless_Gaming_Program
-stringreplace,Borderless_Gaming_ProgramT,Borderless_Gaming_ProgramT,%A_Space%,`%,All
-guicontrol,,Borderless_Gaming_ProgramT,%Borderless_Gaming_ProgramT%
-}
-else {
-stringreplace,Borderless_Gaming_ProgramT,Borderless_Gaming_ProgramT,%A_Space%,`%,All
-guicontrol,,Borderless_Gaming_ProgramT,<Borderless_Gaming_Program
-}
+	{
+		Borderless_Gaming_Program= %Borderless_Gaming_ProgramT%
+		iniwrite,%Borderless_Gaming_Program%,%RJDB_Config%,GENERAL,Borderless_Gaming_Program
+		stringreplace,Borderless_Gaming_ProgramT,Borderless_Gaming_ProgramT,%A_Space%,`%,All
+		guicontrol,,Borderless_Gaming_ProgramT,%Borderless_Gaming_ProgramT%
+	}
+	else {
+		stringreplace,Borderless_Gaming_ProgramT,Borderless_Gaming_ProgramT,%A_Space%,`%,All
+		guicontrol,,Borderless_Gaming_ProgramT,<Borderless_Gaming_Program
+	}
 return
 
 BGP_DataB:
 gui,submit,nohide
 FileSelectFile,Borderless_Gaming_DatabaseT,3,%A_Appdata%\Andrew Sampson\Borderless Gaming,Select File,config.bin
 if ((Borderless_Gaming_DatabaseT <> "")&& !instr(Borderless_Gaming_DatabaseT,"<"))
-{
-Borderless_Gaming_Database= %Borderless_Gaming_DatabaseT%
-iniwrite,%Borderless_Gaming_Database%,%RJDB_Config%,GENERAL,Borderless_Gaming_Database
-stringreplace,Borderless_Gaming_DatabaseT,Borderless_Gaming_DatabaseT,%A_Space%,`%,All
-guicontrol,,Borderless_Gaming_DatabaseT,%Borderless_Gaming_DatabaseT%
-}
-else {
-stringreplace,Borderless_Gaming_Database,Borderless_Gaming_Database,%A_Space%,`%,All
-guicontrol,,Borderless_Gaming_DatabaseT,<Borderless_Gaming_Database
-}
+	{
+		Borderless_Gaming_Database= %Borderless_Gaming_DatabaseT%
+		iniwrite,%Borderless_Gaming_Database%,%RJDB_Config%,GENERAL,Borderless_Gaming_Database
+		stringreplace,Borderless_Gaming_DatabaseT,Borderless_Gaming_DatabaseT,%A_Space%,`%,All
+		guicontrol,,Borderless_Gaming_DatabaseT,%Borderless_Gaming_DatabaseT%
+	}
+	else {
+		stringreplace,Borderless_Gaming_Database,Borderless_Gaming_Database,%A_Space%,`%,All
+		guicontrol,,Borderless_Gaming_DatabaseT,<Borderless_Gaming_Database
+	}
 return
 
 PostAPP:
@@ -1217,14 +1263,14 @@ if (CONCAT_ROOT <> "")
 return
 
 popgui:
-FileRead,rjdb,RJDB.ini
+FileRead,rjdb,%RJDB_Config%
 Prelist=
 PostStatus=
 postlist= 
 PostStatus=
 PREDDT=
 POSTDDT=
-iniread,RJDBSECTS,RJDB.ini
+iniread,RJDBSECTS,%RJDB_Config%
 Loop,parse,RJDBSECTS,`r`n
 	{
 		if (A_LoopField = "")
@@ -1363,31 +1409,47 @@ resetting=
 return
 
 RECREATEJOY:
+ifnotexist,Player1.xpadderprofile
+	{
+		filecopy,xallgames.set,Player1.xpadderprofile
+	}
+ifnotexist,Player2.xpadderprofile
+	{
+		filecopy,xallgames.set,Player2.xpadderprofile
+	}
+ifnotexist,Mediacenter.xpadderprofile
+	{
+		filecopy,xDesk.set,MediaCenter.xpadderprofile
+	}
+ifnotexist,Mediacenter2.xpadderprofile
+	{
+		filecopy,xDesk.set,MediaCenter2.xpadderprofile
+	}
 ifnotexist,Player1.gamecontroller.amgp
     {
         fileread,mctmp,allgames.set
-        stringreplace,SCRIPTRV,A_ScriptDir,\,/,All
+        stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,Player1.gamecontroller.amgp
     }
 ifnotexist,Player2.gamecontroller.amgp
     {
         fileread,mctmp,allgames.set
-        stringreplace,SCRIPTRV,A_ScriptDir,\,/,All
+        stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,Player2.gamecontroller.amgp
     }    
 ifnotexist,MediaCenter.gamecontroller.amgp
     {
         fileread,mctmp,Desktop.set
-        stringreplace,SCRIPTRV,A_ScriptDir,\,/,All
+        stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,MediaCenter.gamecontroller.amgp
     }  
-ifnotexist,MediaCenter2.gamecontroller.amgp
+ifnotexist,eskgamecontroller.amgp
     {
         fileread,mctmp,Desktop.set
-        stringreplace,SCRIPTRV,A_ScriptDir,\,/,All
+        stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,MediaCenter2.gamecontroller.amgp
     }
@@ -1401,38 +1463,40 @@ OVERWRT:
 OVERWRT= 1
 return
 
-MMSETUP:
+MMSETUPD:
 Msgbox,,Default Desktop Config,Configure your monitor/s as you would have them for your`nMediaCenter or Desktop`nthen click "OK"
 ifmsgbox,OK
     {
         FileMove,Desktop.cfg,Desktop.cfg.bak
-        RunWait, %comspec% /c "" "%multimonitor_tool%" /SaveConfig "%CFGDIR%\Desktop.cfg",%A_ScriptDir%,hide
-        ifexist,Desktop.cfg
+        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\Desktop.cfg`",%A_ScriptDir%,hide
+        ifexist,%CFGDIR%\Desktop.cfg
             {
                 Msgbox,,Success,The current monitor configuration will be used for your Mediacenter or desktop
-                iniwrite,%A_ScriptDir%\Desktop.cfg,%RJDB_Config%,GENERAL,MM_MEDIACENTER_Config
-                iniwrite,/LoadConfig "%A_ScriptDir%\Desktop.cfg",%RJDB_Config%,CONFIG,switchback
+                iniwrite,%CFGDIR%\Desktop.cfg,%RJDB_Config%,GENERAL,MM_MEDIACENTER_Config
+                iniwrite,/LoadConfig "%CFGDIR%\Desktop.cfg",%RJDB_Config%,CONFIG,switchback
 				guicontrol,,MM_Mediacenter_ConfigT,Desktop.cfg
             }
            else {
             Msgbox,,Failure,The current monitor configuration could not be saved
            } 
     }
+return	
+MMSETUPG:	
 Msgbox,,Default Game Config,Configure your monitor/s as you would have them for your`nGames or Emulators`nthen click "OK"
 ifmsgbox,OK
     {
         FileMove,Game.cfg,Game.cfg.bak
-        RunWait, %comspec% /c "" "%multimonitor_tool%" /SaveConfig "%A_ScriptDir%\Game.cfg",%A_ScriptDir%,hide
-        ifexist,Game.cfg
+        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\Game.cfg`",%A_ScriptDir%,hide
+        ifexist,%CFGDIR%\Game.cfg
             {
-                Msgbox,,Success,The current monitor configuration will be used for your Games or Emulators
-                iniwrite,%A_ScriptDir%\Game.cfg,%RJDB_Config%,GENERAL,MM_Game_Config
-                iniwrite,/LoadConfig "%A_ScriptDir%\Game.cfg",%RJDB_Config%,CONFIG,switchcmd
+                Msgbox,,Success,The current monitor configuration will be used for your Game/s or Emulator/s
+                iniwrite,%CFGDIR%\Game.cfg,%RJDB_Config%,GENERAL,MM_Game_Config
+                iniwrite,/LoadConfig "%CFGDIR%\Game.cfg",%RJDB_Config%,CONFIG,switchcmd
 				guicontrol,,MM_Game_ConfigT,Game.cfg
-            }
+			}
+		   else {
+			Msgbox,,Failure,The current monitor configuration could not be saved
     }
-   else {
-    Msgbox,,Failure,The current monitor configuration could not be saved
 }
 return
 
@@ -1537,19 +1601,19 @@ Loop,parse,GUIVARS,|
 str := ""
 guicontrolget,EXEONLY,,EXEONLY
 if (exeonly = 1)
-{
-gosub, EXEONLY
-}
+	{
+		gosub, EXEONLY
+	}
 guicontrolget,SCONLY,,SCONLY
 if (SCONLY = 1)
-{
-gosub, SCONLY
-}
+	{
+		gosub, SCONLY
+	}
 guicontrolget,BOTHSRCH,,BOTHSRCH
 if (BOTHSRCH = 1)
-{
-gosub, BOTHSRCH
-}
+	{
+		gosub, BOTHSRCH
+	}
 lvachk= +Check
 fullist= 
 if (SOURCEDLIST <> "")
@@ -2244,6 +2308,7 @@ Loop,%fullstn0%
 						gmnamex= %gmnamed%
 						FileMove,%GAME_PROFILES%\%GMNAMED%\%gmnamed%.lnk,%GAME_PROFILES%\%GMNAMED%\alternates\%gmnamed%_[0%poscntx%].lnk,1
 						FileMove,%GAME_PROFILES%\%GMNAMED%\Game.ini,%GAME_PROFILES%\%GMNAMED%\alternates\%gmnamed%_[0%poscntx%].ini,1
+						FileMove,%GAME_PROFILES%\%GMNAMED%\*.xpadderprofile,%GAME_PROFILES%\%GMNAMED%\alternates,1
 						FileMove,%GAME_PROFILES%\%GMNAMED%\*.amgp,%GAME_PROFILES%\%GMNAMED%\alternates,1
 						FileMove,%GAME_PROFILES%\%GMNAMED%\*.cfg,%GAME_PROFILES%\%GMNAMED%\alternates,1
 					}

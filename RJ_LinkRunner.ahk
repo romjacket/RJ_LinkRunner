@@ -27,6 +27,28 @@ if ((plink = "") or !fileExist(plink) or (scextn = ""))
 		Sleep, 3000
 		exitapp
 	}
+if (GetKeyState("Alt")&&(scextn = "exe"))
+	{
+		CreateSetup= 1
+		iniread,Game_Profiles,RJDB.ini,GENERAL,Game_Profiles
+		iniread,mapper_extension,RJDB.ini,GENERAL,mapper_extension
+		FileCreateDir,%Game_Profiles%\%gmname%
+		if (errorlevel = 0)
+			{
+				Game_Profiles= %Game_Profiles%\%gmname%
+				FileCopy,Player1.%mapper_extension%,%GameProfiles%
+				FileCopy,Player2.%mapper_extension%,%GameProfiles%
+				Filecopy,Game.cfg,%GameProfiles%
+				Filecopy,Desk.cfg,%GameProfiles%
+				Filecopy,Mediacenter.%mapper_extension%,%GameProfiles%
+				FileCopy,RJDB.ini,%GameProfiles%\Game.ini
+				iniwrite,%GameProfiles%\Desk.cfg,%GameProfiles%\Game.ini,GENERAL,MM_MEDIACENTER_Config
+				iniwrite,%GameProfiles%\Game.cfg,%GameProfiles%\Game.ini,GENERAL,MM_Game_Config
+				iniwrite,%GameProfiles%\Player1.%mapper_extension%,%GameProfiles%\Game.ini,GENERAL,Player1
+				iniwrite,%GameProfiles%\Player2.%mapper_extension%,%GameProfiles%\Game.ini,GENERAL,Player2
+				iniwrite,%GameProfiles%\MediaCenter.%mapper_extension%,%GameProfiles%\Game.ini,GENERAL,MediaCenter_Profile
+			}
+	}
 ;;LinkOptions= 
 inif= RJDB.ini
 READINI:
@@ -367,18 +389,26 @@ if (prestk2 <> "")
 premapper:	
 if (Mapper > 0)
 	{
+		joycnt=
+		joycnt= %joycount%					
+		player2n= "%player2%"
+		gosub, AmicroTest
+		if (JMap = "xpadder")
+			{
+				player2n=
+				if (joycnt < 2)
+					{
+						player2t:= A_Space . player2n . "/M"
+					}
+			}
 		if (JMap = "antimicro")
 			{
+				player2t:= A_Space . player2n
 				unload:= "" . antimicro_executable . "" . A_Space . "--unload"
 				Run, %unload%,%mapperp%,hide
 				process,close,antimicro.exe
 				sleep,600
 				joycount=
-				joycnt=
-				gosub, AmicroTest	
-				joycnt= %joycount%					
-				player2n= "%player2%"
-				player2t:= A_Space . player2n
 				if (joycount < 2)
 					{
 						player2t=
@@ -405,7 +435,7 @@ if (prestk2 <> "")
 				RunWait,%prestk2%,,precpid
 				goto,begin
 			}
-		Run,%prestk2%,,precpid	
+		Run,%prestk2%,,precpid
 	}	
 begin:
 if (nrx > 2)
@@ -495,6 +525,11 @@ dcls=
 nrx=
 return
 
+^!+f9::
+Run, NewOsk.exe
+Return
+
+
 Ctrl & f12::
 givup:
 gii= 1
@@ -514,16 +549,39 @@ if (prestk2 <> "")
 postmapper:	
 if (Mapper > 0)
 	{
-		if (JMap = "antimicro")
-			{		
-				gosub, AmicroTest
-				mediacenter_profile_2n= "%mediacenter_profile_2%"
-				mediacenter_profile_2t:=  A_Space . "" . mediacenter_profile_2n . ""
-				if (joycount < 2)
-					{
-						mediacenter_profile_2t=
-					}
+		gosub, AmicroTest
+		mediacenter_profile_2n= "%mediacenter_profile_2%"
+		mediacenter_profile_2t:=  A_Space . "" . mediacenter_profile_2n . ""
+		if (joycount =< 2)
+			{
+				mediacenter_profile_2t=
 			}
+		else {
+			if ((joycount > joycnt)&&(joycnt < 3))
+				{
+					splitpath,Player1,p1fn,pl1pth,,plgetat
+					Loop,files,%pl1pth%\*.%mapper_extension%
+						{
+							if (A_LoopFileFullPath = Player1)
+								{
+									continue
+								}
+							if (A_LoopFileName = plgetat . "_2")
+								{
+									Player2= %A_LoopFileFullPath%
+									break
+								}
+							if (instr(A_LoopFileName,"Player2")or instr(A_LoopFileName,"Player_2")or instr(A_LoopFileName,"Player 2")or instr(A_LoopFileName,"Player2"))
+								{
+									Player2= %A_LoopFileFullPath%
+								}
+							else {
+									Player2= %A_LoopFileFullPath%
+							}	
+						}
+					iniwrite,%Player2%,%RJDB_Config%,GENERAL,Player2
+				}
+		}	
 		Run, %Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%,,hide,kbmp
 		Loop,5
 			{
