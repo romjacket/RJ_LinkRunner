@@ -49,8 +49,8 @@ if (GetKeyState("Alt")&&(scextn = "exe"))
 				iniwrite,%GameProfiles%\Player1.%mapper_extension%,%GameProfiles%\Game.ini,GENERAL,Player1
 				iniwrite,%GameProfiles%\Player2.%mapper_extension%,%GameProfiles%\Game.ini,GENERAL,Player2
 				iniwrite,%GameProfiles%\MediaCenter.%mapper_extension%,%GameProfiles%\Game.ini,GENERAL,MediaCenter_Profile
-				FileCreateShortcut,%plink%,%GameProfiles%\%gmname%.lnk,%scpth%,,%gmname%,%plink%,,%iconnumber%
-				FileCreateShortcut,%A_ScriptDir%\RJ_LinkRunner.exe, %Game_Directory%\%gmname%.lnk,%scpth%, `"%GameProfiles%\%gmname%.lnk`",%gmname%,%plink%,,%iconnumber%
+				FileCreateShortcut,%plink%,%GameProfiles%\%gmname%.lnk,%scpath%, ,%gmname%,%plink%,,%iconnumber%
+				FileCreateShortcut,%A_ScriptDir%\RJ_LinkRunner.exe, %Game_Directory%\%gmname%.lnk,%scpath%, `"%GameProfiles%\%gmname%.lnk`",%gmname%,%plink%,,%iconnumber%
 			}
 	}
 ;;LinkOptions= 
