@@ -948,6 +948,7 @@
 |hôte|
 |i|
 |icon|
+|icons|
 |icono|
 |iconos|
 |icons|
@@ -1128,8 +1129,13 @@
 |live|
 |lié|
 |local|
+|localised|
+|localisation|
+|locale|
 |location|
 |log|
+|logo|
+|logos|
 |lokal|
 |loLA|
 |lookup|
@@ -1693,6 +1699,7 @@
 |space|
 |spec|
 |special|
+|speech|
 |specmaps|
 |speicher|
 |speichern|

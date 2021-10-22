@@ -3,11 +3,45 @@ SendMode Input
 SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
-RJDB_Config= RJDB.ini
-filedelete,log.txt
-FileCreateDir,Launchers
-FileCreateDir,profiles
-FileCreateDir,Shortcuts
+
+Loop %0%  
+	{
+		GivenPath := %A_Index%
+		Loop %GivenPath%,
+			{
+				if (plink = "")
+					{
+						plink = %A_LoopFileLongPath%
+						continue
+					}
+			}
+		IF (!INSTR(LinkOptions,GivenPath)&& !instr(LinkOptions,plink)&& (GivenPath <> plink))
+			{
+				LinkOptions.= GivenPath . a_SpACE
+			}
+	}
+splitpath,plink,scname,scpath,scextn,gmname,gmd
+CFGDIR= %SCPATH%
+if (scextn = "lnk")
+	{
+		FileGetShortcut,%plink%,inscname,inscpth,chkargl
+		if instr(inscname,"linkrunner")
+			{
+				splitpath,chkargl,chkargxe,chkargpth
+				msgbox,,,%chkargpth%
+			}
+		
+	}
+
+if ((plink = "") or !fileExist(plink) or (scextn = ""))
+	{
+		RJDB_Config= RJDB.ini
+		filedelete,log.txt
+		FileCreateDir,Launchers
+		FileCreateDir,profiles
+		FileCreateDir,Shortcuts
+	}
+
 ifnotexist,Antimicro_!.cmd
     {
         gosub, INITAMIC
@@ -25,6 +59,8 @@ if fileexist("continue.db")
 	}
 fileread,exclfls,exclfnms.set
 filextns= exe|lnk
+MENU_X:= A_GuiX*(A_ScreenDPI/96)
+MENU_Y:= A_GuiY*(A_ScreenDPI/96)
 reduced= |_Data|Assets|alt|shipping|Data|ThirdParty|engine|App|steam|steamworks|script|nocd|Tool|trainer|
 priora= |Launcher64|Launcherx64|Launcherx8664|Launcher64bit|Launcher64|Launchx64|Launch64|Launchx8664|
 priorb= |Launcher32|Launcherx86|Launcher32bit|Launcher32|Launchx86|Launch32|
@@ -40,7 +76,7 @@ GenQuery= Games|juegos|spellen|Spiele|Jeux|Giochi|игры
 AllQuery:= GogQuery . | . "Origin" . "|" . "Epic Games" . steamhome 
 undir= |%A_WinDir%|%A_Programfiles%|%A_Programs%|%A_AppDataCommon%|%A_AppData%|%A_Desktop%|%A_DesktopCommon%|%A_StartMenu%|%A_StartMenuCommon%|%A_Startup%|%A_StartupCommon%|%A_Temp%|
 GUIVARS= PostWait|PreWait|SCONLY|EXEONLY|BOTHSRCH|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_ProfB|GAME_DirB|SOURCE_DirB|SOURCE_DirectoryT|REMSRC|Keyboard_MapB|Player1_TempB|Player2_TempB|MediaCenter_ProfB|MultiMonitor_Tool|MM_Game_CfgB|MM_MediaCenter_CfgB|BGM_ProgB|BGP_DataB|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS|SELALLBUT|SELNONEBUT
-STDVARS= KeyBoard_Mapper|MediaCenter_Profile|Player1_Template|Player2_Template|MultiMonitor_Tool|MM_MEDIACENTER_Config|MM_Game_Config|BorderLess_Gaming_Program|BorderLess_Gaming_Database|extapp|Game_Directory|Game_Profiles|RJDB_Location|Source_Directory|Mapper_Extension|1_Pre|2_Pre|3_Pre|1_Post|2_Post|3_Post|switchcmd|switchback
+STDVARS= SOURCE_DirectoryT|SOURCE_Directory|KeyBoard_Mapper|MediaCenter_Profile|Player1_Template|Player2_Template|MultiMonitor_Tool|MM_MEDIACENTER_Config|MM_Game_Config|BorderLess_Gaming_Program|BorderLess_Gaming_Database|extapp|Game_Directory|Game_Profiles|RJDB_Location|Source_Directory|Mapper_Extension|1_Pre|2_Pre|3_Pre|1_Post|2_Post|3_Post|switchcmd|switchback
 DDTA= <$This_prog$><Monitor><Mapper>
 DDTB= <Monitor><$This_prog$><Mapper>
 DDTC= <$This_prog$><Monitor><Mapper>
@@ -81,6 +117,9 @@ if instr(1_PostT,"W<")
 	{
 		poststatus= checked
 	}
+Menu,RCLButton,Add,Reset ,ResetButs
+Menu,UCLButton,Add,Disable ,DisableButs
+Menu,DCLButton,Add,Delete ,DeleteButs
 ; Create the ListView and its columns via Gui Add:
 Gui, Add, Button, x310 y8 vButtonClear gButtonClear hidden disabled, Clear List
 Gui, Add, Text, x380 y3 h12, Select
@@ -287,6 +326,8 @@ guicontrol,,RJDB_LocationT,<RJDB_Location
 }
 return
 
+
+
 Game_ProfB:
 gui,submit,nohide
 FileSelectFolder,GAME_ProfilesT,%fldflt%,3,Select Folder
@@ -331,8 +372,10 @@ Gui, ListView, MyListView
 LV_Modify(0, "-Check") 
 return
 
+
 SOURCE_DirB:
 gui,submit,nohide
+SFSLCTD:
 FileSelectFolder,Source_DirectoryT,%fldflt%,3,Select Folder
 if ((Source_DirectoryT <> "")&& !instr(Source_DirectoryT,"<"))
 	{
@@ -366,6 +409,9 @@ stringreplace,CURDP,Source_DirectoryX,%A_Space%,`%,All
 guicontrol,,Source_DirectoryT,|%srcdira%
 guicontrol,,CURDP,%CURDP%
 }
+return
+
+Keyboard_MapBDisable:
 return
 
 Keyboard_MapB:
@@ -443,33 +489,35 @@ MediaCenter_ProfB:
 gui,submit,nohide
 FileSelectFile,MediaCenter_ProfileT,3,,Select File
 if ((MediaCenter_ProfileT <> "")&& !instr(MediaCenter_ProfileT,"<"))
-{
-MediaCenter_Profile= %MediaCenter_ProfileT%
-iniwrite,%MediaCenter_Profile%,%RJDB_Config%,GENERAL,MediaCenter_Profile
-iniwrite,%MediaCenter_Profile%,%RJDB_Config%,GENERAL,MediaCenter2_Profile
-stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
-guicontrol,,MediaCenter_ProfileT,%MediaCenter_ProfileT%
-}
-else {
-stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
-guicontrol,,MediaCenter_ProfileT,<MediaCenter_Profile
-}
+	{
+		MediaCenter_Profile= %MediaCenter_ProfileT%
+		iniwrite,%MediaCenter_Profile%,%RJDB_Config%,GENERAL,MediaCenter_Profile
+		iniwrite,%MediaCenter_Profile%,%RJDB_Config%,GENERAL,MediaCenter2_Profile
+		stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
+		guicontrol,,MediaCenter_ProfileT,%MediaCenter_ProfileT%
+	}
+		else {
+			stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
+			guicontrol,,MediaCenter_ProfileT,<MediaCenter_Profile
+		}
+return
+MM_ToolBDisable:
 return
 
 MM_ToolB:
 gui,submit,nohide
 FileSelectFile,MultiMonitor_ToolT,3,,Select File,multimonitor*.exe
 if ((MultiMonitor_ToolT <> "")&& !instr(MultiMonitor_ToolT,"<"))
-{
-MultiMonitor_Tool= %MultiMonitor_ToolT%
-iniwrite,%MultiMonitor_Tool%,%RJDB_Config%,GENERAL,MultiMonitor_Tool
-stringreplace,MultiMonitor_ToolT,MultiMonitor_ToolT,%A_Space%,`%,All
-guicontrol,,MultiMonitor_ToolT,%MultiMonitor_ToolT%
-}
-else {
-stringreplace,MultiMonitor_ToolT,MultiMonitor_ToolT,%A_Space%,`%,All
-guicontrol,,MultiMonitor_ToolT,<MultiMonitor_Tool
-}
+	{
+		MultiMonitor_Tool= %MultiMonitor_ToolT%
+		iniwrite,%MultiMonitor_Tool%,%RJDB_Config%,GENERAL,MultiMonitor_Tool
+		stringreplace,MultiMonitor_ToolT,MultiMonitor_ToolT,%A_Space%,`%,All
+		guicontrol,,MultiMonitor_ToolT,%MultiMonitor_ToolT%
+	}
+	else {
+		stringreplace,MultiMonitor_ToolT,MultiMonitor_ToolT,%A_Space%,`%,All
+		guicontrol,,MultiMonitor_ToolT,<MultiMonitor_Tool
+	}
 if ((MM_Game_Config = "")or(MM_Mediacenter_Config = ""))
     {
         msgbox,4,Setup,Setup the Multimonitor Tool now?
@@ -495,17 +543,17 @@ if (!fileexist("Game.cfg")or !fileexist(gmcfg))
 
 FileSelectFile,MM_GAME_ConfigT,3,,Select File,*.cfg
 if ((MM_GAME_ConfigT <> "")&& !instr(MM_GAME_ConfigT,"<"))
-{
-MM_GAME_Config= %MM_GAME_ConfigT%
-iniwrite,%MM_GAME_Config%,%RJDB_Config%,GENERAL,MM_GAME_Config
-iniwrite,2,%RJDB_Config%,GENERAL,MonitorMode
-stringreplace,MM_GAME_ConfigT,MM_GAME_ConfigT,%A_Space%,`%,All
-guicontrol,,MM_GAME_ConfigT,%MM_GAME_ConfigT%
-}
-else {
-stringreplace,MM_GAME_Config,MM_GAME_Config,%A_Space%,`%,All
-guicontrol,,MM_GAME_ConfigT,<MM_GAME_Config
-}
+	{
+		MM_GAME_Config= %MM_GAME_ConfigT%
+		iniwrite,%MM_GAME_Config%,%RJDB_Config%,GENERAL,MM_GAME_Config
+		iniwrite,2,%RJDB_Config%,GENERAL,MonitorMode
+		stringreplace,MM_GAME_ConfigT,MM_GAME_ConfigT,%A_Space%,`%,All
+		guicontrol,,MM_GAME_ConfigT,%MM_GAME_ConfigT%
+	}
+	else {
+		stringreplace,MM_GAME_Config,MM_GAME_Config,%A_Space%,`%,All
+		guicontrol,,MM_GAME_ConfigT,<MM_GAME_Config
+	}
 return
 
 MM_MediaCenter_CfgB:
@@ -533,6 +581,10 @@ stringreplace,MM_MediaCenter_Config,MM_MediaCenter_Config,%A_Space%,`%,All
 guicontrol,,MM_MediaCenter_ConfigT,<MM_MediaCenter_Config
 }
 return
+
+BGM_ProgBDisable:
+return
+
 
 BGM_ProgB:
 gui,submit,nohide
@@ -976,7 +1028,7 @@ return
 
 
 INITQUERY:
-CONCAT_ROOT=
+CONCAT_ROOT= 
 GENERIC_ROOT=
 Loop,parse,dralbet,|
 	{
@@ -1130,6 +1182,7 @@ Loop,parse,dralbet,|
 								Anorigin= %A_LoopFileFullPath%\Origin.exe
 								if (fileexist(Anorigin)&& !instr(CONCAT_ROOT,A_LoopFileFullPath))
 									{
+										CONCAT_ROOT.= ORIGINchkh . "|"
 										ORIGIN_ROOT.= ORIGINchkh . "|"
 									}
 							}
@@ -1229,7 +1282,6 @@ if (resetting = 1)
 		guicontrol,hide,MyListView
 		guicontrol,disable,MyListView
 		GuiControl, Move, MyListView, w0
-		Gui, Show, Autosize
 	}	
 	/*
 Loop,parse,rjdb,`r`n
@@ -1341,6 +1393,7 @@ ifnotexist,MediaCenter2.gamecontroller.amgp
     }
 return
 
+
 UPDTSC:
 OVERWRT= 
 return
@@ -1353,7 +1406,7 @@ Msgbox,,Default Desktop Config,Configure your monitor/s as you would have them f
 ifmsgbox,OK
     {
         FileMove,Desktop.cfg,Desktop.cfg.bak
-        RunWait, %comspec% /c "" "%multimonitor_tool%" /SaveConfig "%A_ScriptDir%\Desktop.cfg",%A_ScriptDir%,hide
+        RunWait, %comspec% /c "" "%multimonitor_tool%" /SaveConfig "%CFGDIR%\Desktop.cfg",%A_ScriptDir%,hide
         ifexist,Desktop.cfg
             {
                 Msgbox,,Success,The current monitor configuration will be used for your Mediacenter or desktop
@@ -2428,6 +2481,14 @@ stringreplace,invarx,invarx,-,,All
 stringreplace,invarx,invarx,%A_Space%,,All
 return
 
+ResetButs:
+goto,%butrclick%Reset
+DisableButs:
+goto,%butrclick%Reset
+DeleteButs:
+goto,%butrclick%Delete
+return
+
 ButtonClear:
 LV_Delete()  ; Clear the ListView, but keep icon cache intact for simplicity.
 SOURCEDLIST= 
@@ -2448,12 +2509,38 @@ if (A_GuiEvent = "DoubleClick")  ; There are many other possible values the scri
 }
 return
 
-GuiContextMenu:  ; Launched in response to a right-click or press of the Apps key.
+		
+		
+GuiContextMenu: 
+gui,submit,nohide
+If A_GuiControlEvent RightClick
+	{	
+	butrclick= %A_GuiControl%
+	MENU_X:= A_GuiX*(A_ScreenDPI/96)
+	MENU_Y:= A_GuiY*(A_ScreenDPI/96)
+	if A_GuiControl = MM_ToolB
+		{
+			Menu, UCLButton, Show, %MENU_X% %MENU_Y%
+			return	
+		}
+	if A_GuiControl = Keyboard_MapB
+		{
+			Menu, UCLButton, Show, %MENU_X% %MENU_Y%
+			return	
+		}
+if A_GuiControl = BGM_ProgB
+		{
+			Menu, UCLButton, Show, %MENU_X% %MENU_Y%
+			return	
+		}
+		
+ ; Launched in response to a right-click or press of the Apps key.
 if (A_GuiControl != "MyListView")  ; Display the menu only for clicks inside the ListView.
     return
 ; Show the menu at the provided coordinates, A_GuiX and A_GuiY. These should be used
 ; because they provide correct coordinates even if the user pressed the Apps key:
 Menu, MyContextMenu, Show, %A_GuiX%, %A_GuiY%
+}
 return
 
 ContextOpenFile:  ; The user selected "Open" in the context menu.
