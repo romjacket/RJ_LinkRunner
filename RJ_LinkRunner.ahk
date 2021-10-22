@@ -32,7 +32,7 @@ if (GetKeyState("Alt")&&(scextn = "exe"))
 	{
 		CreateSetup= 1
 		iniread,Game_Profiles,RJDB.ini,GENERAL,Game_Profiles
-		iniread,mapper_extension,RJDB.ini,GENERAL,mapper_extension
+		iniread,mapper_extension,RJDB.ini,JOYSTICKS,mapper_extension
 		iniread,Game_Directory,RJDB.ini,GENERAL,Game_Directory
 		FileCreateDir,%Game_Profiles%\%gmname%
 		if (errorlevel = 0)
@@ -280,7 +280,7 @@ ifnotexist,%player2%
 if (mediacenter_profile_2 = "")
 	{
 		splitpath,mediacenter_profile,,,,mcp2
-		mediacenter_profile_2= %mcp2%2.%mapper_extension%
+		mediacenter_profile_2= %Game_Profiles%\%gmnamex%\%mcp2%2.%mapper_extension%
 	}
 ifnotexist, %mediacenter_profile_2%
 	{
@@ -399,11 +399,7 @@ if (Mapper > 0)
 		gosub, AmicroTest
 		if (JMap = "xpadder")
 			{
-				player2n=
-				if (joycnt < 2)
-					{
-						player2t:= A_Space . player2n . "/M"
-					}
+				player2t:= A_Space . player2n . "/M"
 			}
 		if (JMap = "antimicro")
 			{
@@ -413,10 +409,15 @@ if (Mapper > 0)
 				process,close,antimicro.exe
 				sleep,600
 				joycount=
-				if (joycount < 2)
+			}
+		if (joycnt < 2)
+			{
+				if (JMap = "Xpadder")
 					{
-						player2t=
+						Player1.= A_Space . "/M"
 					}
+				player2t=
+				player2n=
 			}
 		Run,%Keyboard_Mapper% "%player1%"%player2t%
 		Sleep,600
@@ -554,10 +555,23 @@ postmapper:
 if (Mapper > 0)
 	{
 		gosub, AmicroTest
-		mediacenter_profile_2n= "%mediacenter_profile_2%"
-		mediacenter_profile_2t:=  A_Space . "" . mediacenter_profile_2n . ""
+		if (JMap = "antimicro")
+			{
+				mediacenter_profile_2n= "%mediacenter_profile_2%"
+				mediacenter_profile_2t:=  A_Space . "" . mediacenter_profile_2n . ""				
+			}		
+		if (JMap = "xpadder")
+			{
+				mediacenter_profile_2n= "%mediacenter_profile_2%"
+				mediacenter_profile_2t:=  A_Space . "" . mediacenter_profile_2n . "/M" . ""				
+			}
 		if (joycount =< 2)
 			{
+				
+				if (JMap = "Xpadder")
+					{
+						mediacenter_profile.= A_Space . "/M"
+					}
 				mediacenter_profile_2t=
 			}
 		else {

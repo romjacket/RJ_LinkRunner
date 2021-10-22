@@ -435,17 +435,15 @@ if ((Keyboard_MapperT <> "")&& !instr(Keyboard_MapperT,"<"))
 		guicontrol,,Keyboard_MapperT,<Keyboard_Mapper
 	}
 Mapper= 
+keyboard_mapper= %keyboard_mappern%
 if instr(Keyboard_Mappern,"Xpadder")
 	{
 		Mapper= 1
-		iniwrite,1,%RJDB_Config%,GENERAL,Mapper
+		tooltip,xpadder
+		iniwrite,2,%RJDB_Config%,GENERAL,Mapper
 		iniwrite,Xpadder,%RJDB_Config%,JOYSTICKS,Jmap
 		iniwrite,xpadderprofile,%RJDB_Config%,JOYSTICKS,Mapper_Extension
-        fileread,amcjp,xallgames.set,
-        xpadder_executable=%keyboard_mappern%
-        Keyboard_Mapper=%xpadder_executable%
         iniwrite,%Keyboard_Mapper%,%RJDB_Config%,GENERAL,Keyboard_Mapper
-        iniwrite,antimicro.exe,%RJDB_Config%,GENERAL,Antimicro_executable
 		stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
 		guicontrol,,Keyboard_MapperT,%Keyboard_Mapper%
 		guicontrol,,Player1_TemplateT,%A_ScriptDir%\Player1.xpadderprofile
@@ -459,6 +457,7 @@ if instr(Keyboard_Mappern,"Xpadder")
 if instr(Keyboard_Mappern,"Antimicro")
 	{
 		Mapper= 1
+		tooltip,antimicro
 		iniwrite,1,%RJDB_Config%,GENERAL,Mapper
 		iniwrite,antimicro,%RJDB_Config%,JOYSTICKS,Jmap
 		iniwrite,gamecontroller.amgp,%RJDB_Config%,JOYSTICKS,Mapper_Extension
@@ -471,9 +470,7 @@ if instr(Keyboard_Mappern,"Antimicro")
         stringreplace,amcb,amcb,[AMICRO],%Keyboard_Mappern%,All
         FileAppend,%amcb%,%A_ScriptDir%\Antimicro_!.cmd
 		antimicro_executable=%keyboard_mappern%
-        Keyboard_Mapper=%A_ScriptDir%\Antimicro_!.cmd
         iniwrite,%Keyboard_Mapper%,%RJDB_Config%,GENERAL,Keyboard_Mapper
-        iniwrite,%Keyboard_Mappern%,%RJDB_Config%,GENERAL,Antimicro_executable
 		guicontrol,,Player1_TemplateT,%A_ScriptDir%\Player1.gamecontroller.amgp
 		guicontrol,,Player2_TemplateT,%A_ScriptDir%\Player2.gamecontroller.amgp
 		guicontrol,,MediaCenter_ProfileT,%A_ScriptDir%\MediaCenter.gamecontroller.amgp
@@ -481,6 +478,11 @@ if instr(Keyboard_Mappern,"Antimicro")
 		iniwrite,%A_ScriptDir%\Player1.gamecontroller.amgp,%RJDB_CONFIG%,GENERAL,Player2_Template
 		iniwrite,%A_ScriptDir%\MediaCenter.gamecontroller.amgp,%RJDB_CONFIG%,GENERAL,MediaCenter_Profile
     }
+if (antimicro_executable <> keyboard_mappern)
+	{
+		antimicro_executable=%A_ScriptDir%\antimicro\antimicro.exe
+	}
+iniwrite,%antimicro_executable%,%RJDB_Config%,GENERAL,Antimicro_executable
 stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
 guicontrol,,Keyboard_MapperT,%Keyboard_Mapper%
 return
