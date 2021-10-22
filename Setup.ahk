@@ -481,12 +481,8 @@ if instr(Keyboard_Mappern,"Antimicro")
 		iniwrite,%A_ScriptDir%\Player1.gamecontroller.amgp,%RJDB_CONFIG%,GENERAL,Player2_Template
 		iniwrite,%A_ScriptDir%\MediaCenter.gamecontroller.amgp,%RJDB_CONFIG%,GENERAL,MediaCenter_Profile
     }
-		else {
-			iniwrite,%Keyboard_Mapper%,%RJDB_Config%,GENERAL,Keyboard_Mapper
-		}	
 stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
 guicontrol,,Keyboard_MapperT,%Keyboard_Mapper%
-iniwrite,%A_ScriptDir%\Antimicro_!.cmd,%RJDB_Config%,GENERAL,Keyboard_Mapper
 return
 
 Player1_TempB:
