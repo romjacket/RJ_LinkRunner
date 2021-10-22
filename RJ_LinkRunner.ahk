@@ -20,7 +20,8 @@ Loop %0%
 			}
 	}
 splitpath,plink,scname,scpath,scextn,gmname,gmd
-	
+ExtID := FileExt
+IconNumber:= 0				
 if ((plink = "") or !fileExist(plink) or (scextn = ""))
 	{
 		Tooltip, No Item Detected
@@ -32,6 +33,7 @@ if (GetKeyState("Alt")&&(scextn = "exe"))
 		CreateSetup= 1
 		iniread,Game_Profiles,RJDB.ini,GENERAL,Game_Profiles
 		iniread,mapper_extension,RJDB.ini,GENERAL,mapper_extension
+		iniread,Game_Directory,RJDB.ini,GENERAL,Game_Directory
 		FileCreateDir,%Game_Profiles%\%gmname%
 		if (errorlevel = 0)
 			{
@@ -47,6 +49,8 @@ if (GetKeyState("Alt")&&(scextn = "exe"))
 				iniwrite,%GameProfiles%\Player1.%mapper_extension%,%GameProfiles%\Game.ini,GENERAL,Player1
 				iniwrite,%GameProfiles%\Player2.%mapper_extension%,%GameProfiles%\Game.ini,GENERAL,Player2
 				iniwrite,%GameProfiles%\MediaCenter.%mapper_extension%,%GameProfiles%\Game.ini,GENERAL,MediaCenter_Profile
+				FileCreateShortcut,%plink%,%GameProfiles%\%gmname%.lnk,%scpth%,,%gmname%,%plink%,,%iconnumber%
+				FileCreateShortcut,%A_ScriptDir%\RJ_LinkRunner.exe, %Game_Directory%\%gmname%.lnk,%scpth%, `"%GameProfiles%\%gmname%.lnk`",%gmname%,%plink%,,%iconnumber%
 			}
 	}
 ;;LinkOptions= 
