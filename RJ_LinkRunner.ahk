@@ -31,26 +31,26 @@ if ((plink = "") or !fileExist(plink) or (scextn = ""))
 if (GetKeyState("Alt")&&(scextn = "exe"))
 	{
 		CreateSetup= 1
-		iniread,Game_Profilex,RJDB.ini,GENERAL,Game_Profiles
+		iniread,Game_Profiles,RJDB.ini,GENERAL,Game_Profiles
 		iniread,mapper_extension,RJDB.ini,GENERAL,mapper_extension
 		iniread,Game_Directory,RJDB.ini,GENERAL,Game_Directory
-		FileCreateDir,%Game_Profilex%\%gmname%
+		FileCreateDir,%Game_Profiles%\%gmname%
 		if (errorlevel = 0)
 			{
-				Game_Profiles= %Game_Profilex%\%gmname%
-				FileCopy,Player1.%mapper_extension%,%GameProfiles%\Player1.%mapper_extension%
-				FileCopy,Player2.%mapper_extension%,%GameProfiles%\Player1.%mapper_extension%
-				Filecopy,Game.cfg,%GameProfiles%\Game.cfg
-				Filecopy,Desk.cfg,%GameProfiles%\Desk.cfg
-				Filecopy,Mediacenter.%mapper_extension%,%GameProfiles%\Mediacenter.%mapper_extension%
-				FileCopy,RJDB.ini,%GameProfiles%\Game.ini
-				iniwrite,%GameProfiles%\Desk.cfg,%GameProfiles%\Game.ini,GENERAL,MM_MEDIACENTER_Config
-				iniwrite,%GameProfiles%\Game.cfg,%GameProfiles%\Game.ini,GENERAL,MM_Game_Config
-				iniwrite,%GameProfiles%\Player1.%mapper_extension%,%GameProfiles%\Game.ini,GENERAL,Player1
-				iniwrite,%GameProfiles%\Player2.%mapper_extension%,%GameProfiles%\Game.ini,GENERAL,Player2
-				iniwrite,%GameProfiles%\MediaCenter.%mapper_extension%,%GameProfiles%\Game.ini,GENERAL,MediaCenter_Profile
-				FileCreateShortcut,%plink%,%GameProfiles%\%gmname%.lnk,%scpath%, ,%gmname%,%plink%,,%iconnumber%
-				FileCreateShortcut,%A_ScriptDir%\RJ_LinkRunner.exe, %Game_Directory%\%gmname%.lnk,%scpath%, `"%GameProfiles%\%gmname%.lnk`",%gmname%,%plink%,,%iconnumber%
+				This_Profile= %Game_Profiles%\%gmname%
+				FileCopy,Player1.%mapper_extension%,%This_Profile%\Player1.%mapper_extension%
+				FileCopy,Player2.%mapper_extension%,%This_Profile%\Player1.%mapper_extension%
+				Filecopy,Game.cfg,%This_Profile%\Game.cfg
+				Filecopy,Desk.cfg,%This_Profile%\Desk.cfg
+				Filecopy,Mediacenter.%mapper_extension%,%This_Profile%\Mediacenter.%mapper_extension%
+				FileCopy,RJDB.ini,%This_Profile%\Game.ini
+				iniwrite,%This_Profile%\Desk.cfg,%This_Profile%\Game.ini,GENERAL,MM_MEDIACENTER_Config
+				iniwrite,%This_Profile%\Game.cfg,%This_Profile%\Game.ini,GENERAL,MM_Game_Config
+				iniwrite,%This_Profile%\Player1.%mapper_extension%,%This_Profile%\Game.ini,GENERAL,Player1
+				iniwrite,%This_Profile%\Player2.%mapper_extension%,%This_Profile%\Game.ini,GENERAL,Player2
+				iniwrite,%This_Profile%\MediaCenter.%mapper_extension%,%This_Profile%\Game.ini,GENERAL,MediaCenter_Profile
+				FileCreateShortcut,%plink%,%This_Profile%\%gmname%.lnk,%scpath%, ,%gmname%,%plink%,,%iconnumber%
+				FileCreateShortcut,%A_ScriptDir%\RJ_LinkRunner.exe, %Game_Directory%\%gmname%.lnk,%scpath%, `"%This_Profile%\%gmname%.lnk`",%gmname%,%plink%,,%iconnumber%
 			}
 	}
 ;;LinkOptions= 
