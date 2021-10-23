@@ -46,7 +46,10 @@ if ((plink = "") or !fileExist(plink) or (scextn = ""))
 		FileCreateDir,profiles
 		FileCreateDir,Shortcuts
 	}
-
+ifnotexist,xpadder_!.cmd
+	{
+		gosub, INITXPD
+	}
 ifnotexist,Antimicro_!.cmd
     {
         gosub, INITAMIC
@@ -307,7 +310,7 @@ if ((RJDB_ConfigT <> "")&& !instr(RJDB_ConfigT,"<"))
 		RJDB_Config= %RJDB_ConfigT%
 		iniwrite,%RJDB_Config%,%RJDB_Config%,GENERAL,RJDB_Config
 		stringreplace,RJDB_ConfigT,RJDB_ConfigT,%A_Space%,`%,All
-		guicontrol,,RJDB_ConfigT,%RJDB_Config%
+		guicontrol,,RJDB_ConfigT,%RJDB_ConfigT%
 	}
 	else {
 		stringreplace,RJDB_ConfigT,RJDB_ConfigT,%A_Space%,`%,All
@@ -323,7 +326,7 @@ if ((RJDB_LocationT <> "")&& !instr(RJDB_LocationT,"<"))
 		RJDB_Location= %RJDB_LocationT%
 		iniwrite,%RJDB_Location%,%RJDB_Config%,GENERAL,RJDB_Location
 		stringreplace,RJDB_LocationT,RJDB_LocationT,%A_Space%,`%,All
-		guicontrol,,RJDB_LocationT,%RJDB_Location%
+		guicontrol,,RJDB_LocationT,%RJDB_LocationT%
 	}
 	else {
 		stringreplace,RJDB_LocationT,RJDB_LocationT,%A_Space%,`%,All
@@ -337,11 +340,26 @@ Game_ProfB:
 gui,submit,nohide
 FileSelectFolder,GAME_ProfilesT,%fldflt%,3,Select Folder
 if ((GAME_ProfilesT <> "")&& !instr(GAME_ProfilesT,"<"))
-	{
+	{	
+		if (instr(Game_ProfilesT,"profile")or instr(Game_ProfilesT,"Jacket"))or (instr(Game_ProfilesT,"RJ")&& instr(Game_ProfilesT,"data"))
+			{
+				Game_Profiles= %Game_Profiles%
+			}
+		else {
+			stringright,gdtst,Game_ProfilesT,2
+			stringLeft,rdtst,Game_ProfilesT,2
+			if (gdtst = ":\")
+				{
+					Game_ProfilesT= %rdtst%
+				}
+			Game_Profiles= %GAME_ProfilesT%\RJ_Profiles
+			Game_ProfilesT= %Game_Profiles%
+		}
+		
 		GAME_Profiles= %GAME_ProfilesT%
 		iniwrite,%GAME_Profiles%,%RJDB_Config%,GENERAL,GAME_Profiles
 		stringreplace,GAME_ProfilesT,GAME_ProfilesT,%A_Space%,`%,All
-		guicontrol,,GAME_ProfilesT,%GAME_Profiles%
+		guicontrol,,GAME_ProfilesT,%GAME_ProfilesT%
 	}
 	else {
 		stringreplace,GAME_ProfilesT,GAME_ProfilesT,%A_Space%,`%,All
@@ -354,10 +372,24 @@ gui,submit,nohide
 FileSelectFolder,GAME_DirectoryT,%fldflt%,3,Select Folder
 if ((GAME_DirectoryT <> "")&& !instr(GAME_DirectoryT,"<"))
 	{
-		GAME_Directory= %GAME_DirectoryT%
+		if (instr(Game_DirectoryT,"launchers")or instr(Game_DirectoryT,"shortcuts")or instr(Game_DirectoryT,"links")or instr(Game_DirectoryT,"lnk") or instr(Game_DirectoryT,"runner"))
+			{
+				GAME_Directory= %GAME_DirectoryT%				
+			}
+		else {
+			stringright,gdtst,Game_DirectoryT,2
+			stringLeft,rdtst,Game_DirectoryT,2
+			if (gdtst = ":\")
+				{
+					Game_DirectoryT= %rdtst%
+				}
+			Game_Directory= %Game_DirectoryT%\RJ_Launchers
+			Game_DirectoryT= %Game_Directory%
+		}
+		
 		iniwrite,%GAME_Directory%,%RJDB_Config%,GENERAL,GAME_Directory
 		stringreplace,GAME_DirectoryT,GAME_DirectoryT,%A_Space%,`%,All
-		guicontrol,,GAME_DirectoryT,%GAME_Directory%
+		guicontrol,,GAME_DirectoryT,%GAME_DirectoryT%
 	}
 	else {
 		stringreplace,GAME_DirectoryT,GAME_DirectoryT,%A_Space%,`%,All
@@ -425,6 +457,10 @@ if fileexist(Programfilesx86 . "\" . "Antimicro")
 	{
 		kbmdefloc= %programfilesx86%\Antimicro
 	}
+if fileexist(Programfilesx86 . "\" . "Xpadder")
+	{
+		kbmdefloc= %programfilesx86%\Xpadder
+	}
 FileSelectFile,Keyboard_MapperT,35,%kbmdefloc%,Select File,*.exe
 if ((Keyboard_MapperT <> "")&& !instr(Keyboard_MapperT,"<"))
 	{
@@ -435,49 +471,74 @@ if ((Keyboard_MapperT <> "")&& !instr(Keyboard_MapperT,"<"))
 		guicontrol,,Keyboard_MapperT,<Keyboard_Mapper
 	}
 Mapper= 
+Antimtmp= %A_ScriptDir%\xpadder\Xpadder.exe
 keyboard_mapper= %keyboard_mappern%
+if ((antimicro_executable <> Antimtmp)&& !fileexist(antimicro_executble))
+	{
+		antimicro_executable= %Antimtmp%
+	}
+Antitmp= %antimicro_executeable%	
+Xpadtmp= %A_ScriptDir%\antimicro\Antimicro.exe
+if ((xpadder_executable = xpadtmp)&& !fileexist(xpadder_executable))
+	{
+		xpadder_executable= %Xpadtmp%
+	}
+Xpadtmp= %Xpadder_executable%
 if instr(Keyboard_Mappern,"Xpadder")
 	{
 		Mapper= 1
-		tooltip,xpadder
-		iniwrite,2,%RJDB_Config%,GENERAL,Mapper
 		iniwrite,Xpadder,%RJDB_Config%,JOYSTICKS,Jmap
-		iniwrite,xpadderprofile,%RJDB_Config%,JOYSTICKS,Mapper_Extension
-        iniwrite,%Keyboard_Mapper%,%RJDB_Config%,GENERAL,Keyboard_Mapper
-		stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
-		guicontrol,,Keyboard_MapperT,%Keyboard_Mapper%
-		guicontrol,,Player1_TemplateT,%A_ScriptDir%\Player1.xpadderprofile
-		guicontrol,,Player2_TemplateT,%A_ScriptDir%\Player2.xpadderprofile
-		guicontrol,,MediaCenter_ProfileT,%A_ScriptDir%\MediaCenter.xpadderprofile
-		iniwrite,%A_ScriptDir%\Player1.xpadderprofile,%RJDB_CONFIG%,GENERAL,Player1_Template
-		iniwrite,%A_ScriptDir%\Player1.xpadderprofile,%RJDB_CONFIG%,GENERAL,Player2_Template
-		iniwrite,%A_ScriptDir%\Desktop.xpadderprofile,%RJDB_CONFIG%,GENERAL,MediaCenter_Profile
+		mapper_extension= xpadderprofile
+		antimicro_executable=%antitimp%
+		tooltip,xpadder
+		FileDelete,xpadder_!.cmd
+		xpadder_executable=%keyboard_mappern%
+        fileread,xpdcb,xpadr.set
+        stringreplace,xpdcb,xpdcb,[XPADR],%Keyboard_Mappern%,All
+        FileAppend,%xpdcb%,%A_ScriptDir%\xpadder_!.cmd
+		keyboard_Mapper= %A_ScriptDir%\xpadder_!.cmd
+		keyboard_Mappern= %A_ScriptDir%\xpadder_!.cmd
+		JMAP= Xpadder
 	}
 	
 if instr(Keyboard_Mappern,"Antimicro")
 	{
 		Mapper= 1
 		tooltip,antimicro
-		iniwrite,1,%RJDB_Config%,GENERAL,Mapper
-		iniwrite,antimicro,%RJDB_Config%,JOYSTICKS,Jmap
-		iniwrite,gamecontroller.amgp,%RJDB_Config%,JOYSTICKS,Mapper_Extension
+		mapper_extension= gamecontroller.amgp
+		FileDelete,Antimicro_!.cmd
+		xpadder_executable=%xpadtmp%
+		antimicro_executable=%keyboard_mappern%
+        fileread,amcb,Amicro.set
         fileread,amcjp,allgames.set,
         oskloc= %A_ScriptDir%\newosk.exe
         stringreplace,oskloc,oskloc,\,/,All
         stringreplace,amcjp,amcjp,[NEWOSK],%oskloc%,All
-        fileread,amcb,Amicro.set
-		FileDelete,Antimicro_!.cmd
         stringreplace,amcb,amcb,[AMICRO],%Keyboard_Mappern%,All
         FileAppend,%amcb%,%A_ScriptDir%\Antimicro_!.cmd
-		antimicro_executable=%keyboard_mappern%
-        iniwrite,%Keyboard_Mapper%,%RJDB_Config%,GENERAL,Keyboard_Mapper
-		guicontrol,,Player1_TemplateT,%A_ScriptDir%\Player1.gamecontroller.amgp
-		guicontrol,,Player2_TemplateT,%A_ScriptDir%\Player2.gamecontroller.amgp
-		guicontrol,,MediaCenter_ProfileT,%A_ScriptDir%\MediaCenter.gamecontroller.amgp
-		iniwrite,%A_ScriptDir%\Player1.gamecontroller.amgp,%RJDB_CONFIG%,GENERAL,Player1_Template
-		iniwrite,%A_ScriptDir%\Player1.gamecontroller.amgp,%RJDB_CONFIG%,GENERAL,Player2_Template
-		iniwrite,%A_ScriptDir%\MediaCenter.gamecontroller.amgp,%RJDB_CONFIG%,GENERAL,MediaCenter_Profile
-    }
+		keyboard_Mapper= %A_ScriptDir%\Antimicro_!.cmd
+		keyboard_Mappern= %A_ScriptDir%\Antimicro_!.cmd
+		JMAP= antimicro
+	}
+		iniwrite,%JMAP%,%RJDB_Config%,JOYSTICKS,Jmap
+		stringreplace,keyboard_mapperT,keyboard_mapper,%A_Space%,`%,All
+		stringreplace,Player1_TemplateT,Player1_Template,%A_Space%,`%,All
+		stringreplace,Player2_TemplateT,Player2_Template,%A_Space%,`%,All
+		stringreplace,MediaCenter_ProfileT,MediaCenter_Profile,%A_Space%,`%,All
+		stringreplace,keyboard_mapperT,keyboard_mapper,%A_Space%,`%,All
+		iniwrite,%mapper_extension%,%RJDB_Config%,JOYSTICKS,Mapper_Extension
+		iniwrite,%mapper%,%RJDB_Config%,GENERAL,Mapper
+		iniwrite,%Keyboard_Mapper%,%RJDB_Config%,GENERAL,Keyboard_Mapper
+		stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
+		stringreplace,Player1_TemplateT,Player1_TemplateT,%A_Space%,`%,All
+		stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
+		guicontrol,,Keyboard_MapperT,%Keyboard_MapperT%
+		guicontrol,,Player1_TemplateT,%Player2_Template2T%
+		guicontrol,,Player1_TemplateT,%Player2_Template2T%
+		guicontrol,,MediaCenter_ProfileT,%Player2_Template2T%
+		iniwrite,%A_ScriptDir%\Player1.%mapper_extension%,%RJDB_CONFIG%,GENERAL,Player1_Template
+		iniwrite,%A_ScriptDir%\Player1.%mapper_extension%,%RJDB_CONFIG%,GENERAL,Player2_Template
+		iniwrite,%A_ScriptDir%\Mediacenter.%mapper_extension%,%RJDB_CONFIG%,GENERAL,MediaCenter_Profile
 if (antimicro_executable <> keyboard_mappern)
 	{
 		antimicro_executable=%A_ScriptDir%\antimicro\antimicro.exe
@@ -485,6 +546,7 @@ if (antimicro_executable <> keyboard_mappern)
 iniwrite,%antimicro_executable%,%RJDB_Config%,GENERAL,Antimicro_executable
 stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
 guicontrol,,Keyboard_MapperT,%Keyboard_Mapper%
+tooltip,
 return
 
 Player1_TempB:
@@ -1032,7 +1094,12 @@ ifMsgbox,Yes
         gosub,INITALL
         resetting= 1
         filedelete,Antimicro_!.cmd
-        filedelete,MediaCenter.gamecontroller.amgp
+        filedelete,xpadder_!.cmd
+        filedelete,MediaCenter.xpadderprofile
+        filedelete,MediaCenter2.xpadderprofile
+        filedelete,Player1.xpadderprofile
+        filedelete,Player2.xpadderprofile
+		filedelete,MediaCenter.gamecontroller.amgp
         filedelete,MediaCenter2.gamecontroller.amgp
         filedelete,Player1.gamecontroller.amgp
         filedelete,Player2.gamecontroller.amgp
@@ -1060,6 +1127,14 @@ if fileexist("log.txt")
 else {
 	SB_SetText("no log exists")
 }
+return
+
+INITXPD:
+fileread,xpadtmp,xpadr.set
+FileDelete,xpadder_!.cmd
+stringreplace,xpadtmp,xpadtmp,[XPADR],%A_ScriptDir%\xpadder\Xpadder.exe,
+fileappend,%xpadtmp%,xpadder_!.cmd
+Xpadder_Executable= %A_ScriptDir%\xpadder\Xpadder.exe
 return
 
 INITAMIC:
@@ -1417,11 +1492,11 @@ ifnotexist,Player2.xpadderprofile
 	}
 ifnotexist,Mediacenter.xpadderprofile
 	{
-		filecopy,xDesk.set,MediaCenter.xpadderprofile
+		filecopy,xDesktop.set,MediaCenter.xpadderprofile
 	}
 ifnotexist,Mediacenter2.xpadderprofile
 	{
-		filecopy,xDesk.set,MediaCenter2.xpadderprofile
+		filecopy,xDesktop.set,MediaCenter2.xpadderprofile
 	}
 ifnotexist,Player1.gamecontroller.amgp
     {
@@ -1444,7 +1519,7 @@ ifnotexist,MediaCenter.gamecontroller.amgp
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,MediaCenter.gamecontroller.amgp
     }  
-ifnotexist,eskgamecontroller.amgp
+ifnotexist,MediaCenter.gamecontroller.amgp
     {
         fileread,mctmp,Desktop.set
         stringreplace,SCRIPTRV,CFGDIR,\,/,All
@@ -1877,6 +1952,14 @@ gmnameds= |
 gmnamed=
 exlist= 
 fullstx= %fullstn%
+if !fileexist(GAME_Directory)
+	{
+		filecreatedir,%Game_Directory%
+	}
+if !fileexist(GAME_Profiles)
+	{
+		filecreatedir,%GAME_Profiles%
+	}
 Loop,%fullstn0%
 	{
 		prn= % fullstn%A_Index%
@@ -2374,8 +2457,10 @@ Loop,%fullstn0%
                             {
 								Player1x= %GAME_PROFILES%\%GMNAMED%\%subfldrep%%GMNAMEX%.%Mapper_Extension%
                                 Player2x= %GAME_PROFILES%\%GMNAMED%\%subfldrep%%GMNAMEX%_2.%Mapper_Extension%
-                                if ((OVERWRT = 1)or !fileexist(gamecfg))
+                                cfgcopied= 
+								if ((OVERWRT = 1)or !fileexist(gamecfg))
                                     {
+										cfgcopied= 1
 										Filecopy,%RJDB_Config%,%gamecfg%,%OVERWRT%
                                         if ((errorlevel <> 0)or fileexist(gamecfg))
                                             {
@@ -2415,7 +2500,7 @@ Loop,%fullstn0%
                                                 krs:= % an1
                                                 if ((an1 = "Source_Directory") or (an1 = "Game_Profiles")or(an1 = "Game_Directory"))
                                                     {
-                                                        continue
+														Continue
                                                     }
                                                 if ((krs = "")&&!instr(an1,"template"))
                                                     {
@@ -2434,18 +2519,27 @@ Loop,%fullstn0%
                                                     }
                                             }
                                     }
+								if ((OVERWRT = 1)or(cfgcopied = 1))
+									{
+										iniwrite, %GAME_PROFILES%\%GMNAMED%,%gamecfg%,GENERAL,GAME_PROFILES
+										iniwrite, %outdir%,%gamecfg%,GENERAL,Source_Directory
+										iniwrite, %gamecfg%,%gamecfg%,GENERAL,RJDB_Config
+									}
+									
 								DeskMon= %GAME_PROFILES%\%GMNAMED%\%subfldrep%%DMon%
-                                if ((OVERWRT = 1)or !fileexist(DeskMon)&& fileexist(MM_MediaCenter_Config))
+                                if ((OVERWRT = 1))or (!fileexist(DeskMon)&& fileexist(MM_MediaCenter_Config))
                                     {
 										filecopy, %MM_MediaCenter_Config%,%DeskMon%,%OVERWRT%
 										iniwrite,%DeskMon%,%gamecfg%,GENERAL,MM_MediaCenter_Config
 									}
                                 GameMon= %GAME_PROFILES%\%GMNAMED%\%subfldrep%%GMon%
-                                if ((OVERWRT = 1)or !fileexist(GameMon)&& fileexist(MM_Game_Config))
+                                if ((OVERWRT = 1))or (!fileexist(GameMon)&& fileexist(MM_Game_Config))
                                     {
 										filecopy, %MM_GAME_Config%,%GameMon%,%OVERWRT%
 										iniwrite,%GameMon%,%gamecfg%,GENERAL,MM_Game_Config
 									}
+								GameProfs= %GAME_PROFILES%\%GMNAMED%	
+								iniwrite,%GameMon%,%gamecfg%,GENERAL,MM_Game_Config
 								killist:
 								if (KILLCHK = 1)
 									{

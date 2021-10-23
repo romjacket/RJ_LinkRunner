@@ -28,8 +28,11 @@ if ((plink = "") or !fileExist(plink) or (scextn = ""))
 		Sleep, 3000
 		exitapp
 	}
+Tooltip,Keyboad/Mouse Disabled`n::Please Be Patient::`n
+Blockinput, on
 if (GetKeyState("Alt")&&(scextn = "exe"))
 	{
+		Tooltip,!! AltKey Detected !!`nKeyboad/Mouse Disabled`n::Please Be Patient::`n
 		CreateSetup= 1
 		iniread,Game_Profiles,RJDB.ini,GENERAL,Game_Profiles
 		iniread,mapper_extension,RJDB.ini,JOYSTICKS,mapper_extension
@@ -248,16 +251,18 @@ if (fileexist(gbrpr)&&(gbar <> 1))
 		gbar = 1
 		inif= %gbrpr%
 		Game_Profile= %gbrpr%
+		Tooltip,::Please Be Patient::`nReading Configuration
 		goto, readini
 	}
 inif= %GAME_PROFILES%\%gmnamex%\game.ini
+ifnotexist,%Game_Profiles%\%gmnamex%\
+	{
+		ToolTip, Creating Configurations
+		FileCreateDir,%Game_Profiles%\%gmnamex%
+	}
 ifnotexist,%inif%
 	{
 		filecopy,%RJDB_Config%,%inif%
-	}
-ifnotexist,%Game_Profiles%\%gmnamex%\
-	{
-		FileCreateDir,%Game_Profiles%\%gmnamex%
 	}
 if player1= 
 	{
@@ -298,6 +303,7 @@ if (prestk2 <> "")
 	}
 acwchk=
 GMGDBCHK= %gmnamex%	
+Tooltip, Configuration Created`n:::running %gmnamx% preferences:::
 if !fileexist(Borderless_Gaming_Program)
 	{
 		bgpon= 1
@@ -372,7 +378,7 @@ if (MonitorMode > 0)
 	}
 sleep, 1200
 Mapper_Extension:= % Mapper_Extension
-
+Tooltip,
 WinGet, WindowList, List
 Loop, %WindowList%
 	{
@@ -393,6 +399,7 @@ if (prestk2 <> "")
 premapper:	
 if (Mapper > 0)
 	{
+		ToolTip,Running %gmnamx% preferences`n:::Loading Joystick Configurations:::
 		joycnt=
 		joycnt= %joycount%					
 		player2n= "%player2%"
@@ -400,6 +407,9 @@ if (Mapper > 0)
 		if (JMap = "xpadder")
 			{
 				player2t:= A_Space . player2n . "/M"
+				process,close,xpadder.exe
+				sleep,600
+				joycount= 
 			}
 		if (JMap = "antimicro")
 			{
@@ -412,14 +422,15 @@ if (Mapper > 0)
 			}
 		if (joycnt < 2)
 			{
-				if (JMap = "Xpadder")
-					{
-						Player1.= A_Space . "/M"
-					}
 				player2t=
 				player2n=
+				if (JMap = "Xpadder")
+					{
+						player2t:= A_Space . "/M"
+					}
+				Joycount=
 			}
-		Run,%Keyboard_Mapper% "%player1%"%player2t%
+		Run,%Keyboard_Mapper% "%player1%"%player2t%,,hide,kbmp
 		Sleep,600
 		Loop,5
 			{
@@ -443,12 +454,17 @@ if (prestk2 <> "")
 		Run,%prestk2%,,precpid
 	}	
 begin:
+ToolTip,Loading %gmnamex%
 if (nrx > 2)
 	{
+		Tooltip,reload exceeded marker`nBe sure you have the launched executable in the executable_list for this game.
 		goto, givup
 	}
+Blockinput, Off	
+ToolTip,
 Run, %plfp%%linkoptions%%plarg%,%pldr%,max UseErrorLevel,dcls
 nerlv= %errorlevel%
+Tooltip,
 Process, Exist, %bgmexe%
 goto, bgl
 if (instr(bgm,gmname)or instr(bgm,GMGDBCHK))
@@ -457,6 +473,7 @@ if (instr(bgm,gmname)or instr(bgm,GMGDBCHK))
 	}
 	
 bgl:	
+Tooltip, :::getting ancilary exes:::
 apchkn=
 if (exe_list <> "")
 	{
@@ -477,10 +494,12 @@ if (exe_list <> "")
 					}
 				if (apchkn < 10)
 					{
+						Tooltip,
 						goto,appcheck
 					}
 			}
 	}
+Tooltip,
 if (exe_list <> "")
 	{	
 		WinActivate
@@ -491,6 +510,8 @@ if (exe_list <> "")
 				gosub,nonmres
 				acwchk= 
 			}
+		Tooltip,
+		BlockInput,Off	
 		process,WaitClose,%erahkpid%
 		goto, appclosed
 	}
@@ -508,16 +529,17 @@ Process,waitclose,%DCLS%
 AppClosed:
 if ((nerlv = 1234)or(gii = 1))
 	{
-		msgbox,,,what
 		goto, givup
 	}
-	
+ToolTip, Disabling Keyboard`n:::Please be patient:::
+BlockInput, On
 nrx+=1
 goto, begin
 return
 
 Ctrl & f2::
 process,close,%dcls%
+ToolTip,Closing
 process, close, %pfile%
 if (exe_list <> "")
 	{
@@ -525,6 +547,7 @@ if (exe_list <> "")
 			{
 				process,close,%A_LoopField%
 			}
+		Tooltip,
 	}
 dcls= 
 nrx=
@@ -537,8 +560,11 @@ Return
 
 Ctrl & f12::
 givup:
+Tooltip,...Quitting...
 gii= 1
 Quitout:
+Blockinput,On
+Tooltip,Keyboard / Mouse are disabled`n:::Please be patient:::
 process,exist,%mapapp%
 mperl= %errorlevel%
 stringsplit,prestk,1_Post,<
@@ -554,6 +580,7 @@ if (prestk2 <> "")
 postmapper:	
 if (Mapper > 0)
 	{
+		ToolTip,Please Be Patient`n:::Reloading Mediacenter/Desktop Profiles:::
 		gosub, AmicroTest
 		if (JMap = "antimicro")
 			{
@@ -568,14 +595,14 @@ if (Mapper > 0)
 		if (joycount =< 2)
 			{
 				
+				mediacenter_profile_2t= 
 				if (JMap = "Xpadder")
 					{
-						mediacenter_profile.= A_Space . "/M"
+						mediacenter_profile_2t:= A_Space . "/M"
 					}
-				mediacenter_profile_2t=
 			}
 		else {
-			if ((joycount > joycnt)&&(joycnt < 3))
+			if ((joycount > joycnt)&&(joycnt =< 3))
 				{
 					splitpath,Player1,p1fn,pl1pth,,plgetat
 					Loop,files,%pl1pth%\*.%mapper_extension%
@@ -612,6 +639,7 @@ if (Mapper > 0)
 				Sleep,500
 			}
 	}
+Tooltip,Reloading Profiles`n:::shutting down game:::
 process,close, %erahkpid%
 process,close, %dcls%
 process, close, %pfile%
@@ -646,6 +674,7 @@ if (MonitorMode > 0)
 			Run, %Multimonitor_Tool%,%mmpath%,hide,dsplo
 		}	
 	}
+Tooltip,shutting down game`n:::Writing Settings
 iniwrite,%MONITORMODE%,%inif%,GENERAL,MonitorMode
 iniwrite,%disprogw%,%inif%,GENERAL,disprogw
 iniwrite,%MAPPER%,%inif%,GENERAL,Mapper
@@ -689,6 +718,7 @@ if (prestk2 <> "")
 		if instr(prestk1,"W")
 			{
 				RunWait,%prestk2%,,postcpid
+				ToolTip,
 				goto,loggingout
 			}
 		Run,%prestk2%,,postcpid	
@@ -701,6 +731,7 @@ if (Logging = 1)
 ExitApp
 
 AmicroTest:
+Tooltip, :::Evaluating Joysticks:::
 process,close,antimicro.exe
 Run, %unload%,%mapperp%,hide
 sleep, 600
@@ -727,6 +758,7 @@ Loop,parse,testout,`n`r
 				joycount+=1
 			}
 	}
+Tooltip, %Joycount% Joysticks Detected	
 return	
 
 CmdRet(sCmd, callBackFuncObj := "", encoding := "")

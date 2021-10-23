@@ -3,8 +3,8 @@ Extract the binary to a location of your choice, **or** download and build and r
 ```sh
 "SSD.exe"
 "multimonitortool.exe"
-"antimicro.exe"
-"xpadder.exe"
+"Antimicro\antimicro.exe"
+"xpadder\xpadder.exe"
 "Source_Builder.exe"
 "NewOsk.exe"
 "RJ_LinkRunner.exe"
@@ -69,6 +69,8 @@ The Left-Analog stick held left is the delete-key.
 The Left-Analog stick held right is the Tab-key.
 ```
 ## Launching Games
+
+It is best if you set the RJ_LinkRunner.exe, antimicro.exe and xpadder.exe to run as the administrator.
 
 During gameplay you may add additional joysticks and save a profile for them. Any additional joystick profiles found within the game's jacket will be saved and reloaded for player 2, prioritizing the default profile-name (**Game Jacket_2.gamecontroller.amgp**, and other "player 2" monikers.)
 
