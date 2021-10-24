@@ -292,14 +292,28 @@ ifnotexist, %mediacenter_profile_2%
 		Filecopy,%mediacenter_Template%,%mediacenter_profile_2%
 	}
 stringsplit,prestk,1_Pre,<
+stringright,lnky,prestk2,4
+runhow= 
 if (prestk2 <> "")
 	{
+		if (lnky = ".lnk")
+			{
+				Filegetshortcut,%prestk2%,,,argm,,,,lsrst
+				if (lsrst = 7)
+					{
+						runhow= hide
+					}			
+				if (lsrst = 3)
+					{
+						runhow= Max
+					}
+			}
 		if instr(prestk1,"W")
 			{
-				RunWait,%prestk2%,,preapid
+				RunWait,%prestk2%,%A_ScriptDir%,%runhow%,preapid
 				goto,nonmres
 			}
-		Run,%prestk2%,,preapid	
+		Run,%prestk2%,%A_ScriptDir%,,preapid	
 	}
 acwchk=
 GMGDBCHK= %gmnamex%	
@@ -387,14 +401,28 @@ Loop, %WindowList%
 Send {LCtrl Down}&{LAlt Down}&B	
 Send {LCtrl Up}&{LAlt Up}
 stringsplit,prestk,2_Pre,<
+stringright,lnky,prestk2,4
+runhow= 
 if (prestk2 <> "")
 	{
+		if (lnky = ".lnk")
+			{
+				Filegetshortcut,%prestk2%,,,argm,,,,lsrst
+				if (lsrst = 7)
+					{
+						runhow= hide
+					}			
+				if (lsrst = 3)
+					{
+						runhow= Max
+					}
+			}
 		if instr(prestk1,"W")
 			{
-				RunWait,%prestk2%,,prebpid
+				RunWait,%prestk2%,%A_ScriptDir%,%runhow%,prebpid
 				goto,premapper
 			}
-		Run,%prestk2%,,prebpid	
+		Run,%prestk2%,%A_ScriptDir%,%runhow%,prebpid	
 	}
 premapper:	
 if (Mapper > 0)
@@ -444,14 +472,28 @@ if (Mapper > 0)
 			}
 	}
 stringsplit,prestk,3_Pre,<
+stringright,lnky,prestk2,4
+runhow= 
 if (prestk2 <> "")
 	{
+		if (lnky = ".lnk")
+			{
+				Filegetshortcut,%prestk2%,,,argm,,,,lsrst
+				if (lsrst = 7)
+					{
+						runhow= hide
+					}			
+				if (lsrst = 3)
+					{
+						runhow= Max
+					}
+			}
 		if instr(prestk1,"W")
 			{
-				RunWait,%prestk2%,,precpid
+		RunWait,%prestk2%,%A_ScriptDir%,%runhow%,precpid
 				goto,begin
 			}
-		Run,%prestk2%,,precpid
+		Run,%prestk2%,%A_ScriptDir%,%runhow%,precpid
 	}	
 begin:
 ToolTip,Loading %gmnamex%
@@ -568,14 +610,28 @@ Tooltip,Keyboard / Mouse are disabled`n:::Please be patient:::
 process,exist,%mapapp%
 mperl= %errorlevel%
 stringsplit,prestk,1_Post,<
+stringright,lnky,prestk2,4
+runhow= 
 if (prestk2 <> "")
 	{
+		if (lnky = ".lnk")
+			{
+				Filegetshortcut,%prestk2%,,,argm,,,,lsrst
+				if (lsrst = 7)
+					{
+						runhow= hide
+					}			
+				if (lsrst = 3)
+					{
+						runhow= Max
+					}
+			}
 		if instr(prestk1,"W")
 			{
-				RunWait,%prestk2%,,postapid
+				RunWait,%prestk2%,%A_ScriptDir%,%runhow%,postapid
 				goto,postmapper
 			}
-		Run,%prestk2%,,postapid
+		Run,%prestk2%,%A_ScriptDir%,%runhow%,postapid
 	}
 postmapper:	
 if (Mapper > 0)
@@ -653,14 +709,28 @@ if (exe_list <> "")
 
 Run, taskkill /f /im "%plnkn%*",,hide
 stringsplit,prestk,2_Post,<
+stringright,lnky,prestk2,4
+runhow= 
 if (prestk2 <> "")
 	{
+		if (lnky = ".lnk")
+			{
+				Filegetshortcut,%prestk2%,,,argm,,,,lsrst
+				if (lsrst = 7)
+					{
+						runhow= hide
+					}			
+				if (lsrst = 3)
+					{
+						runhow= Max
+					}
+			}
 		if instr(prestk1,"W")
 			{
-				RunWait,%prestk2%,,postbpid
+				RunWait,%prestk2%,%A_ScriptDir%,%runhow%,postbpid
 				goto,postmonitor
 			}
-		Run,%prestk2%,,postbpid	
+		Run,%prestk2%,%A_ScriptDir%,%runhow%,postbpid	
 	}
 postmonitor:
 if (MonitorMode > 0)
@@ -713,15 +783,29 @@ Loop,20
 Send {LCtrl Down}&{LAlt Down}&K
 Send {LCtrl Up}&{LAlt Up}
 stringsplit,prestk,3_Post,<
+stringright,lnky,prestk2,4
+runhow= 
 if (prestk2 <> "")
 	{
+		if (lnky = ".lnk")
+			{
+				Filegetshortcut,%prestk2%,,,argm,,,,lsrst
+				if (lsrst = 7)
+					{
+						runhow= hide
+					}			
+				if (lsrst = 3)
+					{
+						runhow= Max
+					}
+			}
 		if instr(prestk1,"W")
 			{
-				RunWait,%prestk2%,,postcpid
+				RunWait,%prestk2%,%A_ScriptDir%,%runhow%,postcpid
 				ToolTip,
 				goto,loggingout
 			}
-		Run,%prestk2%,,postcpid	
+		Run,%prestk2%,%A_ScriptDir%,%runhow%,postcpid	
 	}
 loggingout:	
 if (Logging = 1)

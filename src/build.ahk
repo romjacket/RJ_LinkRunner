@@ -3,22 +3,33 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ToolTip,building LinkRunner
-#SingleInstance Force``
+#SingleInstance Force
 Send, {LCtrl Down}{f12}
 Send, {LCtrl Up}
-FileDelete,RJ_LinkRunner.exe
-FileDelete,NewOSK.exe
-FileDelete,Setup.exe
-FileDelete,Source_Builder.exe
-iniread,URLFILEX,RJDB.ini,CONFIG,remotebinaries
+srctst= %A_ScriptDir%
+splitpath,srctst,srcfn,srcpth
+splitpath,srcpth,,sourcehome
+if (srcfn = "src")
+	{
+		sourcehome= %srcpth%
+	}	
+FileDelete,%sourcehome%\RJ_LinkRunner.exe
+FileDelete,%sourcehome%\NewOSK.exe
+FileDelete,%sourcehome%\Setup.exe
+FileDelete,%sourcehome%\Source_Builder.exe
+iniread,URLFILEX,%sourcehome%\RJDB.ini,CONFIG,remotebinaries
 DOWNLOADIT:
-iniread,URLFILE,RJxDB.ini,CONFIG,remotebinaries%nam%
+iniread,URLFILE,%sourcehome%\RJxDB.ini,CONFIG,remotebinaries%nam%
 if (URLFILE = "") or (URLFILE = "ERROR")
 	{
 		URLFILE= %URLFILEX%
 		nam= 
 	}
 splitpath,A_ScriptFullPath,scriptfilename,HEREDIR
+if (HEREDIR <> sourcehome)
+	{
+		HEREDIR= %sourcehome%
+	}
 save= %HEREDIR%\Binaries.zip
 ifexist,%save%
 	{
@@ -35,7 +46,7 @@ DownloadFile(URLFILE,save,False,True)
 EXTRACTING:
 ToolTip, 
 Sleep, 500
-if (fileexist(save)&& !fileexist("multimonitortool.exe"))
+if (fileexist(save)&& !fileexist(sourcehome . "\" . "multimonitortool.exe"))
 	{
 		ToolTip, Extracting...
 		Unz(save,HEREDIR)
@@ -60,7 +71,7 @@ ifnotexist,%save%
 			goto, DOWNLOADIT
 			}
 	}
-splitpath,A_AhkPath,,AHKLOC
+SplitPath,A_AhkPath,AHKFNM,AHKLOC
 Loop,files,%AHKLOC%\*.exe,R
 	{
 		if (A_LoopFileName = "Ahk2Exe.exe")
@@ -78,25 +89,25 @@ Loop,files,%AHKLOC%\*.bin,R
 			}
 		}	
 	}
-RunWait,"%AHKEXE%" /in "%HEREDIR%\RJ_LinkRunner.ahk" /icon "RJ_LinkRunner.ico" /bin "%BINFILE%" /out "%HEREDIR%\RJ_LinkRunner.exe",%HEREDIR%,hide
+RunWait,"%AHKEXE%" /in "%HEREDIR%\src\RJ_LinkRunner.ahk" /icon "%sourcehome%\src\RJ_LinkRunner.ico" /bin "%BINFILE%" /out "%HEREDIR%\RJ_LinkRunner.exe",%HEREDIR%,hide
 if (errorlevel <> 0)
 	{
 		Msgbox,,,LinkRunner Build Failed	
 	}
 ToolTip,Compiling Setup
-RunWait,"%AHKEXE%" /in "%HEREDIR%\Setup.ahk" /icon "RJ_Setup.ico" /bin "%BINFILE%" /out "%HEREDIR%\Setup.exe",%HEREDIR%,hide
+RunWait,"%AHKEXE%" /in "%HEREDIR%\src\Setup.ahk" /icon "%sourcehome%\src\RJ_Setup.ico" /bin "%BINFILE%" /out "%HEREDIR%\Setup.exe",%HEREDIR%,hide
 if (errorlevel <> 0)
 	{
 		Msgbox,,,Setup Build Failed	
 	}
 ToolTip,Compiling NewOSK
-RunWait,"%AHKEXE%" /in "%HEREDIR%\NewOSK.ahk" /icon "NewOSK.ico" /bin "%BINFILE%" /out "%HEREDIR%\NewOSK.exe",%HEREDIR%,hide
+RunWait,"%AHKEXE%" /in "%HEREDIR%\src\NewOSK.ahk" /icon "%sourcehome%\src\NewOSK.ico" /bin "%BINFILE%" /out "%HEREDIR%\NewOSK.exe",%HEREDIR%,hide
 if (errorlevel <> 0)
 	{
 		Msgbox,,,NewOSK Build Failed	
 	}
 ToolTip,Compiling Source Builder
-RunWait,"%AHKEXE%" /in "%HEREDIR%\build.ahk" /icon "Source_Builder.ico" /bin "%BINFILE%" /out "%HEREDIR%\Source_Builder.exe",%HEREDIR%,hide
+RunWait,"%AHKEXE%" /in "%HEREDIR%\src\build.ahk" /icon "%sourcehome%\src\Source_Builder.ico" /bin "%BINFILE%" /out "%HEREDIR%\Source_Builder.exe",%HEREDIR%,hide
 if (errorlevel <> 0)
 	{
 		Msgbox,,,Builder Build Failed	

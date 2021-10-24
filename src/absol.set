@@ -1,3 +1,4 @@
+unarc.exe
 background
 benchmark
 bluetooth
@@ -35,6 +36,9 @@ licensing
 linux
 loggi
 logoff
+modloader.exe
+modder.exe
+modifier.exe
 ntfs
 oalinst
 plugin
@@ -82,3 +86,8 @@ viewer.exe
 xpak.exe
 webcam
 wifi
+zip.exe
+rar.exe
+gz.exe
+tar.exe
+unpack.exe

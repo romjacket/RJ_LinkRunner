@@ -1,0 +1,39 @@
+;--- Xpadder Profile File ---
+DataType=Profile
+Version=2015.01.01
+
+[Profile Settings]
+
+[Set Settings]
+
+[Assignments]
+Set1Button7SetSelect=1
+Set2Button1Slots=Enter
+Set2Button2Slots=Alt
+Set2Button3Slots=Left Shift
+Set2Button4Slots=Right Control
+Set2Button5Slots=Backspace
+Set2Button6Slots=Space
+Set2Button7SetSelect=0
+Set2Button8Slots=HOLD ZONE 3.50s,Left Control,F12
+Set2Button9Slots=HOLD ZONE 2.50s,Left Control,F2
+Set2Button10Slots=Left Mouse Button (1)
+Set2Button11Slots=HOLD ZONE 3.50s,Left Control,Alt,Left Shift,F9
+Set2DPadUpSlots=Arrow Up
+Set2DPadRightSlots=Arrow Right
+Set2DPadDownSlots=Arrow Down
+Set2DPadLeftSlots=Arrow Left
+Set2Stick1UpSlots=HOLD ZONE 0.50s,Page Up,HOLD ZONE 5.50s,Home
+Set2Stick1RightSlots=HOLD ZONE 0.50s,Tab
+Set2Stick1DownSlots=HOLD ZONE 0.50s,Page Down,HOLD ZONE 5.50s,End
+Set2Stick1LeftSlots=HOLD ZONE 0.50s,Delete
+Set2Stick2UpSlots=Mouse Move Up
+Set2Stick2UpMouseSpeed=32
+Set2Stick2RightSlots=Mouse Move Right
+Set2Stick2RightMouseSpeed=32
+Set2Stick2DownSlots=Mouse Move Down
+Set2Stick2DownMouseSpeed=32
+Set2Stick2LeftSlots=Mouse Move Left
+Set2Stick2LeftMouseSpeed=32
+Set2TriggerLeftSlots=Middle Mouse Button (3)
+Set2TriggerRightSlots=Right Mouse Button (2)

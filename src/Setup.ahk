@@ -3,7 +3,12 @@ SendMode Input
 SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
-
+sourcehome= %A_ScriptDir%
+Splitpath,A_ScripTDir,tstidir,tstipth
+if (tstidir = "src")
+	{
+		sourcehome= %tstipth%
+	}
 Loop %0%  
 	{
 		GivenPath := %A_Index%
@@ -22,7 +27,7 @@ Loop %0%
 	}
 splitpath,plink,scname,scpath,scextn,gmname,gmd
 CFGDIR= %SCPATH%
-RJDB_Config= RJDB.ini
+RJDB_Config= %sourcehome%\RJDB.ini
 if (scextn = "lnk")
 	{
 		FileGetShortcut,%plink%,inscname,inscpth,chkargl
@@ -35,37 +40,34 @@ if (scextn = "lnk")
 		
 	}
 	else {
-		CFGDIR= %A_ScriptDir%
-		RJDB_Config= RJDB.ini
+		CFGDIR= %sourcehome%
+		RJDB_Config= %CFGDIR%\RJDB.ini
 	}
 
 if ((plink = "") or !fileExist(plink) or (scextn = ""))
 	{
-		filedelete,log.txt
-		FileCreateDir,Launchers
-		FileCreateDir,profiles
-		FileCreateDir,Shortcuts
+		filedelete,%sourcehome%\log.txt
 	}
-ifnotexist,xpadder_!.cmd
+ifnotexist,%sourcehome%\xpadder_!.cmd
 	{
 		gosub, INITXPD
 	}
-ifnotexist,Antimicro_!.cmd
+ifnotexist,%sourcehome%\Antimicro_!.cmd
     {
         gosub, INITAMIC
     }
 gosub,RECREATEJOY
 gosub, DDPOPS
 repopbut= hidden
-fileread,unlike,unlike.Set
-fileread,unselect,unsel.set
-fileread,absol,absol.set
-if fileexist("continue.db")
+fileread,unlike,%sourcehome%\src\unlike.set
+fileread,unselect,%sourcehome%\src\unsel.set
+fileread,absol,%sourcehome%\src\absol.set
+if fileexist(sourcehome . "\" . "continue.db")
 	{
 		repopbut= 
-		fileread,SOURCEDLIST,continue.db
+		fileread,SOURCEDLIST,%sourcehome%\continue.db
 	}
-fileread,exclfls,exclfnms.set
+fileread,exclfls,%sourcehome%\src\exclfnms.set
 filextns= exe|lnk
 MENU_X:= A_GuiX*(A_ScreenDPI/96)
 MENU_Y:= A_GuiY*(A_ScreenDPI/96)
@@ -83,12 +85,12 @@ GogQuery= GOG|G.O.G|GOG Games
 GenQuery= Games|juegos|spellen|Spiele|Jeux|Giochi|игры
 AllQuery:= GogQuery . | . "Origin" . "|" . "Epic Games" . steamhome 
 undir= |%A_WinDir%|%A_Programfiles%|%A_Programs%|%A_AppDataCommon%|%A_AppData%|%A_Desktop%|%A_DesktopCommon%|%A_StartMenu%|%A_StartMenuCommon%|%A_Startup%|%A_StartupCommon%|%A_Temp%|
-GUIVARS= PostWait|PreWait|SCONLY|EXEONLY|BOTHSRCH|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_ProfB|GAME_DirB|SOURCE_DirB|SOURCE_DirectoryT|REMSRC|Keyboard_MapB|Player1_TempB|Player2_TempB|MediaCenter_ProfB|MultiMonitor_Tool|MM_Game_CfgB|MM_MediaCenter_CfgB|BGM_ProgB|BGP_DataB|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS|SELALLBUT|SELNONEBUT
+GUIVARS= PostWait|PreWait|SCONLY|EXEONLY|BOTHSRCH|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_ProfB|GAME_DirB|SOURCE_DirB|SOURCE_DirectoryT|REMSRC|Keyboard_MapB|Player1_TempB|Player2_TempB|MediaCenter_ProfB|MultiMonitor_Tool|MM_ToolB|MM_Game_CfgB|MM_MediaCenter_CfgB|BGM_ProgB|BGP_DataB|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS|SELALLBUT|SELNONEBUT
 STDVARS= SOURCE_DirectoryT|SOURCE_Directory|KeyBoard_Mapper|MediaCenter_Profile|Player1_Template|Player2_Template|MultiMonitor_Tool|MM_MEDIACENTER_Config|MM_Game_Config|BorderLess_Gaming_Program|BorderLess_Gaming_Database|extapp|Game_Directory|Game_Profiles|RJDB_Location|Source_Directory|Mapper_Extension|1_Pre|2_Pre|3_Pre|1_Post|2_Post|3_Post|switchcmd|switchback
 DDTA= <$This_prog$><Monitor><Mapper>
 DDTB= <Monitor><$This_prog$><Mapper>
 DDTC= <$This_prog$><Monitor><Mapper>
-ifnotexist,RJDB.ini
+ifnotexist,%sourcehome%\RJDB.ini
 gosub,INITALL
 gosub, popgui
 if (Logging = 1)	
@@ -452,7 +454,7 @@ return
 
 Keyboard_MapB:
 gui,submit,nohide
-kbmdefloc= %A_Scriptdir%
+kbmdefloc= %sourcehome%
 if fileexist(Programfilesx86 . "\" . "Antimicro")
 	{
 		kbmdefloc= %programfilesx86%\Antimicro
@@ -471,14 +473,14 @@ if ((Keyboard_MapperT <> "")&& !instr(Keyboard_MapperT,"<"))
 		guicontrol,,Keyboard_MapperT,<Keyboard_Mapper
 	}
 Mapper= 
-Antimtmp= %A_ScriptDir%\xpadder\Xpadder.exe
+Antimtmp= %sourcehome%\xpadder\Xpadder.exe
 keyboard_mapper= %keyboard_mappern%
 if ((antimicro_executable <> Antimtmp)&& !fileexist(antimicro_executble))
 	{
 		antimicro_executable= %Antimtmp%
 	}
 Antitmp= %antimicro_executeable%	
-Xpadtmp= %A_ScriptDir%\antimicro\Antimicro.exe
+Xpadtmp= %sourcehome%\antimicro\Antimicro.exe
 if ((xpadder_executable = xpadtmp)&& !fileexist(xpadder_executable))
 	{
 		xpadder_executable= %Xpadtmp%
@@ -491,13 +493,13 @@ if instr(Keyboard_Mappern,"Xpadder")
 		mapper_extension= xpadderprofile
 		antimicro_executable=%antitimp%
 		tooltip,xpadder
-		FileDelete,xpadder_!.cmd
+		FileDelete,%sourcehome%\xpadder_!.cmd
 		xpadder_executable=%keyboard_mappern%
-        fileread,xpdcb,xpadr.set
+        fileread,xpdcb,%sourcehome%\src\xpadr.set
         stringreplace,xpdcb,xpdcb,[XPADR],%Keyboard_Mappern%,All
-        FileAppend,%xpdcb%,%A_ScriptDir%\xpadder_!.cmd
-		keyboard_Mapper= %A_ScriptDir%\xpadder_!.cmd
-		keyboard_Mappern= %A_ScriptDir%\xpadder_!.cmd
+        FileAppend,%xpdcb%,%sourcehome%\xpadder_!.cmd
+		keyboard_Mapper= %sourcehome%\xpadder_!.cmd
+		keyboard_Mappern= %sourcehome%\xpadder_!.cmd
 		JMAP= Xpadder
 	}
 	
@@ -506,18 +508,18 @@ if instr(Keyboard_Mappern,"Antimicro")
 		Mapper= 1
 		tooltip,antimicro
 		mapper_extension= gamecontroller.amgp
-		FileDelete,Antimicro_!.cmd
+		FileDelete,%sourcehome%\Antimicro_!.cmd
 		xpadder_executable=%xpadtmp%
 		antimicro_executable=%keyboard_mappern%
-        fileread,amcb,Amicro.set
-        fileread,amcjp,allgames.set,
-        oskloc= %A_ScriptDir%\newosk.exe
+        fileread,amcb,%sourcehome%\src\Amicro.set
+        fileread,amcjp,%sourcehome%\src\allgames.set,
+        oskloc= %sourcehome%\newosk.exe
         stringreplace,oskloc,oskloc,\,/,All
         stringreplace,amcjp,amcjp,[NEWOSK],%oskloc%,All
         stringreplace,amcb,amcb,[AMICRO],%Keyboard_Mappern%,All
-        FileAppend,%amcb%,%A_ScriptDir%\Antimicro_!.cmd
-		keyboard_Mapper= %A_ScriptDir%\Antimicro_!.cmd
-		keyboard_Mappern= %A_ScriptDir%\Antimicro_!.cmd
+        FileAppend,%amcb%,%sourcehome%\Antimicro_!.cmd
+		keyboard_Mapper= %sourcehome%\Antimicro_!.cmd
+		keyboard_Mappern= %sourcehome%\Antimicro_!.cmd
 		JMAP= antimicro
 	}
 		iniwrite,%JMAP%,%RJDB_Config%,JOYSTICKS,Jmap
@@ -533,15 +535,15 @@ if instr(Keyboard_Mappern,"Antimicro")
 		stringreplace,Player1_TemplateT,Player1_TemplateT,%A_Space%,`%,All
 		stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
 		guicontrol,,Keyboard_MapperT,%Keyboard_MapperT%
-		guicontrol,,Player1_TemplateT,%Player2_Template2T%
-		guicontrol,,Player1_TemplateT,%Player2_Template2T%
-		guicontrol,,MediaCenter_ProfileT,%Player2_Template2T%
-		iniwrite,%A_ScriptDir%\Player1.%mapper_extension%,%RJDB_CONFIG%,GENERAL,Player1_Template
-		iniwrite,%A_ScriptDir%\Player1.%mapper_extension%,%RJDB_CONFIG%,GENERAL,Player2_Template
-		iniwrite,%A_ScriptDir%\Mediacenter.%mapper_extension%,%RJDB_CONFIG%,GENERAL,MediaCenter_Profile
+		guicontrol,,Player1_TemplateT,%Player2_TemplateT%
+		guicontrol,,Player2_TemplateT,%Player2_TemplateT%
+		guicontrol,,MediaCenter_ProfileT,%Player2_TemplateT%
+		iniwrite,%sourcehome%\Player1.%mapper_extension%,%RJDB_CONFIG%,GENERAL,Player1_Template
+		iniwrite,%sourcehome%\Player2.%mapper_extension%,%RJDB_CONFIG%,GENERAL,Player2_Template
+		iniwrite,%sourcehome%\Mediacenter.%mapper_extension%,%RJDB_CONFIG%,GENERAL,MediaCenter_Profile
 if (antimicro_executable <> keyboard_mappern)
 	{
-		antimicro_executable=%A_ScriptDir%\antimicro\antimicro.exe
+		antimicro_executable=%sourcehome%\antimicro\antimicro.exe
 	}
 iniwrite,%antimicro_executable%,%RJDB_Config%,GENERAL,Antimicro_executable
 stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
@@ -1076,15 +1078,15 @@ guicontrol,,PRETNUM,%PRETNUM%
 return
 
 INITALL:
-FileRead,RJTMP,RJDB.set
+FileRead,RJTMP,%sourcehome%\src\RJDB.set
 Loop,parse,STDVARS,|
     {
         %A_LoopField%=
     }
 initz= 1	
-stringreplace,RJTMP,RJTMP,[LOCV],%A_ScriptDir%,All
-FileDelete,RJDB.ini
-FileAppend,%RJTMP%,RJDB.ini
+stringreplace,RJTMP,RJTMP,[LOCV],%sourcehome%,All
+FileDelete,%sourcehome%\RJDB.ini
+FileAppend,%RJTMP%,%sourcehome%\RJDB.ini
 return
 
 RESET:
@@ -1093,16 +1095,16 @@ ifMsgbox,Yes
     {
         gosub,INITALL
         resetting= 1
-        filedelete,Antimicro_!.cmd
-        filedelete,xpadder_!.cmd
-        filedelete,MediaCenter.xpadderprofile
-        filedelete,MediaCenter2.xpadderprofile
-        filedelete,Player1.xpadderprofile
-        filedelete,Player2.xpadderprofile
-		filedelete,MediaCenter.gamecontroller.amgp
-        filedelete,MediaCenter2.gamecontroller.amgp
-        filedelete,Player1.gamecontroller.amgp
-        filedelete,Player2.gamecontroller.amgp
+        filedelete,%sourcehome%\Antimicro_!.cmd
+        filedelete,%sourcehome%\xpadder_!.cmd
+        filedelete,%sourcehome%\MediaCenter.xpadderprofile
+        filedelete,%sourcehome%\MediaCenter2.xpadderprofile
+        filedelete,%sourcehome%\Player1.xpadderprofile
+        filedelete,%sourcehome%\Player2.xpadderprofile
+		filedelete,%sourcehome%\MediaCenter.gamecontroller.amgp
+        filedelete,%sourcehome%\MediaCenter2.gamecontroller.amgp
+        filedelete,%sourcehome%\Player1.gamecontroller.amgp
+        filedelete,%sourcehome%\Player2.gamecontroller.amgp
         gosub,RECREATEJOY
         goto,popgui
 		LV_Delete()
@@ -1120,9 +1122,9 @@ return
 
 OPNLOG:
 gui,submit,NoHide
-if fileexist("log.txt")
+if fileexist("%sourcehome%\log.txt")
 	{
-		Run,Notepad log.txt,
+		Run,Notepad %sourcehome%\log.txt,
 	}
 else {
 	SB_SetText("no log exists")
@@ -1130,20 +1132,21 @@ else {
 return
 
 INITXPD:
-fileread,xpadtmp,xpadr.set
-FileDelete,xpadder_!.cmd
-stringreplace,xpadtmp,xpadtmp,[XPADR],%A_ScriptDir%\xpadder\Xpadder.exe,
-fileappend,%xpadtmp%,xpadder_!.cmd
-Xpadder_Executable= %A_ScriptDir%\xpadder\Xpadder.exe
+fileread,xpadtmp,%sourcehome%\src\xpadr.set
+FileDelete,%sourcehome%\xpadder_!.cmd
+stringreplace,xpadtmp,xpadtmp,[XPADR],%sourcehome%\xpadder\Xpadder.exe,
+fileappend,%xpadtmp%,%sourcehome%\xpadder_!.cmd
+Xpadder_Executable= %sourcehome%\xpadder\Xpadder.exe
 return
 
 INITAMIC:
-fileread,amictmp,amicro.set
-FileDelete,Antimicro_!.cmd
-stringreplace,amictmp,amictmp,[AMICRO],%A_ScriptDir%\Antimicro\Antimicro.exe,
-fileappend,%amictmp%,Antimicro_!.cmd
-Antimicro_Executable= %A_ScriptDir%\Antimicro\Antimicro.exe
+fileread,amictmp,%sourcehome%\src\amicro.set
+FileDelete,%sourcehome%\Antimicro_!.cmd
+stringreplace,amictmp,amictmp,[AMICRO],%sourcehome%\Antimicro\Antimicro.exe,
+fileappend,%amictmp%,%sourcehome%\Antimicro_!.cmd
+Antimicro_Executable= %sourcehome%\Antimicro\Antimicro.exe
 return
+
 
 
 INITQUERY:
@@ -1350,7 +1353,7 @@ Loop,parse,RJDBSECTS,`r`n
 			{
 				continue
 			}
-		iniread,sectp,RJDB.ini,%A_LoopField%
+		iniread,sectp,%sourcehome%\RJDB.ini,%A_LoopField%
 		Loop,parse,sectp,`r`n
 			{
 				if (A_LoopField = "")
@@ -1470,7 +1473,7 @@ Loop,parse,rjdb,`r`n
             }
     }
 	*/
-Srcdeflt= %A_ScriptDir%\Shortcuts
+Srcdeflt= %sourcehome%\Shortcuts
 Iniread,Source_Directory,%RJDB_Config%,GENERAL,Source_Directory
 if ((Source_Directory = Srcdeflt)or (resetting = 1) or (initz = 1))
 	{
@@ -1482,49 +1485,49 @@ resetting=
 return
 
 RECREATEJOY:
-ifnotexist,Player1.xpadderprofile
+ifnotexist,%sourcehome%\Player1.xpadderprofile
 	{
-		filecopy,xallgames.set,Player1.xpadderprofile
+		filecopy,%sourcehome%\src\xallgames.set,%sourcehome%\Player1.xpadderprofile
 	}
-ifnotexist,Player2.xpadderprofile
+ifnotexist,%sourcehome%\Player2.xpadderprofile
 	{
-		filecopy,xallgames.set,Player2.xpadderprofile
+		filecopy,%sourcehome%\src\xallgames.set,%sourcehome%\Player2.xpadderprofile
 	}
-ifnotexist,Mediacenter.xpadderprofile
+ifnotexist,%sourcehome%\Mediacenter.xpadderprofile
 	{
-		filecopy,xDesktop.set,MediaCenter.xpadderprofile
+		filecopy,%sourcehome%\src\xDesktop.set,%sourcehome%\MediaCenter.xpadderprofile
 	}
-ifnotexist,Mediacenter2.xpadderprofile
+ifnotexist,%sourcehome%\Mediacenter2.xpadderprofile
 	{
-		filecopy,xDesktop.set,MediaCenter2.xpadderprofile
+		filecopy,%sourcehome%\src\xDesktop.set,%sourcehome%\MediaCenter2.xpadderprofile
 	}
-ifnotexist,Player1.gamecontroller.amgp
+ifnotexist,%sourcehome%\Player1.gamecontroller.amgp
     {
-        fileread,mctmp,allgames.set
+        fileread,mctmp,%sourcehome%\src\allgames.set
         stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
-        FileAppend,%mctmp%,Player1.gamecontroller.amgp
+        FileAppend,%mctmp%,%sourcehome%\Player1.gamecontroller.amgp
     }
-ifnotexist,Player2.gamecontroller.amgp
+ifnotexist,%sourcehome%\Player2.gamecontroller.amgp
     {
-        fileread,mctmp,allgames.set
+        fileread,mctmp,%sourcehome%\src\allgames.set
         stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
-        FileAppend,%mctmp%,Player2.gamecontroller.amgp
+        FileAppend,%mctmp%,%sourcehome%\Player2.gamecontroller.amgp
     }    
-ifnotexist,MediaCenter.gamecontroller.amgp
+ifnotexist,%sourcehome%\MediaCenter.gamecontroller.amgp
     {
-        fileread,mctmp,Desktop.set
+        fileread,mctmp,%sourcehome%\src\Desktop.set
         stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
-        FileAppend,%mctmp%,MediaCenter.gamecontroller.amgp
+        FileAppend,%mctmp%,%sourcehome%\MediaCenter.gamecontroller.amgp
     }  
-ifnotexist,MediaCenter.gamecontroller.amgp
+ifnotexist,%sourcehome%\%sourcehome%\MediaCenter.gamecontroller.amgp
     {
-        fileread,mctmp,Desktop.set
+        fileread,mctmp,%sourcehome%\src\Desktop.set
         stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
-        FileAppend,%mctmp%,MediaCenter2.gamecontroller.amgp
+        FileAppend,%mctmp%,%sourcehome%\MediaCenter2.gamecontroller.amgp
     }
 return
 
@@ -1540,8 +1543,8 @@ MMSETUPD:
 Msgbox,,Default Desktop Config,Configure your monitor/s as you would have them for your`nMediaCenter or Desktop`nthen click "OK"
 ifmsgbox,OK
     {
-        FileMove,Desktop.cfg,Desktop.cfg.bak
-        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\Desktop.cfg`",%A_ScriptDir%,hide
+        FileMove,%sourcehome%\Desktop.cfg,%sourcehome%\Desktop.cfg.bak
+        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\Desktop.cfg`",%sourcehome%,hide
         ifexist,%CFGDIR%\Desktop.cfg
             {
                 Msgbox,,Success,The current monitor configuration will be used for your Mediacenter or desktop
@@ -1558,8 +1561,8 @@ MMSETUPG:
 Msgbox,,Default Game Config,Configure your monitor/s as you would have them for your`nGames or Emulators`nthen click "OK"
 ifmsgbox,OK
     {
-        FileMove,Game.cfg,Game.cfg.bak
-        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\Game.cfg`",%A_ScriptDir%,hide
+        FileMove,%sourcehome%\Game.cfg,%sourcehome%\Game.cfg.bak
+        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\Game.cfg`",%sourcehome%,hide
         ifexist,%CFGDIR%\Game.cfg
             {
                 Msgbox,,Success,The current monitor configuration will be used for your Game/s or Emulator/s
@@ -1656,8 +1659,8 @@ return
 REINDEX:
 SOURCEDLIST= 
 fullist= 
-filedelete,simpth.db
-filedelete,continue.db
+filedelete,%sourcehome%\simpth.db
+filedelete,%sourcehome%\continue.db
 guicontrol,hide,REINDEX
 Gui,Listview,MyListView
 LV_Delete()
@@ -1881,7 +1884,7 @@ Loop,parse,simpnk,`r`n
 					}
 			}
 	}
-fileappend,%SOURCEDLIST%,continue.db
+fileappend,%SOURCEDLIST%,%sourcehome%\continue.db
 REPOP:
 Guicontrol,Show,MyListView	
 Guicontrol,Show,ButtonCreate
@@ -2034,7 +2037,7 @@ Loop,%fullstn0%
 				topdir= %invarx%
 				gmnamedv= %topdir%
 				stringlen,topln,topdir
-				chkpl= %cursrc%\%topdir%
+				chkpl= %cursrc%\%topdirec%
 				pthchk= 
 				Loop,%fullstx0%
 					{
@@ -2544,7 +2547,7 @@ Loop,%fullstn0%
 								if (KILLCHK = 1)
 									{
 										klist= 
-										Loop,files,%OutDir%\*.exe,R
+										Loop,files,%tlevel%\*.exe,R
 											{
 												splitpath,A_LoopFileFullPath,tmpfn,tmpfd,,tmpfo
 												abson= 
@@ -2649,7 +2652,7 @@ return
 ButtonClear:
 LV_Delete()  ; Clear the ListView, but keep icon cache intact for simplicity.
 SOURCEDLIST= 
-fileDelete,continue.db
+fileDelete,%sourcehome%\continue.db
 guicontrol,show,REINDEX
 return
 
