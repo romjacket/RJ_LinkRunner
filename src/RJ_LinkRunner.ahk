@@ -520,7 +520,7 @@ begin:
 ToolTip,Loading %gmnamex%
 if (nrx > 2)
 	{
-		Tooltip,reload exceeded marker`nBe sure you have the launched executable in the executable_list for this game.
+		Tooltip,reload exceeded marker`nBe sure you have the launched executable in the exe_list for this game.
 		goto, givup
 	}
 Blockinput, Off	
@@ -561,10 +561,7 @@ if (exe_list <> "")
 						goto,appcheck
 					}
 			}
-	}
-Tooltip,
-if (exe_list <> "")
-	{	
+		Tooltip,
 		WinActivate
 		WinGetActiveTitle,GMGDBCHK
 		if ((GMGDBCHK <> gmname)&&(bgpon = 1))
@@ -576,8 +573,10 @@ if (exe_list <> "")
 		Tooltip,
 		BlockInput,Off	
 		process,WaitClose,%erahkpid%
-		goto, appclosed
+		goto, appclosed	
 	}
+Tooltip,
+BlockInput,Off	
 WinWait, ahk_pid %dcls%
 WinActivate
 WinGetActiveTitle,GMGDBCHK
