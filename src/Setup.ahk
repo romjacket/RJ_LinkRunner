@@ -2503,7 +2503,7 @@ Loop,%fullstn0%
 								if (!fileexist(linktarget)or(renum = 1))
 									{
 										FileDelete,%linktarget%
-										FileCreateShortcut, %RJDB_LOCATION%bin\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%linkproxy%`"%OutArgs%, %refname%, %OutTarget%,, %IconNumber%, %OutRunState%
+										FileCreateShortcut, %RJDB_LOCATION%\bin\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%linkproxy%`"%OutArgs%, %refname%, %OutTarget%,, %IconNumber%, %OutRunState%
 									}
 							}							
 						if (prnxtn = "exe")
@@ -2523,11 +2523,11 @@ Loop,%fullstn0%
 									}
 								if ((rn = "")or(renum = 1))
 									{
-										FileCreateShortcut, %RJDB_LOCATION%bin\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%linkproxy%`"%OutArgs%, %refname%, %OutTarget%,, %IconNumber%, %OutRunState%
+										FileCreateShortcut, %RJDB_LOCATION%\bin\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%linkproxy%`"%OutArgs%, %refname%, %OutTarget%,, %IconNumber%, %OutRunState%
 									}
 								if (!fileexist(linktarget)&&(renum = "")&&(SETALTSALL = 1))	
 										{
-											FileCreateShortcut, %RJDB_LOCATION%bin\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%linkproxy%`"%OutArgs%, %refname%, %OutTarget%,, %IconNumber%, %OutRunState%
+											FileCreateShortcut, %RJDB_LOCATION%\bin\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%linkproxy%`"%OutArgs%, %refname%, %OutTarget%,, %IconNumber%, %OutRunState%
 										}
 							}
                         if (GMCONF = 1)
