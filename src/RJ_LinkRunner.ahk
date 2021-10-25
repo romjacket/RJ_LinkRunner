@@ -28,36 +28,44 @@ if ((plink = "") or !fileExist(plink) or (scextn = ""))
 		Sleep, 3000
 		exitapp
 	}
+home= %A_ScriptDir%
+Splitpath,A_ScriptDir,tstidir,tstipth
+if ((tstidir = "src")or(tstidir = "bin")or(tstidir = "binaries"))
+	{
+		home= %tstipth%
+	}
+source= %home%\src
+binhome= %home%\bin
 Tooltip,Keyboad/Mouse Disabled`n::Please Be Patient::`n
 Blockinput, on
 if (GetKeyState("Alt")&&(scextn = "exe"))
 	{
 		Tooltip,!! AltKey Detected !!`nKeyboad/Mouse Disabled`n::Please Be Patient::`n
 		CreateSetup= 1
-		iniread,Game_Profiles,RJDB.ini,GENERAL,Game_Profiles
-		iniread,mapper_extension,RJDB.ini,JOYSTICKS,mapper_extension
-		iniread,Game_Directory,RJDB.ini,GENERAL,Game_Directory
+		iniread,Game_Profiles,%home%\RJDB.ini,GENERAL,Game_Profiles
+		iniread,mapper_extension,%home%\RJDB.ini,JOYSTICKS,mapper_extension
+		iniread,Game_Directory,%home%\RJDB.ini,GENERAL,Game_Directory
 		FileCreateDir,%Game_Profiles%\%gmname%
 		if (errorlevel = 0)
 			{
 				This_Profile= %Game_Profiles%\%gmname%
-				FileCopy,Player1.%mapper_extension%,%This_Profile%\Player1.%mapper_extension%
-				FileCopy,Player2.%mapper_extension%,%This_Profile%\Player1.%mapper_extension%
-				Filecopy,Game.cfg,%This_Profile%\Game.cfg
-				Filecopy,Desk.cfg,%This_Profile%\Desk.cfg
-				Filecopy,Mediacenter.%mapper_extension%,%This_Profile%\Mediacenter.%mapper_extension%
-				FileCopy,RJDB.ini,%This_Profile%\Game.ini
+				FileCopy,%home%\Player1.%mapper_extension%,%This_Profile%\Player1.%mapper_extension%
+				FileCopy,%home%\Player2.%mapper_extension%,%This_Profile%\Player1.%mapper_extension%
+				Filecopy,%home%\Game.cfg,%This_Profile%\Game.cfg
+				Filecopy,%home%\Desk.cfg,%This_Profile%\Desk.cfg
+				Filecopy,%home%\Mediacenter.%mapper_extension%,%This_Profile%\Mediacenter.%mapper_extension%
+				FileCopy,%home%\RJDB.ini,%This_Profile%\Game.ini
 				iniwrite,%This_Profile%\Desk.cfg,%This_Profile%\Game.ini,GENERAL,MM_MEDIACENTER_Config
 				iniwrite,%This_Profile%\Game.cfg,%This_Profile%\Game.ini,GENERAL,MM_Game_Config
 				iniwrite,%This_Profile%\Player1.%mapper_extension%,%This_Profile%\Game.ini,GENERAL,Player1
 				iniwrite,%This_Profile%\Player2.%mapper_extension%,%This_Profile%\Game.ini,GENERAL,Player2
 				iniwrite,%This_Profile%\MediaCenter.%mapper_extension%,%This_Profile%\Game.ini,GENERAL,MediaCenter_Profile
 				FileCreateShortcut,%plink%,%This_Profile%\%gmname%.lnk,%scpath%, ,%gmname%,%plink%,,%iconnumber%
-				FileCreateShortcut,%A_ScriptDir%\RJ_LinkRunner.exe, %Game_Directory%\%gmname%.lnk,%scpath%, `"%This_Profile%\%gmname%.lnk`",%gmname%,%plink%,,%iconnumber%
+				FileCreateShortcut,%binhome%\RJ_LinkRunner.exe, %Game_Directory%\%gmname%.lnk,%scpath%, `"%This_Profile%\%gmname%.lnk`",%gmname%,%plink%,,%iconnumber%
 			}
 	}
 ;;LinkOptions= 
-inif= RJDB.ini
+inif= %home%\RJDB.ini
 READINI:
 sect= GENERAL|JOYSTICKS
 Loop,parse,sect,|
@@ -831,7 +839,7 @@ if (prestk2 <> "")
 loggingout:	
 if (Logging = 1)
 	{
-		FileAppend,Run="%plfp%[%linkoptions%|%plarg%]in%pldr%"`nkeyboard=|%Keyboard_Mapper% "%player1%"%player2t%|`njoycount1="%joycnt%"`n%Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%`njoycount2=%joucount%`n`n,%A_ScriptDir%\log.txt
+		FileAppend,Run="%plfp%[%linkoptions%|%plarg%]in%pldr%"`nkeyboard=|%Keyboard_Mapper% "%player1%"%player2t%|`njoycount1="%joycnt%"`n%Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%`njoycount2=%joucount%`n`n,%home%\log.txt
 	}
 ExitApp
 
