@@ -1,18 +1,45 @@
 ## Installation
 Extract the binary to a location of your choice, **or** download and build and run the source files and executables.
 ```sh
-"SSD.exe"
-"multimonitortool.exe"
-"Antimicro\antimicro.exe"
-"xpadder\xpadder.exe"
-"Source_Builder.exe"
-"NewOsk.exe"
-"RJ_LinkRunner.exe"
-"Setup.exe"
+rj_linkrunner
+├── bin
+│   ├── 7za.exe
+│   ├── MultiMonitorTool.chm
+│   ├── NewOSK.exe
+│   ├── RJ_LinkRunner.exe
+│   ├── Setup.exe
+│   └── Source_Builder.exe
+│
+├── src
+│   ├── absol.set
+│   ├── allgames.set
+│   ├── amicro.set
+│   ├── build.ahk
+│   ├── Desktop.set
+│   ├── exclfnms.set
+│   ├── exez.set
+│   ├── Joystick.ico
+│   ├── log.txt
+│   ├── newosk.ahk
+│   ├── NewOSK.ico
+│   ├── RJDB.set
+│   ├── RJ_LinkRunner.ahk
+│   ├── RJ_LinkRunner.ico
+│   ├── RJ_Setup.ico
+│   ├── Setup.ahk
+│   ├── Source_Builder.ico
+│   ├── unlike.set
+│   ├── unsel.set
+│   ├── xallgames.set
+│   ├── xDesktop.set
+│   └── xpadr.set
+│
+└── README.md
 ```
+
 ## Setup
 
-Setup is fairly simple and the tool will index your drives for common game folders used by many delivery providers.
+Setup (bin\Setup.exe) is fairly simple and the tool will index your drives for common game folders used by many delivery providers.
 
 Use the "SRC" button to add a folder/s where games have been installed. EG: C:\Games, or C:\Program Files
 
@@ -20,11 +47,10 @@ Use the "OUT" button to set the location for the shortcuts.
 
 The "GPD" button will set the location where profile folders for each game will be kept.
 
+Right-Click on the buttons in the setup tool to download supported executables.
+
 If you have a multimonitor setup or wish to change the display of the monitor you will play games on, use the "GMC" button to create a profile for games, and the "DMC" button to create a profile for your mediacenter/desktop.
 
-Included with the binary release you will find the program "SSD.exe"
-
-This program can be used to create shortcuts for an audio-output device. Use the pre/pst buttons to add these shortcuts in order to switch the audio device before and after you launch a game.
 
 
 #### The presets are setup to do a few things:
@@ -47,17 +73,12 @@ The L-Shoulder(bumper) button is the Backspace-key.
 The R-Shoulder(bumper) button is the Space-Key.
 The D-Pad corresponds to arrow keys.
 Holding the Left-Analog stick upwards for a few seconds will activate the Win-Key.
-Holding the Left-Analog stick left for a few seconds will close the currently active window (Alt+f4).
-Holding the Left-Analog stick right for a few seconds will bring forth the task-manager.
-Holding the Left-Analog stick down is the Alt-key.
-The default game-quit button combination is set to Back+Hold Menu-Button(ctrl + f12)
-the default game-reset button combination is set to Back+Hold L-Stick-Button) (ctrl + f2)
+The game-quit button combination is Back+Hold + Menu-Button(ctrl + f12)
+the game-reset button combination is Back+Hold + L-Stick-Button) (ctrl + f2)
 
-The profile for player 1 and player 2 have the ability to reset and end games as well as control the desktop.
-To reset the current game, hold the back button and while holding the back button, press and hold the L-Stick button.
-To end the current game, hold the back button and while holding the back button, press and hold the Menu (start) button.
-To bring forth the on-screen-keyboard, hold the back button, and press the guide (xbox) button. (alt+ctrl+f9)
+The on-screen-keyboard is Back+Hold + guide (xbox) button. (alt+ctrl+f9)
 ```
+The profile for player 1 and player 2 have the ability to reset and end games as well as control the desktop.
 The Mediacenter/Desktop profile is similar with differences being:
 
 ```sh
