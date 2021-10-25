@@ -1704,7 +1704,7 @@ if (SOURCEDLIST <> "")
 		goto,REPOP	
 	}	
 SOURCEDLIST= 
-FileDelete,simpth.db
+FileDelete,%sourcehome%\simpth.db
 Loop,parse,SOURCE_DIRECTORY,|
 	{
 		SRCLOOP= %A_LoopField%
