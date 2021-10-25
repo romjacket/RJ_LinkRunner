@@ -6,71 +6,19 @@ ToolTip,building LinkRunner
 #SingleInstance Force
 Send, {LCtrl Down}{f12}
 Send, {LCtrl Up}
-srctst= %A_ScriptDir%
-splitpath,srctst,srcfn,srcpth
-splitpath,srcpth,,sourcehome
-if (srcfn = "src")
+home= %A_ScriptDir%
+splitpath,home,srcfn,srcpth
+if ((srcfn = "src")or(srcfn = "bin")or(srcfn = "binaries"))
 	{
-		sourcehome= %srcpth%
+		home= %srcpth%
 	}	
-FileDelete,%sourcehome%\RJ_LinkRunner.exe
-FileDelete,%sourcehome%\NewOSK.exe
-FileDelete,%sourcehome%\Setup.exe
-FileDelete,%sourcehome%\Source_Builder.exe
-iniread,URLFILEX,%sourcehome%\RJDB.ini,CONFIG,remotebinaries
-DOWNLOADIT:
-iniread,URLFILE,%sourcehome%\RJxDB.ini,CONFIG,remotebinaries%nam%
-if (URLFILE = "") or (URLFILE = "ERROR")
-	{
-		URLFILE= %URLFILEX%
-		nam= 
-	}
-splitpath,A_ScriptFullPath,scriptfilename,HEREDIR
-if (HEREDIR <> sourcehome)
-	{
-		HEREDIR= %sourcehome%
-	}
-save= %HEREDIR%\Binaries.zip
-ifexist,%save%
-	{
-		Msgbox,260,Redownload,Download the Binaries.zip file again?`noriginal will be renamed ".bak",3
-		ifmsgbox,yes
-			{
-				gosub,DOWNBIN
-			}
-		goto, EXTRACTING
-	}
-DOWNBIN:	
-DownloadFile(URLFILE,save,False,True)
-;UrlDownloadToFile,%URLFILE%,%save%
-EXTRACTING:
-ToolTip, 
-Sleep, 500
-if (fileexist(save)&& !fileexist(sourcehome . "\" . "multimonitortool.exe"))
-	{
-		ToolTip, Extracting...
-		Unz(save,HEREDIR)
-		Tooltip,Extracted.
-	}
-Sleep, 500
-ToolTip, 
-ifnotexist,%save%
-	{
-		msgbox,258,,Failed To download,Binary support files did not download.`n`nContinue?
-		ifmsgbox,Abort
-		exitapp
-		if (nam = "")
-			{
-				nam+=1
-			}
-			else {
-			nam= 
-			}
-		if Msgbox,Retry
-			{
-			goto, DOWNLOADIT
-			}
-	}
+binhome= %home%\bin
+source= %home%\src	
+FileDelete,%binhome%\RJ_LinkRunner.exe
+FileDelete,%binhome%\NewOSK.exe
+FileDelete,%binhome%\Setup.exe
+FileDelete,%binhome%\Source_Builder.exe
+
 SplitPath,A_AhkPath,AHKFNM,AHKLOC
 Loop,files,%AHKLOC%\*.exe,R
 	{
@@ -89,25 +37,25 @@ Loop,files,%AHKLOC%\*.bin,R
 			}
 		}	
 	}
-RunWait,"%AHKEXE%" /in "%HEREDIR%\src\RJ_LinkRunner.ahk" /icon "%sourcehome%\src\RJ_LinkRunner.ico" /bin "%BINFILE%" /out "%HEREDIR%\RJ_LinkRunner.exe",%HEREDIR%,hide
+RunWait,"%AHKEXE%" /in "%source%\RJ_LinkRunner.ahk" /icon "%source%\RJ_LinkRunner.ico" /bin "%BINFILE%" /out "%binhome%\RJ_LinkRunner.exe",%source%,hide
 if (errorlevel <> 0)
 	{
 		Msgbox,,,LinkRunner Build Failed	
 	}
 ToolTip,Compiling Setup
-RunWait,"%AHKEXE%" /in "%HEREDIR%\src\Setup.ahk" /icon "%sourcehome%\src\RJ_Setup.ico" /bin "%BINFILE%" /out "%HEREDIR%\Setup.exe",%HEREDIR%,hide
+RunWait,"%AHKEXE%" /in "%source%\Setup.ahk" /icon "%source%\RJ_Setup.ico" /bin "%BINFILE%" /out "%binhome%\Setup.exe",%source%,hide
 if (errorlevel <> 0)
 	{
 		Msgbox,,,Setup Build Failed	
 	}
 ToolTip,Compiling NewOSK
-RunWait,"%AHKEXE%" /in "%HEREDIR%\src\NewOSK.ahk" /icon "%sourcehome%\src\NewOSK.ico" /bin "%BINFILE%" /out "%HEREDIR%\NewOSK.exe",%HEREDIR%,hide
+RunWait,"%AHKEXE%" /in "%source%\NewOSK.ahk" /icon "%source%\NewOSK.ico" /bin "%BINFILE%" /out "%binhome%\NewOSK.exe",%source%,hide
 if (errorlevel <> 0)
 	{
 		Msgbox,,,NewOSK Build Failed	
 	}
 ToolTip,Compiling Source Builder
-RunWait,"%AHKEXE%" /in "%HEREDIR%\src\build.ahk" /icon "%sourcehome%\src\Source_Builder.ico" /bin "%BINFILE%" /out "%HEREDIR%\Source_Builder.exe",%HEREDIR%,hide
+RunWait,"%AHKEXE%" /in "%source%\build.ahk" /icon "%source%\Source_Builder.ico" /bin "%BINFILE%" /out "%binhome%\Source_Builder.exe",%source%,hide
 if (errorlevel <> 0)
 	{
 		Msgbox,,,Builder Build Failed	
@@ -118,79 +66,3 @@ sleep,2000
 exitapp
 esc::
 exitapp
-DownloadFile(UrlToFile, _SaveFileAs, Overwrite := True, UseProgressBar := True) {
-	FinalSize= 
-
-  If (!Overwrite && FileExist(_SaveFileAs))
-	  {
-		FileSelectFile, _SaveFileAs,S, %_SaveFileAs%
-		if !_SaveFileAs 
-		  return
-	  }
-
-  If (UseProgressBar) {
-	  
-		SaveFileAs := _SaveFileAs
-	  
-		try WebRequest := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-		catch {
-		}
-	  
-		try WebRequest.Open("HEAD", UrlToFile)
-		catch {
-		}
-		try WebRequest.Send()
-		catch {
-		}
-	  
-		try FinalSize := WebRequest.GetResponseHeader("Content-Length") 
-		catch {
-			FinalSize := 1
-		}
-		SetTimer, DownloadFileFunction_UpdateProgressBar, 100
-	
-
-  }   
-  UrlDownloadToFile, %UrlToFile%, %_SaveFileAs%
-If (UseProgressBar) {
-	ToolTip,
-  }
-
-      DownloadFileFunction_UpdateProgressBar:
-    
-      try CurrentSize := FileOpen(_SaveFileAs, "r").Length 
-	  catch {
-			}
-			
-      try CurrentSizeTick := A_TickCount
-    catch {
-			}
-			
-      try Speed := Round((CurrentSize/1024-LastSize/1024)/((CurrentSizeTick-LastSizeTick)/1000)) . " Kb/s"
-	  catch {
-			}
-    
-      LastSizeTick := CurrentSizeTick
-      try LastSize := FileOpen(_SaveFileAs, "r").Length
-    catch {
-			}
-	
-      try PercentDone := Round(CurrentSize/FinalSize*100)
-    catch {
-			}
-			
-	 if (PercentDone > 100)
-		{
-			ToolTip,
-			PercentDone= 
-		}
-	 ToolTip,%Speed% at %PercentDone%`% : %CurrentSize% bytes completed
-	 return
-  }
-
-
-Unz(sZip, sUnz)
-	{
-		psh  := ComObjCreate("Shell.Application")
-		psh.Namespace( sUnz ).CopyHere( psh.Namespace( sZip ).items, 4|16 )
-	}

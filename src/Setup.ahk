@@ -4,8 +4,8 @@ SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
 sourcehome= %A_ScriptDir%
-Splitpath,A_ScripTDir,tstidir,tstipth
-if (tstidir = "src")
+Splitpath,A_ScriptDir,tstidir,tstipth
+if ((tstidir = "src")or(tstidir = "bin")or(tstidir = "binaries"))
 	{
 		sourcehome= %tstipth%
 	}
@@ -43,7 +43,7 @@ if (scextn = "lnk")
 		CFGDIR= %sourcehome%
 		RJDB_Config= %CFGDIR%\RJDB.ini
 	}
-
+binhome= %sourcehome%\bin
 if ((plink = "") or !fileExist(plink) or (scextn = ""))
 	{
 		filedelete,%sourcehome%\log.txt
@@ -56,9 +56,9 @@ ifnotexist,%sourcehome%\Antimicro_!.cmd
     {
         gosub, INITAMIC
     }
-gosub,RECREATEJOY
 gosub, DDPOPS
 repopbut= hidden
+
 fileread,unlike,%sourcehome%\src\unlike.set
 fileread,unselect,%sourcehome%\src\unsel.set
 fileread,absol,%sourcehome%\src\absol.set
@@ -69,6 +69,7 @@ if fileexist(sourcehome . "\" . "continue.db")
 	}
 fileread,exclfls,%sourcehome%\src\exclfnms.set
 filextns= exe|lnk
+remotebins= _BorderlessGaming_|_Antimicro_|_Xpadder_|_MultiMonitorTool_|_SetSoundDevice_
 MENU_X:= A_GuiX*(A_ScreenDPI/96)
 MENU_Y:= A_GuiY*(A_ScreenDPI/96)
 reduced= |_Data|Assets|alt|shipping|Data|ThirdParty|engine|App|steam|steamworks|script|nocd|Tool|trainer|
@@ -107,6 +108,13 @@ if (CREFLD = 1)
 		joyenbl= 
 		lnkenbl= 
 	}
+ovrwrchk=
+updtchk= checked	
+if (CREMODE = 0)
+	{
+		ovrwrchk= checked
+		updtchk= 
+	}
 if (GMCONF = 1)
 	{
 		cfgget= checked
@@ -128,6 +136,8 @@ if instr(1_PostT,"W<")
 		poststatus= checked
 	}
 Menu,RCLButton,Add,Reset ,ResetButs
+Menu,AddProgs,Add,Download,DownloadAddons
+Menu,UCLButton,Add,Download,DownloadButs
 Menu,UCLButton,Add,Disable ,DisableButs
 Menu,DCLButton,Add,Delete ,DeleteButs
 ; Create the ListView and its columns via Gui Add:
@@ -193,8 +203,8 @@ GUi, Add, Checkbox, x36 y132 h14 vCREFLD gCREFLD %fldrget% %fldrenbl%, Folders
 GUi, Add, Checkbox, x40 y152 h14 vGMCONF gGMCONF %cfgget% %cfgenbl%,Cfg
 GUi, Add, Checkbox, x96 y152 h14 vGMJOY gGMJOY %Joyget% %joyenbl%,Joy
 GUi, Add, Checkbox, x144 y152 vGMLNK gGMLNK %lnkget% %lnkenbl%,Lnk
-Gui, Add, Radio, x95 y132 vOVERWRT gUPDTSC, Overwrite
-Gui, Add, Radio, x168 y132 vUPDTSC gOVERWRT checked, Update
+Gui, Add, Radio, x95 y132 vOVERWRT gUPDTSC %ovrwrchk%, Overwrite
+Gui, Add, Radio, x168 y132 vUPDTSC gOVERWRT %updtchk%, Update
 
 Gui, Font, Bold
 Gui, Add, Button, x21 y176 w36 h21 vGame_ProfB gGame_ProfB,GPD
@@ -294,6 +304,22 @@ Gui, Add, Checkbox, x260 y588 h14 vEnableLogging gEnableLogging %loget%, Log
 
 Gui, Add, StatusBar, x0 y546 w314 h28 vRJStatus, Status Bar
 Gui Show, w314 h625, RJ_Setup
+/*
+Loop,parse,remotebins,|
+	{
+		curemote= %A_LoopField%
+		gosub, BINGETS
+		Loop,parse,exetfndsp,?
+			{
+				if !fileexist(binhome . "\" . A_LoopField)
+					{
+						gosub, DOWNLOADIT
+					}
+			}
+	}
+*/	
+SB_SetText("")	
+
 Return
 
 
@@ -449,21 +475,57 @@ if ((Source_DirectoryT <> "")&& !instr(Source_DirectoryT,"<"))
 	}
 return
 
+Keyboard_MapBDownload:
+Return
 Keyboard_MapBDisable:
+Keyboard_Mapper=
+Keyboard_MapperT=
+Player1_Template=
+Player1_TemplateT=
+Player2_Template=
+Player2_TemplateT=
+MediaCenter_Profile=
+MediaCenter_ProfileT=
+iniwrite,%A_Space%,%RJDB_CONFIG%,GENERAL,Keyboard_Mapper
+iniwrite,%A_Space%,%RJDB_CONFIG%,GENERAL,Player1_Template
+iniwrite,%A_Space%,%RJDB_CONFIG%,GENERAL,Player2_Template
+iniwrite,%A_Space%,%RJDB_CONFIG%,GENERAL,Mediacenter_Profile
+GuiControl,,Player1_TemplateT,
+GuiControl,,Player2_TemplateT,
+GuiControl,,MediaCenter_ProfileT,
+GuiControl,,Keyboard_MapperT,
 return
 
 Keyboard_MapB:
 gui,submit,nohide
 kbmdefloc= %sourcehome%
-if fileexist(Programfilesx86 . "\" . "Antimicro")
-	{
-		kbmdefloc= %programfilesx86%\Antimicro
-	}
-if fileexist(Programfilesx86 . "\" . "Xpadder")
+xpadtmp=
+Antimtmp= 
+if fileexist(Programfilesx86 . "\" . "Xpadder" . "\" . "Xpadder.exe")
 	{
 		kbmdefloc= %programfilesx86%\Xpadder
+		Xpadtmp= %kbmdefloc%\Xpadder.exe
 	}
-FileSelectFile,Keyboard_MapperT,35,%kbmdefloc%,Select File,*.exe
+if fileexist(Programfilesx86 . "\" . "Antimicro" . "\" . "Antimicro.exe")
+	{
+		kbmdefloc= %programfilesx86%\Antimicro
+		Antimtmp= %kbmdefloc%\antimicro.exe
+	}
+if fileexist(binhome . "\" . "Xpadder" . "\" . "Xpadder.exe")
+	{
+		kbmdefloc= %binhome%\Xpadder
+		Xpadtmp= %kbmdefloc%\Xpadder.exe
+	}
+if fileexist(binhome . "\" . "Antimicro" . "\" . "Antimicro.exe")
+	{
+		kbmdefloc= %binhome%\Antimicro
+		Antimtmp= %kbmdefloc%\antimicro.exe
+	}
+if (dchk = "")
+	{
+		FileSelectFile,Keyboard_MapperT,35,%kbmdefloc%,Select File,xpadder.exe; antimicro.exe
+		;
+	}
 if ((Keyboard_MapperT <> "")&& !instr(Keyboard_MapperT,"<"))
 	{
 		Keyboard_Mappern= %Keyboard_MapperT%
@@ -473,14 +535,10 @@ if ((Keyboard_MapperT <> "")&& !instr(Keyboard_MapperT,"<"))
 		guicontrol,,Keyboard_MapperT,<Keyboard_Mapper
 	}
 Mapper= 
-Antimtmp= %sourcehome%\xpadder\Xpadder.exe
-keyboard_mapper= %keyboard_mappern%
-if ((antimicro_executable <> Antimtmp)&& !fileexist(antimicro_executble))
+if ((antimicro_executable = Antimtmp)&& !fileexist(antimicro_executable))
 	{
 		antimicro_executable= %Antimtmp%
-	}
-Antitmp= %antimicro_executeable%	
-Xpadtmp= %sourcehome%\antimicro\Antimicro.exe
+	} 
 if ((xpadder_executable = xpadtmp)&& !fileexist(xpadder_executable))
 	{
 		xpadder_executable= %Xpadtmp%
@@ -488,32 +546,31 @@ if ((xpadder_executable = xpadtmp)&& !fileexist(xpadder_executable))
 Xpadtmp= %Xpadder_executable%
 if instr(Keyboard_Mappern,"Xpadder")
 	{
+		gosub, RECREATEXPAD
 		Mapper= 1
 		iniwrite,Xpadder,%RJDB_Config%,JOYSTICKS,Jmap
 		mapper_extension= xpadderprofile
-		antimicro_executable=%antitimp%
 		tooltip,xpadder
 		FileDelete,%sourcehome%\xpadder_!.cmd
-		xpadder_executable=%keyboard_mappern%
         fileread,xpdcb,%sourcehome%\src\xpadr.set
         stringreplace,xpdcb,xpdcb,[XPADR],%Keyboard_Mappern%,All
         FileAppend,%xpdcb%,%sourcehome%\xpadder_!.cmd
 		keyboard_Mapper= %sourcehome%\xpadder_!.cmd
 		keyboard_Mappern= %sourcehome%\xpadder_!.cmd
 		JMAP= Xpadder
+		xpadder_executable=%xpadtmp%
 	}
 	
 if instr(Keyboard_Mappern,"Antimicro")
 	{
+		gosub, RECREATEAMICRO
 		Mapper= 1
 		tooltip,antimicro
 		mapper_extension= gamecontroller.amgp
 		FileDelete,%sourcehome%\Antimicro_!.cmd
-		xpadder_executable=%xpadtmp%
-		antimicro_executable=%keyboard_mappern%
         fileread,amcb,%sourcehome%\src\Amicro.set
         fileread,amcjp,%sourcehome%\src\allgames.set,
-        oskloc= %sourcehome%\newosk.exe
+        oskloc= %binhome%\NewOSK.exe
         stringreplace,oskloc,oskloc,\,/,All
         stringreplace,amcjp,amcjp,[NEWOSK],%oskloc%,All
         stringreplace,amcb,amcb,[AMICRO],%Keyboard_Mappern%,All
@@ -522,31 +579,28 @@ if instr(Keyboard_Mappern,"Antimicro")
 		keyboard_Mappern= %sourcehome%\Antimicro_!.cmd
 		JMAP= antimicro
 	}
-		iniwrite,%JMAP%,%RJDB_Config%,JOYSTICKS,Jmap
-		stringreplace,keyboard_mapperT,keyboard_mapper,%A_Space%,`%,All
-		stringreplace,Player1_TemplateT,Player1_Template,%A_Space%,`%,All
-		stringreplace,Player2_TemplateT,Player2_Template,%A_Space%,`%,All
-		stringreplace,MediaCenter_ProfileT,MediaCenter_Profile,%A_Space%,`%,All
-		stringreplace,keyboard_mapperT,keyboard_mapper,%A_Space%,`%,All
-		iniwrite,%mapper_extension%,%RJDB_Config%,JOYSTICKS,Mapper_Extension
-		iniwrite,%mapper%,%RJDB_Config%,GENERAL,Mapper
-		iniwrite,%Keyboard_Mapper%,%RJDB_Config%,GENERAL,Keyboard_Mapper
-		stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
-		stringreplace,Player1_TemplateT,Player1_TemplateT,%A_Space%,`%,All
-		stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
-		guicontrol,,Keyboard_MapperT,%Keyboard_MapperT%
-		guicontrol,,Player1_TemplateT,%Player2_TemplateT%
-		guicontrol,,Player2_TemplateT,%Player2_TemplateT%
-		guicontrol,,MediaCenter_ProfileT,%Player2_TemplateT%
-		iniwrite,%sourcehome%\Player1.%mapper_extension%,%RJDB_CONFIG%,GENERAL,Player1_Template
-		iniwrite,%sourcehome%\Player2.%mapper_extension%,%RJDB_CONFIG%,GENERAL,Player2_Template
-		iniwrite,%sourcehome%\Mediacenter.%mapper_extension%,%RJDB_CONFIG%,GENERAL,MediaCenter_Profile
-if (antimicro_executable <> keyboard_mappern)
-	{
-		antimicro_executable=%sourcehome%\antimicro\antimicro.exe
-	}
-iniwrite,%antimicro_executable%,%RJDB_Config%,GENERAL,Antimicro_executable
+iniwrite,%JMAP%,%RJDB_Config%,JOYSTICKS,Jmap
+stringreplace,keyboard_mapperT,keyboard_mapper,%A_Space%,`%,All
+stringreplace,Player1_TemplateT,Player1_Template,%A_Space%,`%,All
+stringreplace,Player2_TemplateT,Player2_Template,%A_Space%,`%,All
+stringreplace,MediaCenter_ProfileT,MediaCenter_Profile,%A_Space%,`%,All
+stringreplace,keyboard_mapperT,keyboard_mapper,%A_Space%,`%,All
+iniwrite,%mapper_extension%,%RJDB_Config%,JOYSTICKS,Mapper_Extension
+iniwrite,%mapper%,%RJDB_Config%,GENERAL,Mapper
+iniwrite,%Keyboard_Mapper%,%RJDB_Config%,GENERAL,Keyboard_Mapper
 stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
+stringreplace,Player1_TemplateT,Player1_TemplateT,%A_Space%,`%,All
+stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
+iniwrite,%sourcehome%\Player1.%mapper_extension%,%RJDB_CONFIG%,GENERAL,Player1_Template
+iniwrite,%sourcehome%\Player2.%mapper_extension%,%RJDB_CONFIG%,GENERAL,Player2_Template
+iniwrite,%sourcehome%\Mediacenter.%mapper_extension%,%RJDB_CONFIG%,GENERAL,MediaCenter_Profile
+iniwrite,%xpadtmp%,%RJDB_Config%,GENERAL,Xpadder_executable
+iniwrite,%Antimtmp%,%RJDB_Config%,GENERAL,Antimicro_executable
+stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
+guicontrol,,Keyboard_MapperT,%Keyboard_MapperT%
+guicontrol,,Player1_TemplateT,%Player2_TemplateT%
+guicontrol,,Player2_TemplateT,%Player2_TemplateT%
+guicontrol,,MediaCenter_ProfileT,%Player2_TemplateT%
 guicontrol,,Keyboard_MapperT,%Keyboard_Mapper%
 tooltip,
 return
@@ -599,12 +653,69 @@ if ((MediaCenter_ProfileT <> "")&& !instr(MediaCenter_ProfileT,"<"))
 		guicontrol,,MediaCenter_ProfileT,<MediaCenter_Profile
 	}
 return
+MM_ToolBDownload:
+return
+
+SSD_Prog:
+Run, %binhome%\ssd.exe,%binhome%,,
+return
+
+OtherDownloads:
+return
+AltDownloads:
+curemote= _SetSoundDevice_
+gosub, BINGETS
+gosub, DOWNLOADIT
+flflt= %binhome%
+if (butrclick = "PREAPP")
+	{
+		gosub, PREAPP
+	}
+if (butrclick = "POSTAPP")
+	{
+		gosub, POSTAPP
+	}
+gosub, SSD_Prog
+SB_SetText("")	
+return
+
+DownloadAddons:
+Menu,addonp,Add
+Menu,addonp,DeleteAll
+if (butrclick = "PREAPP")
+	{
+		Menu,addonp,Add,SetSoundDevice,AltDownloads
+		Menu,addonp, Add,Others,OtherDownloads
+	}
+if (butrclick = "POSTAPP")
+	{
+		Menu,addonp,Add,SetSoundDevice,AltDownloads
+		Menu,addonp, Add,Others,OtherDownloads
+	}
+Menu,addonp,show
+return
+
 MM_ToolBDisable:
+MultiMonitor_Tool=
+MultiMonitor_ToolT=
+MM_GAME_Config=
+MM_GAME_ConfigT=
+MM_MEDIACENTER_Config=
+MM_MEDIACENTER_ConfigT=
+iniwrite,%A_SPace%,%RJDB_CONFIG%,GENERAL,MultiMonitor_Tool
+iniwrite,%A_SPace%,%RJDB_CONFIG%,GENERAL,MM_GAME_Config
+iniwrite,%A_SPace%,%RJDB_CONFIG%,GENERAL,MM_Mediacenter_Config
+Guicontrol,,MultiMonitor_ToolT,
+Guicontrol,,MM_Game_ConfigT,
+Guicontrol,,MM_MediaCenter_ConfigT,
 return
 
 MM_ToolB:
 gui,submit,nohide
-FileSelectFile,MultiMonitor_ToolT,3,,Select File,multimonitor*.exe
+if (dchk = "")
+	{
+		FileSelectFile,MultiMonitor_ToolT,3,,Select File,multimonitor*.exe
+	}
 if ((MultiMonitor_ToolT <> "")&& !instr(MultiMonitor_ToolT,"<"))
 	{
 		MultiMonitor_Tool= %MultiMonitor_ToolT%
@@ -690,13 +801,25 @@ if ((setupmm = "")or !fileexist(CFGDIR . "\" . "Desktop.cfg"))
 setupmm= 	
 return
 
+BGM_ProgBDownload:
 BGM_ProgBDisable:
+Borderless_gaming_Program=
+Borderless_gaming_ProgramT=
+Borderless_gaming_Database=
+Borderless_gaming_DatabaseT=
+iniwrite,%A_Space%,%RJDB_CONFIG%,GENERAL,Borderless_Gaming_Program
+iniwrite,%A_Space%,%RJDB_CONFIG%,GENERAL,Borderless_Gaming_Database
+Guicontrol,,Borderless_Gaming_ProgramT,
+Guicontrol,,Borderless_Gaming_DatabaseT,
 return
 
 
 BGM_ProgB:
 gui,submit,nohide
-FileSelectFile,Borderless_Gaming_ProgramT,3,Borderless Gaming,Select File,*.exe
+if (dchk = "")
+	{
+		FileSelectFile,Borderless_Gaming_ProgramT,3,Borderless Gaming,Select File,*.exe	
+	}
 if ((Borderless_Gaming_ProgramT <> "")&& !instr(Borderless_Gaming_ProgramT,"<"))
 	{
 		Borderless_Gaming_Program= %Borderless_Gaming_ProgramT%
@@ -786,6 +909,7 @@ if (inn = A_SPace)
 	{
 		inn:= A_Space
 	}
+	
 FileSelectFile,PREAPPT,35,%flflt%,Select File
 if (PREAPPT <> "")
 	{
@@ -1105,7 +1229,6 @@ ifMsgbox,Yes
         filedelete,%sourcehome%\MediaCenter2.gamecontroller.amgp
         filedelete,%sourcehome%\Player1.gamecontroller.amgp
         filedelete,%sourcehome%\Player2.gamecontroller.amgp
-        gosub,RECREATEJOY
         goto,popgui
 		LV_Delete()
 		guicontrol,,SOURCE,%SOURCE_Directory%
@@ -1134,17 +1257,23 @@ return
 INITXPD:
 fileread,xpadtmp,%sourcehome%\src\xpadr.set
 FileDelete,%sourcehome%\xpadder_!.cmd
-stringreplace,xpadtmp,xpadtmp,[XPADR],%sourcehome%\xpadder\Xpadder.exe,
-fileappend,%xpadtmp%,%sourcehome%\xpadder_!.cmd
-Xpadder_Executable= %sourcehome%\xpadder\Xpadder.exe
+if fileexist(sourcehome . "\" . "\" . "bin" . "\" . "xpadder" . "\" . "Xpadder.exe")
+	{
+		stringreplace,xpadtmp,xpadtmp,[XPADR],%binhome%\xpadder\Xpadder.exe,
+		fileappend,%xpadtmp%,%sourcehome%\xpadder_!.cmd
+		Xpadder_Executable= %binhome%\xpadder\Xpadder.exe
+	}
 return
 
 INITAMIC:
 fileread,amictmp,%sourcehome%\src\amicro.set
 FileDelete,%sourcehome%\Antimicro_!.cmd
-stringreplace,amictmp,amictmp,[AMICRO],%sourcehome%\Antimicro\Antimicro.exe,
-fileappend,%amictmp%,%sourcehome%\Antimicro_!.cmd
-Antimicro_Executable= %sourcehome%\Antimicro\Antimicro.exe
+if fileexist(binhome . "\" . "Antimicro" . "\" . "antimicro.exe")
+	{
+		stringreplace,amictmp,amictmp,[AMICRO],%binhome%\Antimicro\Antimicro.exe,
+		fileappend,%amictmp%,%sourcehome%\Antimicro_!.cmd
+		Antimicro_Executable= %binhome%\Antimicro\Antimicro.exe
+	}
 return
 
 
@@ -1405,77 +1534,10 @@ if (resetting = 1)
 		guicontrol,disable,MyListView
 		GuiControl, Move, MyListView, w0
 	}	
-	/*
-Loop,parse,rjdb,`r`n
-    {
-        if (A_LoopField = "")
-            {
-                continue
-            }
-        stringleft,dn,A_LoopField,1
-        if (dn = "[")
-            {
-                stringreplace,SECTION,A_LoopField,[
-                stringreplace,SECTION,SECTION,]
-                continue
-            }
-        stringsplit,prx,A_LoopField,=
-        val= %prx1%
-        stringreplace,prtv,A_LoopField,%val%=,
-        if (prtv = "")
-            {
-                prtv= %val%
-            }
-        %val%:= prtv
-        stringreplace,prtvd,prtv,%A_Space%,`%,All
-        %val%T:= prtvd
-        if (val = "")
-            {
-                val= %val%T
-            }
-		if instr(val,"_Pre")
-			{
-				stringleft,vpnm,val,1
-				if (vpnm = 1)
-					{
-						PREDDT.= prtv . "||"
-						Prelist.= prtv . "||"
-						continue
-					}
-				PREDDT.= prtvd . "|"
-				Prelist.= prtvd . "|"
-			}
-		if instr(val,"_Post")
-			{
-				stringleft,vpnm,val,1
-				if (vpnm = 1)
-					{
-						POSTDDT.= prtv . "||"
-						Postlist.= prtv . "||"
-						continue
-					}
-				POSTDDT.= prtvd . "|"
-				Postlist.= prtvd . "|"
-			}
-        if (resetting = 1)
-            {
-                guicontrol,,%val%T,%prtvd%
-                guicontrol,,PREDDT,<Pre-Launch Programs>
-                guicontrol,,POSTDDT,<$This_Prog$><Mapper><Monitor>
-				guicontrol,hide,ButtonCreate
-				guicontrol,disable,ButtonCreate
-				guicontrol,disable,ButtonClear
-				guicontrol,hide,ButtonClear
-				guicontrol,hide,MyListView
-				guicontrol,disable,MyListView
-				GuiControl, Move, MyListView, w0
-				Gui, Show, Autosize
-            }
-    }
-	*/
+	
 Srcdeflt= %sourcehome%\Shortcuts
 Iniread,Source_Directory,%RJDB_Config%,GENERAL,Source_Directory
-if ((Source_Directory = Srcdeflt)or (resetting = 1) or (initz = 1))
+if ((Source_Directory = "")or (resetting = 1) or (initz = 1))
 	{
 		gosub, INITQUERY
 	}
@@ -1484,7 +1546,7 @@ guicontrol,,Source_DirectoryT,%Source_Directory%
 resetting= 
 return
 
-RECREATEJOY:
+RECREATEXPAD:
 ifnotexist,%sourcehome%\Player1.xpadderprofile
 	{
 		filecopy,%sourcehome%\src\xallgames.set,%sourcehome%\Player1.xpadderprofile
@@ -1501,6 +1563,9 @@ ifnotexist,%sourcehome%\Mediacenter2.xpadderprofile
 	{
 		filecopy,%sourcehome%\src\xDesktop.set,%sourcehome%\MediaCenter2.xpadderprofile
 	}
+return
+
+RECREATEAMICRO:
 ifnotexist,%sourcehome%\Player1.gamecontroller.amgp
     {
         fileread,mctmp,%sourcehome%\src\allgames.set
@@ -1659,6 +1724,8 @@ return
 REINDEX:
 SOURCEDLIST= 
 fullist= 
+simpnk= 
+omitd= 
 filedelete,%sourcehome%\simpth.db
 filedelete,%sourcehome%\continue.db
 guicontrol,hide,REINDEX
@@ -1810,7 +1877,7 @@ Loop,parse,SOURCE_DIRECTORY,|
 									{
 										lvachk=
 										simpnk.= FileName . "`n"
-										fileappend,%simpath%,simpth.db
+										fileappend,%simpath%,%sourcehome%\simpth.db
 										goto,Chkcon
 									}
 							}
@@ -1829,7 +1896,7 @@ Loop,parse,SOURCE_DIRECTORY,|
 									{
 										lvachk=
 										simpnk.= FileName . "`n"
-										fileappend,%FileName%`n,simpth.db
+										fileappend,%FileName%`n,%sourcehome%\simpth.db
 										goto,Chkcon
 									}
 							}
@@ -1844,7 +1911,9 @@ Loop,parse,SOURCE_DIRECTORY,|
 			}
 	}	
 if (enablelogging = 1)
+	{
 fileappend,[OMITTED]`n%omitd%`n`n[RE-INCLUDED]`n,log.txt	
+	}
 Loop,parse,simpnk,`r`n
 	{
 		if (A_LoopField = "")
@@ -1875,7 +1944,9 @@ Loop,parse,simpnk,`r`n
 						if (errorlevel = 0)
 							{
 								if (enablelogging = 1)
+									{
 								fileappend,%fenx%|`n,log.txt
+									}
 								LV_Add(lvachk,fenf, fenxtn, fendir, 0)
 								SOURCEDLIST.= fenf . "|" . fenxtn . "|" fendir . "|" . 0 . "`n"
 								fullist.= fenx . "|"
@@ -1909,6 +1980,7 @@ Loop % LV_GetCount("Column")
 	}
 ; resize ListView control and GUI
 GuiControl, Move, MyListView, w340
+
 GUI, Show, AutoSize
 Loop,parse,GUIVARS,|
 	{
@@ -1940,7 +2012,7 @@ guicontrolget,GMLNK,,GMLNK
 guicontrolget,INCLALTS,,INCLALTS
 guicontrolget,KILLCHK,,KILLCHK
 guicontrolget,EnableLogging,,EnableLogging
-complist:= LVGetCheckedItems("SysListView321", "RJ_Setup")
+complist:= LVGetCheckedItems("SysListView321","RJ_Setup")
 if (fullist = complist)
 	{
 		SB_SetText("default items selected")
@@ -2378,7 +2450,9 @@ Loop,%fullstn0%
 					}
 				stringtrimright,subfldrepn,subfldrep,1
 				if (enablelogging = 1)
+					{
 				fileappend,%rn%==%subfldrep%%gmnamed%|%gmnamex%(%renum%):%tot%<!%priority%!`n,log.txt
+					}
 				GMon= %subfldrep%%gmnamex%_Game.cfg
 				DMon= %subfldrep%%gmnamex%_Desktop.cfg
 				gamecfgn= %subfldrep%%gmnamex%.ini	
@@ -2643,10 +2717,75 @@ return
 
 ResetButs:
 goto,%butrclick%Reset
+return
 DisableButs:
-goto,%butrclick%Reset
+goto,%butrclick%Disable
+return
 DeleteButs:
 goto,%butrclick%Delete
+return
+
+DownloadButs:
+Menu,keymapd,Add
+Menu,keymapd,DeleteAll
+if (butrclick = "Keyboard_MapB")
+	{
+		Menu,keymapd,Add,Antimicro,keymapdownload
+		Menu,keymapd, Add,Xpadder,keymapdownload	
+	}
+if (butrclick = "MM_ToolB")
+	{
+		Menu,keymapd,Add,MultiMonitorTool,MMdownload
+	}
+if (butrclick = "BGM_ProgB")
+	{
+		Menu,keymapd,Add,Borderless Gaming,BGMdownload
+	}
+Menu,keymapd,show
+goto,%butrclick%Download
+return
+
+MMDownload:
+curemote= _MultiMonitorTool_
+gosub, BINGETS
+gosub, DOWNLOADIT
+MultiMonitor_ToolT= %binhome%\multimonitortool.exe
+gosub, MM_ToolB
+dchk= 
+SB_SetText("")	
+return
+
+BGMdownload:
+curemote= _BorderlessGaming_
+gosub, BINGETS
+gosub, DOWNLOADIT
+Borderless_Gaming_Program= %binhome%\Borderless Gaming\borderless-gaming-portable.exe
+gosub, BGM_ProgB
+dchk= 
+SB_SetText("")	
+return
+
+SSDDownload:
+
+
+keymapdownload:
+if (A_ThisMenuItem = "Antimicro")
+	{
+		curemote= _Antimicro_
+		gosub, BINGETS
+		gosub, DOWNLOADIT
+		keyboard_mapperT= %binhome%\Antimicro\Antimicro.exe
+	}
+if (A_ThisMenuItem = "Xpadder")
+	{
+		curemote= _Xpadder_
+		gosub, BINGETS
+		gosub, DOWNLOADIT
+		keyboard_mapperT= %binhome%\xpadder\xpadder.exe
+	}
+SB_SetText("")	
+gosub, Keyboard_MapB
+dchk= 	
 return
 
 ButtonClear:
@@ -2669,7 +2808,129 @@ if (A_GuiEvent = "DoubleClick")  ; There are many other possible values the scri
 }
 return
 
-		
+DOWNLOADIT:
+extractloc= %binhome%%xtractpath%
+extractlocf= "%extractloc%"
+filecreateDir,%sourcehome%\downloaded
+save= %sourcehome%\downloaded\%binarcf%
+splitpath,save,savefile,savepath,savextn
+savef= "%save%"
+compltdwn:= % curemoteX
+if (fileexist(save)&& (compltdwn = 1))
+	{
+		Msgbox,260,Redownload,Download the %binarcf% file again?`noriginal will be renamed ".bak",3
+		ifmsgbox,yes
+			{
+				gosub,DOWNBIN
+			}
+		if (dwnrej = "")
+			{
+				goto, EXTRACTING
+			}
+		dwnrej= 	
+	}
+DOWNBIN:	
+SB_SetText("Downloading" "" binarcf "")
+/*
+if (curemote <> "originalBinary")
+	{
+		MsgBox,3,%curemote%,Would you like to Download %curemote%?`nThis can be selected later`n,5
+		ifmsgbox,OK
+			{
+				dwnrej=
+				goto, DWNCONFIRM
+			}
+		dwnrej= 1	
+		return
+	}
+*/
+DWNCONFIRM:
+dwnrej= 	
+DownloadFile(URLFILE,save,False,True)
+SB_SetText(" " binarcf " ""downloaded")
+
+EXTRACTING:
+ToolTip, 
+Sleep, 500
+if (fileexist(save)&& !fileexist(exetfnd))
+	{
+		ToolTip, Extracting...
+		if !fileexist(extractloc . "\")
+			{
+				FileCreateDir,%extractloc%
+			}
+		if (!fileexist(binhome . "\" . "7za.exe")&&(savextn <> "7z"))
+			{
+				Extract2Folder(savef,extractlocf)
+			}
+			else {
+			if fileexist(binhome . "\" . "7za.exe")
+				{
+					RunWait,%binhome%\7za.exe x -y "%sourcehome%\downloaded\%binarcf%" -O"%extractloc%",%binhome%,hide
+				}
+				else {
+					Msgbox,258,,7za.exe not found,Binary file 7za.exe is missing from`n%binhome%`n`nContinue?
+					ifmsgbox,Abort
+						{
+							exitapp
+						}
+					if Msgbox,Retry
+						{
+							curemote= originalBinary
+							xtractpath= 
+							gosub, BINGETS
+							goto, DOWNLOADIT
+						}
+				}
+			}
+		Tooltip,Extracted.
+		dchk= 1
+		if (rento <> "")
+			{
+				FileMoveDir,%extractloc%,%rento%,R
+			}
+	}
+Sleep, 500
+ToolTip, 
+ifnotexist,%save%
+	{
+		msgbox,258,Download Failed,%binarcf% did not download.`nYou may select the location of support files later`n`nContinue?
+		ifmsgbox,Abort
+			{
+				if (curemote = "originalBinary")
+					{
+						exitapp
+					}
+			}
+		if Msgbox,Retry
+			{
+				goto, DOWNLOADIT
+			}
+	}
+SB_SetText("")	
+return
+
+BINGETS:
+Loop,6,
+	{
+		URLNX%A_Index%=
+	}
+renfrm= 
+rento= 
+iniread,URLFILESPLIT,%RJDB_CONFIG%,CONFIG,%curemote%
+stringsplit,URLNX,URLFILESPLIT,|
+URLFILE=%URLNX1%
+Splitpath,URLFILE,binarcf
+exetfndsp=%URLNX2%
+xtractpath=%URLNX3%
+stringsplit,rensp,urlnx4,?
+renfrm= %rensp1%
+rento= %rensp2%
+if (URLFILE = "") or (URLFILE = "ERROR")
+	{
+		URLFILE= %URLFILEX%
+	}
+return
 		
 GuiContextMenu: 
 gui,submit,nohide
@@ -2687,6 +2948,11 @@ If A_GuiControlEvent RightClick
 		{
 			Menu, UCLButton, Show, %MENU_X% %MENU_Y%
 			return	
+		}
+	if A_GuiControl = PREAPP
+		{
+			Menu,AddProgs,Show,%MENU_X% %MENU_Y%
+			return
 		}
 if A_GuiControl = BGM_ProgB
 		{
@@ -2758,3 +3024,109 @@ LVGetCheckedItems(cN,wN) {
     Return ChkItems
 }
 
+DownloadFile(UrlToFile, _SaveFileAs, Overwrite := True, UseProgressBar := True) {
+	FinalSize= 
+
+  If (!Overwrite && FileExist(_SaveFileAs))
+	  {
+		FileSelectFile, _SaveFileAs,S, %_SaveFileAs%
+		if !_SaveFileAs 
+		  return
+	  }
+
+  If (UseProgressBar) {
+	  
+		SaveFileAs := _SaveFileAs
+	  
+		try WebRequest := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+		catch {
+		}
+	  
+		try WebRequest.Open("HEAD", UrlToFile)
+		catch {
+		}
+		try WebRequest.Send()
+		catch {
+		}
+	  
+		try FinalSize := WebRequest.GetResponseHeader("Content-Length") 
+		catch {
+			FinalSize := 1
+		}
+		SetTimer, DownloadFileFunction_UpdateProgressBar, 100
+	
+
+  }   
+  UrlDownloadToFile, %UrlToFile%, %_SaveFileAs%
+If (UseProgressBar) {
+	ToolTip,
+  }
+
+      DownloadFileFunction_UpdateProgressBar:
+    
+      try CurrentSize := FileOpen(_SaveFileAs, "r").Length 
+	  catch {
+			}
+			
+      try CurrentSizeTick := A_TickCount
+    catch {
+			}
+			
+      try Speed := Round((CurrentSize/1024-LastSize/1024)/((CurrentSizeTick-LastSizeTick)/1000)) . " Kb/s"
+	  catch {
+			}
+    
+      LastSizeTick := CurrentSizeTick
+      try LastSize := FileOpen(_SaveFileAs, "r").Length
+    catch {
+			}
+	
+      try PercentDone := Round(CurrentSize/FinalSize*100)
+    catch {
+			}
+			
+	 if (PercentDone > 100)
+		{
+			ToolTip,
+			PercentDone= 
+		}
+	 SB_SetText(" " Speed " at " PercentDone "`% " CurrentSize " bytes completed")
+	 return
+  }
+
+
+Extract2Folder(Zip, Dest="", jhFln="")
+{
+    SplitPath, Zip,, SourceFolder
+    if ! SourceFolder
+        Zip := A_ScriptDir . "\" . Zip
+    
+    if ! Dest {
+        SplitPath, Zip,, DestFolder,, Dest
+        Dest := DestFolder . "\" . Dest . "\"
+    }
+    if SubStr(Dest, 0, 1) <> "\"
+        Dest .= "\"
+    SplitPath, Dest,,,,,DestDrive
+    if ! DestDrive
+        Dest := A_ScriptDir . "\" . Dest
+    
+    fso := ComObjCreate("Scripting.FileSystemObject")
+    If Not fso.FolderExists(Dest) ;http://www.autohotkey.com/forum/viewtopic.php?p=402574
+		{
+			fso.CreateFolder(Dest)
+		}
+       
+    AppObj := ComObjCreate("Shell.Application")
+    FolderObj := AppObj.Namespace(Zip)
+    if jhFln {
+        FileObj := FolderObj.ParseName(jhFln)
+        AppObj.Namespace(Dest).CopyHere(FileObj, 4|16)
+    }
+    else
+    {
+        FolderItemsObj := FolderObj.Items()
+        AppObj.Namespace(Dest).CopyHere(FolderItemsObj, 4|16)
+    }
+}
+ 

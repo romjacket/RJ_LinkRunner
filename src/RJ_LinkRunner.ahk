@@ -392,6 +392,11 @@ if (MonitorMode > 0)
 	}
 sleep, 1200
 Mapper_Extension:= % Mapper_Extension
+
+regRead,curwlp,HKCU\Control Panel\Desktop, WallPaper
+regWrite, REG_SZ,HKCU\Control Panel\Desktop,WallPaper," "
+RunWait, Rundll32.exe user32.dll`, UpdatePerUserSystemParameters
+
 Tooltip,
 WinGet, WindowList, List
 Loop, %WindowList%
@@ -431,7 +436,15 @@ if (Mapper > 0)
 		joycnt=
 		joycnt= %joycount%					
 		player2n= "%player2%"
-		gosub, AmicroTest
+		;;gosub, AmicroTest
+		loop, 16 
+			{
+				if (JoyName := GetKeyState(A_Index "JoyName"))
+					{
+						joycount := A_Index
+					}
+			}
+		Joycnt= %joycount%
 		if (JMap = "xpadder")
 			{
 				player2t:= A_Space . player2n . "/M"
@@ -637,7 +650,13 @@ postmapper:
 if (Mapper > 0)
 	{
 		ToolTip,Please Be Patient`n:::Reloading Mediacenter/Desktop Profiles:::
-		gosub, AmicroTest
+		loop, 16 
+			{
+				if (JoyName := GetKeyState(A_Index "JoyName"))
+					{
+						joycount := A_Index
+					}
+			}
 		if (JMap = "antimicro")
 			{
 				mediacenter_profile_2n= "%mediacenter_profile_2%"
@@ -733,6 +752,8 @@ if (prestk2 <> "")
 		Run,%prestk2%,%A_ScriptDir%,%runhow%,postbpid	
 	}
 postmonitor:
+regWrite, REG_SZ,HKCU\Control Panel\Desktop,WallPaper,%curwlp%
+RunWait, Rundll32.exe user32.dll`, UpdatePerUserSystemParameters
 if (MonitorMode > 0)
 	{
 		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(MM_Game_Config)&& fileexist(MM_MediaCenter_Config))
