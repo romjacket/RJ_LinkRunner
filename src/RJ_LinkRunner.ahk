@@ -64,6 +64,8 @@ if (GetKeyState("Alt")&&(scextn = "exe"))
 				FileCreateShortcut,%binhome%\RJ_LinkRunner.exe, %Game_Directory%\%gmname%.lnk,%scpath%, `"%This_Profile%\%gmname%.lnk`",%gmname%,%plink%,,%iconnumber%
 			}
 	}
+nogmnx= WIN32|WIN64|Game|Win|My Documents|My Games|Windows Games|Shortcuts
+nogmne= Launch|Launcher|bat|cmd|exe|Program Files|Program Files (x86)|Windows|Roaming|Local|AppData|Documents|Desktop|%A_Username%|\|/|:|
 ;;LinkOptions= 
 inif= %home%\RJDB.ini
 READINI:
@@ -186,7 +188,7 @@ if (scextn = "lnk")
 		plfp= %plink%
 		splitpath,plfp,,pldr,,plfname
 	}
-splitpath,plfp,pfile,pfdir,plxtn,plnkn
+splitpath,plfp,pfilef,pfdir,plxtn,plnkn
 tempn= %gmname%	
 
 NameTuning:
@@ -224,8 +226,9 @@ Loop,4
 				StringRight,chkb,gmnamex,1
 			}
 	}
-
-if ((gmnamex = "WIN32")or (gmnamex = "WIN64")or (gmnamex = "Game")or (gmnamex = "Win")or (gmname = "Launch")or (gmname = "Launcher")or (gmname = "bat")or (gmname = "cmd")or (gmname = "exe")or (gmname = "Program Files")or (gmname = "Program Files (x86)")or (gmname = "Windows")or (gmname = "Roaming")or (gmname = "Local")or (gmname = "AppData")or (gmname = "Documents")or (gmname = "Desktop")or (gmname = "%A_Username%")or (gmname = "\")or (gmname = "/")or (gmname = ":") or (gmnamex = "") or (gmnamex = "My Documents") or (gmnamex = "My Games") or (gmnamex = "Windows Games") or (gmnamex = "Shortcuts"))
+absgmx= |%gmnamex%|
+absgme= |%gmname%|
+if (instr(nogmnx,absgmx)or instr(nogmne,absgme))
 	{
 		if (lnkg = 1)
 			{
@@ -234,7 +237,8 @@ if ((gmnamex = "WIN32")or (gmnamex = "WIN64")or (gmnamex = "Game")or (gmnamex = 
 						if (lnkft = 1)
 							{
 								gmnamex= %tempn%
-								goto, nonmres
+								gosub, nonmres
+								goto,pgmonchk
 							}
 						splitpath,npfdir,,,,tempn
 						lnkft= 1
@@ -319,39 +323,19 @@ if (prestk2 <> "")
 		if instr(prestk1,"W")
 			{
 				RunWait,%prestk2%,%A_ScriptDir%,%runhow%,preapid
-				goto,nonmres
+				gosub,nonmres
 			}
 		Run,%prestk2%,%A_ScriptDir%,,preapid	
 	}
 acwchk=
 GMGDBCHK= %gmnamex%	
 Tooltip, Configuration Created`n:::running %gmnamx% preferences:::
-if !fileexist(Borderless_Gaming_Program)
+if (fileexist(Borderless_Gaming_Program)&&(Borderless_Gaming_Program <> ""))
 	{
 		bgpon= 1
-		goto,pgmonchk
+		gosub, nonmres
 	}
-nonmres:
-FileRead,bgm,%Borderless_Gaming_Database%
-if (instr(bgm,GMGDBCHK)&& fileexist(Borderless_Gaming_Program))or (instr(bgm,gmname)&& fileexist(Borderless_Gaming_Program))
-	{
-		splitpath,Borderless_Gaming_Program,bgmexe,BGMLOC
-			{
-				Process,exist,%bgmexe%
-				if (errorlevel = 0)	
-					{
-						Run, %Borderless_Gaming_Program%,%BGMLOC%,hide,bgpid
-					}
-					else {
-						bgpid= %errorlevel%
-					}
-				if (acwchk = 1)
-					{
-						return
-					}
-			}
-	}
-process, close, %pfile%
+
 pgmonchk:
 if (MonitorMode > 0)
 	{
@@ -458,7 +442,6 @@ if (Mapper > 0)
 				player2t:= A_Space . player2n . "/M"
 				process,close,xpadder.exe
 				sleep,600
-				joycount= 
 			}
 		if (JMap = "antimicro")
 			{
@@ -467,7 +450,6 @@ if (Mapper > 0)
 				Run, %unload%,%mapperp%,hide
 				process,close,antimicro.exe
 				sleep,600
-				joycount=
 			}
 		if (joycnt < 2)
 			{
@@ -555,12 +537,13 @@ if (exe_list <> "")
 					{
 						break
 					}
-				if (apchkn < 10)
+				if (apchkn > 10)
 					{
 						Tooltip,
 						goto,appcheck
 					}
 			}
+		;;msgbox,,,%erahkpid% is closed`n%gmgdbchk% found`nnerlv=%nerlv%`ngii=%gii%`ndcls=%dcls%
 		Tooltip,
 		WinActivate
 		WinGetActiveTitle,GMGDBCHK
@@ -571,12 +554,13 @@ if (exe_list <> "")
 				acwchk= 
 			}
 		Tooltip,
-		BlockInput,Off	
-		process,WaitClose,%erahkpid%
+		BlockInput,Off
+		process,WaitClose, %erahkpid%
 		goto, appclosed	
 	}
 Tooltip,
 BlockInput,Off	
+		;;msgbox,,,%erahkpid% is closed`n%gmgdbchk% found`nnerlv=%nerlv%`ngii=%gii%`ndcls=%dcls%
 WinWait, ahk_pid %dcls%
 WinActivate
 WinGetActiveTitle,GMGDBCHK
@@ -602,7 +586,7 @@ return
 Ctrl & f2::
 process,close,%dcls%
 ToolTip,Closing
-process, close, %pfile%
+process, close, %pfilef%
 if (exe_list <> "")
 	{
 		Loop,parse,exe_list,|
@@ -722,9 +706,10 @@ if (Mapper > 0)
 			}
 	}
 Tooltip,Reloading Profiles`n:::shutting down game:::
+
 process,close, %erahkpid%
 process,close, %dcls%
-process, close, %pfile%
+process, close, %pfilef%
 if (exe_list <> "")
 	{
 		Loop,parse,exe_list,|
@@ -841,6 +826,28 @@ if (Logging = 1)
 		FileAppend,Run="%plfp%[%linkoptions%|%plarg%]in%pldr%"`nkeyboard=|%Keyboard_Mapper% "%player1%"%player2t%|`njoycount1="%joycnt%"`n%Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%`njoycount2=%joucount%`n`n,%home%\log.txt
 	}
 ExitApp
+
+nonmres:
+FileRead,bgm,%Borderless_Gaming_Database%
+if (instr(bgm,GMGDBCHK)&& fileexist(Borderless_Gaming_Program))or (instr(bgm,gmname)&& fileexist(Borderless_Gaming_Program))
+	{
+		splitpath,Borderless_Gaming_Program,bgmexe,BGMLOC
+			{
+				Process,exist,%bgmexe%
+				if (errorlevel = 0)	
+					{
+						Run, %Borderless_Gaming_Program%,%BGMLOC%,hide,bgpid
+					}
+					else {
+						bgpid= %errorlevel%
+					}
+				if (acwchk = 1)
+					{
+						return
+					}
+			}
+	}
+return
 
 AmicroTest:
 Tooltip, :::Evaluating Joysticks:::

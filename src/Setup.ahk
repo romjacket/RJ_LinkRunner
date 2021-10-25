@@ -2077,7 +2077,6 @@ Loop,%fullstn0%
 					}
 				gmname= %gmnamex%
 				cursrc=
-				tlevel= %outdir%
 				Loop,parse,Source_directory,|
 					{
 						if (A_LoopField = "")
@@ -2094,6 +2093,7 @@ Loop,%fullstn0%
 					{
 						continue
 					}
+				tlevel= %outdir%
 				cursrp=|	
 				stringreplace,undirs,undir,|%cursrc%|,,
 				Stringreplace,gfnamex,outdir,%cursrc%\,,All
@@ -2128,7 +2128,7 @@ Loop,%fullstn0%
 				ExtID := FileExt
 				IconNumber:= 0
 				
-				
+				redpth= %outdir%
 				exlthis= |%gmnamex%|
 				if instr(exclfls,gmnamedx)
 					{
@@ -2161,23 +2161,28 @@ Loop,%fullstn0%
 				
 				if instr(exclfls,gmnamedvx)
 					{
-						tmppath= %curpth%
+						tmppath= %redpth%
 						splitpath,tmppath,gmnamek,curpthk
 						curpthn= |%curpth%|
 						curpthd= %curpth%\
+						;;msgbox,,,%prnmx%`ng=%gmnamedvx%`nt=%tlevel%`nc=%curpth%`nex=%gfnamex%`nrem=%gmat%`nmat=%mattop%`nml=%mattlen%`ndic=%topdirec%
 						if (instr(undirs,curpthn)&& !instr(undirs,curpthd))
 							{
+								tlevel= %redpth%
 								goto, topout
 							}
 						stringtrimright,gfnamek,gfnamex,%gmat%
 						if (gfnamek = "")
 							{
+								tlevel= %redpth%
 								goto, topout
 							}
 						gfnamex= %gfnamek%	
-						curpth= %curpthk%	
+						redpth= %curpthk%
+						stringlen,gmat,gmnamek
+						gmat+=1
 						topreduc= 1
-						tlevel= %curpth%
+						tlevel= %redpth%
 						invar= %gmnamek%
 						gosub, CleanVar
 						topdir= %invarx%
@@ -2210,6 +2215,7 @@ Loop,%fullstn0%
 						gmnamed= %topdirec%
 						gmnamedx= |%topdirec%|
 					}
+				;;msgbox,,,%gmnamed%`nd=%topdirec%`n%orilen%`nmat=%mattop%`nml=%mattlen%
 				priority:= 0
 				if (topdirec = gmnamed)
 					{
@@ -2623,6 +2629,7 @@ Loop,%fullstn0%
 								if (KILLCHK = 1)
 									{
 										klist= 
+										;;msgbox,,,cur=%curpth%`ntl=%tlevel%`no=%outdir%`ng=%gfnamex%`nred=%redpth%`n
 										Loop,files,%tlevel%\*.exe,R
 											{
 												splitpath,A_LoopFileFullPath,tmpfn,tmpfd,,tmpfo
@@ -2631,26 +2638,21 @@ Loop,%fullstn0%
 													{
 														if (A_LoopField = "")
 															{
+																continue
+															}
+														if instr(tmpfo,A_LoopField)
+															{
 																abson= 1
 																continue
 															}
-														if instr(A_LoopField,tmpfo)
-															{
-																continue
-															}
 													}
-												if (A_LoopFileName = prnmx)
-													{
-														continue
-													}
-												if (abson = "")
+												if (!instr(klist,A_LoopFileName)&&(abson = ""))
 													{
 														klist.= A_LoopFileName . "|"
 													}
 											}
 										if (klist <> "")
 											{
-											    klist.= prnmx
 												iniread,nklist,%gamecfg%,CONFIG,exe_list
 												if ((nklist = "")or(nklist = "ERROR")or(OVRWR = 1))
 													{
