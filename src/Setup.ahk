@@ -196,7 +196,7 @@ Gui, Add, Button, x18 y588 h16 w16 vRESET gRESET,R
 Gui, Font, Normal
 Gui, Add, Checkbox, x40 y14 h14 vKILLCHK gKILLCHK checked,Kill-List
 Gui, Add, Checkbox, x100 y14 h14 vINCLALTS gINCLALTS,Alts
-Gui, Add, Checkbox, x100 y14 h14 vLocalize gLocalize,Localize
+Gui, Add, Checkbox, x140 y14 h14 vLocalize gLocalize,Localize
 
 Gui, Font, Bold
 Gui, Add, Button, x24 y56 w36 h21 vSOURCE_DirB gSOURCE_DirB,SRC
@@ -2028,6 +2028,23 @@ if (A_EventInfo = 1)  ; The window has been minimized. No action needed.
 GuiControl, Move, MyListView, % "W" . (A_GuiWidth - 20) . " H" . (A_GuiHeight - 40)
 return
 
+SANITIZER:
+stringreplace,insan,insan,:,-,All
+SANITIZE:
+stringreplace,insan,insan,/,-,All
+stringreplace,insan,insan,?,-,All
+stringreplace,insan,insan,`,,-,All
+stringreplace,insan,insan,>,-,All
+stringreplace,insan,insan,",,All
+;"
+stringreplace,insan,insan,=,-,All
+stringreplace,insan,insan,|,-,All
+stringreplace,outsan,insan,%A_Tab%,-,All
+if instr(outsan,"<")
+	{
+		outsan= <
+	}
+return	
 ButtonCreate:
 SB_SetText("Creating Custom ShortCuts")
 Loop,parse,GUIVARS,|
@@ -2073,7 +2090,10 @@ Loop,%fullstn0%
 			{
 				stringsplit,prvn,przn,?>
 				prn= %prvn1%
-				nameOverride= %prvn2%			
+				nameOverride= %prvn2%
+				INSAN= %NAMEOVERRIDE%
+				gosUB,SANITIZER
+				nameOverride= %outsan%
 			}
 		else {
 			stringsplit,prvn,przn,>/
@@ -2086,23 +2106,23 @@ Loop,%fullstn0%
 		pstovr= %prvn11%
 		if (prvn7 <> "<")
 			{
-				
+				pl1ovr= %prvn3%
 			}
 		if (prvn8 <> "<")
 			{
-				
+				pl2ovr= %prvn4%
 			}
 		if (prvn9 <> "<")
 			{
-				
+				mcpovr= %prvn5%
 			}
 		if (prvn11 <> "<")
 			{
-				
+				mgovr= %prvn7%
 			}
 		if (prvn12 <> "<")
 			{
-				
+				dgovr= %prvn8%
 			}
 		splitpath,prn,tmpn,tmpth,tmpxtn,gmnamex
 		refname= %gmnamex%
@@ -2534,6 +2554,7 @@ Loop,%fullstn0%
 					{
 						sidn= %OUTDIR%
 					}
+				splitpath,sidn,sidnf,sidnpth	
 				GMon= %subfldrep%%gmnamex%_Game.cfg
 				DMon= %subfldrep%%gmnamex%_Desktop.cfg
 				gamecfgn= %subfldrep%%gmnamex%.ini	
@@ -2613,7 +2634,19 @@ Loop,%fullstn0%
                         if (GMCONF = 1)
                             {
 								Player1x= %sidn%\%subfldrep%%GMNAMEX%.%Mapper_Extension%
+								if (pl1ovr <> "<")
+									{
+										Player1_Template= %pl1ovr%
+										splitpath,pl1ovr,pl1flnm
+										Player1x= %sidn%\%pl1flnm%
+									}
                                 Player2x= %sidn%\%subfldrep%%GMNAMEX%_2.%Mapper_Extension%
+								if (pl2ovr <> "<")
+									{
+										Player2_Template= %pl1ovr%
+										splitpath,pl2ovr,pl2flnm
+										Player2x= %sidn%\%pl2flnm%
+									}
                                 cfgcopied= 
 								if ((OVERWRT = 1)or !fileexist(gamecfg))
                                     {
@@ -2684,12 +2717,20 @@ Loop,%fullstn0%
 									}
 									
 								DeskMon= %sidn%\%subfldrep%%DMon%
+								if (dgovr <> "<")
+									{
+										DeskMon= %dgovr%
+									}
                                 if ((OVERWRT = 1))or (!fileexist(DeskMon)&& fileexist(MM_MediaCenter_Config))
                                     {
 										filecopy, %MM_MediaCenter_Config%,%DeskMon%,%OVERWRT%
 										iniwrite,%DeskMon%,%gamecfg%,GENERAL,MM_MediaCenter_Config
 									}
                                 GameMon= %sidn%\%subfldrep%%GMon%
+								if (mgovr <> "<")
+									{
+										GameMon= %mgovr%
+									}
                                 if ((OVERWRT = 1))or (!fileexist(GameMon)&& fileexist(MM_Game_Config))
                                     {
 										filecopy, %MM_GAME_Config%,%GameMon%,%OVERWRT%
@@ -2793,7 +2834,10 @@ Loop,%fullstn0%
 				iniwrite,%A_Space%,%GAMECFG%,CONFIG,2_Post
 				iniwrite,%A_Space%,%GAMECFG%,CONFIG,3_Post
 			}
-	
+		if (mcpovr <> "<")
+			{
+				iniwrite,%mcpovr%,%GAMECFG%,CONFIG,MediaCenter_Profile
+			}
 	}
 SB_SetText("Shortcuts Created")	
 Loop,parse,GUIVARS,|
@@ -2817,7 +2861,8 @@ stringreplace,invarx,invarx,-,,All
 stringreplace,invarx,invarx,%A_Space%,,All
 return
 Localize:
-
+gui,submit,NoHide
+guicontrolget,localize,,localize
 
 return
 ResetButs:
@@ -2941,7 +2986,7 @@ If (A_GuiEvent == "F") {
   if ((O.Col = 7)or(O.Col = 8)or(O.Col = 9)or(O.Col = 11)or(O.Col = 12))
 	{
 		;FileSelectFile,replathis,35,,Select File,*.*
-		SB_SetText("comingsoon")
+		SB_SetText("input an unquoted path to the file")
 	}
 }
 return
@@ -3527,7 +3572,7 @@ Class LV_InCellEdit {
          If (N = 0x0400) || (N = 0x0300) || (N = 0x0100) { ; EN_UPDATE | EN_CHANGE | EN_SETFOCUS
             If (N = 0x0100) ; EN_SETFOCUS
                SendMessage, 0x00D3, 0x01, 0, , % "ahk_id " . L ; EM_SETMARGINS, EC_LEFTMARGIN
-            ControlGetText, EditText, , % "ahk_id " . L
+            ControlGetText, EditText, , % "ahk_id " . L		
             SendMessage, % (A_IsUnicode ? 0x1057 : 0x1011), 0, % &EditText, , % "ahk_id " . This.HWND
             EW := ErrorLevel + This.DW
             , EX := This.EX
@@ -3598,6 +3643,7 @@ Class LV_InCellEdit {
       , NumPut(1024 + 1, LVITEM, 16 + (A_PtrSize * 2), "Int") ; cchTextMax in LVITEM
       SendMessage, % (A_IsUnicode ? 0x1073 : 0x102D), % This.Item, % &LVITEM, , % "ahk_id " . H ; LVM_GETITEMTEXT
       This.ItemText := StrGet(&ItemText, ErrorLevel)
+	  	
       ; Call the user function, if any
       If (This.EditUserFunc)
          This.EditUserFunc.Call("BEGIN", This.HWND, This.HEDIT, This.Item + 1, This.Subitem + 1, This.ItemText)

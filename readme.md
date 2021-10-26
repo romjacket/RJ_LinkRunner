@@ -94,7 +94,7 @@ The Left-Analog stick held right is the Tab-key.
 
 It is best if you set the RJ_LinkRunner.exe, antimicro.exe and xpadder.exe to run as the administrator.
 
-During gameplay you may add additional joysticks and save a profile for them. Any additional joystick profiles found within the game's jacket will be saved and reloaded for player 2, prioritizing the default profile-name (**Game Jacket_2.gamecontroller.amgp**, and other "player 2" monikers.)
+During gameplay you may add additional joysticks and save a profile for them. Any additional joystick profiles found within the game's jacket will be saved and reloaded for player 2, prioritizing the default profile-name (Game Jacket_2.gamecontroller.amgp, and other "player 2" monikers.)
 
 The multimonitor tool will save the current monitor/s resolution/s of the current running game upon exit of the launcher.
 
