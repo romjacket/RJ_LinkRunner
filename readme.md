@@ -22,6 +22,7 @@ rj_linkrunner
 │   ├── log.txt
 │   ├── newosk.ahk
 │   ├── NewOSK.ico
+│   ├── repos.set
 │   ├── RJDB.set
 │   ├── RJ_LinkRunner.ahk
 │   ├── RJ_LinkRunner.ico
@@ -51,7 +52,7 @@ Right-Click on the buttons in the setup tool to download supported executables.
 
 If you have a multimonitor setup or wish to change the display of the monitor you will play games on, use the "GMC" button to create a profile for games, and the "DMC" button to create a profile for your mediacenter/desktop.
 
-
+[example](http://romjacket.github.io/RJ_LinkRunner/example.png)
 
 #### The presets are setup to do a few things:
 
