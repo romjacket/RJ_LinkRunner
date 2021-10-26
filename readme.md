@@ -52,7 +52,7 @@ Right-Click on the buttons in the setup tool to download supported executables.
 
 If you have a multimonitor setup or wish to change the display of the monitor you will play games on, use the "GMC" button to create a profile for games, and the "DMC" button to create a profile for your mediacenter/desktop.
 
-[example](http://romjacket.github.io/RJ_LinkRunner/example.png)
+![example](http://romjacket.github.io/RJ_LinkRunner/example.png)
 
 #### The presets are setup to do a few things:
 
