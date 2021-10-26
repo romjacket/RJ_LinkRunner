@@ -1,0 +1,11 @@
+[BINARIES]
+originalBinary=https://github.com/romjacket/RJ_LinkRunner/releases/download/SupportFiles/Binaries.zip|RJ_LinkRunner.exe?Setup.exe?Build_Source.exe?NewOsk.exe?7za.exe|\..\|
+_BorderlessGaming_=https://github.com/portapps/borderless-gaming-portable/releases/download/9.5.6-3/borderless-gaming-portable-win32-9.5.6-3.7z|Borderless Gaming\borderless-gaming-portable.exe|\Borderless Gaming
+_Antimicro_=https://github.com/AntiMicro/antimicro/releases/download/2.23/antimicro-2.23-win32.portable.zip|Antimicro\antimicro.exe|
+_Xpadder_=https://raw.githubusercontent.com/romjacket/Xpadder/master/Xpadder.7z|Xpadder\xpadder.exe|
+_MultiMonitorTool_=https://www.nirsoft.net/utils/multimonitortool-x64.zip|multimonitortool.exe|
+_SetSoundDevice_=https://github.com/romjacket/SetSoundDevice/releases/download/SSD_win64_binary/SSD.zip|SSD.exe|
+_ShiftWindow_=http://grismar.net/shiftwindow/setup.exe
+_SWRE_=https://github.com/dtgDTGdtg/SRWE/releases/download/SRWE_v236/SRWE_236_WithProfiles.zip
+_FullScreenIzer_=https://github.com/KasumiL5x/Fullscreenizer/releases/download/v1.0/Fullscreenizer-v1.zip
+_borderStripper_=https://phoenixnap.dl.sourceforge.net/project/winborderstrip/winborderstrip/1.5/border_stripper.exe
