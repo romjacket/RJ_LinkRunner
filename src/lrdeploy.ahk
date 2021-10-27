@@ -3752,24 +3752,15 @@ if (GitPush = 1)
 				donation= 00.00				
 			}			
 		FileDelete, %SKELD%\!gitupdate.cmd
-		FileAppend, mkdir "%GITD%\bin"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, mkdir "%GITD%\site"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, mkdir "%GITD%\src"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, del /s /q "%GITD%\src\*.ini"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, del /s /q "%GITD%\src\*.txt"`n,%SKELD%\!gitupdate.cmd
-		FileAppend, robocopy "rj" "%GITD%\rj" /s /e /w:1 /r:1 /xf "*.bak" "*.ini" "*.tdb" "*.tmp" "*.jak" /xd "ES" "RF" "PG" "scrapeArt" "netArt" "syscfgs"`n,%SKELD%\!gitupdate.cmd
-		FileAppend, robocopy "img" "%GITD%\img" /s /e /w:1 /r:1`n,%SKELD%\!gitupdate.cmd
-		FileAppend, robocopy "rj\emucfgs" "%GITD%\rj\emuCfgs" /s /e /w:1 /r:1`n,%SKELD%\!gitupdate.cmd
 		if (DATBLD = 1)
 			{
 				;FileAppend, copy /y "downloaded\*.*" "%GITD%\downloaded"`n,%SKELD%\!gitupdate.cmd
 			}
 		FileAppend, copy /y "site\index.html" "%GITD%\site"`n,%SKELD%\!gitupdate.cmd
-		FileAppend, copy /y "bin\Setup.exe" "%GITD%\bin"`n,%SKELD%\!gitupdate.cmd
-		FileAppend, copy /y "bin\RJ_LinkRunner.exe" "%GITD%\bin"`n,%SKELD%\!gitupdate.cmd
-		FileAppend, copy /y "bin\NewOSK.exe" "%GITD%\bin"`n,%SKELD%\!gitupdate.cmd
-		FileAppend, copy /y "bin\7za.exe" "%GITD%\bin"`n,%SKELD%\!gitupdate.cmd
-		FileAppend, copy /y "bin\source_builder.exe" "%GITD%\bin"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, copy /y "src\*.ahk" "%GITD%\src"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, copy /y "src\*.set" "%GITD%\src"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, copy /y "src\*.ico" "%GITD%\src"`n,%SKELD%\!gitupdate.cmd
