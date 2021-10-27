@@ -9,3 +9,10 @@ _ShiftWindow_=http://grismar.net/shiftwindow/setup.exe
 _SWRE_=https://github.com/dtgDTGdtg/SRWE/releases/download/SRWE_v236/SRWE_236_WithProfiles.zip
 _FullScreenIzer_=https://github.com/KasumiL5x/Fullscreenizer/releases/download/v1.0/Fullscreenizer-v1.zip
 _borderStripper_=https://phoenixnap.dl.sourceforge.net/project/winborderstrip/winborderstrip/1.5/border_stripper.exe
+[GLOBAL]
+CLOUDLOC=
+HOSTINGURL=[HOSTINGURL]
+SOURCEHOST=[SOURCEHOST]
+IP_LOOKUP=[IPLK]
+UPDATEFILE=[UPDATEFILE]
+Version={VERS}

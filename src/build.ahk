@@ -14,6 +14,7 @@ if ((srcfn = "src")or(srcfn = "bin")or(srcfn = "binaries"))
 	}	
 binhome= %home%\bin
 source= %home%\src	
+SetWorkingDir, %home%
 FileDelete,%binhome%\RJ_LinkRunner.exe
 FileDelete,%binhome%\NewOSK.exe
 FileDelete,%binhome%\Setup.exe

@@ -1,0 +1,61 @@
+FileCreateDir, site
+FileCreateDir, sets
+FileCreateDir, bin
+FileCreateDir, src
+IfNotExist, rj
+{
+FileCreateDir, rj
+FILEINS= 1
+}
+If (INITIAL = 1)
+{
+FILEINS= 1
+}
+If (FILEINS = 1)
+{
+
+}
+FileInstall,site\version.txt,site\version.txt,1
+FileInstall,site\ReadMe.md,site\ReadMe.md,1
+FileInstall,site\key.ico,site\key.ico,1
+FileInstall,site\Global-Launch-Menu.png,site\Global-Launch-Menu.png,1
+FileInstall,site\invaders.png,site\invaders.png,1
+FileInstall,site\key.png,site\key.png,1
+FileInstall,site\paradigm.png,site\paradigm.png,1
+FileInstall,site\tip.png,site\tip.png,1
+FileInstall,site\index.html,site\index.html,1
+FileInstall,site\Monoton-Regular.ttf,site\Monoton-Regular.ttf,1
+FileInstall,site\Muli-ExtraBold.ttf,site\Muli-ExtraBold.ttf,1
+FileInstall,site\Muli.ttf,site\Muli.ttf,1
+FileInstall,site\Opticon.ttf,site\Opticon.ttf,1
+FileInstall,sets\BuildTools.set,sets\BuildTools.set,1
+FileInstall,bin\7za.exe,bin\7za.exe,1
+FileInstall,bin\aria2c.exe,bin\aria2c.exe,1
+FileInstall,bin\MultiMonitorTool.exe,bin\MultiMonitorTool.exe,1
+FileInstall,bin\NewOSK.exe,bin\NewOSK.exe,1
+FileInstall,bin\RJ_LinkRunner.exe,bin\RJ_LinkRunner.exe,1
+FileInstall,bin\Setup.exe,bin\Setup.exe,1
+FileInstall,bin\Source_Builder.exe,bin\Source_Builder.exe,1
+FileInstall,bin\SSD.exe,bin\SSD.exe,1
+FileInstall,src\build.ahk,src\build.ahk,1
+FileInstall,src\LV_InCellEdit.ahk,src\LV_InCellEdit.ahk,1
+FileInstall,src\newosk.ahk,src\newosk.ahk,1
+FileInstall,src\RJ_LinkRunner.ahk,src\RJ_LinkRunner.ahk,1
+FileInstall,src\Setup.ahk,src\Setup.ahk,1
+FileInstall,src\Update.ahk,src\Update.ahk,1
+FileInstall,src\Joystick.ico,src\Joystick.ico,1
+FileInstall,src\NewOSK.ico,src\NewOSK.ico,1
+FileInstall,src\RJ_LinkRunner.ico,src\RJ_LinkRunner.ico,1
+FileInstall,src\RJ_Setup.ico,src\RJ_Setup.ico,1
+FileInstall,src\Source_Builder.ico,src\Source_Builder.ico,1
+FileInstall, bin\7za.exe,bin\7za.exe
+FileInstall, bin\NewOSK.exe,bin\NewOSK.exe
+FileInstall, bin\Build_Source.exe,bin\Build_Source.exe
+FileInstall, bin\RJ_LinkRunner.exe,bin\RJ_LinkRunner.exe
+FileInstall, bin\Setup.exe,bin\Setup.exe
+FileInstall, site\index.html,site\index.html,1
+FileInstall, site\version.txt,site\version.txt,1
+FileInstall, src\Update.ahk,src\Update.ahk,1
+FileInstall, src\rj_linkrunner.ahk,src\rj_linkrunner.ahk,1
+FileInstall, src\lrdeploy.ahk,src\lrdeploy.ahk,1
+FileInstall, Readme.md,Readme.md,1

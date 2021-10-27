@@ -10,6 +10,7 @@ if ((tstidir = "src")or(tstidir = "bin")or(tstidir = "binaries"))
 		home= %tstipth%
 	}
 source= %home%\src	
+#Include %source%\LV_InCellEdit.ahk
 Loop %0%  
 	{
 		GivenPath := %A_Index%
