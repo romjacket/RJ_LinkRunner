@@ -52,7 +52,7 @@ ifinstring,optionONE,-gituser
 					}
 			}
 	}
-GITWEB= http://github.com
+GITWEB= https://github.com
 GITSWEB= https://github.com
 ifinstring,optionONE,-reset
 	{
@@ -156,7 +156,7 @@ IfNotExist, %home%\skopt.cfg
 		_GITPAT=
 		_RREPO=repo_hub
 		_DREPO=dat_hub
-		_UPDTURL= http://raw.githubusercontent.com/romjacket/rj_linkrunner/master/site/version.txt
+		_UPDTURL= https://raw.githubusercontent.com/romjacket/rj_linkrunner/master/site/version.txt
 		_UPDTFILE= %GITSWEB%/romjacket/rj_linkrunner/releases/download/portable/rj_linkrunner.zip
 		_GETIPADR= http://www.netikus.net/show_ip.html				
 		_GITSRC= %GITWEB%/romjacket/rj_linkrunner
@@ -297,7 +297,7 @@ IfNotExist, %home%\skopt.cfg
 						CONTPARAM11= 1
 						iniwrite,%SITEDIR%,%home%\skopt.cfg,GLOBAL,site_directory
 						
-						UPDTURL= http://raw.githubusercontent.com/%gituser%/rj_linkrunner/master/site/version.txt
+						UPDTURL= https://raw.githubusercontent.com/%gituser%/rj_linkrunner/master/site/version.txt
 						_UPDTURL= %UPDTURL%
 						CONTPARAM13= 1
 						iniwrite,%UPDTURL%,%home%\skopt.cfg,GLOBAL,update_url
@@ -690,7 +690,7 @@ ifnotexist,%getversf%
 	{
 		FileDelete,ORIGHTML.html
 		save= ORIGHTML.html
-		URLFILE= http://romjacket.github.io/rj_linkrunner/index.html
+		URLFILE= https://romjacket.github.io/rj_linkrunner/index.html
 		splitpath,save,svaf,svap
 		exe_get(ARIA,URLFILE,svap,svaf,CURPID,cacheloc)
 		;;DownloadFile(URLFILE, save, True, True)
@@ -866,7 +866,7 @@ guicontrol,,txtgwd,(not set) Github-Site-Directory
 guicontrol,,txtsrc,(not set) Source-Directory
 guicontrol,,txtbld,(not set) Build-Directory
 guicontrol,,txtdpl,(not set) Deployment-Directory
-guicontrol,,uver, http://raw.githubusercontent.com/romjacket/rj_linkrunner/master/site/version.txt
+guicontrol,,uver, https://raw.githubusercontent.com/romjacket/rj_linkrunner/master/site/version.txt
 guicontrol,,iurl,http://www.netikus.net/show_ip.html
 guicontrol,,uflu, %GITSWEB%/romjacket/rj_linkrunner/releases/download/portable/rj_linkrunner.zip
 guicontrol,,irepo, %GITSWEB%/romjacket
@@ -1217,7 +1217,7 @@ if (GITUSER = "")
 			if (UPDTURL = "")
 				{
 					CONTPARAM13= 1
-					UPDTURL= http://raw.githubusercontent.com/%gituser%/rj_linkrunner/master/site/version.txt
+					UPDTURL= https://raw.githubusercontent.com/%gituser%/rj_linkrunner/master/site/version.txt
 					iniwrite,%UPDTURL%,%home%\skopt.cfg,GLOBAL,update_url
 					guicontrol,,UVER,%UPDTURL%
 				}
@@ -1356,7 +1356,7 @@ if (GITUSER = "")
 	}
 CONTPARAM1= 1
 iniwrite, %GITUSER%,%home%\skopt.cfg,GLOBAL,Git_username
-guicontrol,,uVer,http://raw.githubusercontent.com/%gituser%/rj_linkrunner/master/site/version.txt
+guicontrol,,uVer,https://raw.githubusercontent.com/%gituser%/rj_linkrunner/master/site/version.txt
 CONTPARAM13= 1
 iniwrite,%uVer%,%home%\skopt.cfg,GLOBAL,update_url
 guicontrol,,uFLU,%GITSWEB%/%gituser%/rj_linkrunner/releases/download/portable/rj_linkrunner.zip
@@ -1485,11 +1485,11 @@ gui,submit,nohide
 guicontrolget,UVER,,UVER
 if (UVER = "")
 	{
-		UVER= http://raw.githubusercontent.com/%GITUSER%/rj_linkrunner/master/site/version.txt
+		UVER= https://raw.githubusercontent.com/%GITUSER%/rj_linkrunner/master/site/version.txt
 	}
 if (GITUSER = "")
 	{
-		UVER= http://raw.githubusercontent.com/romjacket/rj_linkrunner/master/site/version.txt
+		UVER= https://raw.githubusercontent.com/romjacket/rj_linkrunner/master/site/version.txt
 	}
 guicontrol,,UVER,%UVER%
 CONTPARAM13= 1
@@ -2075,7 +2075,7 @@ FileAppend,"`%gitapp`%" add .`n,%BUILDIR%\gitcommit.bat
 FileAppend,"`%gitapp`%" commit -m `%1`%.`n,%BUILDIR%\gitcommit.bat
 if (GITPASS <> "")
 	{
-		FileAppend,"`%gitapp`%" push --repo http://%gituser%:%GITPASS%@github.com/%gituser%/rj_linkrunner`n,%BUILDIR%\gitcommit.bat			
+		FileAppend,"`%gitapp`%" push --repo https://%gituser%:%GITPASS%@github.com/%gituser%/rj_linkrunner`n,%BUILDIR%\gitcommit.bat			
 	}
 if (GITPASS = "")
 	{
@@ -2849,12 +2849,12 @@ gui,submit,nohide
 UPDTURL= 
 if (UPDTURLT = "")
 	{
-		UPDTURLT= http://raw.githubusercontent.com/%GITUSER%/rj_linkrunner/master/site/version.txt
+		UPDTURLT= https://raw.githubusercontent.com/%GITUSER%/rj_linkrunner/master/site/version.txt
 	}
 inputbox,UPDTURL,Version,Enter the url of the file which contains your update information,,345,140,,,,,%UPDTURLT%
 if (UPDTURL = "")
 	{
-		UPDTURLT= http://raw.githubusercontent.com/romjacket/rj_linkrunner/master/site/version.txt
+		UPDTURLT= https://raw.githubusercontent.com/romjacket/rj_linkrunner/master/site/version.txt
 		UPDTURL= %UPDTURLT%
 	}
 IniWrite,%UPDTURL%,%home%\skopt.cfg,GLOBAL,update_url
@@ -3784,10 +3784,10 @@ if (GitPush = 1)
 				FileAppend,"%GITAPP%" config user.name %GITUSER%`n,%BUILDIR%\gitcommit.bat
 				FileAppend,"`%gitapp`%" add .`n,%BUILDIR%\gitcommit.bat
 				FileAppend,"`%gitapp`%" commit -m `%1`%`n,%BUILDIR%\gitcommit.bat
-				FileAppend,"`%gitapp`%" push --set-upstream http://%gituser%:%gitpass%@github.com/%gituser%/rj_linkrunner master`n,%BUILDIR%\gitcommit.bat
+				FileAppend,"`%gitapp`%" push --set-upstream https://%gituser%:%gitpass%@github.com/%gituser%/rj_linkrunner master`n,%BUILDIR%\gitcommit.bat
 				if (GITPASS <> "")
 					{
-						FileAppend,"`%gitapp`%" push -f --repo http://%GITUSER%:%GITPASS%@github.com/%gituser%/rj_linkrunner`n,%BUILDIR%\gitcommit.bat
+						FileAppend,"`%gitapp`%" push -f --repo https://%GITUSER%:%GITPASS%@github.com/%gituser%/rj_linkrunner`n,%BUILDIR%\gitcommit.bat
 					}
 				if (GITPASS = "")
 					{
@@ -3978,7 +3978,7 @@ if (SiteUpdate = 1)
 			}		
 		guicontrol,,progb,90
 		StringReplace,skelhtml,skelhtml,[RSHA1],%ApndSHA%,All
-		StringReplace,skelhtml,skelhtml,[WEBURL],http://%GITUSER%.github.io,All
+		StringReplace,skelhtml,skelhtml,[WEBURL],https://%GITUSER%.github.io,All
 		StringReplace,skelhtml,skelhtml,[PAYPAL],%donation%
 		StringReplace,skelhtml,skelhtml,[GITSRC],%GITSRC%,All
 		StringReplace,skelhtml,skelhtml,[REVISION],%GITWEB%/%gituser%/rj_linkrunner/releases/download/Installer/rj_linkrunner.zip,All
@@ -4042,10 +4042,10 @@ if (uptoserv = 1)
 		FileAppend,"`%gitapp`%" config user.email %GITMAIL%`n,%BUILDIR%\sitecommit.bat
 		FileAppend,"`%gitapp`%" add rj_linkrunner`n,%BUILDIR%\sitecommit.bat
 		FileAppend,"`%gitapp`%" commit -m siteupdate`n,%BUILDIR%\sitecommit.bat
-		FileAppend,"`%gitapp`%" push --set-upstream http://%gituser%:%gitpass%@github.com/%gituser%/%gituser%.github.io master`n,sitecommit.bat
+		FileAppend,"`%gitapp`%" push --set-upstream https://%gituser%:%gitpass%@github.com/%gituser%/%gituser%.github.io master`n,sitecommit.bat
 		if (GITPASS <> "")
 			{
-				FileAppend,"`%gitapp`%" push -f --repo http://%GITUSER%:%GITPASS%@github.com/%GITUSER%/%GITUSER%.github.io`n,%BUILDIR%\sitecommit.bat
+				FileAppend,"`%gitapp`%" push -f --repo https://%GITUSER%:%GITPASS%@github.com/%GITUSER%/%GITUSER%.github.io`n,%BUILDIR%\sitecommit.bat
 			}
 		if (GITPASS = "")
 			{

@@ -1,6 +1,6 @@
 ## Installation
-This Version:0.99.00.099
-This Build: 2021-10-27 12:46 PM
+This Version:0.99.1.00
+This Build: 2021-10-27 1:27 PM
 Extract the binary to a location of your choice, **or** download and build and run the source files and executables.
 ```sh
 rj_linkrunner
