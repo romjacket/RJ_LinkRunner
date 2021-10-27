@@ -1647,9 +1647,9 @@ CONTPARAM11= 1
 ;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.name "%GITUSER%",,hide
 ;;RunWait,"bin\curl.exe" -k -u %gituser%:%gitpass% https://api.github.com/user/repos -d `"{\`"name\`":\`"%gituser%.github.io\`"}`",,hide
 
-FileAppend, "%GITAPP%" config user.email %GITMAIL%`n%GITAPP% config user.name %GITNAME%`npushd "%gitroot%\%GITUSER%.github.io"`n%GITAPP% init`npopd`n"bin\curl.exe" -k -u %gituser%:%gitpass% https://api.github.com/user/repos -d "{"name":"%gituser%.github.io"}",gitinit.cmd
-RunWait,gitinit.cmd,,hide
-FileDelete,gitinit.cmd
+FileDelete,%DEPL%\gitinit.cmd
+FileAppend, "%GITAPP%" config --global user.email %GITMAIL%`n%GITAPP%config --global user.name %GITNAME%`npopd`n,%DEPL%\gitinit.cmd
+RunWait,%DEPL%\gitinit.cmd,,hide
 				
 
 guicontrol,,txtGWD,%SITEDIR%
@@ -2104,7 +2104,7 @@ if (autoinstall = 1)
 		GRLL= %grltmp%
 		goto, GRLLSEL
 	}
-FileselectFolder,GRLL,*%grltmp%,0,Location to extract gh.exe
+FileselectFolder,GRLL,*%home%,0,Location to extract gh.exe
 GRLLSEL:
 if (GRLL = "")
 	{
@@ -2116,7 +2116,7 @@ if (GRLL = "")
 SETUPTOG= disable
 gosub, SETUPTOG
 SB_SetText(" Extracting github-release to " GITRLS "")
-Runwait, "%binhome%\7za.exe" x -y "%grlsv%" -O"%GRLL%",,%rntp%
+Runwait, "%binhome%\7za.exe" x -y "%home%" -O"%GRLL%",,%rntp%
 SETUPTOG= enable
 gosub, SETUPTOG
 
@@ -2124,6 +2124,7 @@ GITRLS= %GRLL%\gh.exe
 iniwrite, %GITRLS%,%home%\skopt.cfg,GLOBAL,git_rls
 guicontrol,,TxtRLS,%GITRLS%
 CONTPARAM5= 1
+Run, %GITRLS% auth login --with-token < %GITPASS%
 SB_SetText(" Github-release is " GITRLS "")
 return
 
@@ -2296,6 +2297,8 @@ ifexist, %gitzsv%
 		guicontrol,,txtGIT,%GITAPP%
 		CONTPARAM4= 1
 		iniwrite, %GITAPP%,%home%\skopt.cfg,GLOBAL,git_app
+		Run, %GITAPP% config --global user.name %GITUSER%,%GITAPPT%,hide
+		Run, %GITAPP% config --global user.email %GITMAIL%,%GITAPPT%,hide
 		return
 	}
 gitapdtmp= 
@@ -2463,7 +2466,9 @@ if (gitroot = "")
 SETUPTOG= disable
 gosub, SETUPTOG
 SB_SetText("Cloning rj_linkrunner")
-Runwait, "%gitapp%" clone https://%gituser%:%gitpass%@github.com/%GITUSER%/rj_linkrunner,%GITROOT%,hide
+Run, %GITAPP% config --global user %GITUSER%,%GITAPPT%,hide
+Run, %GITAPP% config --global user.email %GITMAIL%,%GITAPPT%,hide
+Runwait, "%gitapp%" clone https://github.com/%GITUSER%/rj_linkrunner,%GITROOT%,hide
 SB_SetText("")
 gcle= %ERRORLEVEL%
 SETUPTOG= enable
@@ -2515,13 +2520,13 @@ ifexist,%GITROOT%\rj_linkrunner\
 		CONTPARAM18= 1
 		
 		;;RunWait, %comspec% cmd /c "%gitapp%" init,%gitroot%\rj_linkrunner,hide
-		;;RunWait, %comspec% cmd /c "%gitapp%" config user.email %GITMAIL%,,hide
-		;;RunWait, %comspec% cmd /c "%gitapp%" config user.name %GITUSER%,,hide
+		;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.email %GITMAIL%,,hide
+		;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.name %GITUSER%,,hide
 		;;RunWait, "bin\curl.exe" -k -u %gituser%:%gitpass% https://api.github.com/user/repos -d `"{\`"name\`":\`"rj_linkrunner\`"}`",,hide
 		
-		FileAppend, "%GITAPP%" config user.email %GITMAIL%`n%GITAPP% config user.name %GITNAME%`npushd "%gitroot%\%GITUSER%.github.io"`n%GITAPP% init`npopd`n"bin\curl.exe" -k -u %gituser%:%gitpass% https://api.github.com/user/repos -d "{"name":"%gituser%.github.io"}",gitinit.cmd
-		RunWait,gitinit.cmd,,hide
-		FileDelete,gitinit.cmd
+		FileDelete,%DEPL%\gitinit.cmd
+		FileAppend, "%GITAPP%" config --global user.email %GITMAIL%`n%GITAPP% config --global user.name %GITNAME%`n,%DEPL%\gitinit.cmd
+		RunWait,%DEPL%\gitinit.cmd,,hide
 				
 		guicontrol,,txtGSD,%GITD%
 		IniWrite,%GitSRC%,%home%\skopt.cfg,GLOBAL,git_url
@@ -2603,14 +2608,14 @@ ifexist,%GITROOT%\%gituser%.github.io\rj_linkrunner\
 	{
 		SITEDIR= %GITROOT%\%gituser%.github.io\rj_linkrunner
 		CONTPARAM11= 1	
-		;;RunWait, %comspec% cmd /c "%gitapp%" config user.email %GITMAIL%,,hide
-		;;RunWait, %comspec% cmd /c "%gitapp%" config user.name %GITUSER%,,hide
+		;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.email %GITMAIL%,,hide
+		;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.name %GITUSER%,,hide
 		;;RunWait, %comspec% cmd /c "%gitapp%" init,%gitroot%\%GITUSER%.github.io,hide	
 		;;RunWait,"bin\curl.exe" -k -u %gituser%:%gitpass% https://api.github.com/user/repos -d `"{\`"name\`":\`"%gituser%.github.io\`"}`",,hide
 
-		FileAppend, "%GITAPP%" config user.email %GITMAIL%`n%GITAPP% config user.name %GITNAME%`npushd "%gitroot%\%GITUSER%.github.io"`n%GITAPP% init`npopd`n"bin\curl.exe" -k -u %gituser%:%gitpass% https://api.github.com/user/repos -d "{"name":"%gituser%.github.io"}",gitinit.cmd
-		RunWait,gitinit.cmd,,hide
-		FileDelete,gitinit.cmd
+		FileDelete,%DEPL%\gitinit.cmd
+		FileAppend, "%GITAPP%" config --global user.email %GITMAIL%`n%GITAPP%config --global user.name %GITNAME%`n,%DEPL%\gitinit.cmd
+		RunWait,%DEPL%\gitinit.cmd,,hide
 		
 		guicontrol,,txtGWD,%SITEDIR%
 		iniwrite, %SITEDIR%,%home%\skopt.cfg,GLOBAL,Site_Directory
@@ -2705,9 +2710,9 @@ Loop, %GITROOT%\rj_linkrunner\*.*
 				;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.name "%GITUSER%",,hide
 				;;RunWait,"bin\curl.exe" -u %gituser%:%gitpass% https://api.github.com/user/repos -d `"{\`"name\`":\`"rj_linkrunner\`"}`",,hide
 				
-				FileAppend, "%GITAPP%" config user.email %GITMAIL%`n%GITAPP% config user.name %GITNAME%`npushd "%gitroot%\%GITUSER%.github.io"`n%GITAPP% init`npopd`n"bin\curl.exe" -k -u %gituser%:%gitpass% https://api.github.com/user/repos -d "{"name":"rj_linkrunner"}",gitinit.cmd
-				RunWait,gitinit.cmd,,hide
-				FileDelete,gitinit.cmd
+				FileDelete,%DEPL%\gitinit.cmd
+				FileAppend, "%GITAPP%" config --global user.email %GITMAIL%`n%GITAPP%config --global user.name %GITNAME%`n,%DEPL%\gitinit.cmd
+				RunWait,%DEPL%\gitinit.cmd,,hide
 				
 			}
 SB_SetText("Cloning current rj_linkrunner website")
@@ -2748,9 +2753,9 @@ if ((av = "")or(gwde <> 0))
 		;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.name "%GITUSER%",,hide
 		;;RunWait,"bin\curl.exe" -u %gituser%:%gitpass% https://api.github.com/user/repos -d `"{\`"name\`":\`"%gituser%.github.io\`"}`",,hide	
 		
-		FileAppend, "%GITAPP%" config user.email %GITMAIL%`n%GITAPP% config user.name %GITNAME%`npushd "%gitroot%\%GITUSER%.github.io"`n%GITAPP% init`npopd`n"bin\curl.exe" -k -u %gituser%:%gitpass% https://api.github.com/user/repos -d "{"name":"%gituser%.github.io"}",gitinit.cmd
-		RunWait,gitinit.cmd,,hide
-		FileDelete,gitinit.cmd
+		FileDelete,%DEPL%\gitinit.cmd
+		FileAppend, "%GITAPP%" config --global user.email %GITMAIL%`n%GITAPP%config --global user.name %GITNAME%`n,%DEPL%\gitinit.cmd
+		RunWait,%DEPL%\gitinit.cmd,,hide
 				
 		
 		FileCreateDir,%GITROOT%\%GITUSER%.github.io,1
@@ -3763,8 +3768,8 @@ if (GitPush = 1)
 			{
 				FileAppend,for /f "delims=" `%`%a in ("%GITAPP%") do set gitapp=`%`%~a`n,%BUILDIR%\gitcommit.bat
 				FileAppend,pushd "%GITD%"`n,%BUILDIR%\gitcommit.bat
-				FileAppend,"%GITAPP%" config user.email %GITMAIL%`n,%BUILDIR%\gitcommit.bat
-				FileAppend,"%GITAPP%" config user.name %GITUSER%`n,%BUILDIR%\gitcommit.bat
+				FileAppend,"%GITAPP%" config --global user.email %GITMAIL%`n,%BUILDIR%\gitcommit.bat
+				FileAppend,"%GITAPP%" config --global user.name %GITUSER%`n,%BUILDIR%\gitcommit.bat
 				FileAppend,"`%gitapp`%" add .`n,%BUILDIR%\gitcommit.bat
 				FileAppend,"`%gitapp`%" commit -m `%1`%`n,%BUILDIR%\gitcommit.bat
 				FileAppend,"`%gitapp`%" push -f --all`n,%BUILDIR%\gitcommit.bat
@@ -3813,18 +3818,15 @@ if (BCANC = 1)
 if (ServerPush = 1)
 	{
 		FileDelete, %DEPL%\gpush.cmd
-		FileAppend, set GITHUB_USER=%GITUSER%`n,%DEPL%\gpush.cmd
-		FileAppend, set GITHUB_TOKEN=%GITPAT%`n,%DEPL%\gpush.cmd
 		FileAppend, pushd "%GITD%"`n,%DEPL%\gpush.cmd
 		SB_SetText(" Uploading to server ")
 		if (PortVer = 1)
 			{
 				if (ServerPush = 1)
 					{	
-						
 						;FileAppend, "%GITRLS%" delete -u %gituser% -s %GITPAT% -r rj_linkrunner -t portable`n,%DEPL%\gpush.cmd
-						FileAppend, "%GITRLS%" release delete portable -y,%DEPL%\gpush.cmd
-						FileAppend, "%GITRLS%" release create portable "%DEPL%\portable.zip",%DEPL%\gpush.cmd
+						FileAppend, "%GITRLS%" release delete portable -y`n,%DEPL%\gpush.cmd
+						FileAppend, "%GITRLS%" release create portable "%DEPL%\portable.zip"`n,%DEPL%\gpush.cmd
 						;FileAppend, "%GITRLS%" upload -u %gituser% -s %GITPAT% -R -r rj_linkrunner -t portable -l portable -n rj_linkrunner.zip -f "%DEPL%\rj_linkrunner.zip"`n,%DEPL%\gpush.cmd
 					}
 			}
@@ -3858,8 +3860,8 @@ if (ServerPush = 1)
 				if (ServerPush = 1)
 					{
 						;FileAppend, "%GITRLS%" delete -u %gituser% -s %GITPAT% -r rj_linkrunner -t Installer`n,%DEPL%\gpush.cmd
-						FileAppend, "%GITRLS%" release delete Installer -y,%DEPL%\gpush.cmd
-						FileAppend, "%GITRLS%" release create Installer "%DEPL%\rj_linkrunner.zip",%DEPL%\gpush.cmd
+						FileAppend, "%GITRLS%" release delete Installer -y`n,%DEPL%\gpush.cmd
+						FileAppend, "%GITRLS%" release create Installer "%DEPL%\rj_linkrunner.zip"`n,%DEPL%\gpush.cmd
 ;						FileAppend, "%GITRLS%" release -u %gituser% -s %GITPAT% -r rj_linkrunner -n Installer -t Installer`n,%DEPL%\gpush.cmd
 ;						FileAppend, "%GITRLS%" upload -u %gituser% -s %GITPAT% -R -r rj_linkrunner -t Installer -l Installer -n rj_linkrunner.zip -f "%DEPL%\rj_linkrunner.zip"`n,%DEPL%\gpush.cmd
 					}
@@ -3984,9 +3986,9 @@ if (SiteUpdate = 1)
 				;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.name "%GITUSER%",,hide
 				;;RunWait,"bin\curl.exe" -k -u %gituser%:%gitpass% https://api.github.com/user/repos -d `"{\`"name\`":\`"%gituser%.github.io\`"}`",,hide
 				
-				FileAppend, "%GITAPP%" config user.email %GITMAIL%`n%GITAPP% config user.name %GITNAME%`npushd "%gitroot%\%GITUSER%.github.io"`n%GITAPP% init`npopd`n"bin\curl.exe" -k -u %gituser%:%gitpass% https://api.github.com/user/repos -d "{"name":"%gituser%.github.io"}",gitinit.cmd
-				RunWait,gitinit.cmd,,hide
-				FileDelete,gitinit.cmd
+				FileDelete,%DEPL%\gitinit.cmd
+				FileAppend, "%GITAPP%" config --global user.email %GITMAIL%`n%GITAPP%config --global user.name %GITNAME%`n,%DEPL%\gitinit.cmd
+				RunWait,%DEPL%\gitinit.cmd,,hide
 				
 			}
 		FileAppend,%skelhtml%,%gitroot%\%gituser%.github.io\rj_linkrunner\index.html
