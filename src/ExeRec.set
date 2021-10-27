@@ -1,5 +1,4 @@
 FileCreateDir, site
-FileCreateDir, sets
 FileCreateDir, bin
 FileCreateDir, src
 IfNotExist, rj

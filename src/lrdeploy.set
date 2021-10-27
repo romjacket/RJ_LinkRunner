@@ -5,7 +5,7 @@ SetCompress on
 Name "RJ_LinkRunner"
 Caption "Universal ROM-Library Interface Kit"
 Icon "[SOURCE]\src\Install.ico"
-OutFile "[DBP]\rj_linkrunner[INSTYP].exe"
+OutFile "[SOURCE]\rj_linkrunner[INSTYP].exe"
 AllowRootDirInstall true
 AutoCloseWindow true
 SetDateSave on
@@ -74,19 +74,18 @@ Section "" ; empty string makes it hidden, so would starting with -
 
   SetOutPath $INSTDIR
 
-  File "[DBP]\bin\RJ_LinkRunner.exe"
-  File "[DBP]\bin\Build_Source.exe"
-  File "[DBP\bin\Setup.exe"
-  File "[DBP]\bin\Update.exe"
-  File "[DBP]\bin\NewOSK.exe"
-  File "[DBP]\bin\aria2c.exe"
-  File "[DBP]\bin\7za.exe"
-  File /r "[DBP]\site\*.*"
-  File /r "[DBP]\src\*.set"
-  File /r "[DBP]\src\*.ico"
-  File /r "[DBP]\src\*.ahk"
+  File "[SOURCE]\bin\RJ_LinkRunner.exe"
+  File "[SOURCE]\bin\Build_Source.exe"
+  File "[SOURCE]\bin\Setup.exe"
+  File "[SOURCE]\bin\Update.exe"
+  File "[SOURCE]\bin\NewOSK.exe"
+  File "[SOURCE]\bin\aria2c.exe"
+  File "[SOURCE]\bin\7za.exe"
+  File /r "[SOURCE]\site\*.*"
+  File /r "[SOURCE]\src\*.set"
+  File /r "[SOURCE]\src\*.ico"
+  File /r "[SOURCE]\src\*.ahk"
   File "readme.md"
-  File /nonfatal "license.md"
   WriteUninstaller "RJ_LinkRunner-uninst.exe"
   
   Nop ; for fun

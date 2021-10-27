@@ -3492,7 +3492,6 @@ if (INITINCL = 1)
 	{
 			exprt= 
 			exprt.= "FileCreateDir, site" . "`n"
-			exprt.= "FileCreateDir, sets" . "`n"
 			exprt.= "FileCreateDir, bin" . "`n"
 			exprt.= "FileCreateDir, src" . "`n"
 			exprt.= "IfNotExist, rj" . "`n" . "{" . "`n" . "FileCreateDir, rj" . "`n" . "FILEINS= 1" . "`n" . "}" . "`n"
@@ -3504,45 +3503,54 @@ if (INITINCL = 1)
 			runwait, %comspec% cmd /c " "%AHKDIR%\Ahk2Exe.exe" /in "%SKELD%\src\Setup.ahk" /out "%SKELD%\bin\Setup.exe" /icon "%SKELD%\src\RJ_Setup.ico" /bin "%AHKDIR%\Unicode 32-bit.bin" >>"%DEPL%\deploy.log"", %SKELD%,%rntp%
 			RunWait, %comspec% cmd /c echo.########################################## >>"%DEPL%\deploy.log", ,%rntp%
 			exprt.= fcdxp . "`n" . "}" . "`n"
+			portableincludes= 
 			Loop, files, %SKELD%\site\*.txt
 				{
 					stringreplace,ain,A_LoopFileFullPath,%home%\,,All
 					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
+					portableincludes.= "site" . "\" . A_LoopFileName . "|"
 				}
 			Loop, files, %SKELD%\site\*.md
 				{
 					stringreplace,ain,A_LoopFileFullPath,%home%\,,All
 					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
+					portableincludes.= "site" . "\" . A_LoopFileName . "|"
 				}
 			Loop, files, %SKELD%\src\*.ico
 				{
 					stringreplace,ain,A_LoopFileFullPath,%home%\,,All
 					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
+					portableincludes.= "src" . "\" . A_LoopFileName . "|"
 				}
 			Loop, files, %SKELD%\site\*.svg
 				{
 					stringreplace,ain,A_LoopFileFullPath,%home%\,,All
 					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
+					portableincludes.= "site" . "\" . A_LoopFileName . "|"
 				}
 			Loop, files, %SKELD%\site\*.png
 				{
 					stringreplace,ain,A_LoopFileFullPath,%home%\,,All
 					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
+					portableincludes.= "site" . "\" . A_LoopFileName . "|"
 				}
 			Loop, files, %SKELD%\site\*.html
 				{
 					stringreplace,ain,A_LoopFileFullPath,%home%\,,All
 					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
+					portableincludes.= "site" . "\" . A_LoopFileName . "|"
 				}
 			Loop, files, %SKELD%\site\*.ttf
 				{
 					stringreplace,ain,A_LoopFileFullPath,%home%\,,All
 					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
+					portableincludes.= "site" . "\" . A_LoopFileName . "|"
 				}
 			Loop, files, %SKELD%\site\*.otf
 				{
 					stringreplace,ain,A_LoopFileFullPath,%home%\,,All
 					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
+					portableincludes.= "site" . "\" . A_LoopFileName . "|"
 				}
 				/*
 			Loop, files,%SKELD%\sets\*.set
@@ -3560,13 +3568,21 @@ if (INITINCL = 1)
 				{
 					stringreplace,ain,A_LoopFileFullPath,%home%\,,All
 					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
+					portableincludes.= "src" . "\" . A_LoopFileName . "|"
 				}
 			Loop, files, %SKELD%\src\*.ico,R
 				{
 					stringreplace,ain,A_LoopFileFullPath,%home%\,,All
 					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
+					portableincludes.= "src" . "\" . A_LoopFileName . "|"
 				}
 
+			portableincludes.= .bin . "\" . "7za.exe" . "|"
+			portableincludes.= .bin . "\" . "Setup.exe" . "|"
+			portableincludes.= .bin . "\" . "RJ_LinkRunner.exe" . "|"
+			portableincludes.= .bin . "\" . "Update.exe" . "|"
+			portableincludes.= .bin . "\" . "NewOSK.exe" . "|"
+			portableincludes.= .bin . "\" . "lrdeploy.exe" . "|"
 			exprt.= "FileInstall, bin\7za.exe,bin\7za.exe" . "`n"	
 			exprt.= "FileInstall, bin\NewOSK.exe,bin\NewOSK.exe" . "`n"	
 			exprt.= "FileInstall, bin\Build_Source.exe,bin\Build_Source.exe" . "`n"	
@@ -3631,9 +3647,9 @@ if (REPODATS = 1)
 			}	
 
 	}
-*/
 FileGetSize,dbsize,%DEPL%\ART_ASSETS.7z,K
 DATSZ:= dbsize / 1000
+*/
 	
 if (PortVer = 1)
 	{		
@@ -3643,7 +3659,10 @@ if (PortVer = 1)
 			{
 				FileDelete, %DEPL%\rj_linkrunner.zip
 				RunWait, %comspec% cmd /c echo.##################  CREATE PORTABLE ZIP  ######################## >>"%DEPL%\deploy.log", ,%rntp%	
-				runwait, %comspec% cmd /c " "%BUILDIR%\bin\7za.exe" a "%DEPL%\rj_linkrunner.zip" "%DEPL%\rj_linkrunner.exe" >>"%DEPL%\deploy.log"", %SKELD%,%rntp%
+				Loop,parse,portableincludes,|
+					{
+						runwait, %comspec% cmd /c " "%BUILDIR%\bin\7za.exe" a "%DEPL%\portable.zip" "%A_LoopField%" >>"%DEPL%\deploy.log"", %SKELD%,%rntp%					
+					}
 				RunWait, %comspec% cmd /c echo.########################################## >>"%DEPL%\deploy.log", ,%rntp%	
 				sleep, 1000
 			}
