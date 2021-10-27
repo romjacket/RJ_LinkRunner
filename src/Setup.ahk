@@ -1191,17 +1191,17 @@ PREDD:
 gui,submit,nohide
 guicontrolget,predd,,PreDD
 stringsplit,povr,predd,<
-if instr(povr1,1)
+if instr(povr1,3)
 	{
-		guicontrol,,PREDDT,%DDTA%<game.exe>
+		guicontrol,,PREDDT,<game.exe>%DDTA%
 	}
 if instr(povr1,2)
 	{
-		guicontrol,,PREDDT,%DDTB%<game.exe>
+		guicontrol,,PREDDT,<game.exe>%DDTB%
 	}
-if instr(povr1,3)
+if instr(povr1,1)
 	{
-		guicontrol,,PREDDT,%DDTC%<game.exe>
+		guicontrol,,PREDDT,<game.exe>%DDTC%
 	}
 if instr(povr1,"W")
 	{
@@ -2638,14 +2638,12 @@ Loop,%fullstn0%
 									{
 										Player1_Template= %pl1ovr%
 										splitpath,pl1ovr,pl1flnm
-										Player1x= %sidn%\%pl1flnm%
 									}
                                 Player2x= %sidn%\%subfldrep%%GMNAMEX%_2.%Mapper_Extension%
 								if (pl2ovr <> "<")
 									{
 										Player2_Template= %pl1ovr%
 										splitpath,pl2ovr,pl2flnm
-										Player2x= %sidn%\%pl2flnm%
 									}
                                 cfgcopied= 
 								if ((OVERWRT = 1)or !fileexist(gamecfg))
