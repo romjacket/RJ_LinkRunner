@@ -3701,7 +3701,7 @@ if (GitPush = 1)
 				TAGLINE= %ebeb2%				
 			}
 			else {
-			TAGLINE= A unified interface for ROMs, emulators and frontends.
+			TAGLINE= Profiles FOR Your Windows Games.
 			}
 		ifinstring,pushnotes,$
 			{
