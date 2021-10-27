@@ -3579,12 +3579,12 @@ if (INITINCL = 1)
 					portableincludes.= "src" . "\" . A_LoopFileName . "|"
 				}
 
-			portableincludes.= . "bin" . "\" . "7za.exe" . "|"
-			portableincludes.= . "bin" . "\" . "Setup.exe" . "|"
-			portableincludes.= . "bin" . "\" . "RJ_LinkRunner.exe" . "|"
-			portableincludes.= . "bin" . "\" . "Update.exe" . "|"
-			portableincludes.= . "bin" . "\" . "NewOSK.exe" . "|"
-			portableincludes.= . "bin" . "\" . "lrdeploy.exe" . "|"
+			portableincludes.= "bin" . "\" . "7za.exe" . "|"
+			portableincludes.= "bin" . "\" . "Setup.exe" . "|"
+			portableincludes.= "bin" . "\" . "RJ_LinkRunner.exe" . "|"
+			portableincludes.= "bin" . "\" . "Update.exe" . "|"
+			portableincludes.= "bin" . "\" . "NewOSK.exe" . "|"
+			portableincludes.= "bin" . "\" . "lrdeploy.exe" . "|"
 			exprt.= "FileInstall, bin\7za.exe,bin\7za.exe" . "`n"	
 			exprt.= "FileInstall, bin\NewOSK.exe,bin\NewOSK.exe" . "`n"	
 			exprt.= "FileInstall, bin\source_builder.exe,bin\source_builder.exe" . "`n"	
