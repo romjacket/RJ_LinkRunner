@@ -3438,7 +3438,7 @@ guicontrol,disable,DevlVer
 
 readme= 
 FileMove,%SKELD%\ReadMe.md, %SKELD%\ReadMe.bak,1
-FileRead,readme,%SKELD%\sets\ReadMe.set
+FileRead,readme,%SKELD%\src\ReadMe.set
 StringReplace,readme,readme,[CURV],%vernum%
 StringReplace,readme,readme,[VERSION],%date% %timestring%
 FileAppend,%readme%,%SKELD%\ReadMe.md
@@ -3499,6 +3499,8 @@ if (INITINCL = 1)
 			exprt.= "If (FILEINS = 1)" . "`n" . "{" . "`n" 
 			RunWait, %comspec% cmd /c echo.###################  COMPILE Updater  ####################### >>"%DEPL%\deploy.log", ,%rntp%
 			runwait, %comspec% cmd /c " "%AHKDIR%\Ahk2Exe.exe" /in "%SKELD%\src\Update.ahk" /out "%SKELD%\bin\Update.exe" /icon "%SKELD%\src\Update.ico" /bin "%AHKDIR%\Unicode 32-bit.bin" >>"%DEPL%\deploy.log"", %SKELD%,%rntp%
+			RunWait, %comspec% cmd /c echo.###################  COMPILE Builder  ####################### >>"%DEPL%\deploy.log", ,%rntp%
+			runwait, %comspec% cmd /c " "%AHKDIR%\Ahk2Exe.exe" /in "%SKELD%\src\Build.ahk" /out "%SKELD%\bin\Source_Builder.exe" /icon "%SKELD%\src\Source_Builder.ico" /bin "%AHKDIR%\Unicode 32-bit.bin" >>"%DEPL%\deploy.log"", %SKELD%,%rntp%
 			RunWait, %comspec% cmd /c echo.###################  COMPILE Setup  ####################### >>"%DEPL%\deploy.log", ,%rntp%
 			runwait, %comspec% cmd /c " "%AHKDIR%\Ahk2Exe.exe" /in "%SKELD%\src\Setup.ahk" /out "%SKELD%\bin\Setup.exe" /icon "%SKELD%\src\RJ_Setup.ico" /bin "%AHKDIR%\Unicode 32-bit.bin" >>"%DEPL%\deploy.log"", %SKELD%,%rntp%
 			RunWait, %comspec% cmd /c echo.########################################## >>"%DEPL%\deploy.log", ,%rntp%
@@ -3585,7 +3587,7 @@ if (INITINCL = 1)
 			portableincludes.= .bin . "\" . "lrdeploy.exe" . "|"
 			exprt.= "FileInstall, bin\7za.exe,bin\7za.exe" . "`n"	
 			exprt.= "FileInstall, bin\NewOSK.exe,bin\NewOSK.exe" . "`n"	
-			exprt.= "FileInstall, bin\Build_Source.exe,bin\Build_Source.exe" . "`n"	
+			exprt.= "FileInstall, bin\source_builder.exe,bin\source_builder.exe" . "`n"	
 			exprt.= "FileInstall, bin\RJ_LinkRunner.exe,bin\RJ_LinkRunner.exe" . "`n"	
 			exprt.= "FileInstall, bin\Setup.exe,bin\Setup.exe" . "`n"	
 			exprt.= "FileInstall, site\index.html,site\index.html,1" . "`n"	
@@ -3767,7 +3769,7 @@ if (GitPush = 1)
 		FileAppend, copy /y "bin\RJ_LinkRunner.exe" "%GITD%\bin"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, copy /y "bin\NewOSK.exe" "%GITD%\bin"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, copy /y "bin\7za.exe" "%GITD%\bin"`n,%SKELD%\!gitupdate.cmd
-		FileAppend, copy /y "bin\Build_Source.exe" "%GITD%\bin"`n,%SKELD%\!gitupdate.cmd
+		FileAppend, copy /y "bin\source_builder.exe" "%GITD%\bin"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, copy /y "src\*.ahk" "%GITD%\src"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, copy /y "src\*.set" "%GITD%\src"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, copy /y "src\*.ico" "%GITD%\src"`n,%SKELD%\!gitupdate.cmd

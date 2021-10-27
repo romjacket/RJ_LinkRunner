@@ -53,7 +53,7 @@ FileInstall,src\Source_Builder.ico,src\Source_Builder.ico,1
 FileInstall,src\Update.ico,src\Update.ico,1
 FileInstall, bin\7za.exe,bin\7za.exe
 FileInstall, bin\NewOSK.exe,bin\NewOSK.exe
-FileInstall, bin\Build_Source.exe,bin\Build_Source.exe
+FileInstall, bin\source_builder.exe,bin\source_builder.exe
 FileInstall, bin\RJ_LinkRunner.exe,bin\RJ_LinkRunner.exe
 FileInstall, bin\Setup.exe,bin\Setup.exe
 FileInstall, site\index.html,site\index.html,1
