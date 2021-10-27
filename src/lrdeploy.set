@@ -75,7 +75,7 @@ Section "" ; empty string makes it hidden, so would starting with -
   SetOutPath $INSTDIR
 
   File "[SOURCE]\bin\RJ_LinkRunner.exe"
-  File "[SOURCE]\bin\Build_Source.exe"
+  File "[SOURCE]\bin\source_builder.exe"
   File "[SOURCE]\bin\Setup.exe"
   File "[SOURCE]\bin\Update.exe"
   File "[SOURCE]\bin\NewOSK.exe"
