@@ -4,7 +4,7 @@ SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
 
-RELEASE= 2021-10-27 12:29 PM
+RELEASE= 2021-10-27 12:32 PM
 VERSION= 0.99.00.019
 home= %A_ScriptDir%
 Splitpath,A_ScriptDir,tstidir,tstipth
