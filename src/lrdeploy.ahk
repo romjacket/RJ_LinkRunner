@@ -3301,7 +3301,7 @@ if (RESDD = "Deployer")
 			{
 				FileDelete, %BUILDIR%\gitcommit.bat
 				FileDelete, %BUILDIR%\lrdeploy.nsi				
-				FileDelete, %BUILDIR%\%home%\skopt.cfg
+				FileDelete, %home%\skopt.cfg
 				ExitApp
 			}
 	}
@@ -3663,7 +3663,7 @@ if (PortVer = 1)
 				RunWait, %comspec% cmd /c echo.##################  CREATE PORTABLE ZIP  ######################## >>"%DEPL%\deploy.log", ,%rntp%	
 				Loop,parse,portableincludes,|
 					{
-						runwait, %comspec% cmd /c " "%BUILDIR%\bin\7za.exe" a "%DEPL%\portable.zip" "%A_LoopField%" >>"%DEPL%\deploy.log"", %SKELD%,%rntp%					
+						runwait, %comspec% cmd /c " "%BUILDIR%\bin\7za.exe" a -tzip "%DEPL%\portable.zip" "%A_LoopField%" >>"%DEPL%\deploy.log"", %SKELD%,%rntp%					
 					}
 				RunWait, %comspec% cmd /c echo.########################################## >>"%DEPL%\deploy.log", ,%rntp%	
 				sleep, 1000
@@ -3793,7 +3793,7 @@ if (GitPush = 1)
 				FileAppend,"%GITAPP%" config user.name %GITUSER%`n,%BUILDIR%\gitcommit.bat
 				FileAppend,"`%gitapp`%" add .`n,%BUILDIR%\gitcommit.bat
 				FileAppend,"`%gitapp`%" commit -m `%1`%`n,%BUILDIR%\gitcommit.bat
-				FileAppend,"`%gitapp`%" push --set-upstream http://%gituser%:%gitpass%@github.com/%gituser%/rj_linkrunner master`n,gitcommit.bat
+				FileAppend,"`%gitapp`%" push --set-upstream http://%gituser%:%gitpass%@github.com/%gituser%/rj_linkrunner master`n,%BUILDIR%\gitcommit.bat
 				if (GITPASS <> "")
 					{
 						FileAppend,"`%gitapp`%" push -f --repo http://%GITUSER%:%GITPASS%@github.com/%gituser%/rj_linkrunner`n,%BUILDIR%\gitcommit.bat
