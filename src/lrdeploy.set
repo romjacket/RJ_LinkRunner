@@ -4,7 +4,7 @@ SetCompress on
 
 Name "RJ_LinkRunner"
 Caption "Universal ROM-Library Interface Kit"
-Icon "[SOURCE]\site\Install.ico"
+Icon "[SOURCE]\src\Install.ico"
 OutFile "[DBP]\rj_linkrunner[INSTYP].exe"
 AllowRootDirInstall true
 AutoCloseWindow true
@@ -81,12 +81,14 @@ Section "" ; empty string makes it hidden, so would starting with -
   File "[DBP]\bin\NewOSK.exe"
   File "[DBP]\bin\aria2c.exe"
   File "[DBP]\bin\7za.exe"
+  File /r "[DBP]\site\*.*"
   File /r "[DBP]\src\*.set"
   File /r "[DBP]\src\*.ico"
   File /r "[DBP]\src\*.ahk"
   File "readme.md"
   File /nonfatal "license.md"
-  WriteUninstaller "RJ_LinkRunner-uninst.exe"  
+  WriteUninstaller "RJ_LinkRunner-uninst.exe"
+  
   Nop ; for fun
 
 SectionEnd

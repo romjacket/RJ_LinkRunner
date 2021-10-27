@@ -1,11 +1,11 @@
-#NoEnv  
+﻿#NoEnv  
 SendMode Input
 SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
 
-RELEASE= 2021-10-27 11:43 AM
-VERSION= 0.99.00.01
+RELEASE= [VERSION]
+VERSION= [CURV]
 home= %A_ScriptDir%
 Splitpath,A_ScriptDir,tstidir,tstipth
 if ((tstidir = "src")or(tstidir = "bin")or(tstidir = "binaries"))
@@ -86,7 +86,7 @@ remProgdirs= Program Files|Program Files (x86)|ProgramData|%A_username%
 steamhome= Steam\SteamApps\common
 dralbet= c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|
 GogQuery= GOG|G.O.G|GOG Games
-GenQuery= Games|juegos|spellen|Spiele|Jeux|Giochi|????
+GenQuery= Games|juegos|spellen|Spiele|Jeux|Giochi|игры
 AllQuery:= GogQuery . | . "Origin" . "|" . "Epic Games" . steamhome 
 undir= |%A_WinDir%|%A_Programfiles%|%A_Programs%|%A_AppDataCommon%|%A_AppData%|%A_Desktop%|%A_DesktopCommon%|%A_StartMenu%|%A_StartMenuCommon%|%A_Startup%|%A_StartupCommon%|%A_Temp%|
 GUIVARS= PostWait|PreWait|Localize|SCONLY|EXEONLY|BOTHSRCH|ADDGAME|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_ProfB|GAME_DirB|SOURCE_DirB|SOURCE_DirectoryT|REMSRC|Keyboard_MapB|Player1_TempB|Player2_TempB|MediaCenter_ProfB|MultiMonitor_Tool|MM_ToolB|MM_Game_CfgB|MM_MediaCenter_CfgB|BGM_ProgB|BGP_DataB|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS|SELALLBUT|SELNONEBUT

@@ -1,27 +1,33 @@
 #NoEnv
 #SingleInstance Force
 SetBatchLines -1
-
-rjlrupdf= %1%
+localdir=%A_ScriptDir%
+home= %A_ScriptDir%
+splitpath,home,srcfn,srcpth
+if ((srcfn = "src")or(srcfn = "bin")or(srcfn = "binaries"))
+	{
+		home= %srcpth%
+	}	
+binhome= %home%\bin
+source= %home%\src	
+SetWorkingDir, %home%
+rjrlupdf= %1%
 iniread,cacheloc,Settings.ini,GLOBAL,temp_location
 inapp= 
-if (rjlrupdf <> "")
+if (rjrlupdf <> "")
 	{
 		inapp= 1
-		goto, rjlrupdf
+		goto, rjrlupdf
 	}
-FileDelete, version.txt
-ARCORG= sets\Arcorg.set
-ifexist, Arcorg.ini
-	{
-		ARCORG= Arcorg.ini
-	}
+FileDelete, %home%\version.txt
+ARCORG= %source%\repos.set
+
 IniRead,sourceHost,%ARCORG%,GLOBAL,SOURCEHOST
 IniRead,UPDATEFILE,%ARCORG%,GLOBAL,UPDATEFILE
 IniRead,RELEASE,%ARCORG%,GLOBAL,VERSION
 getVer:
-URLDownloadToFile, %sourceHost%,version.txt
-ifnotexist, version.txt
+URLDownloadToFile, %sourceHost%,%home%\version.txt
+ifnotexist, %home%\version.txt
 	{
 		MsgBox,4,Not Found,Update Versioning File not found.`nRetry?
 		ifMsgBox, Yes
@@ -60,10 +66,11 @@ save= %cacheloc%\RJ_LinkRunner%upcnt%.zip
 DownloadFile(URLFILE, save, True, True)
 ifexist,%save%
 	{
-		Process, close, Invader.exe
-		Process, close, Skey-Deploy.exe
+		Process, close, Setup.exe
+		Process, close, lrdeploy.exe
 		Process, close, RJ_LinkRunner.exe
-		Runwait, %comspec% cmd /c "bin\7za.exe x -y "%save%" -O"`%CD`%" ",,hide
+		Process, close, Build_Source.exe
+		Runwait, %comspec% cmd /c "%binhome%\7za.exe x -y "%save%" -O"`%CD`%" ",,hide
 		if (ERRORLEVEL <> 0)
 			{
 				MsgBox,3,Update Failed,Update not found.`n    Retry?
@@ -86,9 +93,9 @@ ifexist,%save%
 	}
 return
 
-skelupdf:
+rjrlupdf:
 TrayTip, Update, Extracting Update.`nRj_linkRunner will restart,999,48
-Runwait, %comspec% /c "bin\7za.exe" x -y "%skelupdf%" -O"`%CD`%",,hide
+Runwait, %comspec% /c "%binhome%\7za.exe" x -y "%rjrlupdf%" -O"`%CD`%",,hide
 if (ERRORLEVEL <> 0)
 	{
 		MsgBox,,ERROR,Update Failed,3
