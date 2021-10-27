@@ -9,14 +9,19 @@ if ((srcfn = "src")or(srcfn = "bin")or(srcfn = "binaries"))
 		home= %srcpth%
 	}	
 binhome= %home%\bin
-source= %home%\src	
+source= %home%\src
 SetWorkingDir, %home%
-rjrlupdf= %1%
-iniread,cacheloc,Settings.ini,GLOBAL,temp_location
+rjrlupdfX= %1%
+cacheloc= %home%\downloaded
 inapp= 
-if (rjrlupdf <> "")
+if (rjrlupdfX <> "")
 	{
 		inapp= 1
+		splitpath,rjrlupdfX,savefileX,home
+		cacheloc= %home%\downloaded
+		binhome= %home%\bin
+		source= %home%\src
+		SetWorkingDir, %home%
 		goto, rjrlupdf
 	}
 FileDelete, %home%\version.txt
@@ -95,7 +100,7 @@ return
 
 rjrlupdf:
 TrayTip, Update, Extracting Update.`nRj_linkRunner will restart,999,48
-Runwait, %comspec% /c "%binhome%\7za.exe" x -y "%rjrlupdf%" -O"`%CD`%",,hide
+Runwait, %binhome%\7za.exe x -y "%rjrlupdfX%" -O"%home%",,hide
 if (ERRORLEVEL <> 0)
 	{
 		MsgBox,,ERROR,Update Failed,3

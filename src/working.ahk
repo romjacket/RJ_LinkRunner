@@ -2876,10 +2876,28 @@ DeleteButs:
 goto,%butrclick%Delete
 return
 
+
 UpdateRJLR:
 curemote= originalBinary
 gosub, BINGETS
+UPDATING= 1
 gosub, DOWNLOADIT
+UPDATING= 
+ifexist,%save%
+	{
+		Process, close, RJ_LinkRunner.exe
+		Process, close, Update.exe
+		Process, close, Source_Builder.exe
+		Process, close, NewOSK.exe
+		Process, close, lrdeploy.exe
+		FileCopy, %binhome%\Update.exe, %A_Temp%
+		Run, "%A_Temp%\Update.exe" "%save%"
+		Process, close, Setup.exe
+		exitapp
+	}
+SB_SetText("Update file not found")
+return
+
 return	
 DownloadButs:
 Menu,keymapd,Add
@@ -3032,7 +3050,10 @@ DWNCONFIRM:
 dwnrej= 	
 DownloadFile(URLFILE,save,False,True)
 SB_SetText(" " binarcf " ""downloaded")
-
+if (UPDATING = 1)
+	{
+		return
+	}
 EXTRACTING:
 ToolTip, 
 Sleep, 500

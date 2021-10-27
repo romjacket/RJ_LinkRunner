@@ -216,7 +216,7 @@ IfNotExist, %home%\skopt.cfg
 			}
 			
 		_GITAPP= (not set) git.exe
-		_GITRLS= (not set) github-release.exe
+		_GITRLS= (not set) gh.exe
 		gitapptmp= 
 		gitrlstmp= 
 		ifexist,%rpfs%\git\bin\git.exe
@@ -226,9 +226,9 @@ IfNotExist, %home%\skopt.cfg
 				_GITAPP= %gitapptmp%
 				CONTPARAM4= 1
 				iniwrite,%gitapptmp%,%home%\skopt.cfg,GLOBAL,git_app
-				ifexist,%rpfs%\git\bin\github-release.exe
+				ifexist,%A_ProgramFiles% (X86)\Github CLI\gh.exe
 					{
-						gitrlstmp= %rpfs%\git\bin\github-release.exe
+						gitrlstmp= %A_ProgramFiles% (X86)\Github CLI\gh.exe
 						_GITRLS= %gitrlstmp%
 						GITRLS= %gitrlstmp%
 						CONTPARAM5= 1
@@ -242,14 +242,6 @@ IfNotExist, %home%\skopt.cfg
 				_GITAPP= %gitapptmp%
 				CONTPARAM4= 1
 				iniwrite,%gitapptmp%,%home%\skopt.cfg,GLOBAL,git_app
-				ifexist,%A_MyDocuments%\git\bin\github-release.exe
-					{
-						gitrlstmp= %A_MyDocuments%\git\bin\github-release.exe
-						_GITRLS= %gitrlstmp%
-						GITRLS= %gitrlstmp%
-						CONTPARAM5= 1
-						iniwrite,%gitrlstmp%,%home%\skopt.cfg,GLOBAL,git_rls
-					}
 			}
 			
 		_NSIS= (not set) makensis.exe
@@ -542,8 +534,8 @@ RREPO_TT :="GitHub ROM repository project"
 DREPO_TT :="GitHub DAT repository project"
 IPass_TT :="github password"
 IToken_TT :="Personal Access Token"
-DwnRls_TT :="Download Github-release.exe"
-SelRls_TT :="Select the github-release.exe"
+DwnRls_TT :="Download gh.exe"
+SelRls_TT :="Select the gh.exe"
 DwnNSIS_TT :="Download the NSIS executable"
 SelNSIS_TT :="Select makensis.exe"
 DwnAHK_TT :="Download AutoHotkey"
@@ -857,7 +849,7 @@ guicontrol,,txtGIT,(not set) git.exe
 guicontrol,,ilogin,	
 guicontrol,,ipass,	
 guicontrol,,itoken,	
-guicontrol,,txtrls,(not set) github-release.exe
+guicontrol,,txtrls,(not set) gh.exe
 guicontrol,,txtnsis,(not set) makensis.exe
 guicontrol,,txtahk,(not set) Ahk2Exe.exe
 guicontrol,,txtgpd,(not set) Github-Projects-Directory
@@ -995,7 +987,7 @@ if (nocont = 1)
 			}
 		if (CONTPARAM5 = "")
 			{
-				SB_SetText("github-release.exe not defined")
+				SB_SetText("gh.exe not defined")
 				return
 			}
 		if (CONTPARAM6 = "")
@@ -1116,18 +1108,11 @@ Loop,parse,BLDITEMS,|
 			}
 		if (A_LoopField = GITRV)
 			{
-				ifExist,%rpfs%\Git\bin\github-release.exe
+				ifExist,%A_ProgramFiles% (X86)\Github CLI\gh.exe
 					{
-						iniwrite,%rpfs%\Git\bin\github-release.exe,%home%\skopt.cfg,GLOBAL,git_rls
+						iniwrite,%A_ProgramFiles% (X86)\Github CLI\gh.exe,%home%\skopt.cfg,GLOBAL,git_rls
 						CONTPARAM5= 1
-						GITRLS= %rpfs%\Git\bin\github-release.exe
-						guicontrol,,txtRLS,%GITRLS%
-					}
-				ifExist,%A_MyDocuments%\Git\bin\github-release.exe
-					{
-						iniwrite,%A_MyDocuments%\Git\bin\github-release.exe,%home%\skopt.cfg,GLOBAL,git_rls
-						GITRLS= %A_MyDocuments%\Git\bin\github-release.exe
-						CONTPARAM5= 1
+						GITRLS= %A_ProgramFiles% (X86)\Github CLI\gh.exe
 						guicontrol,,txtRLS,%GITRLS%
 					}
 				if (CONTPARAM5 = "")
@@ -1901,12 +1886,12 @@ CONTPARAM5=
 GetRls:
 GITRLST=
 grltmp= %GITAPPD%
-FileSelectFile,GITRLST,3,%grltmp%\github-release.exe,Select github-release,*.exe
+FileSelectFile,GITRLST,3,%grltmp%\gh.exe,Select github-release,*.exe
 GITRLST:
 if (GITRLST = "")
 	{
 		grltmp= 
-		guicontrol,,TxtGit,(not set) Github-release.exe
+		guicontrol,,TxtGit,(not set) gh.exe
 		CONTPARAM5= 
 		return
 	}
@@ -1914,6 +1899,7 @@ GITRLS= %GITRLST%
 iniwrite, %GITRLS%,%home%\skopt.cfg,GLOBAL,git_rls
 CONTPARAM5= 1
 SB_SetText(" Github Release is " GITRLS "")
+guicontrol,,TxtRls,%GITRLS%
 return
 
 getSCI:
@@ -2073,14 +2059,7 @@ FileAppend,for /f "delims=" `%`%a in ("%GITAPP%") do set gitapp=`%`%~a`n,%BUILDI
 FileAppend,pushd "%GITD%"`n,%BUILDIR%\gitcommit.bat
 FileAppend,"`%gitapp`%" add .`n,%BUILDIR%\gitcommit.bat
 FileAppend,"`%gitapp`%" commit -m `%1`%.`n,%BUILDIR%\gitcommit.bat
-if (GITPASS <> "")
-	{
-		FileAppend,"`%gitapp`%" push --repo https://%gituser%:%GITPASS%@github.com/%gituser%/rj_linkrunner`n,%BUILDIR%\gitcommit.bat			
-	}
-if (GITPASS = "")
-	{
-		FileAppend,"`%gitapp`%" push origin master`n,%BUILDIR%\gitcommit.bat			
-	}
+FileAppend,"`%gitapp`%" push --all`n,%BUILDIR%\gitcommit.bat			
 guicontrol,,txtGSD,%GITD%	
 return
 ;{;;;;;;;;;;;;;;;;;;;;;;;;;;   DOWNLOAD APPS  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2125,13 +2104,13 @@ if (autoinstall = 1)
 		GRLL= %grltmp%
 		goto, GRLLSEL
 	}
-FileselectFolder,GRLL,*%grltmp%,0,Location to extract Github-release.exe
+FileselectFolder,GRLL,*%grltmp%,0,Location to extract gh.exe
 GRLLSEL:
 if (GRLL = "")
 	{
 		inidelete,%home%\skopt.cfg,GLOBAL,git_rls
 		CONTPARAM5= 
-		guicontrol,,TxtGit,(not set) Github-release.exe
+		guicontrol,,TxtGit,(not set) gh.exe
 		return
 	}
 SETUPTOG= disable
@@ -2141,7 +2120,7 @@ Runwait, "%binhome%\7za.exe" x -y "%grlsv%" -O"%GRLL%",,%rntp%
 SETUPTOG= enable
 gosub, SETUPTOG
 
-GITRLS= %GRLL%\github-release.exe
+GITRLS= %GRLL%\gh.exe
 iniwrite, %GITRLS%,%home%\skopt.cfg,GLOBAL,git_rls
 guicontrol,,TxtRLS,%GITRLS%
 CONTPARAM5= 1
@@ -2247,7 +2226,7 @@ scitmp= %A_myDocuments%
 FileselectFolder,SCIL,*%scitmp%,0,Location to extract SciTE4AutoHotkey
 if (SCIL = "")
 	{
-		guicontrol,,txtRLS,Github-Release.exe
+		guicontrol,,txtRLS,gh.exe
 		CONTPARAM4= 
 		return
 	}
@@ -3328,17 +3307,21 @@ if (RESDD = "NSIS")
 	}
 if (RESDD = "github-release")
 	{
-		MsgBox,1,Confirm Tool Reset, Are You sure you want to reset the github-release.exe?
+		MsgBox,1,Confirm Tool Reset, Are You sure you want to reset the gh.exe?
 		IfMsgBox, OK
 			{
-				GITRLSTtmp= 
+				GITRLSTtmp= %A_ProgramFiles% (x86)\Github CLI
+				if !fileexist(GITRLSTtmp)
+					{
+					GITRLSTtmp=
+					}
 				GBOV= 
-				FileSelectFile,GITRLST,3,%gitroot%\github-release.exe,Select github-release,*.exe.
+				FileSelectFile,GITRLST,3,%GITRLSTtmp%,Select github-cli gh.exe,gh.exe.
 				if (GITRLST = "")
 					{
 						return
 					}
-				MsgBox,1,Confirm Overwrite,Are you sure you want to change the github-release.exe?
+				MsgBox,1,Confirm Overwrite,Are you sure you want to change the gh.exe?
 					IfMsgBox, OK
 						{
 							GITRLS= %GITRLST%
@@ -3784,15 +3767,8 @@ if (GitPush = 1)
 				FileAppend,"%GITAPP%" config user.name %GITUSER%`n,%BUILDIR%\gitcommit.bat
 				FileAppend,"`%gitapp`%" add .`n,%BUILDIR%\gitcommit.bat
 				FileAppend,"`%gitapp`%" commit -m `%1`%`n,%BUILDIR%\gitcommit.bat
-				FileAppend,"`%gitapp`%" push --set-upstream https://%gituser%:%gitpass%@github.com/%gituser%/rj_linkrunner master`n,%BUILDIR%\gitcommit.bat
-				if (GITPASS <> "")
-					{
-						FileAppend,"`%gitapp`%" push -f --repo https://%GITUSER%:%GITPASS%@github.com/%gituser%/rj_linkrunner`n,%BUILDIR%\gitcommit.bat
-					}
-				if (GITPASS = "")
-					{
-						FileAppend,"`%gitapp`%" push -f origin master`n,%BUILDIR%\gitcommit.bat
-					}
+				FileAppend,"`%gitapp`%" push -f --all`n,%BUILDIR%\gitcommit.bat
+			
 			}
 			
 		FileAppend, "%PushNotes%`n",%DEPL%\changelog.txt
@@ -3839,17 +3815,20 @@ if (ServerPush = 1)
 		FileDelete, %DEPL%\gpush.cmd
 		FileAppend, set GITHUB_USER=%GITUSER%`n,%DEPL%\gpush.cmd
 		FileAppend, set GITHUB_TOKEN=%GITPAT%`n,%DEPL%\gpush.cmd
-		FileAppend, pushd "%DEPL%"`n,%DEPL%\gpush.cmd
+		FileAppend, pushd "%GITD%"`n,%DEPL%\gpush.cmd
 		SB_SetText(" Uploading to server ")
 		if (PortVer = 1)
 			{
 				if (ServerPush = 1)
 					{	
-						FileAppend, "%GITRLS%" delete -u %gituser% -s %GITPAT% -r rj_linkrunner -t portable`n,%DEPL%\gpush.cmd
-						FileAppend, "%GITRLS%" release -u %gituser% -s %GITPAT% -r rj_linkrunner -n portable -t portable`n,%DEPL%\gpush.cmd
-						FileAppend, "%GITRLS%" upload -u %gituser% -s %GITPAT% -R -r rj_linkrunner -t portable -l portable -n rj_linkrunner.zip -f "%DEPL%\rj_linkrunner.zip"`n,%DEPL%\gpush.cmd
+						
+						;FileAppend, "%GITRLS%" delete -u %gituser% -s %GITPAT% -r rj_linkrunner -t portable`n,%DEPL%\gpush.cmd
+						FileAppend, "%GITRLS%" release delete portable -y,%DEPL%\gpush.cmd
+						FileAppend, "%GITRLS%" release create portable "%DEPL%\portable.zip",%DEPL%\gpush.cmd
+						;FileAppend, "%GITRLS%" upload -u %gituser% -s %GITPAT% -R -r rj_linkrunner -t portable -l portable -n rj_linkrunner.zip -f "%DEPL%\rj_linkrunner.zip"`n,%DEPL%\gpush.cmd
 					}
 			}
+			/*
 		if (DATBLD = 1)
 			{
 				if (ServerPush = 1)
@@ -3873,13 +3852,16 @@ if (ServerPush = 1)
 							}
 					}
 			}
+		*/	
 		if (OvrStable = 1)
 			{
 				if (ServerPush = 1)
 					{
-						FileAppend, "%GITRLS%" delete -u %gituser% -s %GITPAT% -r rj_linkrunner -t Installer`n,%DEPL%\gpush.cmd
-						FileAppend, "%GITRLS%" release -u %gituser% -s %GITPAT% -r rj_linkrunner -n Installer -t Installer`n,%DEPL%\gpush.cmd
-						FileAppend, "%GITRLS%" upload -u %gituser% -s %GITPAT% -R -r rj_linkrunner -t Installer -l Installer -n rj_linkrunner.zip -f "%DEPL%\rj_linkrunner.zip"`n,%DEPL%\gpush.cmd
+						;FileAppend, "%GITRLS%" delete -u %gituser% -s %GITPAT% -r rj_linkrunner -t Installer`n,%DEPL%\gpush.cmd
+						FileAppend, "%GITRLS%" release delete Installer -y,%DEPL%\gpush.cmd
+						FileAppend, "%GITRLS%" release create Installer "%DEPL%\rj_linkrunner.zip",%DEPL%\gpush.cmd
+;						FileAppend, "%GITRLS%" release -u %gituser% -s %GITPAT% -r rj_linkrunner -n Installer -t Installer`n,%DEPL%\gpush.cmd
+;						FileAppend, "%GITRLS%" upload -u %gituser% -s %GITPAT% -R -r rj_linkrunner -t Installer -l Installer -n rj_linkrunner.zip -f "%DEPL%\rj_linkrunner.zip"`n,%DEPL%\gpush.cmd
 					}
 			}
 		if (SiteUpdate <> 1)
@@ -4038,14 +4020,11 @@ if (uptoserv = 1)
 		FileAppend,copy /y "%BUILDIR%\site\ReadMe.md" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
 		FileAppend,copy /y "%BUILDIR%\site\version.txt" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
 		FileAppend,for /f "delims=" `%`%a in ("%GITAPP%") do set gitapp=`%`%~a`n,%BUILDIR%\sitecommit.bat
-		FileAppend,"`%gitapp`%" config user.name %GITUSER%`n,%BUILDIR%\sitecommit.bat
-		FileAppend,"`%gitapp`%" config user.email %GITMAIL%`n,%BUILDIR%\sitecommit.bat
 		FileAppend,"`%gitapp`%" add rj_linkrunner`n,%BUILDIR%\sitecommit.bat
 		FileAppend,"`%gitapp`%" commit -m siteupdate`n,%BUILDIR%\sitecommit.bat
-		FileAppend,"`%gitapp`%" push --set-upstream https://%gituser%:%gitpass%@github.com/%gituser%/%gituser%.github.io master`n,sitecommit.bat
 		if (GITPASS <> "")
 			{
-				FileAppend,"`%gitapp`%" push -f --repo https://%GITUSER%:%GITPASS%@github.com/%GITUSER%/%GITUSER%.github.io`n,%BUILDIR%\sitecommit.bat
+				FileAppend,"`%gitapp`%" push --all`n,%BUILDIR%\sitecommit.bat
 			}
 		if (GITPASS = "")
 			{
