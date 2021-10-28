@@ -593,8 +593,12 @@ if instr(Keyboard_Mappern,"Antimicro")
         FileAppend,%amcb%,%home%\Antimicro_!.cmd
 		keyboard_Mapper= %home%\Antimicro_!.cmd
 		keyboard_Mappern= %home%\Antimicro_!.cmd
+		antimicro_executable=%keyboard_Mapper%
 		JMAP= antimicro
 	}
+Player1_Template= %home%\Player1.%mapper_extension%
+Player2_Template= %home%\Player1.%mapper_extension%
+Mediacenter_Template= %home%\Mediacenter.%mapper_extension%
 iniwrite,%JMAP%,%RJDB_Config%,JOYSTICKS,Jmap
 stringreplace,keyboard_mapperT,keyboard_mapper,%A_Space%,`%,All
 stringreplace,Player1_TemplateT,Player1_Template,%A_Space%,`%,All
@@ -769,7 +773,7 @@ if (!fileexist(CFGDIR . "\" . "Game.cfg")or !fileexist(gmcfg))
 	}
 if ((setupmm = "")or !fileexist(CFGDIR . "\" . "Game.cfg"))
 	{
-		FileSelectFile,MM_GAME_ConfigT,3,,Select File,*.cfg
+		FileSelectFile,MM_GAME_ConfigT,35,,Select File,*.cfg
 		if ((MM_GAME_ConfigT <> "")&& !instr(MM_GAME_ConfigT,"<"))
 			{
 				MM_GAME_Config= %MM_GAME_ConfigT%
@@ -800,7 +804,7 @@ if (!fileexist(CFGDIR . "\" . "Desktop.cfg")or !fileexist(dtcfg))
 	}
 if ((setupmm = "")or !fileexist(CFGDIR . "\" . "Desktop.cfg"))	
 	{
-		FileSelectFile,MM_MediaCenter_ConfigT,3,,Select File,*.cfg
+		FileSelectFile,MM_MediaCenter_ConfigT,35,,Select File,*.cfg
 		if ((MM_MediaCenter_ConfigT <> "")&& !instr(MM_MediaCenter_ConfigT,"<"))
 			{
 				MM_MediaCenter_Config= %MM_MediaCenter_ConfigT%
@@ -1631,7 +1635,8 @@ ifmsgbox,OK
                 Msgbox,,Success,The current monitor configuration will be used for your Mediacenter or desktop
                 iniwrite,%CFGDIR%\Desktop.cfg,%RJDB_Config%,GENERAL,MM_MEDIACENTER_Config
                 iniwrite,/LoadConfig "%CFGDIR%\Desktop.cfg",%RJDB_Config%,CONFIG,switchback
-				guicontrol,,MM_Mediacenter_ConfigT,Desktop.cfg
+				stringreplace,MM_Mediacenter_ConfigT,%CFGDIR%\Desktop.cfg,%A_Space%,`%,All
+				guicontrol,,MM_Mediacenter_ConfigT,%MM_Mediacenter_ConfigT%
             }
            else {
             Msgbox,,Failure,The current monitor configuration could not be saved
@@ -1649,7 +1654,8 @@ ifmsgbox,OK
                 Msgbox,,Success,The current monitor configuration will be used for your Game/s or Emulator/s
                 iniwrite,%CFGDIR%\Game.cfg,%RJDB_Config%,GENERAL,MM_Game_Config
                 iniwrite,/LoadConfig "%CFGDIR%\Game.cfg",%RJDB_Config%,CONFIG,switchcmd
-				guicontrol,,MM_Game_ConfigT,Game.cfg
+				stringreplace,MM_Game_ConfigT,%CFGDIR%\Game.cfg,%A_Space%,`%,All
+				guicontrol,,MM_Game_ConfigT,%MM_Game_ConfigT%
 			}
 		   else {
 			Msgbox,,Failure,The current monitor configuration could not be saved

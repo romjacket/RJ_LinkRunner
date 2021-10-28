@@ -105,7 +105,7 @@ SectionEnd
 
 Section "Desktop Shortcuts"
 
-  CreateShortCut "$DESKTOP\RJ_LinkRunner_Configure.lnk" "$INSTDIR\bin\Setup.exe" "" "$INSTDIR\src\Setup.ico"
+  CreateShortCut "$DESKTOP\RJ_LinkRunner_Configure.lnk" "$INSTDIR\bin\Setup.exe" "" "$INSTDIR\src\RJ_Setup.ico"
 
 SectionEnd
 
