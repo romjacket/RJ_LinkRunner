@@ -3826,7 +3826,7 @@ if (ServerPush = 1)
 					{	
 						;FileAppend, "%GITRLS%" delete -u %gituser% -s %GITPAT% -r rj_linkrunner -t portable`n,%DEPL%\gpush.cmd
 						FileAppend, "%GITRLS%" release delete portable -y`n,%DEPL%\gpush.cmd
-						FileAppend, "%GITRLS%" release create portable "%DEPL%\portable.zip"`n,%DEPL%\gpush.cmd
+						FileAppend, "%GITRLS%" release create portable -t "portale binaries" "%DEPL%\portable.zip"`n,%DEPL%\gpush.cmd
 						;FileAppend, "%GITRLS%" upload -u %gituser% -s %GITPAT% -R -r rj_linkrunner -t portable -l portable -n rj_linkrunner.zip -f "%DEPL%\rj_linkrunner.zip"`n,%DEPL%\gpush.cmd
 					}
 			}
@@ -3861,7 +3861,7 @@ if (ServerPush = 1)
 					{
 						;FileAppend, "%GITRLS%" delete -u %gituser% -s %GITPAT% -r rj_linkrunner -t Installer`n,%DEPL%\gpush.cmd
 						FileAppend, "%GITRLS%" release delete Installer -y`n,%DEPL%\gpush.cmd
-						FileAppend, "%GITRLS%" release create Installer "%DEPL%\rj_linkrunner.zip"`n,%DEPL%\gpush.cmd
+						FileAppend, "%GITRLS%" release create Installer -t "Zipped Installer" "%DEPL%\rj_linkrunner.zip"`n,%DEPL%\gpush.cmd
 ;						FileAppend, "%GITRLS%" release -u %gituser% -s %GITPAT% -r rj_linkrunner -n Installer -t Installer`n,%DEPL%\gpush.cmd
 ;						FileAppend, "%GITRLS%" upload -u %gituser% -s %GITPAT% -R -r rj_linkrunner -t Installer -l Installer -n rj_linkrunner.zip -f "%DEPL%\rj_linkrunner.zip"`n,%DEPL%\gpush.cmd
 					}
