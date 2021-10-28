@@ -1,7 +1,7 @@
 ## Installation
-This Version:0.99.1.02
+This Version:0.99.1.03
 
-This Build: 2021-10-27 5:09 PM
+This Build: 2021-10-27 6:14 PM
 
 Extract the binary to a location of your choice, **or** download and build and run the source files and executables.
 ```sh

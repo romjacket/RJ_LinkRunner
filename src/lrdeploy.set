@@ -3,7 +3,7 @@ SetCompress on
 !endif
 
 Name "RJ_LinkRunner"
-Caption "Universal ROM-Library Interface Kit"
+Caption "Granular Controls for a Global System"
 Icon "[SOURCE]\src\Install.ico"
 OutFile "[DBP]\rj_linkrunner[INSTYP].exe"
 AllowRootDirInstall true

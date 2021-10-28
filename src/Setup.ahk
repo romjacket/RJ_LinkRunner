@@ -4,8 +4,8 @@ SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
 
-RELEASE= 2021-10-27 5:09 PM
-VERSION= 0.99.1.02
+RELEASE= 2021-10-27 6:14 PM
+VERSION= 0.99.1.03
 home= %A_ScriptDir%
 Splitpath,A_ScriptDir,tstidir,tstipth
 if ((tstidir = "src")or(tstidir = "bin")or(tstidir = "binaries"))
