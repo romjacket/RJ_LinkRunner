@@ -16,6 +16,17 @@ rj_linkrunner
 ¦   +-- Source_Builder.exe
 ¦   +-- Update.exe
 ¦
++-- site
+¦   +-- index.html
+¦   +-- install.png
+¦   +-- example.png
+¦   +-- runas.png
+¦   +-- key.png
+¦   +-- keymapper.png
+¦   +-- tip.png
+¦   +-- update.png
+¦   +-- ReadMe.md
+¦
 +-- src
 ¦   +-- absol.set
 ¦   +-- allgames.set
@@ -65,8 +76,8 @@ Right-Click on the buttons in the setup tool to download supported executables.
 
 It is best if you set the RJ_LinkRunner.exe, antimicro.exe and xpadder.exe to run as the administrator.
 
-During gameplay you may add additional joysticks and save a profile for them. Any additional joystick profiles found within the game's jacket will be saved and reloaded for player 2, prioritizing the default profile-name (Game Jacket_2.gamecontroller.amgp, and other "player 2" monikers.)
+![AsAdmin](http://romjacket.github.com/rj_linkrunner/runas.png)
 
-The multimonitor tool will save the current monitor/s resolution/s of the current running game upon exit of the launcher.
+During gameplay you may add additional joysticks and save a profile for them. Any additional joystick profiles found within the game's jacket will be saved and reloaded for player 2, prioritizing the default profile-name (Game Jacket_2.gamecontroller.amgp, and other "player 2" monikers.)
 
 I've tested this on a variety of preconfigurations with a few hundred games and found that 99% of them are identified & launched properly without any adjustment whatsoever.

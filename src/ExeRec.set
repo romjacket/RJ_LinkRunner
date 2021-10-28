@@ -28,6 +28,7 @@ FileInstall,src\Update.ico,src\Update.ico,1
 FileInstall,site\Install.png,site\Install.png,1
 FileInstall,site\key.png,site\key.png,1
 FileInstall,site\keymapper.png,site\keymapper.png,1
+FileInstall,site\runas.png,site\runas.png,1
 FileInstall,site\tip.png,site\tip.png,1
 FileInstall,site\Update.png,site\Update.png,1
 FileInstall,site\index.html,site\index.html,1
