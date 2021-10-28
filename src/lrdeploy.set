@@ -74,7 +74,7 @@ Section "" ; empty string makes it hidden, so would starting with -
 
   Section
   SetOutPath $INSTDIR
-  File "readme.md"
+  File "[SOURCE]\readme.md"
   SectionEnd
   Section
   SetOutPath $INSTDIR\bin
@@ -88,7 +88,7 @@ Section "" ; empty string makes it hidden, so would starting with -
   SectionEnd
   Section
   SetOutPath $INSTDIR\site
-  File /r "[SOURCE]\site\*.*"
+  File /r "[SOURCE]\site\"
   SectionEnd
   Section
   SetOutPath $INSTDIR\src
