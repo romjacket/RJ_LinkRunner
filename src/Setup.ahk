@@ -4,7 +4,7 @@ SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
 
-RELEASE= 2021-10-27 7:46 PM
+RELEASE= 2021-10-28 9:12 AM
 VERSION= 0.99.1.03
 home= %A_ScriptDir%
 Splitpath,A_ScriptDir,tstidir,tstipth
@@ -288,7 +288,7 @@ Gui, Add, Button, x20 y512 w36 h21 vPREAPP gPREAPP ,PRE
 Gui, Font, Normal
 Gui, Add, Text, x60 y514 h12 vPRETNUM,1
 Gui, Add, DropDownList, x70 y512 w198 vPREDD gPREDD Right,%prelist%
-Gui, Add, Text, x64 y534 h12 w230 vPREDDT,<Pre-Launch Programs>
+Gui, Add, Text, x64 y534 h12 w230 vPREDDT,<$This_Prog$><Monitor><Mapper><game.exe>
 Gui, Add, Checkbox, x270 y513 w12 h12 vPreWait gPreWait %prestatus%,
 Gui, Add, Text, x270 y535 h12,wait
 Gui, Add, Button, x285 y520 w14 h14 vDELPREAPP gDELPREAPP ,X
@@ -298,7 +298,7 @@ Gui, Add, Button, x20 y550 w36 h21 vPOSTAPP gPOSTAPP,PST
 Gui, Font, Normal
 Gui, Add, Text, x60 y552 h12 vPOSTDNUM,1
 Gui, Add, DropDownList, x70 y552 w198 vPostDD gPostDD Right,%postlist%
-Gui, Add, Text, x64 y574 h12 w230 vPOSTDDT,<Post-Launch Programs>
+Gui, Add, Text, x64 y574 h12 w230 vPOSTDDT,<game.exe><$This_Prog$><Mapper><Monitor>
 Gui, Add, Checkbox, x270 y553 w12 h12 vPostWait gPostWait %poststatus%
 Gui, Add, Text, x270 y565 h12,
 Gui, Add, Button, x285 y557 w14 h14 vDELPOSTAPP gDELPOSTAPP ,X
@@ -483,7 +483,7 @@ if ((Source_DirectoryT <> "")&& !instr(Source_DirectoryT,"<"))
 				srcdira.= pkrs . "|"
 			}
 		SOURCEDLIST=					
-		SOURCE_DIRECTORY= %scrdira%
+		SOURCE_DIRECTORY= %srcdira%
 		iniwrite,%srcdira%,%RJDB_Config%,GENERAL,Source_Directory
 		stringreplace,CURDP,Source_DirectoryX,%A_Space%,`%,All
 		guicontrol,,Source_DirectoryT,|%srcdira%
@@ -1173,15 +1173,15 @@ guicontrolget,postdd,,postDD
 stringsplit,povr,postdd,<
 if instr(povr1,1)
 	{
-		guicontrol,,postDDT,%DDTA%<game.exe>
+		guicontrol,,postDDT,<game.exe><$This_Prog$><Mapper><Monitor>
 	}
 if instr(povr1,2)
 	{
-		guicontrol,,postDDT,%DDTB%<game.exe>
+		guicontrol,,postDDT,<game.exe><Mapper><$This_Prog$><Monitor>
 	}
 if instr(povr1,3)
 	{
-		guicontrol,,postDDT,%DDTC%<game.exe>
+		guicontrol,,postDDT,<game.exe><Mapper><Monitor><$This_Prog$>
 	}
 if instr(povr1,"W")
 	{
@@ -1200,15 +1200,15 @@ guicontrolget,predd,,PreDD
 stringsplit,povr,predd,<
 if instr(povr1,3)
 	{
-		guicontrol,,PREDDT,<game.exe>%DDTA%
+		guicontrol,,PREDDT,<$This_Prog$><Monitor><Mapper><game.exe>
 	}
 if instr(povr1,2)
 	{
-		guicontrol,,PREDDT,<game.exe>%DDTB%
+		guicontrol,,PREDDT,<Monitor><$This_Prog$><Mapper><game.exe>
 	}
 if instr(povr1,1)
 	{
-		guicontrol,,PREDDT,<game.exe>%DDTC%
+		guicontrol,,PREDDT,<Monitor><Mapper><$This_Prog$><game.exe>
 	}
 if instr(povr1,"W")
 	{
@@ -1251,7 +1251,7 @@ ifMsgbox,Yes
         filedelete,%home%\Player2.gamecontroller.amgp
         goto,popgui
 		LV_Delete()
-		guicontrol,,SOURCE,%SOURCE_Directory%
+		guicontrol,,SOURCE_DIRECTORYT,%SOURCE_Directory%
 		guicontrol,,PreDD,|1<||2<|3<
 		guicontrol,,PostDD,|1<||2<|3<
     }
@@ -1544,8 +1544,8 @@ Loop,parse,RJDBSECTS,`r`n
 	}
 if (resetting = 1)
 	{
-		guicontrol,,PREDDT,<Pre-Launch Programs>
-		guicontrol,,POSTDDT,<$This_Prog$><Mapper><Monitor>
+		guicontrol,,PREDDT,<$This_Prog$><Monitor><Mapper><game.exe>
+		guicontrol,,POSTDDT,<game.exe><$This_Prog$><Mapper><Monitor>
 		guicontrol,hide,ButtonCreate
 		guicontrol,disable,ButtonCreate
 		guicontrol,disable,ButtonClear
