@@ -71,12 +71,12 @@ Section "" ; empty string makes it hidden, so would starting with -
   ; write uninstall strings
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\RJ_LinkRunner" "RJ_LinkRunner" "RJ_LinkRunner (remove only)"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\RJ_LinkRunner" "UninstallString" '"$INSTDIR\RJ_LinkRunner-uninst.exe"'
-
-  Section
+SectionEnd
+  Section "" 
   SetOutPath $INSTDIR
   File "[SOURCE]\readme.md"
   SectionEnd
-  Section
+  Section "" 
   SetOutPath $INSTDIR\bin
   File "[SOURCE]\bin\RJ_LinkRunner.exe"
   File "[SOURCE]\bin\source_builder.exe"
@@ -86,16 +86,17 @@ Section "" ; empty string makes it hidden, so would starting with -
   File "[SOURCE]\bin\aria2c.exe"
   File "[SOURCE]\bin\7za.exe"
   SectionEnd
-  Section
+  Section "" 
   SetOutPath $INSTDIR\site
   File /r "[SOURCE]\site\"
   SectionEnd
-  Section
+  Section "" 
   SetOutPath $INSTDIR\src
   File /r "[SOURCE]\src\*.set"
   File /r "[SOURCE]\src\*.ico"
   File /r "[SOURCE]\src\*.ahk"
   SectionEnd
+  Section ""
   WriteUninstaller "RJ_LinkRunner-uninst.exe"
   
   Nop ; for fun
