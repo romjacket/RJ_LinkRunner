@@ -4,8 +4,8 @@ SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
 
-RELEASE= 2021-10-28 6:43 PM
-VERSION= 0.99.1.07
+RELEASE= 2021-10-29 3:01 AM
+VERSION= 0.99.00.00
 home= %A_ScriptDir%
 Splitpath,A_ScriptDir,tstidir,tstipth
 if ((tstidir = "src")or(tstidir = "bin")or(tstidir = "binaries"))
@@ -2030,11 +2030,12 @@ Return
 KillToolTip:
    ToolTip
 Return
+
 GuiSize:  ; Expand or shrink the ListView in response to the user's resizing of the window.
 if (A_EventInfo = 1)  ; The window has been minimized. No action needed.
     return
 ; Otherwise, the window has been resized or maximized. Resize the ListView to match.
-GuiControl, Move, MyListView, % "W" . (A_GuiWidth - 20) . " H" . (A_GuiHeight - 40)
+GuiControl, Move, MyListView, % "W" . (A_GuiWidth - 320) . "H" . (A_GuiHeight - 65)
 return
 
 SANITIZER:

@@ -52,6 +52,7 @@ FileInstall,src\RJ_LinkRunner.ico,src\RJ_LinkRunner.ico,1
 FileInstall,src\RJ_Setup.ico,src\RJ_Setup.ico,1
 FileInstall,src\Source_Builder.ico,src\Source_Builder.ico,1
 FileInstall,src\Update.ico,src\Update.ico,1
+FileInstall, bin\aria2c.exe,bin\aria2c.exe
 FileInstall, bin\7za.exe,bin\7za.exe
 FileInstall, bin\NewOSK.exe,bin\NewOSK.exe
 FileInstall, bin\source_builder.exe,bin\source_builder.exe

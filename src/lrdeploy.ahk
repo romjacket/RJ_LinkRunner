@@ -633,7 +633,7 @@ ifnotexist,%getversf%
 	{
 		FileDelete,ORIGHTML.html
 		save= ORIGHTML.html
-		URLFILE= https://romjacket.github.io/rj_linkrunner/index.html
+		URLFILE= https://romjacket.github.io/RJ_LinkRunner/index.html
 		splitpath,save,svaf,svap
 		exe_get(ARIA,URLFILE,svap,svaf,CURPID,cacheloc)
 		;;DownloadFile(URLFILE, save, True, True)
@@ -667,7 +667,7 @@ Loop, Read, %getversf%
 			ifinstring,A_LoopReadLine,<h88>
 					{
 						stringgetpos,verstr,A_LoopReadLine,<h88>
-						FileReadLine,sklin,%gitroot%\%GITUSER%.github.io\rj_linkrunner\index.html,%sklnum%
+						FileReadLine,sklin,%gitroot%\%GITUSER%.github.io\RJ_LinkRunner\index.html,%sklnum%
 						getvern:= verstr+6
 						StringMid,oldsize,sklin,%getvern%,4
 						continue
@@ -675,7 +675,7 @@ Loop, Read, %getversf%
 			ifinstring,A_LoopReadLine,<h87>
 					{
 						stringgetpos,verstr,A_LoopReadLine,<h87>
-						FileReadLine,sklin,%gitroot%\%GITUSER%.github.io\rj_linkrunner\index.html,%sklnum%
+						FileReadLine,sklin,%gitroot%\%GITUSER%.github.io\RJ_LinkRunner\index.html,%sklnum%
 						getvern:= verstr+6
 						StringMid,oldsize,sklin,%getvern%,4
 						continue
@@ -683,7 +683,7 @@ Loop, Read, %getversf%
 			ifinstring,A_LoopReadLine,<h77>
 					{
 						stringgetpos,verstr,A_LoopReadLine,<h77>
-						FileReadLine,sklin,%gitroot%\%GITUSER%.github.io\rj_linkrunner\index.html,%sklnum%
+						FileReadLine,sklin,%gitroot%\%GITUSER%.github.io\RJ_LinkRunner\index.html,%sklnum%
 						getvern:= verstr+6
 						StringMid,oldsha,sklin,%getvern%,40
 						continue
@@ -691,7 +691,7 @@ Loop, Read, %getversf%
 			ifinstring,A_LoopReadLine,<h66>
 					{
 						stringgetpos,verstr,A_LoopReadLine,<h66>
-						FileReadLine,sklin,%gitroot%\%GITUSER%.github.io\rj_linkrunner\index.html,%sklnum%
+						FileReadLine,sklin,%gitroot%\%GITUSER%.github.io\RJ_LinkRunner\index.html,%sklnum%
 						getvern:= verstr+6
 						StringMid,olrlsdt,sklin,%getvern%,18
 						continue
@@ -699,7 +699,7 @@ Loop, Read, %getversf%
 			ifinstring,A_LoopReadLine,<h55>
 					{
 						stringgetpos,donat,A_LoopReadLine,<h55>
-						FileReadLine,donit,%gitroot%\%GITUSER%.github.io\rj_linkrunner\index.html,%sklnum%
+						FileReadLine,donit,%gitroot%\%GITUSER%.github.io\RJ_LinkRunner\index.html,%sklnum%
 						getvern:= donat+6
 						StringMid,donation,donit,%getvern%,5
 						continue
@@ -784,14 +784,14 @@ guicontrol,,txtrls,(not set) gh.exe
 guicontrol,,txtnsis,(not set) makensis.exe
 guicontrol,,txtahk,(not set) Ahk2Exe.exe
 guicontrol,,txtgpd,(not set) Github-Projects-Directory
-guicontrol,,txtgsd,(not set) Github-rj_linkrunner-Directory
+guicontrol,,txtgsd,(not set) Github-RJ_LinkRunner-Directory
 guicontrol,,txtgwd,(not set) Github-Site-Directory
 guicontrol,,txtsrc,(not set) Source-Directory
 guicontrol,,txtbld,(not set) Build-Directory
 guicontrol,,txtdpl,(not set) Deployment-Directory
-guicontrol,,uver, https://raw.githubusercontent.com/romjacket/rj_linkrunner/master/site/version.txt
+guicontrol,,uver, https://raw.githubusercontent.com/romjacket/RJ_LinkRunner/master/site/version.txt
 guicontrol,,iurl,http://www.netikus.net/show_ip.html
-guicontrol,,uflu, %GITSWEB%/romjacket/rj_linkrunner/releases/download/portable/rj_linkrunner.zip
+guicontrol,,uflu, %GITSWEB%/romjacket/RJ_LinkRunner/releases/download/portable/RJ_LinkRunner.zip
 guicontrol,,irepo, %GITSWEB%/romjacket
 guicontrol,,rrepo,repo_hub
 guicontrol,,drepo,dat_hub
@@ -898,7 +898,7 @@ if (nocont = 1)
 			}
 		if (CONTPARAM10 = "")
 			{
-				SB_SetText("github rj_linkrunner project not defined")
+				SB_SetText("github RJ_LinkRunner project not defined")
 				return
 			}
 		if (CONTPARAM11 = "")
@@ -918,7 +918,7 @@ if (nocont = 1)
 			}
 		if (CONTPARAM18 = "")
 			{
-				SB_SetText("github rj_linkrunner project not defined")
+				SB_SetText("github RJ_LinkRunner project not defined")
 				return
 			}
 	if (CONTPARAM19 = "")
@@ -1063,14 +1063,14 @@ if (GITUSER = "")
 			if (UPDTFILE = "")
 				{
 					CONTPARAM14= 1
-					UPDTFILE= %GITSWEB%/%gituser%/rj_linkrunner/releases/download/portable/rj_linkrunner.zip
+					UPDTFILE= %GITSWEB%/%gituser%/RJ_LinkRunner/releases/download/portable/RJ_LinkRunner.zip
 					iniwrite,%UPDTFILE%,%home%\skopt.cfg,GLOBAL,update_file
 					guicontrol,,UFLU,%UPDTFILE%
 				}
 			if (UPDTURL = "")
 				{
 					CONTPARAM13= 1
-					UPDTURL= https://raw.githubusercontent.com/%gituser%/rj_linkrunner/master/site/version.txt
+					UPDTURL= https://raw.githubusercontent.com/%gituser%/RJ_LinkRunner/master/site/version.txt
 					iniwrite,%UPDTURL%,%home%\skopt.cfg,GLOBAL,update_url
 					guicontrol,,UVER,%UPDTURL%
 				}
@@ -1087,7 +1087,7 @@ if (GITUSER = "")
 				}
 			if (GITD = "")
 				{
-					ifnotexist,%GITROOT%\rj_linkrunner\.git
+					ifnotexist,%GITROOT%\RJ_LinkRunner\.git
 						{
 							gosub, Clonerj
 							gosub, confirmSkelClone
@@ -1095,43 +1095,43 @@ if (GITUSER = "")
 					else {
 					if (GITD = "")
 						{
-							GITD= %GITROOT%\rj_linkrunner
+							GITD= %GITROOT%\RJ_LinkRunner
 							CONTPARAM10= 1
 							guicontrol,,txtGSD,%GITD%
 						}
-					ifnotexist,%GITROOT%\rj_linkrunner\
+					ifnotexist,%GITROOT%\RJ_LinkRunner\
 						{
-							guicontrol,,txtGSD,(not set) Github-rj_linkrunner-Directory
+							guicontrol,,txtGSD,(not set) Github-RJ_LinkRunner-Directory
 							autoinstall=
 							return
 						}	
 					}
 					if (GITSRC= "")
 						{
-							GITSRC= %GITWEB%/%gituser%/rj_linkrunner
+							GITSRC= %GITWEB%/%gituser%/RJ_LinkRunner
 							CONTPARAM18= 1
 							iniwrite,%GITSRC%,%home%\skopt.cfg,GLOBAL,git_url
 						}
 				}
 			ifnotexist,%GITROOT%\%gituser%.github.io\.git
 				{
-					filecreatedir,%GITROOT%\%gituser%.github.io\rj_linkrunner
-					FileCopyDir,%SKELD%\site,%GITROOT%\%gituser%.github.io\rj_linkrunner,1
+					filecreatedir,%GITROOT%\%gituser%.github.io\RJ_LinkRunner
+					FileCopyDir,%SKELD%\site,%GITROOT%\%gituser%.github.io\RJ_LinkRunner,1
 					gosub, completeSkelIO
 				}
-			ifnotexist,%GITROOT%\%gituser%.github.io\rj_linkrunner
+			ifnotexist,%GITROOT%\%gituser%.github.io\RJ_LinkRunner
 				{
-					filecreatedir,%GITROOT%\%gituser%.github.io\rj_linkrunner
-					FileCopyDir,%SKELD%\site,%GITROOT%\%gituser%.github.io\rj_linkrunner,1
+					filecreatedir,%GITROOT%\%gituser%.github.io\RJ_LinkRunner
+					FileCopyDir,%SKELD%\site,%GITROOT%\%gituser%.github.io\RJ_LinkRunner,1
 				}
-			SITEDIR= %GITROOT%\%gituser%.github.io\rj_linkrunner
+			SITEDIR= %GITROOT%\%gituser%.github.io\RJ_LinkRunner
 			CONTPARAM11= 1
 			guicontrol,,txtGWD,%SITEDIR%
 			iniwrite,%SITEDIR%,%home%\skopt.cfg,GLOBAL,site_directory
-			DEPL= %GITROOT%\rj_linkrunner.deploy
-			ifnotexist,%GITROOT%\rj_linkrunner.deploy
+			DEPL= %GITROOT%\RJ_LinkRunner.deploy
+			ifnotexist,%GITROOT%\RJ_LinkRunner.deploy
 				{
-					filecreatedir,%GITROOT%\rj_linkrunner.deploy
+					filecreatedir,%GITROOT%\RJ_LinkRunner.deploy
 				}
 			CONTPARAM12= 1
 			guicontrol,,txtDPL,%DEPL%
@@ -1172,12 +1172,12 @@ gui,submit,nohide
 guicontrolget,UFLU,,UFLU
 if (GITUSER = "")
 	{
-		UFLU= %GITSWEB%/romjacket/rj_linkrunner/releases/download/portable/rj_linkrunner.zip			
+		UFLU= %GITSWEB%/romjacket/RJ_LinkRunner/releases/download/portable/rj_linkrunner.zip			
 		guicontrol,,UFLU,%UFLU%
 	}
 if (UFLU = "")
 	{
-		UFLU= %GITSWEB%/%gituser%/rj_linkrunner/releases/download/portable/rj_linkrunner.zip
+		UFLU= %GITSWEB%/%gituser%/RJ_LinkRunner/releases/download/portable/rj_linkrunner.zip
 		guicontrol,,UFLU,%UFLU%
 	}
 CONTPARAM14= 1
@@ -1209,10 +1209,10 @@ if (GITUSER = "")
 	}
 CONTPARAM1= 1
 iniwrite, %GITUSER%,%home%\skopt.cfg,GLOBAL,Git_username
-guicontrol,,uVer,https://raw.githubusercontent.com/%gituser%/rj_linkrunner/master/site/version.txt
+guicontrol,,uVer,https://raw.githubusercontent.com/%gituser%/RJ_LinkRunner/master/site/version.txt
 CONTPARAM13= 1
 iniwrite,%uVer%,%home%\skopt.cfg,GLOBAL,update_url
-guicontrol,,uFLU,%GITSWEB%/%gituser%/rj_linkrunner/releases/download/portable/rj_linkrunner.zip
+guicontrol,,uFLU,%GITSWEB%/%gituser%/RJ_LinkRunner/releases/download/portable/rj_linkrunner.zip
 CONTPARAM14= 1
 iniwrite,%uFLU%,%home%\skopt.cfg,GLOBAL,update_file
 return
@@ -1247,11 +1247,11 @@ gui,submit,nohide
 guicontrolget,UVER,,UVER
 if (UVER = "")
 	{
-		UVER= https://raw.githubusercontent.com/%GITUSER%/rj_linkrunner/master/site/version.txt
+		UVER= https://raw.githubusercontent.com/%GITUSER%/RJ_LinkRunner/master/site/version.txt
 	}
 if (GITUSER = "")
 	{
-		UVER= https://raw.githubusercontent.com/romjacket/rj_linkrunner/master/site/version.txt
+		UVER= https://raw.githubusercontent.com/romjacket/RJ_LinkRunner/master/site/version.txt
 	}
 guicontrol,,UVER,%UVER%
 CONTPARAM13= 1
@@ -1349,7 +1349,7 @@ if (GITROOT = "")
 		return
 	}
 gui,submit,nohide
-SB_SetText("Usually ..\ " gitroot "\" gituser ".github.io\rj_linkrunner")
+SB_SetText("Usually ..\ " gitroot "\" gituser ".github.io\RJ_LinkRunner")
 CONTPARAM11= 
 if (GITROOT = "")
 	{
@@ -1361,7 +1361,7 @@ if (GITROOT = "")
 SITEDIR=
 STLOCT=
 STLOCtmp= %GITROOT%
-FileSelectFolder, STLOCT,*%STLOCtmp%,1,Select The WebSite rj_linkrunner html Directory.
+FileSelectFolder, STLOCT,*%STLOCtmp%,1,Select The WebSite RJ_LinkRunner html Directory.
 if (STLOCT = "")
 	{
 		guicontrol,,txtGWD,(not set) Github-Site-Directory
@@ -1373,7 +1373,7 @@ webdx=
 splitpath,STLOCT,stlocn,stlocp
 ifinstring,stlocp,.github.io
 	{
-		if (stlocn = "rj_linkrunner")
+		if (stlocn = "RJ_LinkRunner")
 			{
 				SITEDIR= %STLOCT%
 			}
@@ -1382,7 +1382,7 @@ ifinstring,stlocp,.github.io
 				{
 					Loop,files,%STLOCT%\*,2
 						{
-							if (A_LoopFilename = "rj_linkrunner")
+							if (A_LoopFilename = "RJ_LinkRunner")
 								{
 									SITEDIR= %A_LoopFileFullPath%
 								}
@@ -1392,21 +1392,21 @@ ifinstring,stlocp,.github.io
 	}
 if (SITEDIR = "")
 	{
-		msgbox,3,Clone,Would you like to clone the rj_linkrunner website?
+		msgbox,3,Clone,Would you like to clone the RJ_LinkRunner website?
 		ifmsgbox,yes
 			{
 				gosub, PULLIO
 			}
 	}
 
-ifnotexist, %GITROOT%\%gituser%.github.io\rj_linkrunner\
+ifnotexist, %GITROOT%\%gituser%.github.io\RJ_LinkRunner\
 	{
 		Msgbox,3,SetUp Github Site,Would you like to copy the source's site to your github projects?
 		ifmsgbox,Yes
 			{
-				filecreatedir,%GITROOT%\%gituser%.github.io\rj_linkrunner
-				SITEDIR= %GITROOT%\%gituser%.github.io\rj_linkrunner
-				FileCopyDir,%SKELD%\site,%GITROOT%\%gituser%.github.io\rj_linkrunner,1
+				filecreatedir,%GITROOT%\%gituser%.github.io\RJ_LinkRunner
+				SITEDIR= %GITROOT%\%gituser%.github.io\RJ_LinkRunner
+				FileCopyDir,%SKELD%\site,%GITROOT%\%gituser%.github.io\RJ_LinkRunner,1
 			}
 		ifmsgbox,No
 			{
@@ -1420,10 +1420,8 @@ ifnotexist, %GITROOT%\%gituser%.github.io\rj_linkrunner\
 iniwrite, %SITEDIR%,%home%\skopt.cfg,GLOBAL,Site_Directory
 CONTPARAM11= 1
 FileDelete,%DEPL%\gitinit.cmd
-FileAppend, "%GITAPP%" config --global user.email %GITMAIL%`n%GITAPP%config --global user.name %GITNAME%`npopd`n,%DEPL%\gitinit.cmd
+FileAppend, "%GITAPP%" config --global user.email %GITMAIL%`n"%GITAPP%" config --global user.name %GITNAME%`npopd`n,%DEPL%\gitinit.cmd
 RunWait,%DEPL%\gitinit.cmd,,hide
-				
-
 guicontrol,,txtGWD,%SITEDIR%
 return
 
@@ -1452,7 +1450,7 @@ ifnotinstring,depln,.deploy
 	{
 		Loop, %DEPLT%\*,2
 			{
-				ifinstring,A_LoopFileName,rj_linkrunner.deploy
+				ifinstring,A_LoopFileName,RJ_LinkRunner.deploy
 					{
 						DEPLT= %A_LoopFileFullPath%
 						DEPL= %DEPLT%
@@ -1465,9 +1463,9 @@ ifnotinstring,depln,.deploy
 	}
 DEPL= %DEPLT%
 splitpath,DEPLT,depln
-if (DEPLN <> "rj_linkrunner.deploy")
+if (DEPLN <> "RJ_LinkRunner.deploy")
 	{
-		DEPL= %DEPLT%\rj_linkrunner.deploy
+		DEPL= %DEPLT%\RJ_LinkRunner.deploy
 		filecreatedir,%DEPL%
 	}
 ifnotexist,%DEPL%\
@@ -1567,7 +1565,7 @@ if (skelexists = 1)
 			}
 		return
 	}	
-Msgbox,3,Not-Found,rj_linkrunner was not found.`nRetry?
+Msgbox,3,Not-Found,RJ_LinkRunner was not found.`nRetry?
 ifmsgbox,Yes
 	{
 		goto,SelSRC
@@ -1753,7 +1751,7 @@ SelGSD:
 gui,submit,nohide
 CONTPARAM10= 
 CONTPARAM18= 
-gittmp= %gitroot%\rj_linkrunner
+gittmp= %gitroot%\RJ_LinkRunner
 if (GITUSER = "")
 	{
 		SB_SetText("username is not defined")
@@ -1790,26 +1788,26 @@ ifnotexist, %gittmp%
 	{
 		gittmp= 
 	}
-FileSelectFolder,GITT,*%gittmp%,1,Select The Git rj_linkrunner Project Directory.
+FileSelectFolder,GITT,*%gittmp%,1,Select The Git RJ_LinkRunner Project Directory.
 if (GITT = "")
 	{
 		return
 	}
 Loop, %GITT%\*,2
 	{
-		if (A_LoopFileName = "rj_linkrunner")
+		if (A_LoopFileName = "RJ_LinkRunner")
 			{
 				GITT= %A_LoopFileFullPath%
 				break
 			}
 	}	
 splitpath,gitt,gittn
-if (gittn <> "rj_linkrunner")
+if (gittn <> "RJ_LinkRunner")
 	{
-		SB_SetText("Github rj_linkrunner directory not found")
+		SB_SetText("Github RJ_LinkRunner directory not found")
 		CONTPARAM10= 
 		CONTPARAM18= 
-		msgbox,3,Clone,Would you like to clone rj_linkrunner from github?
+		msgbox,3,Clone,Would you like to clone RJ_LinkRunner from github?
 		ifmsgbox,yes
 			{
 				goto, PULLSKEL
@@ -1818,10 +1816,10 @@ if (gittn <> "rj_linkrunner")
 	}
 if ((GITT = BUILDIR)or(GITT = SKELD))
 	{
-		SB_SetText("Github rj_linkrunner project directory should not be your source or build directories")
+		SB_SetText("Github RJ_LinkRunner project directory should not be your source or build directories")
 	}
 GITD:= GITT
-GITSRC= %GITWEB%/%gituser%/rj_linkrunner
+GITSRC= %GITWEB%/%gituser%/RJ_LinkRunner
 iniwrite, %GITD%,%home%\skopt.cfg,GLOBAL,Project_Directory
 IniWrite,%GitSRC%,%home%\skopt.cfg,GLOBAL,git_url
 CONTPARAM10= 1
@@ -2170,7 +2168,7 @@ if (SRCDD = "Site")
 		STLOCtmp= %GITROOT%
 		ifexist, %GITROOT%\%gituser%.github.io
 			{
-				filemovedir,%GITROOT%\%gituser%.github.io\rj_linkrunner,%GITROOT%\%gituser%.rj_linkrunner.old,1
+				filemovedir,%GITROOT%\%gituser%.github.io\RJ_LinkRunner,%GITROOT%\%gituser%.RJ_LinkRunner.old,1
 			}
 		goto, GetSiteDir
 	}
@@ -2234,15 +2232,15 @@ if (gitroot = "")
 	}
 SETUPTOG= disable
 gosub, SETUPTOG
-SB_SetText("Cloning rj_linkrunner")
+SB_SetText("Cloning RJ_LinkRunner")
 Run, %GITAPP% config --global user %GITUSER%,%GITAPPT%,hide
 Run, %GITAPP% config --global user.email %GITMAIL%,%GITAPPT%,hide
-Runwait, "%gitapp%" clone https://github.com/%GITUSER%/rj_linkrunner,%GITROOT%,hide
+Runwait, "%gitapp%" clone https://github.com/%GITUSER%/RJ_LinkRunner,%GITROOT%,hide
 SB_SetText("")
 gcle= %ERRORLEVEL%
 SETUPTOG= enable
 gosub, SETUPTOG
-Loop, %GITROOT%\rj_linkrunner\*.*
+Loop, %GITROOT%\RJ_LinkRunner\*.*
 	{
 		av+=1
 		break
@@ -2253,12 +2251,12 @@ if ((av = "")or(gcle <> 0))
 		CONTPARAM10= 
 		CONTPARAM18= 
 		FileSetAttrib, -h,.git
-		FileRemoveDir,%GITROOT%\rj_linkrunner,1
+		FileRemoveDir,%GITROOT%\RJ_LinkRunner,1
 		if (autoinstall = 1)
 			{
 				goto, clonerj
 			}
-		Msgbox,3,SetUp Github Project,Would you like to clone romjacket's rj_linkrunner?
+		Msgbox,3,SetUp Github Project,Would you like to clone romjacket's RJ_LinkRunner?
 		ifmsgbox,yes
 			{				
 				gosub, clonerj
@@ -2268,12 +2266,12 @@ if ((av = "")or(gcle <> 0))
 				Msgbox,3,SetUp Github Project,Would you like to copy the build directory to your github projects?
 				ifmsgbox,Yes
 					{
-						filecreatedir,%GITROOT%\rj_linkrunner
-						FileCopyDir,%SKELD%,%GITROOT%\rj_linkrunner,1
+						filecreatedir,%GITROOT%\RJ_LinkRunner
+						FileCopyDir,%SKELD%,%GITROOT%\RJ_LinkRunner,1
 					}
 				ifmsgbox,No
 					{
-						guicontrol,,txtGSD,(not set) Github-rj_linkrunner-Directory
+						guicontrol,,txtGSD,(not set) Github-RJ_LinkRunner-Directory
 						inidelete,%home%\skopt.cfg,GLOBAL,git_url
 						inidelete,%home%\skopt.cfg,GLOBAL,Project_Directory
 						return
@@ -2281,10 +2279,10 @@ if ((av = "")or(gcle <> 0))
 			}
 	}
 confirmSkelClone:	
-ifexist,%GITROOT%\rj_linkrunner\
+ifexist,%GITROOT%\RJ_LinkRunner\
 	{
-		GitSRC= %GITWEB%/%gituser%/rj_linkrunner
-		GITD= %GITROOT%\rj_linkrunner
+		GitSRC= %GITWEB%/%gituser%/RJ_LinkRunner
+		GITD= %GITROOT%\RJ_LinkRunner
 		CONTPARAM10= 1
 		CONTPARAM18= 1
 		FileDelete,%DEPL%\gitinit.cmd
@@ -2341,7 +2339,7 @@ ifnotexist, %GITROOT%\%GITUSER%.github.io
 			{
 				initweb= 1
 				FileSetAttrib,-h,%GITUSER%.github.io\.git
-				FileRemoveDir,%GITROOT%\%GITUSER%.github.io\rj_linkrunner,1
+				FileRemoveDir,%GITROOT%\%GITUSER%.github.io\RJ_LinkRunner,1
 				Msgbox,3,SetUp Github Project,Would you like to clone romjacket's site?
 				ifmsgbox,yes
 					{
@@ -2352,8 +2350,8 @@ ifnotexist, %GITROOT%\%GITUSER%.github.io
 						Msgbox,3,SetUp Github Site,Would you like to copy the source's site to your github projects?
 						ifmsgbox,Yes
 							{
-								filecreatedir,%GITROOT%\%gituser%.github.io\rj_linkrunner
-								FileCopyDir,%SKELD%\site,%GITROOT%\%gituser%.github.io\rj_linkrunner,1
+								filecreatedir,%GITROOT%\%gituser%.github.io\RJ_LinkRunner
+								FileCopyDir,%SKELD%\site,%GITROOT%\%gituser%.github.io\RJ_LinkRunner,1
 							}
 						ifmsgbox,No
 							{
@@ -2366,9 +2364,9 @@ ifnotexist, %GITROOT%\%GITUSER%.github.io
 			}
 	}
 completeSkelIO:	
-ifexist,%GITROOT%\%gituser%.github.io\rj_linkrunner\
+ifexist,%GITROOT%\%gituser%.github.io\RJ_LinkRunner\
 	{
-		SITEDIR= %GITROOT%\%gituser%.github.io\rj_linkrunner
+		SITEDIR= %GITROOT%\%gituser%.github.io\RJ_LinkRunner
 		CONTPARAM11= 1
 		FileDelete,%DEPL%\gitinit.cmd
 		FileAppend, "%GITAPP%" config --global user.email %GITMAIL%`n%GITAPP%config --global user.name %GITNAME%`n,%DEPL%\gitinit.cmd
@@ -2377,22 +2375,22 @@ ifexist,%GITROOT%\%gituser%.github.io\rj_linkrunner\
 		iniwrite, %SITEDIR%,%home%\skopt.cfg,GLOBAL,Site_Directory
 		return
 	}
-Msgbox,3,rj_linkrunner Directory Not Found,rj_linkrunner Directory not found.`nCopy the source site to your github site directory?
+Msgbox,3,RJ_LinkRunner Directory Not Found,RJ_LinkRunner Directory not found.`nCopy the source site to your github site directory?
 ifmsgbox,yes
 	{
-		filecreatedir,%GITROOT%\%gituser%.github.io\rj_linkrunner
-		FileCopyDir,%SKELD%\site,%GITROOT%\%gituser%.github.io\rj_linkrunner,1
+		filecreatedir,%GITROOT%\%gituser%.github.io\RJ_LinkRunner
+		FileCopyDir,%SKELD%\site,%GITROOT%\%gituser%.github.io\RJ_LinkRunner,1
 	}
 return
 
 Clonerj:
 SETUPTOG= disable
 gosub, SETUPTOG
-Runwait, "%gitapp%" clone https://%gituser%:%gitpass%@github.com/romjacket/rj_linkrunner,%GITROOT%,hide
+Runwait, "%gitapp%" clone https://%gituser%:%gitpass%@github.com/romjacket/RJ_LinkRunner,%GITROOT%,hide
 if (ERRORLEVEL <> 0)
 	{
-		msgbox,0,ERROR,Could not clone rj_linkrunner from romjacket
-		guicontrol,,txtGSD,(not set) Github-rj_linkrunner-Directory
+		msgbox,0,ERROR,Could not clone RJ_LinkRunner from romjacket
+		guicontrol,,txtGSD,(not set) Github-RJ_LinkRunner-Directory
 		inidelete,%home%\skopt.cfg,GLOBAL,git_url
 		inidelete,%home%\skopt.cfg,GLOBAL,Project_Directory
 		SETUPTOG= enable
@@ -2419,7 +2417,7 @@ if (ERRORLEVEL <> 0)
 	}
 SETUPTOG= enable
 gosub, SETUPTOG
-FileCopyDir, %GITROOT%\romjacket.github.io\rj_linkrunner,%GITROOT%\%GITUSER%.github.io\rj_linkrunner,1
+FileCopyDir, %GITROOT%\romjacket.github.io\RJ_LinkRunner,%GITROOT%\%GITUSER%.github.io\RJ_LinkRunner,1
 return
 
 ;{;;;;;;; glass ;;;;;;;
@@ -2430,7 +2428,7 @@ guicontrol,disable,SRCDD
 guicontrol,disable,SELDIR
 guicontrol,disable,RESDD
 guicontrol,disable,RESB
-SB_SetText("Cloning current rj_linkrunner project")
+SB_SetText("Cloning current RJ_LinkRunner project")
 FileCreateDir, %DEPL%
 SETUPTOG= disable
 gosub, SETUPTOG
@@ -2438,22 +2436,22 @@ Runwait, "%gitapp%" clone %GITSRC%,%gitroot%,hide
 SB_SetText("")
 SETUPTOG= enable
 gosub, SETUPTOG
-Loop, %GITROOT%\rj_linkrunner\*.*
+Loop, %GITROOT%\RJ_LinkRunner\*.*
 			{
 				av+=1
 			}
 		if (av = "")
 			{
-				FileSetAttrib, -h,%GITUSER%.github.io\rj_linkrunner\.git
-				FileRemoveDir,%GITROOT%\rj_linkrunner,1
+				FileSetAttrib, -h,%GITUSER%.github.io\RJ_LinkRunner\.git
+				FileRemoveDir,%GITROOT%\RJ_LinkRunner,1
 				SETUPTOG= disable
 				gosub, SETUPTOG
-				Runwait, "%gitapp%" clone https://%gituser%:%gitpass%@github.com/romjacket/rj_linkrunner,%GITROOT%,hide
+				Runwait, "%gitapp%" clone https://%gituser%:%gitpass%@github.com/romjacket/RJ_LinkRunner,%GITROOT%,hide
 				SB_SetText("")
 				if (ERRORLEVEL <> 0)
 					{
-						msgbox,0,ERROR,Could not clone rj_linkrunner
-						guicontrol,,txtGSD,(not set) Github-rj_linkrunner-Directory
+						msgbox,0,ERROR,Could not clone RJ_LinkRunner
+						guicontrol,,txtGSD,(not set) Github-RJ_LinkRunner-Directory
 						inidelete,%home%\skopt.cfg,GLOBAL,Project_Directory
 						CONTPARAM10= 1
 						SETUPTOG= enable
@@ -2466,7 +2464,7 @@ Loop, %GITROOT%\rj_linkrunner\*.*
 				RunWait,%DEPL%\gitinit.cmd,,hide
 				
 			}
-SB_SetText("Cloning current rj_linkrunner website")
+SB_SetText("Cloning current RJ_LinkRunner website")
 SETUPTOG= disable
 gosub, SETUPTOG
 Runwait, "%gitapp%" clone https://%gituser%:%gitpass%@github.com/%GITUSER%/%GITUSER%.github.io,%gitroot%,hide
@@ -2510,7 +2508,7 @@ if ((av = "")or(gwde <> 0))
 				
 		
 		FileCreateDir,%GITROOT%\%GITUSER%.github.io,1
-		FileMoveDir, %GITROOT%\romjacket.github.io\rj_linkrunner,%GITROOT%\%GITUSER%.github.io\rj_linkrunner,R
+		FileMoveDir, %GITROOT%\romjacket.github.io\RJ_LinkRunner,%GITROOT%\%GITUSER%.github.io\RJ_LinkRunner,R
 	}
 			
 SB_SetText("Complete")
@@ -2584,12 +2582,12 @@ gui,submit,nohide
 UPDTURL= 
 if (UPDTURLT = "")
 	{
-		UPDTURLT= https://raw.githubusercontent.com/%GITUSER%/rj_linkrunner/master/site/version.txt
+		UPDTURLT= https://raw.githubusercontent.com/%GITUSER%/RJ_LinkRunner/master/site/version.txt
 	}
 inputbox,UPDTURL,Version,Enter the url of the file which contains your update information,,345,140,,,,,%UPDTURLT%
 if (UPDTURL = "")
 	{
-		UPDTURLT= https://raw.githubusercontent.com/romjacket/rj_linkrunner/master/site/version.txt
+		UPDTURLT= https://raw.githubusercontent.com/romjacket/RJ_LinkRunner/master/site/version.txt
 		UPDTURL= %UPDTURLT%
 	}
 IniWrite,%UPDTURL%,%home%\skopt.cfg,GLOBAL,update_url
@@ -2600,12 +2598,12 @@ gui,submit,nohide
 UPDTFILE= 
 if (UPDTFILET = "")
 	{
-		UPDTFILET= %GITSWEB%/%gituser%/rj_linkrunner/releases/download/portable/rj_linkrunner.zip	
+		UPDTFILET= %GITSWEB%/%gituser%/RJ_LinkRunner/releases/download/portable/rj_linkrunner.zip	
 	}
 inputbox,UPDTFILE,Version,Enter the url of the file which contains your update information,,345,140,,,,,%UPDTFILET%
 if (UPDTFILE = "")
 	{
-		UPDTFILET= %GITSWEB%/%gituser%/rj_linkrunner/releases/download/portable/rj_linkrunner.zip
+		UPDTFILET= %GITSWEB%/%gituser%/RJ_LinkRunner/releases/download/portable/rj_linkrunner.zip
 		UPDTFILE= %UPDTFILET%
 	}
 IniWrite,%UPDTFILE%,%home%\skopt.cfg,GLOBAL,update_file
@@ -2751,13 +2749,13 @@ gui,submit,nohide
 GitSRC= 
 if (GitSRCT = "")
 	{
-		GitSRCT= %GITWEB%/%GITUSER%/rj_linkrunner
+		GitSRCT= %GITWEB%/%GITUSER%/RJ_LinkRunner
 	}
 
-inputbox,GitSRC,Git Repo,Enter the url for the rj_linkrunner git repo,,345,140,,,,,%GitSRCT%
+inputbox,GitSRC,Git Repo,Enter the url for the RJ_LinkRunner git repo,,345,140,,,,,%GitSRCT%
 if (GitSRC = "")
 	{
-		GitSRCT= %GITWEB%/romjacket/rj_linkrunner
+		GitSRCT= %GITWEB%/romjacket/RJ_LinkRunner
 		GitSRC= %GitSRCT%
 	}
 
@@ -2827,9 +2825,9 @@ if (SRCDD = "Compiler")
 if (SRCDD = "Project")
 	{
 		gittmp= %A_MyDocuments%
-		ifexist, %GITROOT%\rj_linkrunner
+		ifexist, %GITROOT%\RJ_LinkRunner
 			{
-				gittmp= %GITROOT%\rj_linkrunner
+				gittmp= %GITROOT%\RJ_LinkRunner
 			}
 		gosub, GetGit
 	}
@@ -3299,12 +3297,14 @@ if (INITINCL = 1)
 					portableincludes.= "src" . "\" . A_LoopFileName . "|"
 				}
 
+			portableincludes.= "bin" . "\" . "aria2c.exe" . "|"
 			portableincludes.= "bin" . "\" . "7za.exe" . "|"
 			portableincludes.= "bin" . "\" . "Setup.exe" . "|"
 			portableincludes.= "bin" . "\" . "RJ_LinkRunner.exe" . "|"
 			portableincludes.= "bin" . "\" . "Update.exe" . "|"
 			portableincludes.= "bin" . "\" . "NewOSK.exe" . "|"
 			portableincludes.= "bin" . "\" . "lrdeploy.exe" . "|"
+			exprt.= "FileInstall, bin\aria2c.exe,bin\aria2c.exe" . "`n"	
 			exprt.= "FileInstall, bin\7za.exe,bin\7za.exe" . "`n"	
 			exprt.= "FileInstall, bin\NewOSK.exe,bin\NewOSK.exe" . "`n"	
 			exprt.= "FileInstall, bin\source_builder.exe,bin\source_builder.exe" . "`n"	
@@ -3465,8 +3465,7 @@ if (GitPush = 1)
 			{
 				FileAppend,for /f "delims=" `%`%a in ("%GITAPP%") do set gitapp=`%`%~a`n,%BUILDIR%\gitcommit.bat
 				FileAppend,pushd "%GITD%"`n,%BUILDIR%\gitcommit.bat
-				FileAppend,"%GITAPP%" config --global user.email %GITMAIL%`n,%BUILDIR%\gitcommit.bat
-				FileAppend,"%GITAPP%" config --global user.name %GITUSER%`n,%BUILDIR%\gitcommit.bat
+				FileAppend,"%GITAPP%" config --global user.email %GITMAIL%`n"%GITAPP%" config --global user.name %GITUSER%`n,%BUILDIR%\gitcommit.bat
 				FileAppend,"`%gitapp`%" add .`n,%BUILDIR%\gitcommit.bat
 				FileAppend,"`%gitapp`%" commit -m `%1`%`n,%BUILDIR%\gitcommit.bat
 				FileAppend,"`%gitapp`%" push -f --all`n,%BUILDIR%\gitcommit.bat
@@ -3678,15 +3677,13 @@ if (uptoserv = 1)
 		FileAppend,copy /y "%BUILDIR%\site\index.html" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
 		FileAppend,copy /y "%BUILDIR%\site\version.txt" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
 		FileAppend,for /f "delims=" `%`%a in ("%GITAPP%") do set gitapp=`%`%~a`n,%BUILDIR%\sitecommit.bat
+		FileAppend,pushd "%SITEDIR%"`n
+		FileAppend,"%GITAPP%" config --global user.email %GITMAIL%`n"%GITAPP%" config --global user.name %GITUSER%`n,%BUILDIR%\gitcommit.bat
 		FileAppend,"`%gitapp`%" add rj_linkrunner`n,%BUILDIR%\sitecommit.bat
 		FileAppend,"`%gitapp`%" commit -m siteupdate`n,%BUILDIR%\sitecommit.bat
 		if (GITPASS <> "")
 			{
 				FileAppend,"`%gitapp`%" push --all`n,%BUILDIR%\sitecommit.bat
-			}
-		if (GITPASS = "")
-			{
-				FileAppend,"`%gitapp`%" push`n,%BUILDIR%\sitecommit.bat
 			}
 		RunWait, %comspec% cmd /c echo.##################  SITE COMMIT  ######################## >>"%DEPL%\deploy.log", ,%rntp%
 		RunWait, %comspec% cmd /c " "%BUILDIR%\sitecommit.bat" "site-commit" >>"%DEPL%\deploy.log"",%BUILDIR%,%rntp%

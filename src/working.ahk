@@ -2030,11 +2030,12 @@ Return
 KillToolTip:
    ToolTip
 Return
+
 GuiSize:  ; Expand or shrink the ListView in response to the user's resizing of the window.
 if (A_EventInfo = 1)  ; The window has been minimized. No action needed.
     return
 ; Otherwise, the window has been resized or maximized. Resize the ListView to match.
-GuiControl, Move, MyListView, % "W" . (A_GuiWidth - 20) . " H" . (A_GuiHeight - 40)
+GuiControl, Move, MyListView, % "W" . (A_GuiWidth - 320) . "H" . (A_GuiHeight - 65)
 return
 
 SANITIZER:
