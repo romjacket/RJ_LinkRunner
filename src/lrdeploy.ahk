@@ -448,17 +448,6 @@ Loop, Read, %home%\skopt.cfg
 							CONTPARAM15= 1
 						}
 				}
-			/*	
-		if (curvl1 = "alt_host")
-				{
-					_REPOURL= %GITWEB%/romjacket
-					if ((curvl2 <> "")&&(curvl2 <> "ERROR"))
-						{
-							ALTHOST= %curvl2%
-							_ALTHOST= %curvl2%
-						}
-				}
-			*/	
 		if (curvl1 = "git_email")
 				{
 					if ((curvl2 <> "")&&(curvl2 <> "ERROR"))
@@ -468,38 +457,6 @@ Loop, Read, %home%\skopt.cfg
 							CONTPARAM19= 1
 						}
 				}
-/*
-		if (curvl1 = "repo_hub")
-				{
-					_DREPO= repo_hub
-					if ((curvl2 <> "")&&(curvl2 <> "ERROR"))
-						{
-							RREPO= %curvl2%
-							_RREPO= %curvl2%
-							CONTPARAM22= 1
-						}
-				}
-		if (curvl1 = "dat_hub")
-				{
-					_DREPO= dat_hub
-					if ((curvl2 <> "")&&(curvl2 <> "ERROR"))
-						{
-							DREPO= %curvl2%
-							_DREPO= %curvl2%
-							CONTPARAM23= 1
-						}
-				}
-		if (curvl1 = "repository_url")
-				{
-					_REPOURL= %GITWEB%/romjacket
-					if ((curvl2 <> "")&&(curvl2 <> "ERROR"))
-						{
-							REPOURL= %curvl2%
-							_REPOURL= %curvl2%
-							CONTPARAM16= 1
-						}
-				}
-			*/	
 		if (curvl1 = "Build_Directory")
 			{
 				if ((curvl2 <> "")&&(curvl2 <> "ERROR"))
@@ -652,12 +609,6 @@ if (initchk = 1)
 		Gui Add, Edit, x30 y310 w326 h21 vUVER gUVER, %_UPDTURL%
 		Gui Add, Edit, x30 y333 w326 h21 vUFLU gUFLU, %_UPDTFILE%
 		Gui Add, Edit, x30 y357 w326 h21 vIURL gIURL, %_GETIPADR%
-		/*
-		Gui Add, Edit, x30 y380 w156 h21 vIREPO gIREPO, %_REPOURL%
-		Gui Add, Edit, x190 y380 w70 h21 vRREPO gRREPO, %RREPO%
-		Gui Add, Edit, x264 y380 w70 h21 vDREPO gDREPO, %DREPO%
-		Gui Add, Edit, x30 y403 w326 h21 vIALTH gIALTH, %_ALTHOST%
-		*/
 		Gui Add, Button, x10 y432 w51 h19 vIReset gIReset, reset_all
 		Gui Add, Button, x331 y432 w51 h19 vSelDXB gSelDXB, quick
 		Gui Add, Button, x159 y433 w80 h23 vICONTINUE gICONTINUE, CONTINUE
@@ -783,25 +734,7 @@ if (GITPAT = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
 	}
 
 ;{;;;;;;;;;;;;;;;,,,,,,,,,, DEPLOYMENT MENU GUI,,,,,,,,,,;;;;;;;;;;;;;;;;;;;;;;;
-;;Gui Add, Tab2, x2 y-1 w487 h171 vTABMENU Bottom, Setup|Deploy
-;;Gui, Tab, 1
-;;Gui, Tab, Setup
-;;Gui, Add, Text,x164 y5, Location
-;;Gui, Add, DropDownList, x8 y2 w100 vSRCDD gSrcDD, Project||Git.exe|github-release|Source|Compiler|Site|Deployment|Build|NSIS|SciTE4AutoHotkey|repo_hub|dat_hub
-;;Gui, Add, Button, x109 y2 w52 h21 vSELDIR gSelDir, Select
-;;Gui, Add, Button, x109 y26 w52 h21 vRESGET gRESGET, Clone
-;;Gui Add, DropDownList,x331 y2 w92 vResDD gResDD, All||Dev-Build|Portable-Build|Stable-Build|Deployer|Update-URL|Update-File|Repo-URL|Internet-IP-URL|Git-User|Git-Password|Git-Token|Git-URL
-;;Gui Add, Button, x425 y2 w52 h21 vResB gResB, Reset
 
-;;Gui Add, Text,x4 y125, %ARCH%-bit
-;;Gui Add, Picture, x4 y58 w155 h67, img\ins.png
-;;Gui Add, Picture, x160 y58 w70 h60, img\cor.png
-;;Gui Add, Picture, x241 y58 w70 h60, img\emu.png
-;;Gui Add, Picture, x322 y58 w70 h60, img\net.png
-;;Gui Add, Picture, x404 y58 w70 h60, img\opt.png
-
-;;Gui, Tab, 2
-;;Gui Tab, Deploy
 Gui, Add, Edit, x8 y24 w469 h50 vPushNotes gPushNotes,%date% :%A_Space%
 Gui, Add, Edit, x161 y151 w115 h21 vVernum gVerNum +0x2, %vernum%
 Gui, Add, Button, x280 y154 w16 h16 vAddIncVer gAddIncVer,+
@@ -818,11 +751,9 @@ Gui, Add, Button, x408 y123 w75 h23 vCANCEL gCANCEL hidden, CANCEL
 gui,font,normal
 Gui, Add, Text, x308 y155, Version
 Gui, Add, CheckBox, x204 y76 w114 h13 vINITINCL gINITINCL checked, Initialize-Include
-;Gui, Add, CheckBox, x204 y95 w154 h13 vREPODATS gREPODATS, Repository Databases
 Gui, Add, CheckBox, x90 y95 w104 h13 vPortVer gPortVer checked %FIE%, Portable/Update
 Gui, Add, CheckBox, x90 y76 w104 h13 vOvrStable gOvrStable %FIE% checked,Stable
 Gui, Add, CheckBox, x90 y95 w154 h13 vDevlVer gDevlVer hidden, Development Version
-;Gui, Add, CheckBox, x90 y113 w154 h13 vDATBLD gDatBld, Database Recompile
 
 Gui, Add, Progress, x12 y135 w388 h8 vprogb -Smooth, 0
 
@@ -886,14 +817,6 @@ return
 ICONTINUE:
 nocont= 
 stv= 
-/*
-if (CONTPARAM21 = "")
-	{
-		guicontrolget,IALTH,,IALTH
-		iniwrite,%IALTH%,%home%\skopt.cfg,GLOBAL,alt_host
-		CONTPARAM21= 1
-	}
-*/	
 if (CONTPARAM19 = "")
 	{
 		guicontrolget,IEmail,,IEmail
@@ -912,43 +835,6 @@ if (CONTPARAM14 = "")
 		CONTPARAM14= 1
 		iniwrite,%UFLU%,%home%\skopt.cfg,GLOBAL,update_file
 	}
-/*	
-if (CONTPARAM15 = "")
-	{
-		guicontrolget,IURL,,IURL
-		iniwrite,%IURL%,%home%\skopt.cfg,GLOBAL,net_ip
-		CONTPARAM15= 1
-	}	
-if (CONTPARAM22 = "")
-	{
-		guicontrolget,RREPO,,RREPO
-		iniwrite,%RREPO%,%home%\skopt.cfg,GLOBAL,repo_hub
-	}	
-if (CONTPARAM23 = "")
-	{
-		guicontrolget,DREPO,,DREPO
-		iniwrite,%DREPO%,%home%\skopt.cfg,GLOBAL,dat_hub
-	}	
-if (CONTPARAM16 = "")
-	{
-		guicontrolget,IREPO,,IREPO
-		reponum1= 
-		reponum2= 
-		reponum3= 
-		reponum4= 
-		ALTHOST= 
-		stringsplit,reponum,IREPO,>
-		IniWrite,%reponum1%,%home%\skopt.cfg,GLOBAL,repository_url
-		if (reponum2 <> "")
-			{
-				ALTHOST= %reponum2%
-			}
-		if (ALTHOST = "")
-			{
-				ALTHOST= %GITWEB%/romjacket
-			}
-	}
-*/	
 CONTPARAM13= 1
 CONTPARAM14= 1
 CONTPARAM15= 1
@@ -1040,24 +926,6 @@ if (nocont = 1)
 				SB_SetText("github email not defined")
 				return
 			}
-	/*
-	if (CONTPARAM21 = "")
-			{
-				SB_SetText("Alternate gituser not defined")
-				return
-			}
-	if (CONTPARAM22 = "")
-			{
-				SB_SetText("repo_hub is not defined")
-				continue
-				return
-			}
-	if (CONTPARAM23 = "")
-			{
-				SB_SetText("dat_hub is not defined")
-				return
-			}
-		*/	
 	}
 Gui,Destroy
 goto, INITCOMPLETE
@@ -1374,97 +1242,6 @@ guicontrol,,IALTH,%IALTH%
 CONTPARAM21= 1
 return
 
-/*
-DREPO:
-gui,submit,nohide
-guicontrolget,DREPO,,DREPO
-IniWrite,%DREPO%,%home%\skopt.cfg,GLOBAL,dat_hub
-if (DREPO = "")
-	{
-		RREPO= rj_linkrunner
-		IniWrite,%DREPO%,%home%\skopt.cfg,GLOBAL,dat_hub
-		CONTPARAM23= 1
-	}
-CONTPARAM23= 1
-return
-
-RREPO:
-gui,submit,nohide
-guicontrolget,RREPO,,RREPO
-IniWrite,%RREPO%,%home%\skopt.cfg,GLOBAL,repo_hub
-if (RREPO = "")
-	{
-		RREPO= repo_hub
-		IniWrite,%RREPO%,%home%\skopt.cfg,GLOBAL,repo_hub
-		CONTPARAM22= 1
-	}
-CONTPARAM22= 1
-return
-IREPO:
-gui,submit,nohide
-guicontrolget,IREPO,,IREPO
-iniread,IREPOv,%source%\repos.set,GLOBAL,HOSTINGURL
-if (IREPO = "")
-	{
-		if (GITUSER = "")
-			{
-				SB_SetText("username is not defined.")
-				guicontrol,,IREPO,%IREPOv%
-				reponum1= 
-				reponum2= 
-				reponum3= 
-				reponum4= 
-				iniread,ALTHv,%source%\repos.set,GLOBAL,ALTHOST
-				stringsplit,reponum,ALTHv,>
-				if (reponum2 <> "")
-					{
-						ALTHOST= %reponum2%
-					}
-				if (ALTHOST = "")
-					{
-						ALTHOST= %GITWEB%/jomracket
-					}
-				IniWrite,%reponum1%,%home%\skopt.cfg,GLOBAL,repository_url
-				IniWrite,%ALTHOST%,%home%\skopt.cfg,GLOBAL,alt_host
-				CONTPARAM16= 1
-				CONTPARAM21= 1
-				return
-			}
-		IREPO= %GITSWEB%/%gituser%
-		if (reponum2 <> "")
-			{
-				ALTHOST= %reponum2%
-			}
-		if (ALTHOST = "")
-			{
-				ALTHOST= %GITWEB%/jomracket
-			}
-		guicontrol,,IREPO,%IREPO%
-		IniWrite,%ALTHOST%,%home%\skopt.cfg,GLOBAL,alt_host
-		CONTPARAM21= 1
-	}
-CONTPARAM16= 1
-IniWrite,%IREPO%,%home%\skopt.cfg,GLOBAL,repository_url
-return
-RepoUrl:
-gui,submit,nohide
-REPOURL= 
-UPDTFILE= %GITWEB%/%GITUSER%/rj_linkrunner/releases/download/nodats
-if (REPORURLT = "")
-	{
-		iniread,REPOURLT,%source%\repos.set,GLOBAL,HOSTINGURL
-		UPDTFILE= %REPORULT%/rj_linkrunner/releases/download/nodats
-	}
-inputbox,REPOURL,Repository-URL,Enter the base-url of the file-repository,,345,140,,,,,%REPOURLT%
-if (REPOURL = "")
-	{
-		REPOURL= %REPOURLT%
-		UPDTFILE= %UPDTFILE%
-	}
-IniWrite,%REPOURL%,%home%\skopt.cfg,GLOBAL,repository_url
-return
-
-*/
 UVER:
 gui,submit,nohide
 guicontrolget,UVER,,UVER
@@ -1642,11 +1419,6 @@ ifnotexist, %GITROOT%\%gituser%.github.io\rj_linkrunner\
 	}	
 iniwrite, %SITEDIR%,%home%\skopt.cfg,GLOBAL,Site_Directory
 CONTPARAM11= 1
-;;RunWait, %comspec% cmd /c "%gitapp%" init,%gitroot%\%GITUSER%.github.io,hide
-;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.email "%GITMAIL%",,hide
-;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.name "%GITUSER%",,hide
-;;RunWait,"bin\curl.exe" -k -u %gituser%:%gitpass% https://api.github.com/user/repos -d `"{\`"name\`":\`"%gituser%.github.io\`"}`",,hide
-
 FileDelete,%DEPL%\gitinit.cmd
 FileAppend, "%GITAPP%" config --global user.email %GITMAIL%`n%GITAPP%config --global user.name %GITNAME%`npopd`n,%DEPL%\gitinit.cmd
 RunWait,%DEPL%\gitinit.cmd,,hide
@@ -2077,7 +1849,6 @@ ifnotexist,%grlsv%
 		gosub, SETUPTOG
 		splitpath,grlsv,svaf,svap
 		exe_get(ARIA,GRLURL,svap,svaf,CURPID,cacheloc)
-		;;DownloadFile(GRLURL, grlsv, False, True)
 		SETUPTOG= enable
 		gosub, SETUPTOG
 		sleep, 1200
@@ -2142,7 +1913,6 @@ ifnotexist, %cacheloc%\%nsisf%
 		gosub, SETUPTOG
 		splitpath,nsisv,svaf,svap
 		exe_get(ARIA,nsisurl,svap,svaf,CURPID,cacheloc)
-		;;DownloadFile(nsisurl, nsisv, False, True)
 		SETUPTOG= enable
 		gosub, SETUPTOG
 		sleep, 1200
@@ -2206,7 +1976,6 @@ ifnotexist,%scisv%
 		gosub, SETUPTOG
 		splitpath,scisv,svaf,svap
 		exe_get(ARIA,SCIURL,svap,svaf,CURPID,cacheloc)
-		;;DownloadFile(SCIURL, scisv, False, True)
 		SETUPTOG= enable
 		gosub, SETUPTOG
 		sleep, 1200
@@ -2518,16 +2287,9 @@ ifexist,%GITROOT%\rj_linkrunner\
 		GITD= %GITROOT%\rj_linkrunner
 		CONTPARAM10= 1
 		CONTPARAM18= 1
-		
-		;;RunWait, %comspec% cmd /c "%gitapp%" init,%gitroot%\rj_linkrunner,hide
-		;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.email %GITMAIL%,,hide
-		;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.name %GITUSER%,,hide
-		;;RunWait, "bin\curl.exe" -k -u %gituser%:%gitpass% https://api.github.com/user/repos -d `"{\`"name\`":\`"rj_linkrunner\`"}`",,hide
-		
 		FileDelete,%DEPL%\gitinit.cmd
 		FileAppend, "%GITAPP%" config --global user.email %GITMAIL%`n%GITAPP% config --global user.name %GITNAME%`n,%DEPL%\gitinit.cmd
-		RunWait,%DEPL%\gitinit.cmd,,hide
-				
+		RunWait,%DEPL%\gitinit.cmd,,hide	
 		guicontrol,,txtGSD,%GITD%
 		IniWrite,%GitSRC%,%home%\skopt.cfg,GLOBAL,git_url
 		iniwrite, %GITD%,%home%\skopt.cfg,GLOBAL,Project_Directory
@@ -2607,16 +2369,10 @@ completeSkelIO:
 ifexist,%GITROOT%\%gituser%.github.io\rj_linkrunner\
 	{
 		SITEDIR= %GITROOT%\%gituser%.github.io\rj_linkrunner
-		CONTPARAM11= 1	
-		;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.email %GITMAIL%,,hide
-		;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.name %GITUSER%,,hide
-		;;RunWait, %comspec% cmd /c "%gitapp%" init,%gitroot%\%GITUSER%.github.io,hide	
-		;;RunWait,"bin\curl.exe" -k -u %gituser%:%gitpass% https://api.github.com/user/repos -d `"{\`"name\`":\`"%gituser%.github.io\`"}`",,hide
-
+		CONTPARAM11= 1
 		FileDelete,%DEPL%\gitinit.cmd
 		FileAppend, "%GITAPP%" config --global user.email %GITMAIL%`n%GITAPP%config --global user.name %GITNAME%`n,%DEPL%\gitinit.cmd
 		RunWait,%DEPL%\gitinit.cmd,,hide
-		
 		guicontrol,,txtGWD,%SITEDIR%
 		iniwrite, %SITEDIR%,%home%\skopt.cfg,GLOBAL,Site_Directory
 		return
@@ -2705,11 +2461,6 @@ Loop, %GITROOT%\rj_linkrunner\*.*
 					}
 				SETUPTOG= enable
 				gosub, SETUPTOG
-				;;RunWait, %comspec% cmd /c "%gitapp%" init,%gitroot%\rj_linkrunner,hide				
-				;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.email "%GITMAIL%",,hide
-				;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.name "%GITUSER%",,hide
-				;;RunWait,"bin\curl.exe" -u %gituser%:%gitpass% https://api.github.com/user/repos -d `"{\`"name\`":\`"rj_linkrunner\`"}`",,hide
-				
 				FileDelete,%DEPL%\gitinit.cmd
 				FileAppend, "%GITAPP%" config --global user.email %GITMAIL%`n%GITAPP%config --global user.name %GITNAME%`n,%DEPL%\gitinit.cmd
 				RunWait,%DEPL%\gitinit.cmd,,hide
@@ -3335,13 +3086,6 @@ if (RESDD = "github-release")
 				ExitApp
 			}
 	}
-	/*
-if (RESDD = "Repo-URL")
-	{
-		iniread,REPOURL,%source%\repos.set,GLOBAL,HOSTINGURL
-		Gosub, RepoURL
-	}
-*/	
 if (RESDD = "Internet-IP-URL")
 	{
 		GETIPADRT= %GETIPADR%
@@ -3542,18 +3286,6 @@ if (INITINCL = 1)
 					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
 					portableincludes.= "site" . "\" . A_LoopFileName . "|"
 				}
-				/*
-			Loop, files,%SKELD%\sets\*.set
-				{
-					stringreplace,ain,A_LoopFileFullPath,%home%\,,All
-					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
-				}
-			Loop, files, %SKELD%\bin\*.exe
-				{
-					stringreplace,ain,A_LoopFileFullPath,%home%\,,All
-					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
-				}
-				*/
 			Loop, files, %SKELD%\src\*.ahk,R
 				{
 					stringreplace,ain,A_LoopFileFullPath,%home%\,,All
@@ -3611,36 +3343,6 @@ guicontrol,,progb,15
 FileDelete,%SKELD%\*.lpl
 FileDelete,%SKELD%\*.tmp
 guicontrol,,progb,20
-/*
-if (DATBLD = 1)
-	{		
-		SB_SetText(" Recompiling Databases ")
-		FileDelete, %DEPL%\ART_ASSETS.7z
-		Loop, %GITD%\rj\scrapeArt\*.7z
-			{
-				RunWait, %comspec% cmd /c echo.##################  CREATE METADATA  ######################## >>"%DEPL%\deploy.log", ,%rntp%	
-				runwait, %comspec% cmd /c " "%BUILDIR%\bin\7za.exe" a -t7z "ART_ASSETS.7z" "%A_LoopFileFullPath%" >>"%DEPL%\deploy.log"",%DEPL%,%rntp%
-				RunWait, %comspec% cmd /c echo.########################################## >>"%DEPL%\deploy.log", ,%rntp%	
-			}
-	}
-if (REPODATS = 1)
-	{
-		SB_SetText(" Compiling Repository Databases ")
-		repolsts= 
-		Loop, %BUILDIR%\gam\*,2
-			{
-				repolsts+=1
-				repoln%A_Index%= %A_LoopFileName%
-				RunWait, %comspec% cmd /c echo.##################  CREATE GAMFILES  ######################## >>"%DEPL%\deploy.log", ,%rntp%
-				runwait, %comspec% cmd /c " "%BUILDIR%\bin\7za.exe" a -t7z "%A_LoopFileName%.7z" "%A_LoopFileFullPath%" >>"%DEPL%\deploy.log"",%DEPL%,%rntp%
-				RunWait, %comspec% cmd /c echo.########################################## >>"%DEPL%\deploy.log", ,%rntp%
-			}	
-
-	}
-FileGetSize,dbsize,%DEPL%\ART_ASSETS.7z,K
-DATSZ:= dbsize / 1000
-*/
-	
 if (PortVer = 1)
 	{		
 		SB_SetText(" Building portable ")
@@ -3744,10 +3446,6 @@ if (GitPush = 1)
 		FileAppend, mkdir "%GITD%\src"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, del /s /q "%GITD%\src\*.ini"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, del /s /q "%GITD%\src\*.txt"`n,%SKELD%\!gitupdate.cmd
-		if (DATBLD = 1)
-			{
-				;FileAppend, copy /y "downloaded\*.*" "%GITD%\downloaded"`n,%SKELD%\!gitupdate.cmd
-			}
 		FileAppend, copy /y "site\index.html" "%GITD%\site"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, copy /y "src\*.ahk" "%GITD%\src"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, copy /y "src\*.set" "%GITD%\src"`n,%SKELD%\!gitupdate.cmd
@@ -3756,7 +3454,6 @@ if (GitPush = 1)
 		FileAppend, copy /y "site\ReadMe.md" "%GITD%\site"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, copy /y "site\version.txt" "%GITD%\site"`n,%SKELD%\!gitupdate.cmd
 		FileAppend, del /q "%GITD%\rj_linkrunner.exe"`n,%SKELD%\!gitupdate.cmd
-
 		FileSetAttrib, +h, %SKELD%\!gitupdate.cmd
 		SB_SetText(" Adding changes to git ")
 		RunWait, %comspec% cmd /c echo.###################  GIT UPDATE  ####################### >>"%DEPL%\deploy.log", ,%rntp%	
@@ -3786,7 +3483,6 @@ if (GitPush = 1)
 		RunWait, %comspec% cmd /c echo.####################  GIT COMMIT  ###################### >>"%DEPL%\deploy.log", ,%rntp%
 		RunWait, %comspec% cmd /c " "%BUILDIR%\gitcommit.bat" "%PushNotes%" >>"%DEPL%\deploy.log"",%GITD%,%rntp%
 		RunWait, %comspec% cmd /c echo.########################################## >>"%DEPL%\deploy.log", ,%rntp%
-		;FileDelete, %BUILDIR%\gitcommit.bat
 		SB_SetText(" source changes pushed to master ")
 		guicontrol,,progb,65
 	}
@@ -3824,46 +3520,16 @@ if (ServerPush = 1)
 			{
 				if (ServerPush = 1)
 					{	
-						;FileAppend, "%GITRLS%" delete -u %gituser% -s %GITPAT% -r rj_linkrunner -t portable`n,%DEPL%\gpush.cmd
 						FileAppend, "%GITRLS%" release delete portable -y`n,%DEPL%\gpush.cmd
 						FileAppend, "%GITRLS%" release create portable -t "portale binaries" "%DEPL%\portable.zip"`n,%DEPL%\gpush.cmd
-						;FileAppend, "%GITRLS%" upload -u %gituser% -s %GITPAT% -R -r rj_linkrunner -t portable -l portable -n rj_linkrunner.zip -f "%DEPL%\rj_linkrunner.zip"`n,%DEPL%\gpush.cmd
 					}
 			}
-			/*
-		if (DATBLD = 1)
-			{
-				if (ServerPush = 1)
-					{					
-						FileAppend, "%GITRLS%" delete -u %gituser% -s %GITPAT% -r %DREPO% -t ART_ASSETS`n,%DEPL%\gpush.cmd
-						FileAppend, "%GITRLS%" release -u %gituser% -s %GITPAT% -r %DREPO% -n ART_ASSETS -t ART_ASSETS`n,%DEPL%\gpush.cmd
-						FileAppend, "%GITRLS%" upload -u %gituser% -s %GITPAT% -R -r %DREPO% -t ART_ASSETS -l "ART_ASSETS" -n ART_ASSETS.7z -f "%DEPL%\ART_ASSETS.7z"`n,%DEPL%\gpush.cmd
-					}
-			}
-		if (REPODATS = 1)
-			{
-				if (ServerPush = 1)
-					{
-						Loop,%repolsts%
-							{
-								rpofn:= % repoln%A_Index%
-								stringupper,rpoln,rpofn
-								FileAppend, "%GITRLS%" delete -u %gituser% -s %GITPAT% -r %RREPO% -t %rpoln%`n,%DEPL%\gpush.cmd
-								FileAppend, "%GITRLS%" release -u %gituser% -s %GITPAT% -r %RREPO% -n %rpoln% -t %rpoln%`n,%DEPL%\gpush.cmd
-								FileAppend, "%GITRLS%" upload -u %gituser% -s %GITPAT% -R -r %RREPO% -t %rpoln% -l "%rpoln%" -n %rpofn%.7z -f "%DEPL%\%rpofn%.7z"`n,%DEPL%\gpush.cmd
-							}
-					}
-			}
-		*/	
 		if (OvrStable = 1)
 			{
 				if (ServerPush = 1)
 					{
-						;FileAppend, "%GITRLS%" delete -u %gituser% -s %GITPAT% -r rj_linkrunner -t Installer`n,%DEPL%\gpush.cmd
 						FileAppend, "%GITRLS%" release delete Installer -y`n,%DEPL%\gpush.cmd
 						FileAppend, "%GITRLS%" release create Installer -t "Zipped Installer" "%DEPL%\rj_linkrunner.zip"`n,%DEPL%\gpush.cmd
-;						FileAppend, "%GITRLS%" release -u %gituser% -s %GITPAT% -r rj_linkrunner -n Installer -t Installer`n,%DEPL%\gpush.cmd
-;						FileAppend, "%GITRLS%" upload -u %gituser% -s %GITPAT% -R -r rj_linkrunner -t Installer -l Installer -n rj_linkrunner.zip -f "%DEPL%\rj_linkrunner.zip"`n,%DEPL%\gpush.cmd
 					}
 			}
 		if (SiteUpdate <> 1)
@@ -3981,13 +3647,8 @@ if (SiteUpdate = 1)
 		ifnotexist, %gitroot%\%gituser%.github.io\rj_linkrunner
 			{
 				FileCreateDir,%gitroot%\%gituser%.github.io\rj_linkrunner
-				;;RunWait, %comspec% cmd /c "%gitapp%" init,%gitroot%\%GITUSER%.github.io,hide				
-				;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.email "%GITMAIL%",,hide
-				;;RunWait, %comspec% cmd /c "%gitapp%" config --global user.name "%GITUSER%",,hide
-				;;RunWait,"bin\curl.exe" -k -u %gituser%:%gitpass% https://api.github.com/user/repos -d `"{\`"name\`":\`"%gituser%.github.io\`"}`",,hide
-				
 				FileDelete,%DEPL%\gitinit.cmd
-				FileAppend, "%GITAPP%" config --global user.email %GITMAIL%`n%GITAPP%config --global user.name %GITNAME%`n,%DEPL%\gitinit.cmd
+				FileAppend, "%GITAPP%" config --global user.name %GITUSER%`n"%GITAPP%" config --global user.email %GITMAIL%`n,%DEPL%\gitinit.cmd
 				RunWait,%DEPL%\gitinit.cmd,,hide
 				
 			}
@@ -4007,19 +3668,14 @@ if (uptoserv = 1)
 		SB_SetText(" Uploading to server ")
 		FileDelete, %BUILDIR%\sitecommit.bat
 		FileAppend,pushd "%gitroot%\%GITUSER%.github.io"`n,%BUILDIR%\sitecommit.bat
-		;FileAppend,copy /y "%BUILDIR%\site\update.png" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		;FileAppend,copy /y "%BUILDIR%\site\update.ico" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
 		FileAppend,copy /y "%BUILDIR%\site\keymapper.png" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		;FileAppend,copy /y "%BUILDIR%\site\install.png" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		;FileAppend,copy /y "%BUILDIR%\site\install.ico" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		FileAppend,copy /y "%BUILDIR%\site\key.ico" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		FileAppend,copy /y "%BUILDIR%\site\key.png" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		FileAppend,copy /y "%BUILDIR%\site\example.png" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		FileAppend,copy /y "%BUILDIR%\site\tip.png" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
+		FileAppend,copy /y "%BUILDIR%\site\*.ico" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
+		FileAppend,copy /y "%BUILDIR%\site\*.png" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
 		FileAppend,copy /y "%BUILDIR%\site\*.otf" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
 		FileAppend,copy /y "%BUILDIR%\site\*.ttf" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
 		FileAppend,copy /y "%BUILDIR%\site\*.svg" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
 		FileAppend,copy /y "%BUILDIR%\site\ReadMe.md" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
+		FileAppend,copy /y "%BUILDIR%\site\index.html" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
 		FileAppend,copy /y "%BUILDIR%\site\version.txt" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
 		FileAppend,for /f "delims=" `%`%a in ("%GITAPP%") do set gitapp=`%`%~a`n,%BUILDIR%\sitecommit.bat
 		FileAppend,"`%gitapp`%" add rj_linkrunner`n,%BUILDIR%\sitecommit.bat
@@ -4035,7 +3691,6 @@ if (uptoserv = 1)
 		RunWait, %comspec% cmd /c echo.##################  SITE COMMIT  ######################## >>"%DEPL%\deploy.log", ,%rntp%
 		RunWait, %comspec% cmd /c " "%BUILDIR%\sitecommit.bat" "site-commit" >>"%DEPL%\deploy.log"",%BUILDIR%,%rntp%
 		RunWait, %comspec% cmd /c echo.########################################## >>"%DEPL%\deploy.log", ,%rntp%
-		;FileDelete,%BUILDIR%\sitecommit.bat
 	}
 
 guicontrol,,progb,100
@@ -4079,7 +3734,6 @@ ifexist, %DEPL%\rj_linkrunner-installer.exe
 	{
 		FileDelete, %DEPL%\rj_linkrunner-installer.exe
 	}
-;;FileDelete, %DEPL%\rj_linkrunner-Full.exe
 ifexist, %BUILDIR%\lrdeploy.nsi
 	{
 		FileDelete, %BUILDIR%\lrdeploy.nsi
@@ -4117,7 +3771,6 @@ if (BLDERROR = 1)
 	{
 		MsgBox,0,,HALT.,INSTALLER FAILED.,CHECK YO SCRIPT MAN!
 	}
-;FileDelete,lrdeploy.nsi
 FileDelete, %SKELD%\site\version.txt
 FileAppend, %date% %timestring%=%nchash%=%vernum%,%SKELD%\site\version.txt
 buildnum= 

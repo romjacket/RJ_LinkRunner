@@ -1,7 +1,7 @@
 ## Installation
-This Version:0.99.1.06
+This Version:0.99.1.07
 
-This Build: 2021-10-28 11:38 AM
+This Build: 2021-10-28 6:43 PM
 
 Run the installer or extract the binary to a location of your choice, **or** download and build and run the source files and executables.
 ```sh
@@ -76,7 +76,7 @@ Right-Click on the buttons in the setup tool to download supported executables.
 
 It is best if you set the RJ_LinkRunner.exe, antimicro.exe and xpadder.exe to run as the administrator.
 
-![AsAdmin](http://romjacket.github.com/rj_linkrunner/runas.png)
+![AsAdmin](https://romjacket.github.io/RJ_LinkRunner/runas.png)
 
 During gameplay you may add additional joysticks and save a profile for them. Any additional joystick profiles found within the game's jacket will be saved and reloaded for player 2, prioritizing the default profile-name (Game Jacket_2.gamecontroller.amgp, and other "player 2" monikers.)
 
