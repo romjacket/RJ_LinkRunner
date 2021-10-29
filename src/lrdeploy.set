@@ -87,6 +87,10 @@ SectionEnd
   File "[SOURCE]\bin\7za.exe"
   SectionEnd
   Section "" 
+  SetOutPath $INSTDIR\site\img
+  File /r "[SOURCE]\site\img"
+  SectionEnd
+  Section "" 
   SetOutPath $INSTDIR\site
   File /r "[SOURCE]\site\"
   SectionEnd

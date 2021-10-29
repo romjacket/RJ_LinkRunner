@@ -1824,12 +1824,12 @@ iniwrite, %GITD%,%home%\skopt.cfg,GLOBAL,Project_Directory
 IniWrite,%GitSRC%,%home%\skopt.cfg,GLOBAL,git_url
 CONTPARAM10= 1
 CONTPARAM18= 1
-FileDelete, %BUILDIR%\gitcommit.bat
-FileAppend,for /f "delims=" `%`%a in ("%GITAPP%") do set gitapp=`%`%~a`n,%BUILDIR%\gitcommit.bat
-FileAppend,pushd "%GITD%"`n,%BUILDIR%\gitcommit.bat
-FileAppend,"`%gitapp`%" add .`n,%BUILDIR%\gitcommit.bat
-FileAppend,"`%gitapp`%" commit -m `%1`%.`n,%BUILDIR%\gitcommit.bat
-FileAppend,"`%gitapp`%" push --all`n,%BUILDIR%\gitcommit.bat			
+FileDelete, %DEPL%\gitcommit.bat
+FileAppend,for /f "delims=" `%`%a in ("%GITAPP%") do set gitapp=`%`%~a`n,%DEPL%\gitcommit.bat
+FileAppend,pushd "%GITD%"`n,%DEPL%\gitcommit.bat
+FileAppend,"`%gitapp`%" add .`n,%DEPL%\gitcommit.bat
+FileAppend,"`%gitapp`%" commit -a -m `%1`%.`n,%DEPL%\gitcommit.bat
+FileAppend,"`%gitapp`%" push --all`n,%DEPL%\gitcommit.bat			
 guicontrol,,txtGSD,%GITD%	
 return
 ;{;;;;;;;;;;;;;;;;;;;;;;;;;;   DOWNLOAD APPS  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -3032,7 +3032,7 @@ if (RESDD = "Deployer")
 		MsgBox,1,Confirm Tool Reset, Are You sure you want to reset the Deployment Tool?
 		IfMsgBox, OK
 			{
-				FileDelete, %BUILDIR%\gitcommit.bat
+				FileDelete, %DEPL%\gitcommit.bat
 				FileDelete, %BUILDIR%\lrdeploy.nsi				
 				FileDelete, %home%\skopt.cfg
 				ExitApp
@@ -3167,7 +3167,7 @@ guicontrol,disable,DevlVer
 
 
 readme= 
-FileMove,%SKELD%\ReadMe.md, %SKELD%\ReadMe.bak,1
+FileMove,%SKELD%\ReadMe.md, %DEPL%\ReadMe.bak,1
 FileRead,readme,%SKELD%\src\ReadMe.set
 StringReplace,readme,readme,[CURV],%vernum%
 StringReplace,readme,readme,[VERSION],%date% %timestring%
@@ -3176,7 +3176,7 @@ FileCopy,%SKELD%\ReadMe.md,site,1
 FileCopy,%SKELD%\ReadMe.md,%SKELD%\License.md,1
 FileDelete, %SKELD%\bin\Setup.exe
 FileDelete,%SKELD%\bin\setup.tmp
-FileMove,%SKELD%\src\Setup.ahk,%SKELD%\src\skel.bak,1
+FileMove,%SKELD%\src\Setup.ahk,%DEPL%\Setup.bak,1
 FileCopy, %SKELD%\src\working.ahk, %SKELD%\src\Setup.tmp,1
 sktmp= 
 sktmc= 
@@ -3222,6 +3222,7 @@ if (INITINCL = 1)
 	{
 			exprt= 
 			exprt.= "FileCreateDir, site" . "`n"
+			exprt.= "FileCreateDir, site" . "\" . "img" . "`n"
 			exprt.= "FileCreateDir, bin" . "`n"
 			exprt.= "FileCreateDir, src" . "`n"
 			exprt.= "IfNotExist, rj" . "`n" . "{" . "`n" . "FileCreateDir, rj" . "`n" . "FILEINS= 1" . "`n" . "}" . "`n"
@@ -3254,17 +3255,17 @@ if (INITINCL = 1)
 					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
 					portableincludes.= "src" . "\" . A_LoopFileName . "|"
 				}
-			Loop, files, %SKELD%\site\*.svg
+			Loop, files, %SKELD%\site\img\*.svg
 				{
 					stringreplace,ain,A_LoopFileFullPath,%home%\,,All
 					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
-					portableincludes.= "site" . "\" . A_LoopFileName . "|"
+					portableincludes.= "site" . "\" . "img" . "\" . A_LoopFileName . "|"
 				}
-			Loop, files, %SKELD%\site\*.png
+			Loop, files, %SKELD%\site\img\*.png
 				{
 					stringreplace,ain,A_LoopFileFullPath,%home%\,,All
 					exprt.= "FileInstall," . ain . "," . ain . ",1" . "`n"
-					portableincludes.= "site" . "\" . A_LoopFileName . "|"
+					portableincludes.= "site" . "\" . "img" . "\"  A_LoopFileName . "|"
 				}
 			Loop, files, %SKELD%\site\*.html
 				{
@@ -3461,14 +3462,14 @@ if (GitPush = 1)
 		RunWait, %comspec% cmd /c echo.########################################## >>"%DEPL%\deploy.log", ,%rntp%	
 		FileDelete, %SKELD%\!gitupdate.cmd
 		SB_SetText(" committing changes to git ")
-		FileDelete, %BUILDIR%\gitcommit.bat
+		FileDelete, %DEPL%\gitcommit.bat
 			{
-				FileAppend,for /f "delims=" `%`%a in ("%GITAPP%") do set gitapp=`%`%~a`n,%BUILDIR%\gitcommit.bat
-				FileAppend,pushd "%GITD%"`n,%BUILDIR%\gitcommit.bat
-				FileAppend,"%GITAPP%" config --global user.email %GITMAIL%`n"%GITAPP%" config --global user.name %GITUSER%`n,%BUILDIR%\gitcommit.bat
-				FileAppend,"`%gitapp`%" add .`n,%BUILDIR%\gitcommit.bat
-				FileAppend,"`%gitapp`%" commit -m `%1`%`n,%BUILDIR%\gitcommit.bat
-				FileAppend,"`%gitapp`%" push -f --all`n,%BUILDIR%\gitcommit.bat
+				FileAppend,for /f "delims=" `%`%a in ("%GITAPP%") do set gitapp=`%`%~a`n,%DEPL%\gitcommit.bat
+				FileAppend,pushd "%GITD%"`n,%DEPL%\gitcommit.bat
+				FileAppend,"%GITAPP%" config --global user.email %GITMAIL%`n"%GITAPP%" config --global user.name %GITUSER%`n,%DEPL%\gitcommit.bat
+				FileAppend,"`%gitapp`%" add .`n,%DEPL%\gitcommit.bat
+				FileAppend,"`%gitapp`%" commit -a -m `%1`%`n,%DEPL%\gitcommit.bat
+				FileAppend,"`%gitapp`%" push -f --all`n,%DEPL%\gitcommit.bat
 			
 			}
 			
@@ -3480,7 +3481,7 @@ if (GitPush = 1)
 		StringReplace,PushNotes,PushNotes,",,All
 		;"
 		RunWait, %comspec% cmd /c echo.####################  GIT COMMIT  ###################### >>"%DEPL%\deploy.log", ,%rntp%
-		RunWait, %comspec% cmd /c " "%BUILDIR%\gitcommit.bat" "%PushNotes%" >>"%DEPL%\deploy.log"",%GITD%,%rntp%
+		RunWait, %comspec% cmd /c " "%DEPL%\gitcommit.bat" "%PushNotes%" >>"%DEPL%\deploy.log"",%GITD%,%rntp%
 		RunWait, %comspec% cmd /c echo.########################################## >>"%DEPL%\deploy.log", ,%rntp%
 		SB_SetText(" source changes pushed to master ")
 		guicontrol,,progb,65
@@ -3665,28 +3666,27 @@ if (ServerPush = 1)
 if (uptoserv = 1)
 	{
 		SB_SetText(" Uploading to server ")
-		FileDelete, %BUILDIR%\sitecommit.bat
-		FileAppend,pushd "%gitroot%\%GITUSER%.github.io"`n,%BUILDIR%\sitecommit.bat
-		FileAppend,copy /y "%BUILDIR%\site\keymapper.png" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		FileAppend,copy /y "%BUILDIR%\site\*.ico" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		FileAppend,copy /y "%BUILDIR%\site\*.png" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		FileAppend,copy /y "%BUILDIR%\site\*.otf" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		FileAppend,copy /y "%BUILDIR%\site\*.ttf" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		FileAppend,copy /y "%BUILDIR%\site\*.svg" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		FileAppend,copy /y "%BUILDIR%\site\ReadMe.md" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		FileAppend,copy /y "%BUILDIR%\site\index.html" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		FileAppend,copy /y "%BUILDIR%\site\version.txt" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%BUILDIR%\sitecommit.bat
-		FileAppend,for /f "delims=" `%`%a in ("%GITAPP%") do set gitapp=`%`%~a`n,%BUILDIR%\sitecommit.bat
+		FileDelete, %DEPL%\sitecommit.bat
+		FileAppend,pushd "%gitroot%\%GITUSER%.github.io"`n,%DEPL%\sitecommit.bat
+		FileAppend,copy /y "%BUILDIR%\site\*.ico" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%DEPL%\sitecommit.bat
+		FileAppend,copy /y "%BUILDIR%\site\img\*.png" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%DEPL%\sitecommit.bat
+		FileAppend,copy /y "%BUILDIR%\site\img\*.svg" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%DEPL%\sitecommit.bat
+		FileAppend,copy /y "%BUILDIR%\site\*.otf" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%DEPL%\sitecommit.bat
+		FileAppend,copy /y "%BUILDIR%\site\*.ttf" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%DEPL%\sitecommit.bat
+		FileAppend,copy /y "%BUILDIR%\site\ReadMe.md" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%DEPL%\sitecommit.bat
+		FileAppend,copy /y "%BUILDIR%\site\index.html" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%DEPL%\sitecommit.bat
+		FileAppend,copy /y "%BUILDIR%\site\version.txt" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%DEPL%\sitecommit.bat
+		FileAppend,for /f "delims=" `%`%a in ("%GITAPP%") do set gitapp=`%`%~a`n,%DEPL%\sitecommit.bat
 		FileAppend,pushd "%SITEDIR%"`n
-		FileAppend,"%GITAPP%" config --global user.email %GITMAIL%`n"%GITAPP%" config --global user.name %GITUSER%`n,%BUILDIR%\gitcommit.bat
-		FileAppend,"`%gitapp`%" add rj_linkrunner`n,%BUILDIR%\sitecommit.bat
-		FileAppend,"`%gitapp`%" commit -m siteupdate`n,%BUILDIR%\sitecommit.bat
+		FileAppend,"%GITAPP%" config --global user.email %GITMAIL%`n"%GITAPP%" config --global user.name %GITUSER%`n,%DEPL%\gitcommit.bat
+		FileAppend,"`%gitapp`%" add -A rj_linkrunner`n,%DEPL%\sitecommit.bat
+		FileAppend,"`%gitapp`%" commit -a -m siteupdate`n,%DEPL%\sitecommit.bat
 		if (GITPASS <> "")
 			{
-				FileAppend,"`%gitapp`%" push --all`n,%BUILDIR%\sitecommit.bat
+				FileAppend,"`%gitapp`%" push --all`n,%DEPL%\sitecommit.bat
 			}
 		RunWait, %comspec% cmd /c echo.##################  SITE COMMIT  ######################## >>"%DEPL%\deploy.log", ,%rntp%
-		RunWait, %comspec% cmd /c " "%BUILDIR%\sitecommit.bat" "site-commit" >>"%DEPL%\deploy.log"",%BUILDIR%,%rntp%
+		RunWait, %comspec% cmd /c " "%DEPL%\sitecommit.bat" "site-commit" >>"%DEPL%\deploy.log"",%BUILDIR%,%rntp%
 		RunWait, %comspec% cmd /c echo.########################################## >>"%DEPL%\deploy.log", ,%rntp%
 	}
 
