@@ -385,9 +385,9 @@ if (MonitorMode > 0)
 sleep, 1200
 Mapper_Extension:= % Mapper_Extension
 
-regRead,curwlp,HKCU\Control Panel\Desktop, WallPaper
-regWrite, REG_SZ,HKCU\Control Panel\Desktop,WallPaper," "
-RunWait, Rundll32.exe user32.dll`, UpdatePerUserSystemParameters
+;regRead,curwlp,HKCU\Control Panel\Desktop, WallPaper
+;regWrite, REG_SZ,HKCU\Control Panel\Desktop,WallPaper," "
+;RunWait, Rundll32.exe user32.dll`, UpdatePerUserSystemParameters
 
 Tooltip,
 WinGet, WindowList, List
@@ -717,7 +717,7 @@ if (exe_list <> "")
 				process,close,%A_LoopField%
 			}
 	}
-
+fileappend,er=%erahkpid%`ndcls=%dcls%`npfile=%pfile%
 Run, taskkill /f /im "%plnkn%*",,hide
 stringsplit,prestk,2_Post,<
 stringright,lnky,prestk2,4
@@ -744,8 +744,8 @@ if (prestk2 <> "")
 		Run,%prestk2%,%A_ScriptDir%,%runhow%,postbpid	
 	}
 postmonitor:
-regWrite, REG_SZ,HKCU\Control Panel\Desktop,WallPaper,%curwlp%
-RunWait, Rundll32.exe user32.dll`, UpdatePerUserSystemParameters
+;regWrite, REG_SZ,HKCU\Control Panel\Desktop,WallPaper,%curwlp%
+;RunWait, Rundll32.exe user32.dll`, UpdatePerUserSystemParameters
 if (MonitorMode > 0)
 	{
 		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(MM_Game_Config)&& fileexist(MM_MediaCenter_Config))

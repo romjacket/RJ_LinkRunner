@@ -1380,7 +1380,7 @@ ifinstring,stlocp,.github.io
 		else {
 			ifinstring,stloct,.github.io
 				{
-					Loop,files,%STLOCT%\*,2
+					Loop,files,%STLOCT%\*,D
 						{
 							if (A_LoopFilename = "RJ_LinkRunner")
 								{
