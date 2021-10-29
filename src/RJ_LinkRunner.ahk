@@ -461,6 +461,7 @@ if (Mapper > 0)
 					}
 				Joycount=
 			}
+		ToolTip, %joycnt% Joysticks found	
 		Run,%Keyboard_Mapper% "%player1%"%player2t%,,hide,kbmp
 		Sleep,600
 		Loop,5

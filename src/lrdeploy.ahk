@@ -614,7 +614,7 @@ if (initchk = 1)
 		Gui Add, Button, x159 y433 w80 h23 vICONTINUE gICONTINUE, CONTINUE
 		Gui Add, StatusBar,, Status Bar
 		OnMessage(0x200, "WM_MOUSEMOVE")
-		Gui, Show, w391 h482, _DEV_
+		Gui, Show, w391 h482, _RJ_LR_DEV_
 		return	
 	}
 ;};;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -759,7 +759,7 @@ Gui, Add, Progress, x12 y135 w388 h8 vprogb -Smooth, 0
 
 Gui, Add, StatusBar, x0 y151 w488 h18, Compiler Status
 OnMessage(0x200, "WM_MOUSEMOVE")
-Gui, Show, w488 h194,_DEV_	
+Gui, Show, w488 h194,_RJ_LR_DEV_	
 GuiControl, Choose, TABMENU, 2
 Return
 
@@ -3848,7 +3848,7 @@ filemove,%SKELD%\rj_linkrunner.exe, %SKELD%\rj_linkrunner.del,1
 return
 
 esc::
-#IfWinActive _DEV_
+#IfWinActive _RJ_LR_DEV_
 FDME:= 8452
 quitnum+=1
 if (quitnum = 3)
@@ -3898,7 +3898,7 @@ StringLower,ApndSHA,ApndSHA
 return
 
 QUITOUT:
-WinGet, PEFV,PID,_DEV_
+WinGet, PEFV,PID,_RJ_LR_DEV_
 Process, close, %PEFV%
 GuiEscape:
 GuiClose:
