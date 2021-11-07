@@ -1,4 +1,8 @@
 set pro1=%1%
 set pro2= --next --profile-controller 2 --profile %2%
+set pro3= --next --profile-controller 3 --profile %3%
+set pro4= --next --profile-controller 4 --profile %4%
+if "%~4" == "" set pro4= 
+if "%~3" == "" set pro3= 
 if "%~2" == "" set pro2= 
-start "" "[AMICRO]" --tray --hidden --profile-controller 1 --profile %pro1%%pro2%
+start "" "[AMICRO]" --tray --hidden --profile-controller 1 --profile %pro1%%pro2%%pro3%%pro4%

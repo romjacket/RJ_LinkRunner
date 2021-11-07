@@ -36,6 +36,8 @@ if ((tstidir = "src")or(tstidir = "bin")or(tstidir = "binaries"))
 	}
 source= %home%\src
 binhome= %home%\bin
+curpidf= %home%\rjpids.ini
+filedelete,%curpidf%
 Tooltip,Keyboad/Mouse Disabled`n::Please Be Patient::`n
 Blockinput, on
 if (GetKeyState("Alt")&&(scextn = "exe"))
@@ -296,8 +298,9 @@ ifnotexist,%player2%
 	}
 if (mediacenter_profile_2 = "")
 	{
-		splitpath,mediacenter_profile,,,,mcp2
-		mediacenter_profile_2= %Game_Profiles%\%gmnamex%\%mcp2%2.%mapper_extension%
+		splitpath,mediacenter_profile,MC_prof,MC_D,,
+		stringreplace,mcp2,MC_prof,.%mapper_extension%,,
+		mediacenter_profile_2= %MC_D%\%mcp2%_2.%mapper_extension%
 	}
 ifnotexist, %mediacenter_profile_2%
 	{
@@ -326,6 +329,7 @@ if (prestk2 <> "")
 				gosub,nonmres
 			}
 		Run,%prestk2%,%A_ScriptDir%,,preapid	
+		iniwrite,%preapid%,%home%/rjpids.ini,1_Pre,pid
 	}
 acwchk=
 GMGDBCHK= %gmnamex%	
@@ -376,12 +380,18 @@ if (MonitorMode > 0)
 			}
 		if (disprogw = 1)
 			{
-				RunWait,%MultiMonitor_Tool% %switchcmd%,%mmpath%,hide
+				RunWait,%MultiMonitor_Tool% %switchcmd%,%mmpath%,hide,mmpid
 			}
 		else {
-			Run,%MultiMonitor_Tool% %switchcmd%,%mmpath%,hide
-		}
+				Run,%MultiMonitor_Tool% %switchcmd%,%mmpath%,hide,mmpid
+			}
+		iniwrite,%mmpid%,%curpidf%,MultiMonitor_Tool,pid
 	}
+Gui, Color, Black
+
+Gui, +ToolWindow -Caption +AlwaysOnTop
+
+Gui, show, x0 y0 w%A_ScreenWidth% h%A_ScreenHeight%, NA
 sleep, 1200
 Mapper_Extension:= % Mapper_Extension
 
@@ -419,50 +429,60 @@ if (prestk2 <> "")
 				RunWait,%prestk2%,%A_ScriptDir%,%runhow%,prebpid
 				goto,premapper
 			}
-		Run,%prestk2%,%A_ScriptDir%,%runhow%,prebpid	
+		Run,%prestk2%,%A_ScriptDir%,%runhow%,prebpid
+		iniwrite,%prebpid%,%curpidf%,2_Pre,pid
 	}
 premapper:	
 if (Mapper > 0)
 	{
 		ToolTip,Running %gmnamx% preferences`n:::Loading Joystick Configurations:::
-		joycnt=
-		joycnt= %joycount%					
-		player2n= "%player2%"
-		;;gosub, AmicroTest
+		joyncnt=
+		joycnt=	
+		Loop, 16
+			{
+				player%A_Index%n=
+				player%A_Index%t=
+			}
+		splitpath,Player1,p1fn,pl1pth,,plgetat
 		loop, 16 
 			{
-				if (JoyName := GetKeyState(A_Index "JoyName"))
+				joypartX:= % joyGetName(A_Index)
+				joypart%A_Index%:= joypartX
+				if (joypartX = "failed")
 					{
-						joycount := A_Index
+						PlayerVX= 
+						player%A_Index%n=
+						player%A_Index%t=
+						;msgbox,,,% joypart%A_Index%
+						continue
 					}
+				joycount+= 1
+				if (2 > JoyCount)
+					{
+						continue
+					}
+				playerVX:= % player%JoyCount%	
+				player%JoyCount%X:= % player%JoyCount%	
+				player%JoyCount%n= "%playerVX%"
+				player%JoyCount%t:= A_Space . (player%JoyCount%n)
+				iniwrite,%PlayerVX%,%inif%,GENERAL,Player%JoyCount%
 			}
 		Joycnt= %joycount%
 		if (JMap = "xpadder")
 			{
-				player2t:= A_Space . player2n . "/M"
 				process,close,xpadder.exe
 				sleep,600
 			}
 		if (JMap = "antimicro")
 			{
-				player2t:= A_Space . player2n
 				unload:= "" . antimicro_executable . "" . A_Space . "--unload"
 				Run, %unload%,%mapperp%,hide
 				process,close,antimicro.exe
 				sleep,600
 			}
-		if (joycnt < 2)
-			{
-				player2t=
-				player2n=
-				if (JMap = "Xpadder")
-					{
-						player2t:= A_Space . "/M"
-					}
-				Joycount=
-			}
 		ToolTip, %joycnt% Joysticks found
-		Run,%Keyboard_Mapper% "%player1%"%player2t%,,hide,kbmp
+		Run,%Keyboard_Mapper% "%player1%"%player2t%%player3t%%player4t%,,hide,kbmp
+		fileappend,`n#####`n%Keyboard_Mapper% "%player1%"%player2t%%player3t%%player4t%`npid=%kbmp%`n#####`n,%home%\log.txt
 		Sleep,600
 		Loop,5
 			{
@@ -474,10 +494,31 @@ if (Mapper > 0)
 					}
 				Sleep,500
 			}
+		iniwrite,%joycnt%,%curpidf%,Mapper,connected
+		iniwrite,%kbmp%,%curpidf%,Mapper,pid
+		joyncnt:= joycnt
+		if (Joycnt > 2)
+			{
+				Loop,files,%pl1pth%\*.%mapper_extension%
+					{
+						if ((A_LoopFileFullPath = Player1X) or (A_LoopFileFullPath = Player2X) or (A_index =< 2))
+							{
+								continue
+							}
+						joyncnt+= 1
+						PlayerN= %gmnamex%_%joyncnt%.%mapper_extension%
+						if (A_LoopFileName = PlayerN)
+							{
+								joypartX:= % joyGetName(joyncnt)			
+								iniwrite,%A_LoopFileFullPath%,%inif%,GENERAL,Player%joyncnt%					
+							}
+					}
+			}
 	}
 stringsplit,prestk,3_Pre,<
 stringright,lnky,prestk2,4
 runhow= 
+Gui, Destroy
 if (prestk2 <> "")
 	{
 		if (lnky = ".lnk")
@@ -498,6 +539,7 @@ if (prestk2 <> "")
 				goto,begin
 			}
 		Run,%prestk2%,%A_ScriptDir%,%runhow%,precpid
+		iniwrite,%precpid%,%curpidf%,3_Pre,pid
 	}	
 begin:
 ToolTip,Loading %gmnamex%
@@ -516,6 +558,7 @@ goto, bgl
 if (instr(bgm,gmname)or instr(bgm,GMGDBCHK))
 	{
 		Run, %bgaming%,%BGMLOC%,,bgpid
+		iniwrite,%bgpid%,%curpidf%,Borderless_Gaming_Program,pid
 	}
 	
 bgl:	
@@ -556,12 +599,14 @@ if (exe_list <> "")
 			}
 		Tooltip,
 		BlockInput,Off
+		iniwrite,%erahkpid%,%curpidf%,Current_Game,pid
 		process,WaitClose, %erahkpid%
 		goto, appclosed	
 	}
 Tooltip,
 BlockInput,Off	
 		;;msgbox,,,%erahkpid% is closed`n%gmgdbchk% found`nnerlv=%nerlv%`ngii=%gii%`ndcls=%dcls%
+iniwrite,%dcls%,%curpidf%,Current_Game,pid
 WinWait, ahk_pid %dcls%
 WinActivate
 WinGetActiveTitle,GMGDBCHK
@@ -644,10 +689,24 @@ if (Mapper > 0)
 		ToolTip,Please Be Patient`n:::Reloading Mediacenter/Desktop Profiles:::
 		loop, 16 
 			{
-				if (JoyName := GetKeyState(A_Index "JoyName"))
+				PlayerVX=
+				joypartX:= % joyGetName(A_Index)
+				joypart%A_Index%:= joypartX
+				if (joypartX = "failed")
 					{
-						joycount := A_Index
+						break
 					}
+				joycount+= 1
+				if (JoyCount >= joycnt)
+					{
+						continue
+					}
+				playerVX:= % player%JoyCount%	
+				player%JoyCount%X:= playerVX
+				player%JoyCount%n= "%playerVX%"
+				playerVN= "%playerVX%"
+				player%JoyCount%t:= A_Space . (playerVN)
+				iniwrite,%PlayerVX%,%inif%,GENERAL,Player%A_index%
 			}
 		if (JMap = "antimicro")
 			{
@@ -659,39 +718,43 @@ if (Mapper > 0)
 				mediacenter_profile_2n= "%mediacenter_profile_2%"
 				mediacenter_profile_2t:=  A_Space . "" . mediacenter_profile_2n . "/M" . ""				
 			}
-		if (joycount =< 2)
+		if (joycount < 2)
 			{
-				
 				mediacenter_profile_2t= 
-				if (JMap = "Xpadder")
-					{
-						mediacenter_profile_2t:= A_Space . "/M"
-					}
 			}
 		else {
-			if ((joycount > joycnt)&&(joycnt =< 3))
+			if (joycount > 1)
 				{
+					joyindex=
 					splitpath,Player1,p1fn,pl1pth,,plgetat
-					Loop,files,%pl1pth%\*.%mapper_extension%
+					Loop, 4
 						{
-							if (A_LoopFileFullPath = Player1)
+							joyindex+=1
+							Loop,files,%pl1pth%\*.%mapper_extension%
 								{
-									continue
+									PlayerVX= 
+									if ((A_LoopFileFullPath = Player1) or (A_LoopFileFullPath = Player2) or (A_LoopFileFullPath = Player3) or (A_LoopFileFullPath = Player4))
+										{
+											continue
+										}
+									if (A_LoopFileName = plgetat . "_" . joyindex)
+										{
+											PlayerVX= %A_LoopFileFullPath%
+											Player%joyindex%= %A_LoopFileFullPath%
+											break
+										}
+									if (instr(A_LoopFileName,"Player" . joyindex)or instr(A_LoopFileName,"Player_" . joyindex)or instr(A_LoopFileName,"Player" . A_Space . joyindex)or instr(A_LoopFileName,"Player" . joyindex))
+										{
+											Player%joyindex%= %A_LoopFileFullPath%
+											break
+										}
+									else {
+											Player%joyindex%= %A_LoopFileFullPath%
+											break
+									}
 								}
-							if (A_LoopFileName = plgetat . "_2")
-								{
-									Player2= %A_LoopFileFullPath%
-									break
-								}
-							if (instr(A_LoopFileName,"Player2")or instr(A_LoopFileName,"Player_2")or instr(A_LoopFileName,"Player 2")or instr(A_LoopFileName,"Player2"))
-								{
-									Player2= %A_LoopFileFullPath%
-								}
-							else {
-									Player2= %A_LoopFileFullPath%
-							}	
+							iniwrite,%PlayerVX%,%RJDB_Config%,GENERAL,Player%joyindex%
 						}
-					iniwrite,%Player2%,%RJDB_Config%,GENERAL,Player2
 				}
 		}	
 		Run, %Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%,,hide,kbmp
@@ -718,7 +781,7 @@ if (exe_list <> "")
 				process,close,%A_LoopField%
 			}
 	}
-fileappend,er=%erahkpid%`ndcls=%dcls%`npfile=%pfile%
+fileappend,er=%erahkpid%`ndcls=%dcls%`npfile=%pfile%,
 Run, taskkill /f /im "%plnkn%*",,hide
 stringsplit,prestk,2_Post,<
 stringright,lnky,prestk2,4
@@ -824,7 +887,7 @@ if (prestk2 <> "")
 loggingout:	
 if (Logging = 1)
 	{
-		FileAppend,Run="%plfp%[%linkoptions%|%plarg%]in%pldr%"`nkeyboard=|%Keyboard_Mapper% "%player1%"%player2t%|`njoycount1="%joycnt%"`n%Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%`njoycount2=%joucount%`n`n,%home%\log.txt
+		FileAppend,Run="%plfp%[%linkoptions%|%plarg%]in%pldr%"`nkeyboard=|%Keyboard_Mapper% "%player1%"%player2t%%player3t%%player4t%|`njoycount1="%joycnt%"`n%Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%`njoycount2=%joucount%`n`n,%home%\log.txt
 	}
 ExitApp
 
@@ -916,7 +979,12 @@ CmdRet(sCmd, callBackFuncObj := "", encoding := "")
 	   DllCall("CloseHandle", "Ptr", hPipeRead)
 	   Return sOutput
 	}
-	
+joyGetName(ID) {
+	VarSetCapacity(caps, 728, 0)
+	if DllCall("winmm\joyGetDevCapsW", "uint", ID-1, "ptr", &caps, "uint", 728) != 0
+		return "failed"
+	return StrGet(&caps+4, "UTF-16")
+}	
 /*
 if ((Mapper <> "")or(mperl <> 0))
 	{

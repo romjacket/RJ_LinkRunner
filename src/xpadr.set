@@ -1,4 +1,6 @@
 set pro1=%1%
-set pro2= "%2%" /M
-if "%~2" == "" set pro2= /M
-start "" "[XPADR]" %pro1%%pro2%
+set ProX= %2% %3% %4% /M
+if "%~4" == "" set proX= %2% %3% /M
+if "%~3" == "" set proX= %2% /M
+if "%~2" == "" set proX= /M
+start "" "[XPADR]" %pro1%%proX%
