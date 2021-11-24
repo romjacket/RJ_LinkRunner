@@ -1,11 +1,11 @@
-#NoEnv  
+#NoEnv
 SendMode Input
 SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
 
-RELEASE= 2021-11-07 1:58 PM
-VERSION= 0.99.01.11
+RELEASE= 2021-11-23 5:15 PM
+VERSION= 0.99.03.00
 home= %A_ScriptDir%
 Splitpath,A_ScriptDir,tstidir,tstipth
 if ((tstidir = "src")or(tstidir = "bin")or(tstidir = "binaries"))
@@ -13,7 +13,7 @@ if ((tstidir = "src")or(tstidir = "bin")or(tstidir = "binaries"))
 		home= %tstipth%
 	}
 source= %home%\src
-Loop %0%  
+Loop %0%
 	{
 		GivenPath := %A_Index%
 		Loop %GivenPath%,
@@ -41,7 +41,7 @@ if (scextn = "lnk")
 				CFGDIR= %CHKARGPTH%
 				RJDB_Config= %CFGDIR%\RJDB.ini
 			}
-		
+
 	}
 	else {
 		CFGDIR= %home%
@@ -67,7 +67,7 @@ fileread,unselect,%source%\unsel.set
 fileread,absol,%source%\absol.set
 if fileexist(home . "\" . "continue.db")
 	{
-		repopbut= 
+		repopbut=
 		fileread,SOURCEDLIST,%home%\continue.db
 	}
 fileread,exclfls,%source%\exclfnms.set
@@ -86,8 +86,8 @@ remProgdirs= Program Files|Program Files (x86)|ProgramData|%A_username%
 steamhome= Steam\SteamApps\common
 dralbet= c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|
 GogQuery= GOG|G.O.G|GOG Games
-GenQuery= Games|juegos|spellen|Spiele|Jeux|Giochi|????
-AllQuery:= GogQuery . | . "Origin" . "|" . "Epic Games" . steamhome 
+GenQuery= Games|juegos|spellen|Spiele|Jeux|Giochi
+AllQuery:= GogQuery . | . "Origin" . "|" . "Epic Games" . steamhome
 undir= |%A_WinDir%|%A_Programfiles%|%A_Programs%|%A_AppDataCommon%|%A_AppData%|%A_Desktop%|%A_DesktopCommon%|%A_StartMenu%|%A_StartMenuCommon%|%A_Startup%|%A_StartupCommon%|%A_Temp%|
 GUIVARS= PostWait|PreWait|Localize|SCONLY|EXEONLY|BOTHSRCH|ADDGAME|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_ProfB|GAME_DirB|SOURCE_DirB|SOURCE_DirectoryT|REMSRC|Keyboard_MapB|Player1_TempB|Player2_TempB|MediaCenter_ProfB|MultiMonitor_Tool|MM_ToolB|MM_Game_CfgB|MM_MediaCenter_CfgB|BGM_ProgB|BGP_DataB|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS|SELALLBUT|SELNONEBUT
 STDVARS= SOURCE_DirectoryT|SOURCE_Directory|KeyBoard_Mapper|MediaCenter_Profile|Player1_Template|Player2_Template|MultiMonitor_Tool|MM_MEDIACENTER_Config|MM_Game_Config|BorderLess_Gaming_Program|BorderLess_Gaming_Database|extapp|Game_Directory|Game_Profiles|RJDB_Location|Source_Directory|Mapper_Extension|1_Pre|2_Pre|3_Pre|1_Post|2_Post|3_Post|switchcmd|switchback
@@ -97,7 +97,7 @@ DDTC= <$This_prog$><Monitor><Mapper>
 ifnotexist,%home%\RJDB.ini
 gosub,INITALL
 gosub, popgui
-if (Logging = 1)	
+if (Logging = 1)
 	{
 		loget= checked
 	}
@@ -107,23 +107,23 @@ lnkenbl= disabled
 if (CREFLD = 1)
 	{
 		fldrget= checked
-		cfgenbl= 
-		joyenbl= 
-		lnkenbl= 
+		cfgenbl=
+		joyenbl=
+		lnkenbl=
 	}
 ovrwrchk=
-updtchk= checked	
+updtchk= checked
 if (CREMODE = 0)
 	{
 		ovrwrchk= checked
-		updtchk= 
+		updtchk=
 	}
 if (GMCONF = 1)
 	{
 		cfgget= checked
 	}
 if (GMJOY = 1)
-	{	
+	{
 		joyget= checked
 	}
 if (GMLNK = 1)
@@ -180,7 +180,7 @@ Menu, MyContextMenu, Add, Toggle PRE, ContextProperties
 Menu, MyContextMenu, Add, Toggle PST, ContextProperties
 Menu, MyContextMenu, Add,,
 Menu, MyContextMenu, Add, Clear from ListView, ContextClearRows
-;Menu, MyContextMenu, Default, Open  ; Make "Open" a bold font to indicate that double-click does the same thing.	
+;Menu, MyContextMenu, Default, Open  ; Make "Open" a bold font to indicate that double-click does the same thing.
 Gui, Add, GroupBox, x16 y0 w280 h208 center, RJDB_Wizard
 
 Gui Add, GroupBox, x16 y205 w283 h146,
@@ -289,7 +289,7 @@ Gui, Font, Normal
 Gui, Add, Text, x60 y514 h12 vPRETNUM,1
 Gui, Add, DropDownList, x70 y512 w198 vPREDD gPREDD Right,%prelist%
 Gui, Add, Text, x64 y534 h12 w230 vPREDDT,<$This_Prog$><Monitor><Mapper><game.exe>
-Gui, Add, Checkbox, x270 y513 w12 h12 vPreWait gPreWait %prestatus%,
+Gui, Add, Checkbox, x270 y515 w12 h12 vPreWait gPreWait %prestatus%,
 Gui, Add, Text, x270 y535 h12,wait
 Gui, Add, Button, x285 y520 w14 h14 vDELPREAPP gDELPREAPP ,X
 
@@ -299,7 +299,7 @@ Gui, Font, Normal
 Gui, Add, Text, x60 y552 h12 vPOSTDNUM,1
 Gui, Add, DropDownList, x70 y552 w198 vPostDD gPostDD Right,%postlist%
 Gui, Add, Text, x64 y574 h12 w230 vPOSTDDT,<game.exe><$This_Prog$><Mapper><Monitor>
-Gui, Add, Checkbox, x270 y553 w12 h12 vPostWait gPostWait %poststatus%
+Gui, Add, Checkbox, x270 y555 w12 h12 vPostWait gPostWait %poststatus%
 Gui, Add, Text, x270 y565 h12,
 Gui, Add, Button, x285 y557 w14 h14 vDELPOSTAPP gDELPOSTAPP ,X
 
@@ -333,8 +333,8 @@ Loop,parse,remotebins,|
 					}
 			}
 	}
-*/	
-SB_SetText("")	
+*/
+SB_SetText("")
 
 Return
 
@@ -384,7 +384,7 @@ Game_ProfB:
 gui,submit,nohide
 FileSelectFolder,GAME_ProfilesT,%fldflt%,3,Select Folder
 if ((GAME_ProfilesT <> "")&& !instr(GAME_ProfilesT,"<"))
-	{	
+	{
 		if (instr(Game_ProfilesT,"profile")or instr(Game_ProfilesT,"Jacket"))or (instr(Game_ProfilesT,"RJ")&& instr(Game_ProfilesT,"data"))
 			{
 				Game_Profiles= %Game_Profiles%
@@ -399,7 +399,7 @@ if ((GAME_ProfilesT <> "")&& !instr(GAME_ProfilesT,"<"))
 			Game_Profiles= %GAME_ProfilesT%\RJ_Profiles
 			Game_ProfilesT= %Game_Profiles%
 		}
-		
+
 		GAME_Profiles= %GAME_ProfilesT%
 		iniwrite,%GAME_Profiles%,%RJDB_Config%,GENERAL,GAME_Profiles
 		stringreplace,GAME_ProfilesT,GAME_ProfilesT,%A_Space%,`%,All
@@ -418,7 +418,7 @@ if ((GAME_DirectoryT <> "")&& !instr(GAME_DirectoryT,"<"))
 	{
 		if (instr(Game_DirectoryT,"launchers")or instr(Game_DirectoryT,"shortcuts")or instr(Game_DirectoryT,"links")or instr(Game_DirectoryT,"lnk") or instr(Game_DirectoryT,"runner"))
 			{
-				GAME_Directory= %GAME_DirectoryT%				
+				GAME_Directory= %GAME_DirectoryT%
 			}
 		else {
 			stringright,gdtst,Game_DirectoryT,2
@@ -430,7 +430,7 @@ if ((GAME_DirectoryT <> "")&& !instr(GAME_DirectoryT,"<"))
 			Game_Directory= %Game_DirectoryT%\RJ_Launchers
 			Game_DirectoryT= %Game_Directory%
 		}
-		
+
 		iniwrite,%GAME_Directory%,%RJDB_Config%,GENERAL,GAME_Directory
 		stringreplace,GAME_DirectoryT,GAME_DirectoryT,%A_Space%,`%,All
 		guicontrol,,GAME_DirectoryT,%GAME_DirectoryT%
@@ -444,13 +444,13 @@ return
 SELALLBUT:
 gui,submit,nohide
 Gui, ListView, MyListView
-LV_Modify(0, "+Check") 
+LV_Modify(0, "+Check")
 return
 
 SELNONEBUT:
 gui,submit,nohide
 Gui, ListView, MyListView
-LV_Modify(0, "-Check") 
+LV_Modify(0, "-Check")
 return
 
 
@@ -462,15 +462,15 @@ if ((Source_DirectoryT <> "")&& !instr(Source_DirectoryT,"<"))
 	{
 		Source_DirectoryX= %Source_DirectoryT%
 		IniRead,SRCDIRS,%RJDB_CONFIG%,GENERAL,Source_Directory
-		rnum= 
+		rnum=
 		srcdira:= SOURCE_DIRECTORYT . "||"
 		Loop,parse,SRCDIRS,|
 			{
-				if (A_LoopField = "") 
+				if (A_LoopField = "")
 					{
 						continue
 				   }
-				pkrs= %A_LoopField%	
+				pkrs= %A_LoopField%
 				if (pkrs = SOURCE_DIRECTORYT)
 					{
 						continue
@@ -482,7 +482,7 @@ if ((Source_DirectoryT <> "")&& !instr(Source_DirectoryT,"<"))
 					}
 				srcdira.= pkrs . "|"
 			}
-		SOURCEDLIST=					
+		SOURCEDLIST=
 		SOURCE_DIRECTORY= %srcdira%
 		iniwrite,%srcdira%,%RJDB_Config%,GENERAL,Source_Directory
 		stringreplace,CURDP,Source_DirectoryX,%A_Space%,`%,All
@@ -505,7 +505,7 @@ MediaCenter_ProfileT=
 iniwrite,%A_Space%,%RJDB_CONFIG%,GENERAL,Keyboard_Mapper
 iniwrite,%A_Space%,%RJDB_CONFIG%,GENERAL,Player1_Template
 iniwrite,%A_Space%,%RJDB_CONFIG%,GENERAL,Player2_Template
-iniwrite,%A_Space%,%RJDB_CONFIG%,GENERAL,Mediacenter_Profile
+iniwrite,%A_Space%,%RJDB_CONFIG%,GENERAL,MediaCenter_Profile_Template
 GuiControl,,Player1_TemplateT,
 GuiControl,,Player2_TemplateT,
 GuiControl,,MediaCenter_ProfileT,
@@ -516,7 +516,7 @@ Keyboard_MapB:
 gui,submit,nohide
 kbmdefloc= %home%
 xpadtmp=
-Antimtmp= 
+Antimtmp=
 if fileexist(Programfilesx86 . "\" . "Xpadder" . "\" . "Xpadder.exe")
 	{
 		kbmdefloc= %programfilesx86%\Xpadder
@@ -550,11 +550,11 @@ if ((Keyboard_MapperT <> "")&& !instr(Keyboard_MapperT,"<"))
 		stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
 		guicontrol,,Keyboard_MapperT,<Keyboard_Mapper
 	}
-Mapper= 
+Mapper=
 if ((antimicro_executable = Antimtmp)&& !fileexist(antimicro_executable))
 	{
 		antimicro_executable= %Antimtmp%
-	} 
+	}
 if ((xpadder_executable = xpadtmp)&& !fileexist(xpadder_executable))
 	{
 		xpadder_executable= %Xpadtmp%
@@ -576,7 +576,7 @@ if instr(Keyboard_Mappern,"Xpadder")
 		JMAP= Xpadder
 		xpadder_executable=%xpadtmp%
 	}
-	
+
 if instr(Keyboard_Mappern,"Antimicro")
 	{
 		gosub, RECREATEAMICRO
@@ -598,12 +598,12 @@ if instr(Keyboard_Mappern,"Antimicro")
 	}
 Player1_Template= %home%\Player1.%mapper_extension%
 Player2_Template= %home%\Player1.%mapper_extension%
-Mediacenter_Template= %home%\Mediacenter.%mapper_extension%
+Mediacenter_Profile_Template= %home%\Mediacenter.%mapper_extension%
 iniwrite,%JMAP%,%RJDB_Config%,JOYSTICKS,Jmap
 stringreplace,keyboard_mapperT,keyboard_mapper,%A_Space%,`%,All
 stringreplace,Player1_TemplateT,Player1_Template,%A_Space%,`%,All
 stringreplace,Player2_TemplateT,Player2_Template,%A_Space%,`%,All
-stringreplace,MediaCenter_ProfileT,MediaCenter_Profile,%A_Space%,`%,All
+stringreplace,MediaCenter_ProfileT,MediaCenter_Profile_Template,%A_Space%,`%,All
 stringreplace,keyboard_mapperT,keyboard_mapper,%A_Space%,`%,All
 iniwrite,%mapper_extension%,%RJDB_Config%,JOYSTICKS,Mapper_Extension
 iniwrite,%mapper%,%RJDB_Config%,GENERAL,Mapper
@@ -613,14 +613,14 @@ stringreplace,Player1_TemplateT,Player1_TemplateT,%A_Space%,`%,All
 stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
 iniwrite,%home%\Player1.%mapper_extension%,%RJDB_CONFIG%,GENERAL,Player1_Template
 iniwrite,%home%\Player2.%mapper_extension%,%RJDB_CONFIG%,GENERAL,Player2_Template
-iniwrite,%home%\Mediacenter.%mapper_extension%,%RJDB_CONFIG%,GENERAL,MediaCenter_Profile
+iniwrite,%home%\Mediacenter.%mapper_extension%,%RJDB_CONFIG%,GENERAL,MediaCenter_Profile_Template
 iniwrite,%xpadtmp%,%RJDB_Config%,GENERAL,Xpadder_executable
 iniwrite,%Antimtmp%,%RJDB_Config%,GENERAL,Antimicro_executable
 stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
 guicontrol,,Keyboard_MapperT,%Keyboard_MapperT%
 guicontrol,,Player1_TemplateT,%Player2_TemplateT%
 guicontrol,,Player2_TemplateT,%Player2_TemplateT%
-guicontrol,,MediaCenter_ProfileT,%Player2_TemplateT%
+guicontrol,,MediaCenter_ProfileT,%MediaCenter_ProfileT%
 guicontrol,,Keyboard_MapperT,%Keyboard_Mapper%
 tooltip,
 return
@@ -662,15 +662,15 @@ gui,submit,nohide
 FileSelectFile,MediaCenter_ProfileT,3,,Select File
 if ((MediaCenter_ProfileT <> "")&& !instr(MediaCenter_ProfileT,"<"))
 	{
-		MediaCenter_Profile= %MediaCenter_ProfileT%
-		iniwrite,%MediaCenter_Profile%,%RJDB_Config%,GENERAL,MediaCenter_Profile
-		iniwrite,%MediaCenter_Profile%,%RJDB_Config%,GENERAL,MediaCenter2_Profile
+		MediaCenter_Profile_Template= %MediaCenter_ProfileT%
+		iniwrite,%MediaCenter_Profile_Template%,%RJDB_Config%,GENERAL,MediaCenter_Profile_Template
+		;iniwrite,%MediaCenter_Profile%,%RJDB_Config%,GENERAL,MediaCenter2_Profile
 		stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
 		guicontrol,,MediaCenter_ProfileT,%MediaCenter_ProfileT%
 	}
 	else {
 		stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
-		guicontrol,,MediaCenter_ProfileT,<MediaCenter_Profile
+		guicontrol,,MediaCenter_ProfileT,<MediaCenter_Profile_Template
 	}
 return
 MM_ToolBDownload:
@@ -696,7 +696,7 @@ if (butrclick = "POSTAPP")
 		gosub, POSTAPP
 	}
 gosub, SSD_Prog
-SB_SetText("")	
+SB_SetText("")
 return
 
 DownloadAddons:
@@ -756,7 +756,7 @@ if ((MM_Game_Config = "")or(MM_Mediacenter_Config = ""))
                 gosub, MMSETUPG
             }
     }
-	
+
 return
 
 MM_Game_CfgB:
@@ -777,6 +777,7 @@ if ((setupmm = "")or !fileexist(CFGDIR . "\" . "Game.cfg"))
 		if ((MM_GAME_ConfigT <> "")&& !instr(MM_GAME_ConfigT,"<"))
 			{
 				MM_GAME_Config= %MM_GAME_ConfigT%
+				FileCopy,%MM_GAME_Config%,%home%\Game.cfg
 				iniwrite,%MM_GAME_Config%,%RJDB_Config%,GENERAL,MM_GAME_Config
 				iniwrite,2,%RJDB_Config%,GENERAL,MonitorMode
 				stringreplace,MM_GAME_ConfigT,MM_GAME_ConfigT,%A_Space%,`%,All
@@ -787,7 +788,7 @@ if ((setupmm = "")or !fileexist(CFGDIR . "\" . "Game.cfg"))
 				guicontrol,,MM_GAME_ConfigT,<MM_GAME_Config
 			}
 	}
-setupmm= 	
+setupmm=
 return
 
 MM_MediaCenter_CfgB:
@@ -802,12 +803,13 @@ if (!fileexist(CFGDIR . "\" . "Desktop.cfg")or !fileexist(dtcfg))
 				setupmm= 1
             }
 	}
-if ((setupmm = "")or !fileexist(CFGDIR . "\" . "Desktop.cfg"))	
+if ((setupmm = "")or !fileexist(CFGDIR . "\" . "Desktop.cfg"))
 	{
 		FileSelectFile,MM_MediaCenter_ConfigT,35,,Select File,*.cfg
 		if ((MM_MediaCenter_ConfigT <> "")&& !instr(MM_MediaCenter_ConfigT,"<"))
 			{
 				MM_MediaCenter_Config= %MM_MediaCenter_ConfigT%
+				FileCopy,%MM_MediaCenter_Config%,%home%\Desktop.cfg
 				iniwrite,%MM_MediaCenter_Config%,%RJDB_Config%,GENERAL,MM_MediaCenter_Config
 				iniwrite,2,%RJDB_Config%,GENERAL,MonitorMode
 				stringreplace,MM_MediaCenter_ConfigT,MM_MediaCenter_ConfigT,%A_Space%,`%,All
@@ -818,7 +820,7 @@ if ((setupmm = "")or !fileexist(CFGDIR . "\" . "Desktop.cfg"))
 				guicontrol,,MM_MediaCenter_ConfigT,<MM_MediaCenter_Config
 			}
 	}
-setupmm= 	
+setupmm=
 return
 
 BGM_ProgBDownload:
@@ -838,7 +840,7 @@ BGM_ProgB:
 gui,submit,nohide
 if (dchk = "")
 	{
-		FileSelectFile,Borderless_Gaming_ProgramT,3,Borderless Gaming,Select File,*.exe	
+		FileSelectFile,Borderless_Gaming_ProgramT,3,Borderless Gaming,Select File,*.exe
 	}
 if ((Borderless_Gaming_ProgramT <> "")&& !instr(Borderless_Gaming_ProgramT,"<"))
 	{
@@ -908,7 +910,7 @@ if (PostAPPT <> "")
 					{
 						PostList.= "|"
 					}
-			 } 
+			 }
 		guicontrol,,PostDD,%PostList%
 		guicontrol,,POSTDNUM,1
 	}
@@ -929,7 +931,7 @@ if (inn = A_SPace)
 	{
 		inn:= A_Space
 	}
-	
+
 FileSelectFile,PREAPPT,35,%flflt%,Select File
 if (PREAPPT <> "")
 	{
@@ -954,7 +956,7 @@ if (PREAPPT <> "")
 					{
 						PreList.= "|"
 					}
-			 } 
+			 }
 		guicontrol,,PreDD,%PreList%
 		guicontrol,,PRETNUM,1
 	}
@@ -985,10 +987,10 @@ Loop,parse,cftst,|
 			;stringreplace,Srclistd,Srclist,||,|,All
 		Srclist.= dkv . "|"
     }
-SOURCE_DIRECTORY= %SrcList%	
+SOURCE_DIRECTORY= %SrcList%
 iniwrite,%Srclist%,%RJDB_Config%,GENERAL,SOURCE_Directory
-guicontrol,,SOURCE_DirectoryT,|%Srclist%    
-guicontrol,,CURDP,%CURDP%    
+guicontrol,,SOURCE_DirectoryT,|%Srclist%
+guicontrol,,CURDP,%CURDP%
 return
 
 KILLCHK:
@@ -1014,7 +1016,7 @@ stringsplit,dxb,DELpostDD,<
 stringreplace,dxn,dxb1,W,,
 iniWrite,%dxn%<,%RJDB_Config%,CONFIG,%dxn%_post
 postList= |
-postWaitn= 
+postWaitn=
 Loop,3
 	{
 		if (A_Index = dxn)
@@ -1027,7 +1029,7 @@ Loop,3
 				continue
 			}
 		iniread,daa,%RJDB_Config%,CONFIG,%A_Index%_post
-		postList.= daa . "|"	
+		postList.= daa . "|"
 		if (A_Index = 1)
 			{
 				stringsplit,dant,daa,<
@@ -1036,7 +1038,7 @@ Loop,3
 						postWaitn= 1
 					}
 				postList.= "|"
-			}		
+			}
 	}
 guicontrol,,postDD,%postList%
 guicontrol,,postWAIT,%postwaitn%
@@ -1050,7 +1052,7 @@ stringsplit,dxb,DELPreDD,<
 stringreplace,dxn,dxb1,W,,
 iniWrite,%dxn%<,%RJDB_Config%,CONFIG,%dxn%_Pre
 PreList= |
-PreWaitn= 
+PreWaitn=
 Loop,3
 	{
 		if (A_Index = dxn)
@@ -1063,7 +1065,7 @@ Loop,3
 				continue
 			}
 		iniread,daa,%RJDB_Config%,CONFIG,%A_Index%_Pre
-		PreList.= daa . "|"	
+		PreList.= daa . "|"
 		if (A_Index = 1)
 			{
 				stringsplit,dant,daa,<
@@ -1072,7 +1074,7 @@ Loop,3
 						PreWaitn= 1
 					}
 				PreList.= "|"
-			}		
+			}
 	}
 guicontrol,,PreDD,%PreList%
 guicontrol,,PreWAIT,%prewaitn%
@@ -1093,7 +1095,7 @@ filextns= exe|lnk|_lnk_
 return
 
 PREWAIT:
-PREwl= 
+PREwl=
 gui,submit,nohide
 guicontrolget,fbdnum,,PRETNUM
 guicontrolget,PREwait,,PREwait
@@ -1106,8 +1108,8 @@ stringsplit,ddn,dd,<
 stringreplace,ddn1,ddn1,W,,
 if ((ddn2 = A_Space) or (ddn2 = ""))
 	{
-		ddn2:= 
-		prewl= 
+		ddn2:=
+		prewl=
 	}
 PreList= |
 Loop,3
@@ -1121,13 +1123,13 @@ Loop,3
 				continue
 			}
 		PreList.= cftsv . "|"
-	 } 	
+	 }
 guicontrol,,PREDD,%PreList%
 return
 
 
 postWAIT:
-postwl= 
+postwl=
 gui,submit,nohide
 guicontrolget,fbdnum,,postDNUM
 guicontrolget,postwait,,postwait
@@ -1140,8 +1142,8 @@ stringsplit,ddn,dd,<
 stringreplace,ddn1,ddn1,W,,
 if ((ddn2 = A_Space) or (ddn2 = ""))
 	{
-		ddn2:= 
-		postwl= 
+		ddn2:=
+		postwl=
 	}
 postList= |
 Loop,3
@@ -1155,7 +1157,7 @@ Loop,3
 				continue
 			}
 		postList.= cftsv . "|"
-	 } 	
+	 }
 guicontrol,,postDD,%postList%
 return
 
@@ -1227,7 +1229,7 @@ Loop,parse,STDVARS,|
     {
         %A_LoopField%=
     }
-initz= 1	
+initz= 1
 stringreplace,RJTMP,RJTMP,[LOCV],%home%,All
 FileDelete,%home%\RJDB.ini
 FileAppend,%RJTMP%,%home%\RJDB.ini
@@ -1255,7 +1257,7 @@ ifMsgbox,Yes
 		guicontrol,,PreDD,|1<||2<|3<
 		guicontrol,,PostDD,|1<||2<|3<
     }
-return    
+return
 
 EnableLogging:
 gui,submit,nohide
@@ -1299,7 +1301,7 @@ return
 
 
 INITQUERY:
-CONCAT_ROOT= 
+CONCAT_ROOT=
 GENERIC_ROOT=
 Loop,parse,dralbet,|
 	{
@@ -1329,7 +1331,7 @@ Loop,parse,dralbet,|
 					}
 			}
 	}
-	
+
 STEAM_ROOT=
 Loop,parse,progdirs
 	{
@@ -1368,7 +1370,7 @@ Loop,parse,dralbet,|
 										Loop,files,%A_LoopFileFullPath%,D
 											{
 												if ((A_LoopFilename = "common")&& !instr(STEAM_ROOT,A_LoopField))
-													{														
+													{
 														CONCAT_ROOT.= A_LoopFileFullPath . "|"
 														STEAM_ROOT.= A_LoopFileFullPath . "|"
 														break
@@ -1378,9 +1380,9 @@ Loop,parse,dralbet,|
 							}
 					}
 	}
-	
-	
-GOGROOT= 
+
+
+GOGROOT=
 
 Loop,parse,progdirs
 	{
@@ -1399,7 +1401,7 @@ Loop,parse,progdirs
 							}
 					}
 			}
-	}	
+	}
 Loop,parse,dralbet,|
 	{
 		srchdrl= %A_LoopField%:
@@ -1419,11 +1421,11 @@ Loop,parse,dralbet,|
 									}
 							}
 					}
-				
+
 			}
 	}
-	
-ORIGINROOT= 
+
+ORIGINROOT=
 
 Loop,parse,progdirs
 	{
@@ -1434,12 +1436,12 @@ Loop,parse,progdirs
 					{
 						if (instr(A_LoopFileName,"Origin")&& !instr(CONCAT_ROOT,A_LoopFileName))
 							{
-								CONCAT_ROOT.= ORIGINchkh . "|"										
-								ORIGIN_ROOT.= ORIGINchkh . "|"										
+								CONCAT_ROOT.= ORIGINchkh . "|"
+								ORIGIN_ROOT.= ORIGINchkh . "|"
 							}
 					}
 			}
-	}	
+	}
 Loop,parse,dralbet,|
 	{
 		srchdrl= %A_LoopField%:
@@ -1458,9 +1460,9 @@ Loop,parse,dralbet,|
 									}
 							}
 					}
-				
+
 			}
-	}		
+	}
 if (CONCAT_ROOT <> "")
 	{
 		pl=
@@ -1478,7 +1480,7 @@ if (CONCAT_ROOT <> "")
 						continue
 					}
 				sourc_t.= A_LoopField . "|"
-				
+
 			}
 		stringtrimRight,sourc_t,sourc_t,1
 		stringtrimRight,Source_directory,Source_directory,1
@@ -1491,7 +1493,7 @@ popgui:
 FileRead,rjdb,%RJDB_Config%
 Prelist=
 PostStatus=
-postlist= 
+postlist=
 PostStatus=
 PREDDT=
 POSTDDT=
@@ -1516,8 +1518,8 @@ Loop,parse,RJDBSECTS,`r`n
 					{
 						trval= %kval1%
 					}
-				%val%:= trval	
-				stringreplace,trvald,trval,%A_Space%,`%,All	
+				%val%:= trval
+				stringreplace,trvald,trval,%A_Space%,`%,All
 				%kval1%T:= trvald
 				if instr(kval1,"_post")
 					{
@@ -1527,7 +1529,7 @@ Loop,parse,RJDBSECTS,`r`n
 								postlist.= "|"
 							}
 					}
-				
+
 				if instr(kval1,"_Pre")
 					{
 						Prelist.= trval . "|"
@@ -1535,7 +1537,7 @@ Loop,parse,RJDBSECTS,`r`n
 							{
 								Prelist.= "|"
 							}
-					}	
+					}
 				if (resetting = 1)
 					{
 						guicontrol,,%kval1%T,%trval%
@@ -1553,17 +1555,17 @@ if (resetting = 1)
 		guicontrol,hide,MyListView
 		guicontrol,disable,MyListView
 		GuiControl, Move, MyListView, w0
-	}	
-	
+	}
+
 Srcdeflt= %home%\Shortcuts
 Iniread,Source_Directory,%RJDB_Config%,GENERAL,Source_Directory
 if ((Source_Directory = "")or (resetting = 1) or (initz = 1))
 	{
 		gosub, INITQUERY
 	}
-initz= 
+initz=
 guicontrol,,Source_DirectoryT,%Source_Directory%
-resetting= 
+resetting=
 return
 
 RECREATEXPAD:
@@ -1599,14 +1601,14 @@ ifnotexist,%home%\Player2.gamecontroller.amgp
         stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,%home%\Player2.gamecontroller.amgp
-    }    
+    }
 ifnotexist,%home%\MediaCenter.gamecontroller.amgp
     {
         fileread,mctmp,%source%\Desktop.set
         stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,%home%\MediaCenter.gamecontroller.amgp
-    }  
+    }
 ifnotexist,%home%\%home%\MediaCenter.gamecontroller.amgp
     {
         fileread,mctmp,%source%\Desktop.set
@@ -1618,7 +1620,7 @@ return
 
 
 UPDTSC:
-OVERWRT= 
+OVERWRT=
 return
 OVERWRT:
 OVERWRT= 1
@@ -1640,10 +1642,10 @@ ifmsgbox,OK
             }
            else {
             Msgbox,,Failure,The current monitor configuration could not be saved
-           } 
+           }
     }
-return	
-MMSETUPG:	
+return
+MMSETUPG:
 Msgbox,,Default Game Config,Configure your monitor/s as you would have them for your`nGames or Emulators`nthen click "OK"
 ifmsgbox,OK
     {
@@ -1666,7 +1668,7 @@ return
 DDPOPS:
 iniread,cftst,%RJDB_Config%,CONFIG
 knum=
-snum= 
+snum=
 Loop,parse,cftst,`n`r
     {
         stringsplit,dkd,A_LoopField,=
@@ -1701,7 +1703,7 @@ Loop,parse,cftst,`n`r
                         continue
                     }
                 PreList.= dkv . "|"
-            }   
+            }
     }
 guicontrol,,PostDD,%PostList%
 guicontrol,,PreDD,%PreList%
@@ -1714,7 +1716,7 @@ fullist.= GametoAdd . "|"
 FileGetSize,filez,GameToAdd
 splitpath,GameToAdd,filenm,filepath,fileext
 SOURCEDLIST.= FileNM . "|" . FileExt . "|" . FilePath . "|" . filez . "|" . A_Space . "|" . 9999 . "|" . 9999 . "`n"
-Gui,ListView,MyListView	
+Gui,ListView,MyListView
 LV_Add(lvachk,FileNM, FileExt, FilePath, filez,A_Space,9999,9999)
 LV_ModifyCol()
 return
@@ -1755,10 +1757,10 @@ iniwrite,%GMLNK%,%RJDB_CONFIG%,CONFIG,GMLNK
 return
 
 REINDEX:
-SOURCEDLIST= 
-fullist= 
-simpnk= 
-omitd= 
+SOURCEDLIST=
+fullist=
+simpnk=
+omitd=
 filedelete,%home%\simpth.db
 filedelete,%home%\continue.db
 guicontrol,hide,REINDEX
@@ -1769,7 +1771,7 @@ if (!Fileexist(GAME_Directory)or !FileExist(Game_Profiles))
     {
         SB_SetText("Please Select Valid Directories")
     }
-SB_SetText("Getting Lnk/Exe List")	
+SB_SetText("Getting Lnk/Exe List")
 Loop,parse,GUIVARS,|
 	{
 		guicontrol,disable,%A_LoopField%
@@ -1791,19 +1793,19 @@ if (BOTHSRCH = 1)
 		gosub, BOTHSRCH
 	}
 lvachk= +Check
-fullist= 
+fullist=
 if (SOURCEDLIST <> "")
 	{
 		Loop,parse,SOURCEDLIST,`n
 			{
 				stringsplit,rni,A_LoopField,|
-				
+
 				LV_Add(lvachk,rni1, rni2, rni3,  rni4, A_Space,"y", "<", "<","<","y","<","<","y","y","y")
 				fullist.= rni3 . "\" . rni1 . "|"
 			}
-		goto,REPOP	
-	}	
-SOURCEDLIST= 
+		goto,REPOP
+	}
+SOURCEDLIST=
 FileDelete,%home%\simpth.db
 Loop,parse,SOURCE_DIRECTORY,|
 	{
@@ -1812,7 +1814,7 @@ Loop,parse,SOURCE_DIRECTORY,|
 			{
 				continue
 			}
-			
+
 		Loop,parse,filextns,|
 			{
 				if (A_LoopField = "")
@@ -1821,14 +1823,14 @@ Loop,parse,SOURCE_DIRECTORY,|
 					}
 				fsext= %A_LoopField%
 				sfi_size := A_PtrSize + 8 + (A_IsUnicode ? 680 : 340)
-				VarSetCapacity(sfi, sfi_size)				
+				VarSetCapacity(sfi, sfi_size)
 				Loop,files,%SRCLOOP%,D
 					{
 						allfld.= A_LoopFileFullPath . "|"
 					}
 				loop, Files, %SRCLOOP%\*.%fsext%,R
 					{
-						excl= 
+						excl=
 						lvachk= +Check
 						FileName := A_LoopFileFullPath  ; Must save it to a writable variable for use below.
 						filez:= A_LoopFileSizeKB
@@ -1839,12 +1841,12 @@ Loop,parse,SOURCE_DIRECTORY,|
 						splitpath,simpath,simpn,simpdir
 						splitpath,trukpath,truknm,farpth
 						splitpath,farpth,farnm,
-						
+
 						/*
 						if (filpn <> simpn)
 							{
-								xeinh= 
-								sinc= 
+								xeinh=
+								sinc=
 								Loop,parse,simpdir,\
 									{
 										sinc+=1
@@ -1859,10 +1861,10 @@ Loop,parse,SOURCE_DIRECTORY,|
 										simploc= %filpn%\%FileNM%
 									}
 									else {
-										simploc= %xeinh%\%simpn%\%FileNM%	
+										simploc= %xeinh%\%simpn%\%FileNM%
 									}
 							}
-						*/	
+						*/
 						simploc= %simpath%\%FileNM%
 						if (FilePath <> SCRLOOP)
 							{
@@ -1882,18 +1884,25 @@ Loop,parse,SOURCE_DIRECTORY,|
 									{
 										continue
 									}
-								if instr(simploc,A_LoopField)
+								if ((filtn = A_LoopField) or (FileName = A_LoopField))
 									{
 										omitd.= filenm . "|" . simploc . "`n"
 										excl= 1
 										break
+									}
+								if instr(simploc,A_LoopField)
+									{
+										lvachk=
+										simpnk.= FileName . "`n"
+										fileappend,%simpath%,%home%\simpth.db
+										goto,Chkcon
 									}
 							}
 						if (excl = 1)
 							{
 								continue
 							}
-						PostDirChk:	
+						PostDirChk:
 						if ((A_LoopFileExt = "lnk")or(A_LoopFileExt = "_lnk_"))
 							{
 								FileGetShortcut, %FileName%,FileSCName,OutDir,OutArgs,OutDescription,OutIcon,IconNumber,OutRunState
@@ -1935,17 +1944,17 @@ Loop,parse,SOURCE_DIRECTORY,|
 							}
 						if (lvachk <> "")
 							{
-								fullist.= A_LoopFileFullPath . "|"						
-							}	
+								fullist.= A_LoopFileFullPath . "|"
+							}
 						Chkcon:
 						LV_Add(lvachk,FileNM, FileExt, FilePath,  filez, A_Space,"y","<","<","<","y","<","<","y","y","y")
 						SOURCEDLIST.= FileNM . "|" . FileExt . "|" . FilePath . "|" . filez . "|" . A_Space . "|" . "y" . "|" . "<" . "|" . "<" . "|" . "<" . "|" . "y" . "|" . "<" . "|" . "<" . "|" . "y" . "|" . "y" . "|" . "y" . "`n"
 					}
 			}
-	}	
+	}
 if (enablelogging = 1)
 	{
-fileappend,[OMITTED]`n%omitd%`n`n[RE-INCLUDED]`n,log.txt	
+fileappend,[OMITTED]`n%omitd%`n`n[RE-INCLUDED]`n,log.txt
 	}
 Loop,parse,simpnk,`r`n
 	{
@@ -1962,11 +1971,11 @@ Loop,parse,simpnk,`r`n
 						continue
 					}
 				srcdtmp= %A_LoopField%\
-				stringreplace,fen,fendir,%srcdtmp%\,,UseErrorLevel				
+				stringreplace,fen,fendir,%srcdtmp%\,,UseErrorLevel
 				if (errorlevel <> 0)
 					{
 						stringreplace,fltsmp,fullist,%scrdtmp%\,,UseErrorLevel
-						fenum2= 
+						fenum2=
 						stringsplit,fenum,fen,\
 						rplt= %fenum1%
 						if (fenum2 <> "")
@@ -1984,13 +1993,13 @@ Loop,parse,simpnk,`r`n
 								SOURCEDLIST.= fenf . "|" . fenxtn . "|" fendir . "|" . 0 . "|" . A_Space . "|" . "y" . "|" . "<" . "|" . "<" . "|" . "<" . "|" . "y" . "|" . "<" . "|" . "<" . "|" . "y" . "|" . "y" . "|" . "y" . "`n"
 								fullist.= fenx . "|"
 								break
-							}					
+							}
 					}
 			}
 	}
 fileappend,%SOURCEDLIST%,%home%\continue.db
 REPOP:
-Guicontrol,Show,MyListView	
+Guicontrol,Show,MyListView
 Guicontrol,Show,ButtonCreate
 Guicontrol,Show,ButtonClear
 Guicontrol,Show,SELALLBUT
@@ -2006,7 +2015,7 @@ LV_ModifyCol(5, 100) ; Make the Size column at little wider to reveal its header
 listView_autoSize:
 GUI, +LastFound ; activate GUI window
 totalWidth := 0 ; initialize ListView width variable
-	; get columns' widths       
+	; get columns' widths
 Loop % LV_GetCount("Column")
 	{
 		SendMessage, 4125, A_Index - 1, 0, SysListView321 ; 4125 is LVM_GETCOLUMNWIDTH.
@@ -2021,12 +2030,12 @@ Loop,parse,GUIVARS,|
 		guicontrol,enable,%A_LoopField%
 	}
 
-ICELV1 := New LV_InCellEdit(HLV1)	
+ICELV1 := New LV_InCellEdit(HLV1)
 ICELV1.SetColumns(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
-ICELV1.OnMessage()		
-Gui, +Resize	
-SB_SetText("Completed Aquisition")	
-Return	
+ICELV1.OnMessage()
+Gui, +Resize
+SB_SetText("Completed Aquisition")
+Return
 KillToolTip:
    ToolTip
 Return
@@ -2054,7 +2063,7 @@ if instr(outsan,"<")
 	{
 		outsan= <
 	}
-return	
+return
 ButtonCreate:
 SB_SetText("Creating Custom ShortCuts")
 Loop,parse,GUIVARS,|
@@ -2078,7 +2087,7 @@ stringsplit,fullstn,fullist,|
 gmnames= |
 gmnameds= |
 gmnamed=
-exlist= 
+exlist=
 fullstx= %fullstn%
 if !fileexist(GAME_Directory)
 	{
@@ -2108,7 +2117,7 @@ Loop,%fullstn0%
 		else {
 			stringsplit,prvn,przn,>/
 			prn= %prvn1%
-		}	
+		}
 		kbmovr= %prvn2%
 		mmovr= %prvn6%
 		bgmovr= %prvn9%
@@ -2138,9 +2147,9 @@ Loop,%fullstn0%
 		refname= %gmnamex%
 		if ((tmpxtn = "exe")or(tmpxtn = "bat")or(tmpxtn = "cmd")or(tmpxtn = "apk"))
 			{
-				fnd64=	
-				fnd32=	
-				getaplist= 
+				fnd64=
+				fnd32=
+				getaplist=
 				splitpath,prn,prnmx,OutDir,prnxtn,gmnamex
 				OutRunState= 1
 				OutTarget= %prn%
@@ -2157,14 +2166,14 @@ Loop,%fullstn0%
 							{
 								;;msgbox,,,found_root`n%prn%`n%outdir%`n%gmnamex%
 								outdir= %A_temp%\thin
-								filecreatedir,%outdir%		
+								filecreatedir,%outdir%
 								break
-							}	
+							}
 					}
 				invar= %gmnamex%
 				gosub, CleanVar
 				gmnamet= |%invarx%|
-				gmnamedx= |%gmnamet%|	
+				gmnamedx= |%gmnamet%|
 				if instr(exclfls,gmnamedx)
 					{
 						gmnamex= %gmnamex%!
@@ -2176,7 +2185,7 @@ Loop,%fullstn0%
 						if (A_LoopField = "")
 							{
 								continue
-							}	
+							}
 						if instr(prn,A_LoopField)
 							{
 								cursrc= %A_LoopField%
@@ -2188,25 +2197,25 @@ Loop,%fullstn0%
 						continue
 					}
 				tlevel= %outdir%
-				cursrp=|	
+				cursrp=|
 				stringreplace,undirs,undir,|%cursrc%|,,
 				Stringreplace,gfnamex,outdir,%cursrc%\,,All
-				
+
 				realpth= \%gfnamex%\
 				invar= %realpth%
 				gosub,CleanVar
 				realpth= %invarx%
 				stringsplit,tdirn,gfnamex,\
-				
+
 				topdirec= %tdirn1%
-				
+
 				invar= %topdirec%
 				gosub, CleanVar
 				topdir= %invarx%
 				gmnamedv= %topdir%
 				stringlen,topln,topdir
 				chkpl= %cursrc%\%topdirec%
-				pthchk= 
+				pthchk=
 				Loop,%fullstx0%
 					{
 						glt:= % fullstn%A_Index%
@@ -2215,13 +2224,13 @@ Loop,%fullstn0%
 								pthchk.= glt . "|"
 							}
 					}
-				stringreplace,pthchk,pthchk,%cursrc%,\,All	
-				exlist.= "?" . cursrc . "?" . "|"	
-				
-				
+				stringreplace,pthchk,pthchk,%cursrc%,\,All
+				exlist.= "?" . cursrc . "?" . "|"
+
+
 				ExtID := FileExt
 				IconNumber:= 0
-				
+
 				redpth= %outdir%
 				exlthis= |%gmnamex%|
 				if instr(exclfls,gmnamedx)
@@ -2238,7 +2247,7 @@ Loop,%fullstn0%
 					}
 				topreduc=
 				gmnameo= %gmnamed%
-				
+
 				TOPREDUC:
 				stringlen,gmat,gmnamed
 				gmat+=1
@@ -2252,7 +2261,7 @@ Loop,%fullstn0%
 					{
 						gmnamed= %gmnameo%
 					}
-				
+
 				if instr(exclfls,gmnamedvx)
 					{
 						tmppath= %redpth%
@@ -2271,7 +2280,7 @@ Loop,%fullstn0%
 								tlevel= %redpth%
 								goto, topout
 							}
-						gfnamex= %gfnamek%	
+						gfnamex= %gfnamek%
 						redpth= %curpthk%
 						stringlen,gmat,gmnamek
 						gmat+=1
@@ -2280,24 +2289,24 @@ Loop,%fullstn0%
 						invar= %gmnamek%
 						gosub, CleanVar
 						topdir= %invarx%
-						
+
 						if (!instr(topdir,gmnamed)or(mattlen < 5))
 							{
-								gmnamed= %gmnamek%	
+								gmnamed= %gmnamek%
 							}
 						goto, topreduc
 					}
-					
+
 				TOPOUT:
 				invar= %gmnamed%
 				gosub, CleanVar
 				gmnamecm= %invarx%
-				
+
 				TOPFIN:
 				invar= %gmnamex%
 				gosub, CleanVar
 				gmnamfcm= %invarx%
-				
+
 				stringlen,orilen,gmnamfcm
 				if (instr(topdir,mattop) && (mattlen > 5))
 					{
@@ -2333,7 +2342,7 @@ Loop,%fullstn0%
 					}
 				SUBDCHK:
 				if instr(priorb,gmnamedx)
-					{						
+					{
 						priority:= 7
 					}
 				if instr(priora,gmnamedx)
@@ -2367,7 +2376,7 @@ Loop,%fullstn0%
 														break
 													}
 											}
-									}	
+									}
 							}
 						if (instr(unlike,kinn)or instr(reduced,kinn))
 							{
@@ -2401,18 +2410,18 @@ Loop,%fullstn0%
 				posa= %gmnamed%
 				posb= |%gmnamed%|
 				stringsplit,expa,exlist,|
-				renum= 
-				rn= 
-				fp= 
+				renum=
+				rn=
+				fp=
 				tot:=-20
 				poscnt:= 0
 				if instr(exlist,posb)
 					{
 						rn= 1
-						fp= 	
-						nm= 
+						fp=
+						nm=
 						Loop,%expa0%
-							{	
+							{
 								fp= 0
 								fn:= A_Index + 1
 								fu:= % expa%A_index%
@@ -2439,7 +2448,7 @@ Loop,%fullstn0%
 					gmnamex= %gmnamed%
 					}
 				exlist.= posa . "|" . priority . "|"
-				subfldrep= 
+				subfldrep=
 				if (rn = 1)
 					{
 						poscntx:= poscnt + 1
@@ -2447,7 +2456,7 @@ Loop,%fullstn0%
 							{
 								Loop,12
 									{
-										GMMO%A_Index%:= 
+										GMMO%A_Index%:=
 									}
 								stringsplit,GMMO,gmnamed,%A_Space%_-([{}
 								if (GMMO3 = "")
@@ -2462,7 +2471,7 @@ Loop,%fullstn0%
 									{
 										Stringleft,gmname,GMMO1,7
 										stringupper,gmname,gmname,T
-									}	
+									}
 								if ((GMMO1 = "the") or (GMMO1 = "A")&&(GMMO4 = ""))
 									{
 										stringleft,INNSG,GMMO1,1
@@ -2504,7 +2513,7 @@ Loop,%fullstn0%
 								substfldrc= %poscnt%_More\%gmname%_[0%poscntx%]
 								if (INCLALTS = "")
 									{
-										gmnamex= %gmname%_[0%poscnt%]									
+										gmnamex= %gmname%_[0%poscnt%]
 									}
 								/*
 								Loop,files,%GAME_PROFILES%\%GMNAMED%\*_More,D
@@ -2513,17 +2522,17 @@ Loop,%fullstn0%
 										if instr(A_LoopFileName,kprt)
 											{
 												stringsplit,Subnumd,A_LoopFileName,_
-												subnumbr:= Subnumd1	
+												subnumbr:= Subnumd1
 												newNumbr:= poscntx
 												if (subnumbr > poscntx)
 													{
-														newNumbr:= submumbr + 1													
+														newNumbr:= submumbr + 1
 													}
 												splitpath,A_LoopFileFullPath,substfld
 												substfldrc= %gmnamex%
 												subfldrep= %subnumbr%_More\
 												substfldrc= %subfldrep%%gmname%_[0%newNumbr%]
-												break	
+												break
 											}
 									}
 								if ((renum = 1)&&(inclalts = 1))
@@ -2546,32 +2555,32 @@ Loop,%fullstn0%
 								*/
 							}
 						else {
-							subfldrep= 
+							subfldrep=
 							;gmnamex= %gmname%_[0%poscntx%]
 							if (INCLALTS = "")
 								{
 									gmnamex= %gmnamed%
 								}
-						}	
+						}
 					}
 				stringtrimright,subfldrepn,subfldrep,1
 				if (enablelogging = 1)
 					{
-				fileappend,%rn%==%subfldrep%%gmnamed%|%gmnamex%(%renum%):%tot%<!%priority%!`n,log.txt
+						fileappend,%rn%==%subfldrep%%gmnamed%|%gmnamex%(%renum%):%tot%<!%priority%!`n,log.txt
 					}
 				sidn= %Game_Profiles%\%gmnameD%
 				if (Localize = 1)
 					{
 						sidn= %OUTDIR%
 					}
-				splitpath,sidn,sidnf,sidnpth	
+				splitpath,sidn,sidnf,sidnpth
 				GMon= %subfldrep%%gmnamex%_Game.cfg
 				DMon= %subfldrep%%gmnamex%_Desktop.cfg
-				gamecfgn= %subfldrep%%gmnamex%.ini	
+				gamecfgn= %subfldrep%%gmnamex%.ini
 				if ((renum = 1)or(rn = ""))
 					{
 						FileCreateDir,%sidn%\alternates
-						subfldrep= 	
+						subfldrep=
 						GMon= Game.cfg
 						DMon= Desktop.cfg
 						gamecfgn= Game.ini
@@ -2597,8 +2606,8 @@ Loop,%fullstn0%
 						{
 							continue
 						}
-					}	
-				skip= 
+					}
+				skip=
 				if (GMLNK = 1)
 					{
 						prvv= %sidn%\%subfldrep%%gmnamex%.lnk
@@ -2616,14 +2625,14 @@ Loop,%fullstn0%
 										FileDelete,%linktarget%
 										FileCreateShortcut, %RJDB_LOCATION%\bin\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%linkproxy%`"%OutArgs%, %refname%, %OutTarget%,, %IconNumber%, %OutRunState%
 									}
-							}							
+							}
 						if (prnxtn = "exe")
 							{
-								OutArgs= 
+								OutArgs=
 								if ((OVERWRT = 1)or(renum = 1))
 								 	{
 										FileDelete,%linkproxy%
-									}	
+									}
 								FileCreateShortcut,%prn%,%linkproxy%,%outdir%,%OutArgs%,%refname%, %OutTarget%,, %IconNumber%, %OutRunState%
 								if (renum = 1)
 									{
@@ -2636,7 +2645,7 @@ Loop,%fullstn0%
 									{
 										FileCreateShortcut, %RJDB_LOCATION%\bin\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%linkproxy%`"%OutArgs%, %refname%, %OutTarget%,, %IconNumber%, %OutRunState%
 									}
-								if (!fileexist(linktarget)&&(renum = "")&&(SETALTSALL = 1))	
+								if (!fileexist(linktarget)&&(renum = "")&&(SETALTSALL = 1))
 										{
 											FileCreateShortcut, %RJDB_LOCATION%\bin\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%linkproxy%`"%OutArgs%, %refname%, %OutTarget%,, %IconNumber%, %OutRunState%
 										}
@@ -2655,7 +2664,9 @@ Loop,%fullstn0%
 										Player2_Template= %pl1ovr%
 										splitpath,pl2ovr,pl2flnm
 									}
-                                cfgcopied= 
+								SplitPath,MediaCenter_Profile_Template,MediaCenter_ProfileName	
+								MediaCenter_ProfileX= %sidn%\%subfldrep%%MediaCenter_ProfileName%	
+                                cfgcopied=
 								if ((OVERWRT = 1)or !fileexist(gamecfg))
                                     {
 										cfgcopied= 1
@@ -2664,7 +2675,7 @@ Loop,%fullstn0%
                                             {
                                                 fileread,gmcf,%gamecfg%
                                                 Loop,parse,gmcf,`n`r
-                                                    {	
+                                                    {
                                                         stringleft,bb,A_LoopField,1
                                                         if (bb = "[")
                                                             {
@@ -2723,7 +2734,7 @@ Loop,%fullstn0%
 										iniwrite, %outdir%,%gamecfg%,GENERAL,Source_Directory
 										iniwrite, %gamecfg%,%gamecfg%,GENERAL,RJDB_Config
 									}
-									
+
 								DeskMon= %sidn%\%subfldrep%%DMon%
 								if (dgovr <> "<")
 									{
@@ -2744,17 +2755,17 @@ Loop,%fullstn0%
 										filecopy, %MM_GAME_Config%,%GameMon%,%OVERWRT%
 										iniwrite,%GameMon%,%gamecfg%,GENERAL,MM_Game_Config
 									}
-								GameProfs= %sidn%	
+								GameProfs= %sidn%
 								iniwrite,%GameMon%,%gamecfg%,GENERAL,MM_Game_Config
 								killist:
 								if (KILLCHK = 1)
 									{
-										klist= 
+										klist=
 										;;msgbox,,,cur=%curpth%`ntl=%tlevel%`no=%outdir%`ng=%gfnamex%`nred=%redpth%`n
 										Loop,files,%tlevel%\*.exe,R
 											{
 												splitpath,A_LoopFileFullPath,tmpfn,tmpfd,,tmpfo
-												abson= 
+												abson=
 												Loop,parse,absol,`r`n
 													{
 														if (A_LoopField = "")
@@ -2780,17 +2791,17 @@ Loop,%fullstn0%
 														iniwrite,%klist%,%gamecfg%,CONFIG,exe_list
 													}
 											}
-									}	
+									}
                             }
 					}
 				if (GMJOY = 1)
 					{
-						Filecopy,%Player1_Template%,%player1X%,%OVERWRT%	
+						Filecopy,%Player1_Template%,%player1X%,%OVERWRT%
 						if ((errorlevel = 0)or fileexist(player1X))
 							{
 								if (OVERWRT = 1)
 									{
-										iniwrite,%player1x%,%GAMECFG%,GENERAL,Player1						
+										iniwrite,%player1x%,%GAMECFG%,GENERAL,Player1
 									}
 								else {
 										iniread,pkt,%GAMECFG%,GENERAL,Player1
@@ -2800,21 +2811,36 @@ Loop,%fullstn0%
 											}
 									}
 							}
-						Filecopy,%Player2_Template%,%player2X%,%OVERWRT%	
+						Filecopy,%Player2_Template%,%player2X%,%OVERWRT%
 						if ((errorlevel = 0)or fileexist(player2x))
 							{
 								if (OVERWRT = 1)
 									{
-										iniwrite,%player2x%,%GAMECFG%,GENERAL,Player2							
+										iniwrite,%player2x%,%GAMECFG%,GENERAL,Player2
 									}
 								else {
 										iniread,pkt2,%GAMECFG%,GENERAL,Player2
 										if ((pkt2 = "ERROR")or(pkt2 = ""))
 											{
-												iniwrite,%player2x%,%GAMECFG%,GENERAL,Player2							
+												iniwrite,%player2x%,%GAMECFG%,GENERAL,Player2
 											}
 									}
 							}
+						Filecopy,%MediaCenter_Profile_Template%,%MediaCenter_ProfileX%,%OVERWRT%
+						if ((errorlevel = 0)or fileexist(MediaCenter_ProfileX))
+							{
+								if (OVERWRT = 1)
+									{
+										iniwrite,%MediaCenter_ProfileX%,%GAMECFG%,GENERAL,MediaCenter_Profile
+									}
+								else {
+										iniread,mktA,%GAMECFG%,GENERAL,MediaCenter_Profile
+										if ((mktA = "ERROR")or(mktA = ""))
+											{
+												iniwrite,%MediaCenter_ProfileX%,%GAMECFG%,GENERAL,MediaCenter_Profile
+											}
+									}
+							}	
 					}
 			}
 		if ((kbmovr = "n") or (kbmovr = "0"))
@@ -2847,12 +2873,12 @@ Loop,%fullstn0%
 				iniwrite,%mcpovr%,%GAMECFG%,CONFIG,MediaCenter_Profile
 			}
 	}
-SB_SetText("Shortcuts Created")	
+SB_SetText("Shortcuts Created")
 Loop,parse,GUIVARS,|
 	{
 		guicontrol,enable,%A_LoopField%
 		stringreplace,exlisting,exlist,|,`n,All
-	}	
+	}
 return
 
 CleanVar:
@@ -2889,7 +2915,7 @@ curemote= originalBinary
 gosub, BINGETS
 UPDATING= 1
 gosub, DOWNLOADIT
-UPDATING= 
+UPDATING=
 ifexist,%save%
 	{
 		Process, close, RJ_LinkRunner.exe
@@ -2905,14 +2931,14 @@ ifexist,%save%
 SB_SetText("Update file not found")
 return
 
-return	
+return
 DownloadButs:
 Menu,keymapd,Add
 Menu,keymapd,DeleteAll
 if (butrclick = "Keyboard_MapB")
 	{
 		Menu,keymapd,Add,Antimicro,keymapdownload
-		Menu,keymapd, Add,Xpadder,keymapdownload	
+		Menu,keymapd, Add,Xpadder,keymapdownload
 	}
 if (butrclick = "MM_ToolB")
 	{
@@ -2932,8 +2958,8 @@ gosub, BINGETS
 gosub, DOWNLOADIT
 MultiMonitor_ToolT= %binhome%\multimonitortool.exe
 gosub, MM_ToolB
-dchk= 
-SB_SetText("")	
+dchk=
+SB_SetText("")
 return
 
 BGMdownload:
@@ -2942,8 +2968,8 @@ gosub, BINGETS
 gosub, DOWNLOADIT
 Borderless_Gaming_Program= %binhome%\Borderless Gaming\borderless-gaming-portable.exe
 gosub, BGM_ProgB
-dchk= 
-SB_SetText("")	
+dchk=
+SB_SetText("")
 return
 
 SSDDownload:
@@ -2964,14 +2990,14 @@ if (A_ThisMenuItem = "Xpadder")
 		gosub, DOWNLOADIT
 		keyboard_mapperT= %binhome%\xpadder\xpadder.exe
 	}
-SB_SetText("")	
+SB_SetText("")
 gosub, Keyboard_MapB
-dchk= 	
+dchk=
 return
 
 ButtonClear:
 LV_Delete()  ; Clear the ListView, but keep icon cache intact for simplicity.
-SOURCEDLIST= 
+SOURCEDLIST=
 fileDelete,%home%\continue.db
 guicontrol,show,REINDEX
 return
@@ -2979,17 +3005,17 @@ return
 MyListView:
 FocusedRowNumber := LV_GetNext(0, "F")  ; Find the focused row.
 if not FocusedRowNumber  ; No row is focusedLV_GetText(nmFName, FocusedRowNumber, 1) ; Get the text of the first field.
-LV_GetText(nmFDir, FocusedRowNumber, 3) 
-LV_GetText(nmovr, FocusedRowNumber, 5) 
-LV_GetText(kbmstat, FocusedRowNumber, 6) 
-LV_GetText(pl1stat, FocusedRowNumber, 7) 
-LV_GetText(pl2stat, FocusedRowNumber, 8) 
-LV_GetText(mcpstat, FocusedRowNumber, 9) 
-LV_GetText(mmtstat, FocusedRowNumber, 10) 
-LV_GetText(gmsstat, FocusedRowNumber, 11) 
-LV_GetText(dmsstat, FocusedRowNumber, 12) 
-LV_GetText(bgmtat, FocusedRowNumber, 13) 
-LV_GetText(prestat, FocusedRowNumber, 14) 
+LV_GetText(nmFDir, FocusedRowNumber, 3)
+LV_GetText(nmovr, FocusedRowNumber, 5)
+LV_GetText(kbmstat, FocusedRowNumber, 6)
+LV_GetText(pl1stat, FocusedRowNumber, 7)
+LV_GetText(pl2stat, FocusedRowNumber, 8)
+LV_GetText(mcpstat, FocusedRowNumber, 9)
+LV_GetText(mmtstat, FocusedRowNumber, 10)
+LV_GetText(gmsstat, FocusedRowNumber, 11)
+LV_GetText(dmsstat, FocusedRowNumber, 12)
+LV_GetText(bgmtat, FocusedRowNumber, 13)
+LV_GetText(prestat, FocusedRowNumber, 14)
 LV_GetText(pststat, FocusedRowNumber, 15)
     return
 
@@ -3036,9 +3062,9 @@ if (fileexist(save)&& (compltdwn = 1))
 			{
 				goto, EXTRACTING
 			}
-		dwnrej= 	
+		dwnrej=
 	}
-DOWNBIN:	
+DOWNBIN:
 SB_SetText("Downloading" "" binarcf "")
 /*
 if (curemote <> "originalBinary")
@@ -3049,12 +3075,12 @@ if (curemote <> "originalBinary")
 				dwnrej=
 				goto, DWNCONFIRM
 			}
-		dwnrej= 1	
+		dwnrej= 1
 		return
 	}
 */
 DWNCONFIRM:
-dwnrej= 	
+dwnrej=
 DownloadFile(URLFILE,save,False,True)
 SB_SetText(" " binarcf " ""downloaded")
 if (UPDATING = 1)
@@ -3062,7 +3088,7 @@ if (UPDATING = 1)
 		return
 	}
 EXTRACTING:
-ToolTip, 
+ToolTip,
 Sleep, 500
 if (fileexist(save)&& !fileexist(exetfnd))
 	{
@@ -3089,7 +3115,7 @@ if (fileexist(save)&& !fileexist(exetfnd))
 					if Msgbox,Retry
 						{
 							curemote= originalBinary
-							xtractpath= 
+							xtractpath=
 							gosub, BINGETS
 							goto, DOWNLOADIT
 						}
@@ -3103,7 +3129,7 @@ if (fileexist(save)&& !fileexist(exetfnd))
 			}
 	}
 Sleep, 500
-ToolTip, 
+ToolTip,
 ifnotexist,%save%
 	{
 		msgbox,258,Download Failed,%binarcf% did not download.`nYou may select the location of support files later`n`nContinue?
@@ -3119,7 +3145,7 @@ ifnotexist,%save%
 				goto, DOWNLOADIT
 			}
 	}
-SB_SetText("")	
+SB_SetText("")
 return
 
 BINGETS:
@@ -3127,8 +3153,8 @@ Loop,6,
 	{
 		URLNX%A_Index%=
 	}
-renfrm= 
-rento= 
+renfrm=
+rento=
 iniread,URLFILESPLIT,%source%\repos.set,BINARIES,%curemote%
 stringsplit,URLNX,URLFILESPLIT,|
 URLFILE=%URLNX1%
@@ -3143,14 +3169,14 @@ if (URLFILE = "") or (URLFILE = "ERROR")
 		URLFILE= %URLFILEX%
 	}
 return
-		
-GuiContextMenu: 
+
+GuiContextMenu:
 gui,submit,nohide
 If A_GuiControlEvent RightClick
-	{	
+	{
 	butrclick= %A_GuiControl%
 	MENU_X:= A_GuiX*(A_ScreenDPI/96)
-	MENU_Y:= A_GuiY*(A_ScreenDPI/96)	
+	MENU_Y:= A_GuiY*(A_ScreenDPI/96)
 	if A_GuiControl = RESET
 		{
 			Menu, UPDButton, Show, %MENU_X% %MENU_Y%
@@ -3159,12 +3185,12 @@ If A_GuiControlEvent RightClick
 	if A_GuiControl = MM_ToolB
 		{
 			Menu, UCLButton, Show, %MENU_X% %MENU_Y%
-			return	
+			return
 		}
 	if A_GuiControl = Keyboard_MapB
 		{
 			Menu, UCLButton, Show, %MENU_X% %MENU_Y%
-			return	
+			return
 		}
 	if A_GuiControl = PREAPP
 		{
@@ -3174,9 +3200,9 @@ If A_GuiControlEvent RightClick
 if A_GuiControl = BGM_ProgB
 		{
 			Menu, UCLButton, Show, %MENU_X% %MENU_Y%
-			return	
+			return
 		}
-		
+
  ; Launched in response to a right-click or press of the Apps key.
 if (A_GuiControl != "MyListView")  ; Display the menu only for clicks inside the ListView.
     return
@@ -3193,23 +3219,23 @@ FocusedRowNumber := LV_GetNext(0, "F")  ; Find the focused row.
 if not FocusedRowNumber  ; No row is focused.
     return
 LV_GetText(nmFName, FocusedRowNumber, 1) ; Get the text of the first field.
-LV_GetText(nmFDir, FocusedRowNumber, 3) 
-LV_GetText(nmovr, FocusedRowNumber, 5) 
-LV_GetText(kbmstat, FocusedRowNumber, 6) 
-LV_GetText(pl1stat, FocusedRowNumber, 7) 
-LV_GetText(pl2stat, FocusedRowNumber, 8) 
-LV_GetText(mcpstat, FocusedRowNumber, 9) 
-LV_GetText(mmtstat, FocusedRowNumber, 10) 
-LV_GetText(gmsstat, FocusedRowNumber, 11) 
-LV_GetText(dmsstat, FocusedRowNumber, 12) 
-LV_GetText(bgmtat, FocusedRowNumber, 13) 
-LV_GetText(prestat, FocusedRowNumber, 14) 
-LV_GetText(pststat, FocusedRowNumber, 15) 
+LV_GetText(nmFDir, FocusedRowNumber, 3)
+LV_GetText(nmovr, FocusedRowNumber, 5)
+LV_GetText(kbmstat, FocusedRowNumber, 6)
+LV_GetText(pl1stat, FocusedRowNumber, 7)
+LV_GetText(pl2stat, FocusedRowNumber, 8)
+LV_GetText(mcpstat, FocusedRowNumber, 9)
+LV_GetText(mmtstat, FocusedRowNumber, 10)
+LV_GetText(gmsstat, FocusedRowNumber, 11)
+LV_GetText(dmsstat, FocusedRowNumber, 12)
+LV_GetText(bgmtat, FocusedRowNumber, 13)
+LV_GetText(prestat, FocusedRowNumber, 14)
+LV_GetText(pststat, FocusedRowNumber, 15)
 if InStr(A_ThisMenuItem, "Open in Explorer")  ; User selected "Open" from the context menu.
-	{	
+	{
 		Run, Explorer `"%nmfDir%`"
 	}
-	
+
 	else {
 		;; Run Properties "%FileDir%\%FileName%",, UseErrorLevel
 	}  ; User selected "Properties" from the context menu.
@@ -3257,70 +3283,70 @@ LVGetCheckedItems(cN,wN) {
 }
 
 DownloadFile(UrlToFile, _SaveFileAs, Overwrite := True, UseProgressBar := True) {
-	FinalSize= 
+	FinalSize=
 
   If (!Overwrite && FileExist(_SaveFileAs))
 	  {
 		FileSelectFile, _SaveFileAs,S, %_SaveFileAs%
-		if !_SaveFileAs 
+		if !_SaveFileAs
 		  return
 	  }
 
   If (UseProgressBar) {
-	  
+
 		SaveFileAs := _SaveFileAs
-	  
+
 		try WebRequest := ComObjCreate("WinHttp.WinHttpRequest.5.1")
 		catch {
 		}
-	  
+
 		try WebRequest.Open("HEAD", UrlToFile)
 		catch {
 		}
 		try WebRequest.Send()
 		catch {
 		}
-	  
-		try FinalSize := WebRequest.GetResponseHeader("Content-Length") 
+
+		try FinalSize := WebRequest.GetResponseHeader("Content-Length")
 		catch {
 			FinalSize := 1
 		}
 		SetTimer, DownloadFileFunction_UpdateProgressBar, 100
-	
 
-  }   
+
+  }
   UrlDownloadToFile, %UrlToFile%, %_SaveFileAs%
 If (UseProgressBar) {
 	ToolTip,
   }
 
       DownloadFileFunction_UpdateProgressBar:
-    
-      try CurrentSize := FileOpen(_SaveFileAs, "r").Length 
+
+      try CurrentSize := FileOpen(_SaveFileAs, "r").Length
 	  catch {
 			}
-			
+
       try CurrentSizeTick := A_TickCount
     catch {
 			}
-			
+
       try Speed := Round((CurrentSize/1024-LastSize/1024)/((CurrentSizeTick-LastSizeTick)/1000)) . " Kb/s"
 	  catch {
 			}
-    
+
       LastSizeTick := CurrentSizeTick
       try LastSize := FileOpen(_SaveFileAs, "r").Length
     catch {
 			}
-	
+
       try PercentDone := Round(CurrentSize/FinalSize*100)
     catch {
 			}
-			
+
 	 if (PercentDone > 100)
 		{
 			ToolTip,
-			PercentDone= 
+			PercentDone=
 		}
 	 SB_SetText(" " Speed " at " PercentDone "`% " CurrentSize " bytes completed")
 	 return
@@ -3332,7 +3358,7 @@ Extract2Folder(Zip, Dest="", jhFln="")
     SplitPath, Zip,, SourceFolder
     if ! SourceFolder
         Zip := A_ScriptDir . "\" . Zip
-    
+
     if ! Dest {
         SplitPath, Zip,, DestFolder,, Dest
         Dest := DestFolder . "\" . Dest . "\"
@@ -3342,13 +3368,13 @@ Extract2Folder(Zip, Dest="", jhFln="")
     SplitPath, Dest,,,,,DestDrive
     if ! DestDrive
         Dest := A_ScriptDir . "\" . Dest
-    
+
     fso := ComObjCreate("Scripting.FileSystemObject")
     If Not fso.FolderExists(Dest) ;http://www.autohotkey.com/forum/viewtopic.php?p=402574
 		{
 			fso.CreateFolder(Dest)
 		}
-       
+
     AppObj := ComObjCreate("Shell.Application")
     FolderObj := AppObj.Namespace(Zip)
     if jhFln {
@@ -3361,11 +3387,11 @@ Extract2Folder(Zip, Dest="", jhFln="")
         AppObj.Namespace(Dest).CopyHere(FolderItemsObj, 4|16)
     }
 }
- 
- 
- 
- 
- 
+
+
+
+
+
  ; ======================================================================================================================
 ; Namespace:      LV_InCellEdit
 ; Function:       Support for in-cell ListView editing.
@@ -3601,7 +3627,7 @@ Class LV_InCellEdit {
          If (N = 0x0400) || (N = 0x0300) || (N = 0x0100) { ; EN_UPDATE | EN_CHANGE | EN_SETFOCUS
             If (N = 0x0100) ; EN_SETFOCUS
                SendMessage, 0x00D3, 0x01, 0, , % "ahk_id " . L ; EM_SETMARGINS, EC_LEFTMARGIN
-            ControlGetText, EditText, , % "ahk_id " . L		
+            ControlGetText, EditText, , % "ahk_id " . L
             SendMessage, % (A_IsUnicode ? 0x1057 : 0x1011), 0, % &EditText, , % "ahk_id " . This.HWND
             EW := ErrorLevel + This.DW
             , EX := This.EX
@@ -3672,7 +3698,7 @@ Class LV_InCellEdit {
       , NumPut(1024 + 1, LVITEM, 16 + (A_PtrSize * 2), "Int") ; cchTextMax in LVITEM
       SendMessage, % (A_IsUnicode ? 0x1073 : 0x102D), % This.Item, % &LVITEM, , % "ahk_id " . H ; LVM_GETITEMTEXT
       This.ItemText := StrGet(&ItemText, ErrorLevel)
-	  	
+
       ; Call the user function, if any
       If (This.EditUserFunc)
          This.EditUserFunc.Call("BEGIN", This.HWND, This.HEDIT, This.Item + 1, This.Subitem + 1, This.ItemText)

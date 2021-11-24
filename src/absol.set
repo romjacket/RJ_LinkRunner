@@ -16,6 +16,7 @@ Copy of
 crashhand
 crashreport
 crashsend
+sendrpt
 crc16
 crc32
 dialog
@@ -53,7 +54,6 @@ properties
 query
 quicksfv
 redist
-regist
 regist
 reshade
 sender.exe

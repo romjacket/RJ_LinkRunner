@@ -42,32 +42,8 @@ Tooltip,Keyboad/Mouse Disabled`n::Please Be Patient::`n
 Blockinput, on
 if (GetKeyState("Alt")&&(scextn = "exe"))
 	{
-		Tooltip,!! AltKey Detected !!`nKeyboad/Mouse Disabled`n::Please Be Patient::`n
-		CreateSetup= 1
-		iniread,Game_Profiles,%home%\RJDB.ini,GENERAL,Game_Profiles
-		iniread,mapper_extension,%home%\RJDB.ini,JOYSTICKS,mapper_extension
-		iniread,Game_Directory,%home%\RJDB.ini,GENERAL,Game_Directory
-		FileCreateDir,%Game_Profiles%\%gmname%
-		if (errorlevel = 0)
-			{
-				This_Profile= %Game_Profiles%\%gmname%
-				FileCopy,%home%\Player1.%mapper_extension%,%This_Profile%\Player1.%mapper_extension%
-				FileCopy,%home%\Player2.%mapper_extension%,%This_Profile%\Player1.%mapper_extension%
-				Filecopy,%home%\Game.cfg,%This_Profile%\Game.cfg
-				Filecopy,%home%\Desk.cfg,%This_Profile%\Desk.cfg
-				Filecopy,%home%\Mediacenter.%mapper_extension%,%This_Profile%\Mediacenter.%mapper_extension%
-				FileCopy,%home%\RJDB.ini,%This_Profile%\Game.ini
-				iniwrite,%This_Profile%\Desk.cfg,%This_Profile%\Game.ini,GENERAL,MM_MEDIACENTER_Config
-				iniwrite,%This_Profile%\Game.cfg,%This_Profile%\Game.ini,GENERAL,MM_Game_Config
-				iniwrite,%This_Profile%\Player1.%mapper_extension%,%This_Profile%\Game.ini,GENERAL,Player1
-				iniwrite,%This_Profile%\Player2.%mapper_extension%,%This_Profile%\Game.ini,GENERAL,Player2
-				iniwrite,%This_Profile%\MediaCenter.%mapper_extension%,%This_Profile%\Game.ini,GENERAL,MediaCenter_Profile
-				FileCreateShortcut,%plink%,%This_Profile%\%gmname%.lnk,%scpath%, ,%gmname%,%plink%,,%iconnumber%
-				FileCreateShortcut,%binhome%\RJ_LinkRunner.exe, %Game_Directory%\%gmname%.lnk,%scpath%, `"%This_Profile%\%gmname%.lnk`",%gmname%,%plink%,,%iconnumber%
-			}
+		FindName= 1
 	}
-nogmnx= WIN32|WIN64|Game|Win|My Documents|My Games|Windows Games|Shortcuts
-nogmne= Launch|Launcher|bat|cmd|exe|Program Files|Program Files (x86)|Windows|Roaming|Local|AppData|Documents|Desktop|%A_Username%|\|/|:|
 ;;LinkOptions= 
 inif= %home%\RJDB.ini
 READINI:
@@ -192,120 +168,37 @@ if (scextn = "lnk")
 	}
 splitpath,plfp,pfilef,pfdir,plxtn,plnkn
 tempn= %gmname%	
-
-NameTuning:
-StringReplace,gmnamex,tempn,%A_Space%Launcher,,All
-StringReplace,gmnamex,gmnamex,_Launcher,,All
-StringReplace,gmnamex,gmnamex,%A_Space%Shortcut,,All
-StringReplace,gmnamex,gmnamex,-Launcher,,All
-StringReplace,gmnamex,gmnamex,Launch%A_Space%,,All
-StringReplace,gmnamex,gmnamex,Launch-,,All
-StringReplace,gmnamex,gmnamex,Launch_,,All
-StringReplace,gmnamex,gmnamex,WIN64,,All
-StringReplace,gmnamex,gmnamex,WIN_64,,All
-StringReplace,gmnamex,gmnamex,WIN_32,,All
-StringReplace,gmnamex,gmnamex,WIN32,,All
-StringReplace,gmnamex,gmnamex,%A_Space%x64,,All
-StringReplace,gmnamex,gmnamex,x-64,,All
-StringReplace,gmnamex,gmnamex,_x64,,All
-StringReplace,gmnamex,gmnamex,Shortcut to%A_Space%,,All
-Stringleft,chka,gmnamex,1
-StringRight,chkb,gmnamex,1
-
-Loop,4
+if (FindName = 1)
 	{
-		if ((chka = "_") or (chka = "-")or (chka = ".") or (chka = "%A_Space%"))
-			{
-				stringtrimleft,gmnamex,gmnamex,1
-				Stringleft,chka,gmnamex,1
-			}			
+		gosub, NameTuning
+		GoSub, AltKey
 	}
-Loop,4
+	else {
+		gmnamex= %tempn%
+	}
+if (Game_Profile = "")
 	{
-		if ((chkb = "_")or (chkb = "-")or (chkb = ".")or (chkb = "%A_Space%"))
-			{
-				stringtrimRight,gmnamex,gmnamex,1
-				StringRight,chkb,gmnamex,1
-			}
+		Game_Profile= %GAME_PROFILES%\%gmnamex%\game.ini
 	}
-absgmx= |%gmnamex%|
-absgme= |%gmname%|
-if (instr(nogmnx,absgmx)or instr(nogmne,absgme))
-	{
-		if (lnkg = 1)
-			{
-				 if (lnkrg = 1)
-					{
-						if (lnkft = 1)
-							{
-								gmnamex= %tempn%
-								gosub, nonmres
-								goto,pgmonchk
-							}
-						splitpath,npfdir,,,,tempn
-						lnkft= 1
-						goto,NameTuning
-					}
-				splitpath,pfdir,,,,tempn
-				lnkrg= 1
-				splitpath,pfdir,,npfdir
-				goto, NameTuning	
-			}
-		lnkg= 1
-		tempn= %plnkn%
-		goto, NameTuning
-	}
-gbrpr= %GAME_PROFILES%\%gmnamex%\game.ini
-if ((Game_Profile = "")&& fileexist(gbrpr))
-	{
-		Game_Profile= %gbrpr%
-	}
-if (fileexist(gbrpr)&&(gbar <> 1))
+if (fileexist(Game_Profile)&&(gbar <> 1))
 	{
 		gbar = 1
-		inif= %gbrpr%
-		Game_Profile= %gbrpr%
+		inif= %Game_Profile%
 		Tooltip,::Please Be Patient::`nReading Configuration
 		goto, readini
 	}
-inif= %GAME_PROFILES%\%gmnamex%\game.ini
-ifnotexist,%Game_Profiles%\%gmnamex%\
-	{
-		ToolTip, Creating Configurations
-		FileCreateDir,%Game_Profiles%\%gmnamex%
-	}
-ifnotexist,%inif%
-	{
-		filecopy,%RJDB_Config%,%inif%
-	}
-if player1= 
-	{
-		player1= %Game_Profiles%\%gmnamex%\%gmnamex%.%Mapper_Extension%
-	}
-ifnotexist,%player1%
-	{
-		Filecopy,%Player1_Template%,%player1%
-		iniwrite,%player1%,%inif%,GENERAL,Player1
-	}
-if player2= 
-	{
-		player2= %Game_Profiles%\%gmnamex%\%gmnamex%_2.%Mapper_Extension%
-		iniwrite,%player2%,%inif%,GENERAL,Player2
-	}
-ifnotexist,%player2%
-	{
-		Filecopy,%Player2_Template%,%player2%
-	}
-if (mediacenter_profile_2 = "")
-	{
-		splitpath,mediacenter_profile,MC_prof,MC_D,,
-		stringreplace,mcp2,MC_prof,.%mapper_extension%,,
-		mediacenter_profile_2= %MC_D%\%mcp2%_2.%mapper_extension%
-	}
-ifnotexist, %mediacenter_profile_2%
-	{
-		Filecopy,%mediacenter_Template%,%mediacenter_profile_2%
-	}
+else {
+	if !fileexist(Game_Profile)
+		{			
+			gosub, NameTuning
+			gosub, SetupINIT
+		}
+}	
+
+
+/*	
+
+*/
 stringsplit,prestk,1_Pre,<
 stringright,lnky,prestk2,4
 runhow= 
@@ -343,47 +236,12 @@ if (fileexist(Borderless_Gaming_Program)&&(Borderless_Gaming_Program <> ""))
 pgmonchk:
 if (MonitorMode > 0)
 	{
-		DeskMon= %GAME_PROFILES%\%GMNAMED%\Desktop.cfg
-		if (!fileexist(DeskMon)&& fileexist(MM_MediaCenter_Config)&&(DeskMon <> MM_MediaCenter_Config))
+		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(MM_Game_Config)&& fileexist(MM_MEDIACENTER_Config))
 			{
-				filecopy,%MM_MediaCenter_Config%,%DeskMon%
-				if (errorlevel <> 0)
-					{
-						MM_MediaCenter_Config= %DeskMon%
-					}
+				RunWait,%MultiMonitor_Tool% /LoadConfig "%MM_Game_Config%",%mmpath%,hide,mmpid
 			}
 		else {
-			if fileexist(DeskMon)
-				{
-					MM_MediaCenter_Config= %DeskMon%
-				}
-			}
-		GameMon= %GAME_PROFILES%\%GMNAMED%\Game.cfg
-		if (!fileexist(GameMon)&& fileexist(MM_Game_Config)&&(GameMon <> MM_Game_Config))
-			{
-				filecopy,%MM_Game_Config%,%GameMon%
-				if (errorlevel <> 0)
-					{
-						MM_Game_Config= %GameMon%
-					}
-			}
-		else {
-			if fileexist(GameMon)
-				{
-					MM_Game_Config= %GameMon%
-				}
-			}
-		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(GameMon)&& fileexist(DeskMon))
-			{
-				switchcmd= /LoadConfig "%MM_Game_Config%"
-				switchback= /LoadConfig "%MM_MEDIACENTER_Config%"
-			}
-		if (disprogw = 1)
-			{
-				RunWait,%MultiMonitor_Tool% %switchcmd%,%mmpath%,hide,mmpid
-			}
-		else {
-				Run,%MultiMonitor_Tool% %switchcmd%,%mmpath%,hide,mmpid
+				Run,%MultiMonitor_Tool%,%mmpath%,hide,mmpid
 			}
 		iniwrite,%mmpid%,%curpidf%,MultiMonitor_Tool,pid
 	}
@@ -427,7 +285,7 @@ if (prestk2 <> "")
 		if instr(prestk1,"W")
 			{
 				RunWait,%prestk2%,%A_ScriptDir%,%runhow%,prebpid
-				goto,premapper
+				goto, premapper
 			}
 		Run,%prestk2%,%A_ScriptDir%,%runhow%,prebpid
 		iniwrite,%prebpid%,%curpidf%,2_Pre,pid
@@ -443,6 +301,8 @@ if (Mapper > 0)
 				player%A_Index%n=
 				player%A_Index%t=
 			}
+		stringreplace,MEDIACENTER_Profilen,MEDIACENTER_PROFILE,%mapper_extension%,,All
+		splitpath,MEDIACENTER_Profilen,mcnm,mcntp,mcnxtn,mcntrn	
 		splitpath,Player1,p1fn,pl1pth,,plgetat
 		loop, 16 
 			{
@@ -482,7 +342,10 @@ if (Mapper > 0)
 			}
 		ToolTip, %joycnt% Joysticks found
 		Run,%Keyboard_Mapper% "%player1%"%player2t%%player3t%%player4t%,,hide,kbmp
-		fileappend,`n#####`n%Keyboard_Mapper% "%player1%"%player2t%%player3t%%player4t%`npid=%kbmp%`n#####`n,%home%\log.txt
+		if (Logging = 1)
+			{
+				fileappend,`n#####`n%Keyboard_Mapper% "%player1%"%player2t%%player3t%%player4t%`npid=%kbmp%`n#####`n,%home%\log.txt
+			}
 		Sleep,600
 		Loop,5
 			{
@@ -497,20 +360,41 @@ if (Mapper > 0)
 		iniwrite,%joycnt%,%curpidf%,Mapper,connected
 		iniwrite,%kbmp%,%curpidf%,Mapper,pid
 		joyncnt:= joycnt
-		if (Joycnt > 2)
+		if (Joycnt >= 2)
 			{
 				Loop,files,%pl1pth%\*.%mapper_extension%
 					{
-						if ((A_LoopFileFullPath = Player1X) or (A_LoopFileFullPath = Player2X) or (A_index =< 2))
+						if (A_LoopFileFullPath = Player1X)
 							{
+								joyncnt+= 1
 								continue
 							}
 						joyncnt+= 1
 						PlayerN= %gmnamex%_%joyncnt%.%mapper_extension%
 						if (A_LoopFileName = PlayerN)
 							{
-								joypartX:= % joyGetName(joyncnt)			
-								iniwrite,%A_LoopFileFullPath%,%inif%,GENERAL,Player%joyncnt%					
+								joypartX:= % joyGetName(joyncnt)
+								iniwrite,%A_LoopFileFullPath%,%inif%,GENERAL,Player%joyncnt%
+								Player%joycnt%= %A_loopFileFullPath%
+							}
+					}
+				Loop,%joycnt%
+					{
+						if (A_Index = 1)
+							{
+								continue
+							}
+						PlayerZ= %pl1pth%\%gmname%_%A_Index%.%mapper_extension%
+						NPlayer:= % Player%A_Index%
+						if (!fileexist(PlayerZ)&& !fileexist(NPlayer))
+							{
+								FileCopy, %Player2_Template%, %PlayerZ%
+								iniwrite,%A_LoopFileFullPath%,%inif%,GENERAL,Player%joyncnt%
+							}
+						ifnotexist,%mcntp%\%mcntrn%_%A_index%.%mapper_extension%
+							{
+								filecopy,%MediaCenter_Profile_Template%,%mcntp%\%mcntrn%_%A_Index%.%mapper_extension%
+								iniwrite,%mcntp%\%mcntrn%_%A_Index%.%mapper_extension%,%inif%,GENERAL,MediaCenter_Profile%A_Index%
 							}
 					}
 			}
@@ -687,7 +571,7 @@ postmapper:
 if (Mapper > 0)
 	{
 		ToolTip,Please Be Patient`n:::Reloading Mediacenter/Desktop Profiles:::
-		loop, 16 
+		loop, 4 
 			{
 				PlayerVX=
 				joypartX:= % joyGetName(A_Index)
@@ -707,20 +591,33 @@ if (Mapper > 0)
 				playerVN= "%playerVX%"
 				player%JoyCount%t:= A_Space . (playerVN)
 				iniwrite,%PlayerVX%,%inif%,GENERAL,Player%A_index%
-			}
-		if (JMap = "antimicro")
-			{
-				mediacenter_profile_2n= "%mediacenter_profile_2%"
-				mediacenter_profile_2t:=  A_Space . "" . mediacenter_profile_2n . ""				
-			}		
-		if (JMap = "xpadder")
-			{
-				mediacenter_profile_2n= "%mediacenter_profile_2%"
-				mediacenter_profile_2t:=  A_Space . "" . mediacenter_profile_2n . "/M" . ""				
+				MEDIACENTER_PROFILE_N= %GAME_PROFILES%\%MEDIACENTER_Profilen%_%A_Index%.%Mapper_Extension%
+				if (A_Index = 1)
+					{
+						MediaCenter_Profile= %Game_Profiles%\%MEDIACENTER_Profilen%.%Mapper_Extension%
+						continue
+					}
+				if (JMap = "antimicro")
+					{
+						mediacenter_profile_%A_Index%n= "%MEDIACENTER_PROFILE_N%"
+						mediacenter_profile_%A_Index%t:=  A_Space . "" . MEDIACENTER_PROFILE_N . ""				
+					}		
+				if (JMap = "xpadder")
+					{
+						mediacenter_profile_%A_Index%n= "%MEDIACENTER_PROFILE_N%"
+						mediacenter_profile_%A_Index%t:=  A_Space . "" . MEDIACENTER_PROFILE_N . "/M" . ""				
+					}
 			}
 		if (joycount < 2)
 			{
-				mediacenter_profile_2t= 
+				Loop,4
+					{
+						if (A_Index = 1)
+							{
+								continue
+							}
+						mediacenter_profile_%A_Index%t= 
+					}
 			}
 		else {
 			if (joycount > 1)
@@ -733,7 +630,7 @@ if (Mapper > 0)
 							Loop,files,%pl1pth%\*.%mapper_extension%
 								{
 									PlayerVX= 
-									if ((A_LoopFileFullPath = Player1) or (A_LoopFileFullPath = Player2) or (A_LoopFileFullPath = Player3) or (A_LoopFileFullPath = Player4))
+									if ((A_LoopFileFullPath = Player1) or (A_LoopFileFullPath = Player2) or (A_LoopFileFullPath = Player3) or (A_LoopFileFullPath = Player4) or instr(A_LoopFileName,"MediaCenter"))
 										{
 											continue
 										}
@@ -753,11 +650,67 @@ if (Mapper > 0)
 											break
 									}
 								}
-							iniwrite,%PlayerVX%,%RJDB_Config%,GENERAL,Player%joyindex%
+						}
+					Loop,%joycount%	
+						{
+							plyrnx:= % Player%A_Index%
+							ploopindex= %A_Index%
+							if ((plyrnx = "")or !fileexist(plyrnx))
+								{
+									if (plyrnx = "")
+										{
+											plyrnx= %pl1pth%\%gmnamex%_%ploopindex%.%mapper_extension%
+										}
+									FileCopy,%Player2_Template%,%plyrnx%
+								}
+							Loop,Files,%pl1pth%\MediaCenter*.%mapper_extension%
+								{
+									mcmnm= 
+									if ((A_LoopFileFullPath = MediaCenter_Profile)or(ploopindex = 1))
+										{
+											continue
+										}
+									stringreplace,mctmpx,A_LoopFileName,%mapper_extension%,,All
+									stringright,mctmpnn,mctmpx,1
+									if (ploopindex = mctmpnn)
+										{
+											MediaCenter_Profile_%ploopindex%= %A_LoopFileFullPath%
+											mcmnm= %MediaCenter_Profile%_%ploopindex%
+											if (JMap = "antimicro")
+												{
+													mediacenter_profile_%ploopindex%n= "%mcmnm%"
+													mediacenter_profile_%ploopindex%t:=  A_Space . "" . mcmnm . ""				
+												}		
+											if (JMap = "xpadder")
+												{
+													mediacenter_profile_%ploopindex%n= "%mcmnm%"
+													mediacenter_profile_%ploopindex%t:=  A_Space . "" . mcmnm . "/M" . ""				
+												}
+											break
+										}
+								}
+							if ((mcmnm = "")or !fileexist(mcmnm))
+								{
+									if (mcmnm = "")
+										{
+											mcmnm= %pl1pth%\MediaCenter_%ploopindex%.%mapper_extension%
+										}
+									if (JMap = "antimicro")
+										{
+											mediacenter_profile_%ploopindex%n= "%mcmnm%"
+											mediacenter_profile_%ploopindex%t:=  A_Space . "" . mcmnm . ""				
+										}		
+									if (JMap = "xpadder")
+										{
+											mediacenter_profile_%ploopindex%n= "%mcmnm%"
+											mediacenter_profile_%ploopindex%t:=  A_Space . "" . mcmnm . "/M" . ""				
+										}	
+									FileCopy,%MediaCenter_Profile_Template%,%pl1pth%\MediaCenter_%ploopindex%.%mapper_extension%	
+								}
 						}
 				}
 		}	
-		Run, %Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%,,hide,kbmp
+		Run, %Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%%MediaCenter_Profile_3t%%MediaCenter_Profile_4t%,,hide,kbmp
 		Loop,5
 			{
 				Process,Exist,%mapln%
@@ -814,8 +767,8 @@ if (MonitorMode > 0)
 	{
 		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(MM_Game_Config)&& fileexist(MM_MediaCenter_Config))
 			{
-				Run, %MultiMonitor_Tool% /SaveConfig "%MM_GameConfig%",%mmpath%,hide,dsplo
-				Run, %MultiMonitor_Tool% %switchback%,%mmpath%,hide,dsplo
+				Run, %MultiMonitor_Tool% /SaveConfig "%MM_Game_Config%",%mmpath%,hide,dsplo
+				Run, %MultiMonitor_Tool% /LoadConfig "%MM_MediaCenter_Config%,%mmpath%,hide,dsplo
 			}
 		else {
 			Run, %Multimonitor_Tool%,%mmpath%,hide,dsplo
@@ -827,16 +780,31 @@ iniwrite,%disprogw%,%inif%,GENERAL,disprogw
 iniwrite,%MAPPER%,%inif%,GENERAL,Mapper
 iniwrite,%Game_Profile%,%inif%,GENERAL,Game_Profile
 iniwrite,%KeyBoard_Mapper%,%inif%,GENERAL,KeyBoard_Mapper
-iniwrite,%MediaCenter_Profile%,%inif%,GENERAL,MediaCenter_Profile
-iniwrite,%MediaCenter_Profile_2%,%inif%,GENERAL,MediaCenter_Profile_2
+Loop, 4
+	{
+		if (A_Index = 1)
+			{
+				iniwrite,%MediaCenter_Profile%,%inif%,GENERAL,MediaCenter_Profile
+				continue
+			}
+		mcpn:= % MediaCenter_Profile%A_Index%	
+		if (mcpn <> "")
+			{
+				iniwrite,%mcpn%,%inif%,GENERAL,MediaCenter_Profile%A_Index%
+			}
+	}
 iniwrite,%MM_MEDIACENTER_Config%,%inif%,GENERAL,MM_MEDIACENTER_Config
 iniwrite,%MM_Game_Config%,%inif%,GENERAL,MM_Game_Config
 iniwrite,%MultiMonitor_Tool%,%inif%,GENERAL,MultiMonitor_Tool
 iniwrite,%Game_Directory%,%inif%,GENERAL,Game_Directory
-iniwrite,%player1%,%inif%,GENERAL,Player1
-iniwrite,%player2%,%inif%,GENERAL,Player2
-iniwrite,%switchcmd%,%inif%,CONFIG,switchcmd
-iniwrite,%switchBACK%,%inif%,CONFIG,switchback
+Loop,4
+	{
+		plyrn:= % Player%A_index%
+		if (plyrn <> "")
+			{
+				iniwrite,%plyrn%,%inif%,GENERAL,Player%A_Index%	
+			}
+	}
 iniwrite,%Jmap%,%inif%,JOYSTICKS,Jmap
 iniwrite,%Mapper_Extension%,%inif%,JOYSTICKS,Mapper_Extension
 sleep, 1000
@@ -887,7 +855,7 @@ if (prestk2 <> "")
 loggingout:	
 if (Logging = 1)
 	{
-		FileAppend,Run="%plfp%[%linkoptions%|%plarg%]in%pldr%"`nkeyboard=|%Keyboard_Mapper% "%player1%"%player2t%%player3t%%player4t%|`njoycount1="%joycnt%"`n%Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%`njoycount2=%joucount%`n`n,%home%\log.txt
+		FileAppend,Run="%plfp%[%linkoptions%|%plarg%]in%pldr%"`nkeyboard=|%Keyboard_Mapper% "%player1%"%player2t%%player3t%%player4t%|`njoycount1="%joycnt%"`n%Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%%MediaCenter_Profile_3t%%MediaCenter_Profile_4t%`njoycount2=%joucount%`n`n,%home%\log.txt
 	}
 ExitApp
 
@@ -913,36 +881,106 @@ if (instr(bgm,GMGDBCHK)&& fileexist(Borderless_Gaming_Program))or (instr(bgm,gmn
 	}
 return
 
-AmicroTest:
-Tooltip, :::Evaluating Joysticks:::
-process,close,antimicro.exe
-Run, %unload%,%mapperp%,hide
-sleep, 600
-retrycmdb:
-process,close,antimicro.exe
-testoutn+=1
-splitpath,antimicro_executable,mapperx,mapperp
-retrnj= "%Antimicro_executable%" -l
-testout:= CmdRet(retrnj)
-Sleep,600
-Joycount= 
-if ((testout = "")&&(testoutn < 3))
+AltKey:
+Tooltip,!! AltKey Detected !!`nKeyboad/Mouse Disabled`n::Please Be Patient::`n
+SetupINIT:
+nogmnx= WIN32|WIN64|Game|Win|My Documents|My Games|Windows Games|Shortcuts
+nogmne= Launch|Launcher|bat|cmd|exe|Program Files|Program Files (x86)|Windows|Roaming|Local|AppData|Documents|Desktop|%A_Username%|\|/|:|
+CreateSetup= 1
+iniread,Game_Profiles,%home%\RJDB.ini,GENERAL,Game_Profiles
+Game_Profiles= %Game_Profiles%\%gmnamex%
+iniread,mapper_extension,%home%\RJDB.ini,JOYSTICKS,mapper_extension
+iniread,Game_Directory,%home%\RJDB.ini,GENERAL,Game_Directory
+ifnotexist,%GAME_PROFILES%\game.ini
 	{
-		goto, retrycmdb
+		filecopy,%RJDB_Config%,%GAME_PROFILES%\game.ini
 	}
-Loop,parse,testout,`n`r
+FileCreateDir,%Game_Profiles%
+ToolTip, Creating Configurations
+FileCreateDir,%Game_Profiles%
+Game_Profile= %Game_Profiles%\Game.ini
+This_Profile= %Game_Profiles%
+player1= %This_Profile%\%gmnamex%.%mapper_extension%
+FileCopy,%Player1_Template%,%player1%,
+player2= %This_Profile%\%gmnamex%_2.%mapper_extension%
+FileCopy,%Player2_Template%,%player2%,
+Filecopy,%home%\Game.cfg,%This_Profile%\Game.cfg
+Filecopy,%home%\Desktop.cfg,%This_Profile%\Desktop.cfg
+Filecopy,%home%\Mediacenter.%mapper_extension%,%This_Profile%\Mediacenter.%mapper_extension%
+FileCopy,%home%\RJDB.ini,%This_Profile%\Game.ini
+iniwrite,%This_Profile%\Desktop.cfg,%Game_Profile%,GENERAL,MM_MEDIACENTER_Config
+iniwrite,%This_Profile%\Game.cfg,%Game_Profile%,GENERAL,MM_Game_Config
+iniwrite,%player1%,%Game_Profile%,GENERAL,Player1
+iniwrite,%player2%,%Game_Profile%,GENERAL,Player2
+iniwrite,%This_Profile%\MediaCenter.%mapper_extension%,%Game_Profile%,GENERAL,MediaCenter_Profile
+FileCreateShortcut,%plink%,%This_Profile%\%gmnamex%.lnk,%scpath%, ,%gmnamex%,%plink%,,%iconnumber%
+FileCreateShortcut,%binhome%\RJ_LinkRunner.exe, %Game_Directory%\%gmnamex%.lnk,%scpath%, `"%This_Profile%\%gmname%.lnk`",%gmname%,%plink%,,%iconnumber%
+inif= %RJDB_Config%,%GAME_PROFILES%\game.ini
+Return	
+
+NameTuning:
+StringReplace,gmnamex,tempn,%A_Space%Launcher,,All
+StringReplace,gmnamex,gmnamex,_Launcher,,All
+StringReplace,gmnamex,gmnamex,%A_Space%Shortcut,,All
+StringReplace,gmnamex,gmnamex,-Launcher,,All
+StringReplace,gmnamex,gmnamex,Launch%A_Space%,,All
+StringReplace,gmnamex,gmnamex,Launch-,,All
+StringReplace,gmnamex,gmnamex,Launch_,,All
+StringReplace,gmnamex,gmnamex,WIN64,,All
+StringReplace,gmnamex,gmnamex,WIN_64,,All
+StringReplace,gmnamex,gmnamex,WIN_32,,All
+StringReplace,gmnamex,gmnamex,WIN32,,All
+StringReplace,gmnamex,gmnamex,%A_Space%x64,,All
+StringReplace,gmnamex,gmnamex,x-64,,All
+StringReplace,gmnamex,gmnamex,_x64,,All
+StringReplace,gmnamex,gmnamex,Shortcut to%A_Space%,,All
+Stringleft,chka,gmnamex,1
+StringRight,chkb,gmnamex,1
+
+Loop,4
 	{
-		if (A_LoopField = "")
+		if ((chka = "_") or (chka = "-")or (chka = ".") or (chka = "%A_Space%"))
 			{
-				continue
-			}
-		ifinstring,A_LoopField,Game Controller: Yes
+				stringtrimleft,gmnamex,gmnamex,1
+				Stringleft,chka,gmnamex,1
+			}			
+	}
+Loop,4
+	{
+		if ((chkb = "_")or (chkb = "-")or (chkb = ".")or (chkb = "%A_Space%"))
 			{
-				joycount+=1
+				stringtrimRight,gmnamex,gmnamex,1
+				StringRight,chkb,gmnamex,1
 			}
 	}
-Tooltip, %Joycount% Joysticks Detected	
-return	
+absgmx= |%gmnamex%|
+absgme= |%gmname%|
+if (instr(nogmnx,absgmx)or instr(nogmne,absgme))
+	{
+		if (lnkg = 1)
+			{
+				 if (lnkrg = 1)
+					{
+						if (lnkft = 1)
+							{
+								gmnamex= %tempn%
+								gosub, nonmres
+								goto,pgmonchk
+							}
+						splitpath,npfdir,,,,tempn
+						lnkft= 1
+						goto,NameTuning
+					}
+				splitpath,pfdir,,,,tempn
+				lnkrg= 1
+				splitpath,pfdir,,npfdir
+				goto, NameTuning	
+			}
+		lnkg= 1
+		tempn= %plnkn%
+		goto, NameTuning
+	}
+return
 
 CmdRet(sCmd, callBackFuncObj := "", encoding := "")
 	{
@@ -986,6 +1024,38 @@ joyGetName(ID) {
 	return StrGet(&caps+4, "UTF-16")
 }	
 /*
+
+AmicroTest:
+Tooltip, :::Evaluating Joysticks:::
+process,close,antimicro.exe
+Run, %unload%,%mapperp%,hide
+sleep, 600
+retrycmdb:
+process,close,antimicro.exe
+testoutn+=1
+splitpath,antimicro_executable,mapperx,mapperp
+retrnj= "%Antimicro_executable%" -l
+testout:= CmdRet(retrnj)
+Sleep,600
+Joycount= 
+if ((testout = "")&&(testoutn < 3))
+	{
+		goto, retrycmdb
+	}
+Loop,parse,testout,`n`r
+	{
+		if (A_LoopField = "")
+			{
+				continue
+			}
+		ifinstring,A_LoopField,Game Controller: Yes
+			{
+				joycount+=1
+			}
+	}
+Tooltip, %Joycount% Joysticks Detected	
+return	
+
 if ((Mapper <> "")or(mperl <> 0))
 	{
 		testin:= CmdRet(retrnj)
@@ -1026,3 +1096,4 @@ if ((Mapper <> "")or(mperl <> 0))
 					}
 			}
 */
+	
