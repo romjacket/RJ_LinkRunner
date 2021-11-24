@@ -3521,7 +3521,7 @@ if (ServerPush = 1)
 				if (ServerPush = 1)
 					{	
 						FileAppend, "%GITRLS%" release delete portable -y`n,%DEPL%\gpush.cmd
-						FileAppend, "%GITRLS%" release create portable -t "portale binaries" "%DEPL%\portable.zip"`n,%DEPL%\gpush.cmd
+						FileAppend, "%GITRLS%" release create portable -t "portable binaries" "%DEPL%\portable.zip"`n,%DEPL%\gpush.cmd
 					}
 			}
 		if (OvrStable = 1)
