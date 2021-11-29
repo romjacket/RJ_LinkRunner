@@ -591,21 +591,23 @@ if (Mapper > 0)
 				playerVN= "%playerVX%"
 				player%JoyCount%t:= A_Space . (playerVN)
 				iniwrite,%PlayerVX%,%inif%,GENERAL,Player%A_index%
-				MEDIACENTER_PROFILE_N= %GAME_PROFILES%\%MEDIACENTER_Profilen%_%A_Index%.%Mapper_Extension%
 				if (A_Index = 1)
 					{
 						MediaCenter_Profile= %Game_Profiles%\%MEDIACENTER_Profilen%.%Mapper_Extension%
 						continue
 					}
-				if (JMap = "antimicro")
-					{
-						mediacenter_profile_%A_Index%n= "%MEDIACENTER_PROFILE_N%"
-						mediacenter_profile_%A_Index%t:=  A_Space . "" . MEDIACENTER_PROFILE_N . ""				
-					}		
-				if (JMap = "xpadder")
-					{
-						mediacenter_profile_%A_Index%n= "%MEDIACENTER_PROFILE_N%"
-						mediacenter_profile_%A_Index%t:=  A_Space . "" . MEDIACENTER_PROFILE_N . "/M" . ""				
+					else {
+						MEDIACENTER_PROFILE_N= %GAME_PROFILES%\%MEDIACENTER_Profilen%_%A_Index%.%Mapper_Extension%
+						if (JMap = "antimicro")
+							{
+								mediacenter_profile_%A_Index%n= "%MEDIACENTER_PROFILE_N%"
+								mediacenter_profile_%A_Index%t:=  A_Space . "" . MEDIACENTER_PROFILE_N . ""				
+							}		
+						if (JMap = "xpadder")
+							{
+								mediacenter_profile_%A_Index%n= "%MEDIACENTER_PROFILE_N%"
+								mediacenter_profile_%A_Index%t:=  A_Space . "" . MEDIACENTER_PROFILE_N . "/M" . ""				
+							}
 					}
 			}
 		if (joycount < 2)
