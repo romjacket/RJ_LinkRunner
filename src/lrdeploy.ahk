@@ -3592,6 +3592,7 @@ if (SiteUpdate = 1)
 				FileMove, %DEPL%\site\index.html, %DEPL%\index.bak,1
 				FileRead,skelhtml,%BUILDIR%\site\index.html
 				StringReplace,skelhtml,skelhtml,[CURV],%vernum%,All
+				Fileappend,%vernum%=[CURV]`n,%DEPL%\deploy.log
 				StringReplace,skelhtml,skelhtml,[TAGLINE],%tagline%,All
 				FileDelete,%BUILDIR%\insts.sha1
 
@@ -3649,10 +3650,11 @@ if (SiteUpdate = 1)
 				FileCreateDir,%gitroot%\%gituser%.github.io\rj_linkrunner
 				FileDelete,%DEPL%\gitinit.cmd
 				FileAppend, "%GITAPP%" config --global user.name %GITUSER%`n"%GITAPP%" config --global user.email %GITMAIL%`n,%DEPL%\gitinit.cmd
-				RunWait,%DEPL%\gitinit.cmd,,hide
+				RunWait,%DEPL%\gitinit.cmd >> "%DEPL%\deploy.log",,hide
 				
 			}
 		FileAppend,%skelhtml%,%gitroot%\%gituser%.github.io\rj_linkrunner\index.html
+		FileAppend,skelhtml=%gitroot%\%gituser%.github.io\rj_linkrunner\index.html`n,"%DEPL%\deploy.log""
 	}
 uptoserv=
 if (SiteUpdate = 1)

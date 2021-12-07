@@ -591,22 +591,22 @@ if (Mapper > 0)
 				playerVN= "%playerVX%"
 				player%JoyCount%t:= A_Space . (playerVN)
 				iniwrite,%PlayerVX%,%inif%,GENERAL,Player%A_index%
-				if (A_Index = 1)
+				if (JoyCount = 1)
 					{
 						MediaCenter_Profile= %Game_Profiles%\%MEDIACENTER_Profilen%.%Mapper_Extension%
 						continue
 					}
 					else {
-						MEDIACENTER_PROFILE_N= %GAME_PROFILES%\%MEDIACENTER_Profilen%_%A_Index%.%Mapper_Extension%
+						MEDIACENTER_PROFILE_N= %GAME_PROFILES%\%MEDIACENTER_Profilen%_%JoyCount%.%Mapper_Extension%
 						if (JMap = "antimicro")
 							{
-								mediacenter_profile_%A_Index%n= "%MEDIACENTER_PROFILE_N%"
-								mediacenter_profile_%A_Index%t:=  A_Space . "" . MEDIACENTER_PROFILE_N . ""				
+								mediacenter_profile_%JoyCount%n= "%MEDIACENTER_PROFILE_N%"
+								mediacenter_profile_%JoyCount%t:=  A_Space . "" . MEDIACENTER_PROFILE_N . ""				
 							}		
 						if (JMap = "xpadder")
 							{
-								mediacenter_profile_%A_Index%n= "%MEDIACENTER_PROFILE_N%"
-								mediacenter_profile_%A_Index%t:=  A_Space . "" . MEDIACENTER_PROFILE_N . "/M" . ""				
+								mediacenter_profile_%JoyCount%n= "%MEDIACENTER_PROFILE_N%"
+								mediacenter_profile_%JoyCount%t:=  A_Space . "" . MEDIACENTER_PROFILE_N . "/M" . ""				
 							}
 					}
 			}
@@ -618,6 +618,7 @@ if (Mapper > 0)
 							{
 								continue
 							}
+						mediacenter_profile_%A_Index%= 
 						mediacenter_profile_%A_Index%t= 
 					}
 			}
@@ -656,37 +657,41 @@ if (Mapper > 0)
 					Loop,%joycount%	
 						{
 							plyrnx:= % Player%A_Index%
-							ploopindex= %A_Index%
+							P_LoopInd= %A_Index%
 							if ((plyrnx = "")or !fileexist(plyrnx))
 								{
 									if (plyrnx = "")
 										{
-											plyrnx= %pl1pth%\%gmnamex%_%ploopindex%.%mapper_extension%
+											plyrnx= %pl1pth%\%gmnamex%_%P_LoopInd%.%mapper_extension%
 										}
 									FileCopy,%Player2_Template%,%plyrnx%
 								}
 							Loop,Files,%pl1pth%\MediaCenter*.%mapper_extension%
 								{
 									mcmnm= 
-									if ((A_LoopFileFullPath = MediaCenter_Profile)or(ploopindex = 1))
+									if ((A_LoopFileFullPath = MediaCenter_Profile)or(P_LoopInd = 1))
 										{
+											if (A_LoopFileFullPath = MediaCenter_Profile)
+												{
+													mcmnm= 	%A_LoopFileFullPath%							
+												}
 											continue
 										}
 									stringreplace,mctmpx,A_LoopFileName,%mapper_extension%,,All
 									stringright,mctmpnn,mctmpx,1
-									if (ploopindex = mctmpnn)
+									if ((P_LoopInd = mctmpnn)&&(P_LoopInd <> 1))
 										{
-											MediaCenter_Profile_%ploopindex%= %A_LoopFileFullPath%
-											mcmnm= %MediaCenter_Profile%_%ploopindex%
+											MediaCenter_Profile_%P_LoopInd%= %A_LoopFileFullPath%
+											mcmnm= %MediaCenter_Profile%_%P_LoopInd%
 											if (JMap = "antimicro")
 												{
-													mediacenter_profile_%ploopindex%n= "%mcmnm%"
-													mediacenter_profile_%ploopindex%t:=  A_Space . "" . mcmnm . ""				
+													mediacenter_profile_%P_LoopInd%n= "%mcmnm%"
+													mediacenter_profile_%P_LoopInd%t:=  A_Space . "" . mcmnm . ""				
 												}		
 											if (JMap = "xpadder")
 												{
-													mediacenter_profile_%ploopindex%n= "%mcmnm%"
-													mediacenter_profile_%ploopindex%t:=  A_Space . "" . mcmnm . "/M" . ""				
+													mediacenter_profile_%P_LoopInd%n= "%mcmnm%"
+													mediacenter_profile_%P_LoopInd%t:=  A_Space . "" . mcmnm . "/M" . ""				
 												}
 											break
 										}
@@ -695,19 +700,23 @@ if (Mapper > 0)
 								{
 									if (mcmnm = "")
 										{
-											mcmnm= %pl1pth%\MediaCenter_%ploopindex%.%mapper_extension%
+											mcmnm= %pl1pth%\MediaCenter_%P_LoopInd%.%mapper_extension%
 										}
 									if (JMap = "antimicro")
 										{
-											mediacenter_profile_%ploopindex%n= "%mcmnm%"
-											mediacenter_profile_%ploopindex%t:=  A_Space . "" . mcmnm . ""				
+											mediacenter_profile_%P_LoopInd%n= "%mcmnm%"
+											mediacenter_profile_%P_LoopInd%t:=  A_Space . "" . mcmnm . ""				
 										}		
 									if (JMap = "xpadder")
 										{
-											mediacenter_profile_%ploopindex%n= "%mcmnm%"
-											mediacenter_profile_%ploopindex%t:=  A_Space . "" . mcmnm . "/M" . ""				
+											mediacenter_profile_%P_LoopInd%n= "%mcmnm%"
+											mediacenter_profile_%P_LoopInd%t:=  A_Space . "" . mcmnm . "/M" . ""				
 										}	
-									FileCopy,%MediaCenter_Profile_Template%,%pl1pth%\MediaCenter_%ploopindex%.%mapper_extension%	
+									if (Logging = 1)
+										{
+											FileAppend,%MediaCenter_Profile_Template%==%pl1pth%\MediaCenter_%P_LoopInd%.%mapper_extension%	,%home%\log.txt
+										}
+									FileCopy,%MediaCenter_Profile_Template%,%pl1pth%\MediaCenter_%P_LoopInd%.%mapper_extension%	
 								}
 						}
 				}
@@ -736,7 +745,10 @@ if (exe_list <> "")
 				process,close,%A_LoopField%
 			}
 	}
-fileappend,er=%erahkpid%`ndcls=%dcls%`npfile=%pfile%,
+if (Logging = 1)
+	{
+		fileappend,er=%erahkpid%`ndcls=%dcls%`npfile=%pfile%,%home%\log.txt
+	}
 Run, taskkill /f /im "%plnkn%*",,hide
 stringsplit,prestk,2_Post,<
 stringright,lnky,prestk2,4
@@ -770,7 +782,7 @@ if (MonitorMode > 0)
 		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(MM_Game_Config)&& fileexist(MM_MediaCenter_Config))
 			{
 				Run, %MultiMonitor_Tool% /SaveConfig "%MM_Game_Config%",%mmpath%,hide,dsplo
-				Run, %MultiMonitor_Tool% /LoadConfig "%MM_MediaCenter_Config%,%mmpath%,hide,dsplo
+				Run, %MultiMonitor_Tool% /LoadConfig "%MM_MediaCenter_Config%",%mmpath%,hide,dsplo
 			}
 		else {
 			Run, %Multimonitor_Tool%,%mmpath%,hide,dsplo
