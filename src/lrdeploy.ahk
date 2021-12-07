@@ -3650,11 +3650,11 @@ if (SiteUpdate = 1)
 				FileCreateDir,%gitroot%\%gituser%.github.io\rj_linkrunner
 				FileDelete,%DEPL%\gitinit.cmd
 				FileAppend, "%GITAPP%" config --global user.name %GITUSER%`n"%GITAPP%" config --global user.email %GITMAIL%`n,%DEPL%\gitinit.cmd
-				RunWait,%DEPL%\gitinit.cmd >> "%DEPL%\deploy.log",,hide
+				RunWait,%DEPL%\gitinit.cmd,,hide
 				
-			}
+			}	
 		FileAppend,%skelhtml%,%gitroot%\%gituser%.github.io\rj_linkrunner\index.html
-		FileAppend,skelhtml=%gitroot%\%gituser%.github.io\rj_linkrunner\index.html`n,"%DEPL%\deploy.log""
+		FileAppend,skelhtml=%gitroot%\%gituser%.github.io\rj_linkrunner\index.html`n,%DEPL%\deploy.log
 	}
 uptoserv=
 if (SiteUpdate = 1)
@@ -3676,7 +3676,8 @@ if (uptoserv = 1)
 		FileAppend,copy /y "%BUILDIR%\site\*.otf" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%DEPL%\sitecommit.bat
 		FileAppend,copy /y "%BUILDIR%\site\*.ttf" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%DEPL%\sitecommit.bat
 		FileAppend,copy /y "%BUILDIR%\site\ReadMe.md" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%DEPL%\sitecommit.bat
-		FileAppend,copy /y "%BUILDIR%\site\index.html" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%DEPL%\sitecommit.bat
+
+		;FileAppend,copy /y "%BUILDIR%\site\index.html" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%DEPL%\sitecommit.bat
 		FileAppend,copy /y "%BUILDIR%\site\version.txt" "%gitroot%\%GITUSER%.github.io\rj_linkrunner"`n,%DEPL%\sitecommit.bat
 		FileAppend,for /f "delims=" `%`%a in ("%GITAPP%") do set gitapp=`%`%~a`n,%DEPL%\sitecommit.bat
 		FileAppend,pushd "%SITEDIR%"`n
