@@ -3589,8 +3589,8 @@ if (SiteUpdate = 1)
 
 		if (ServerPush = 1)
 			{
-				FileMove, %DEPL%\site\index.html, %DEPL%\index.bak,1
 				FileRead,skelhtml,%BUILDIR%\site\index.html
+				FileMove, %DEPL%\site\index.html, %DEPL%\index.bak,1
 				StringReplace,skelhtml,skelhtml,[CURV],%vernum%,All
 				Fileappend,%vernum%=[CURV]`n,%DEPL%\deploy.log
 				StringReplace,skelhtml,skelhtml,[TAGLINE],%tagline%,All
@@ -3654,8 +3654,9 @@ if (SiteUpdate = 1)
 				
 			}	
 		FileAppend,%skelhtml%,%gitroot%\%gituser%.github.io\rj_linkrunner\index.html
-		FileAppend,skelhtml=%gitroot%\%gituser%.github.io\rj_linkrunner\index.html`n,%DEPL%\deploy.log
+		FileAppend,$$$$$$$$$$$$$$$$$$`n`n`n`n`n`n%skelhtml%`n`n`n`n$$$$$$$$$$$$$$$$$$`n%gitroot%\%gituser%.github.io\rj_linkrunner\index.html`n,%DEPL%\deploy.log
 	}
+msgbox,,,testingappend	
 uptoserv=
 if (SiteUpdate = 1)
 	{
