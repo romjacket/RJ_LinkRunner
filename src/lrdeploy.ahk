@@ -3654,9 +3654,8 @@ if (SiteUpdate = 1)
 				
 			}	
 		FileAppend,%skelhtml%,%gitroot%\%gituser%.github.io\rj_linkrunner\index.html
-		FileAppend,$$$$$$$$$$$$$$$$$$`n`n`n`n`n`n%skelhtml%`n`n`n`n$$$$$$$$$$$$$$$$$$`n%gitroot%\%gituser%.github.io\rj_linkrunner\index.html`n,%DEPL%\deploy.log
+		;FileAppend,$$$$$$$$$$$$$$$$$$`n`n`n`n`n`n%skelhtml%`n`n`n`n$$$$$$$$$$$$$$$$$$`n%gitroot%\%gituser%.github.io\rj_linkrunner\index.html`n,%DEPL%\deploy.log
 	}
-msgbox,,,testingappend	
 uptoserv=
 if (SiteUpdate = 1)
 	{
