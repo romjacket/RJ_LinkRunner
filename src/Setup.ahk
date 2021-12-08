@@ -4,7 +4,7 @@ SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
 
-RELEASE= 2021-12-07 3:50 PM
+RELEASE= 2021-12-07 4:59 PM
 VERSION= 0.99.10.07
 home= %A_ScriptDir%
 Splitpath,A_ScriptDir,tstidir,tstipth
@@ -89,7 +89,7 @@ GogQuery= GOG|G.O.G|GOG Games
 GenQuery= Games|juegos|spellen|Spiele|Jeux|Giochi
 AllQuery:= GogQuery . | . "Origin" . "|" . "Epic Games" . steamhome
 undir= |%A_WinDir%|%A_Programfiles%|%A_Programs%|%A_AppDataCommon%|%A_AppData%|%A_Desktop%|%A_DesktopCommon%|%A_StartMenu%|%A_StartMenuCommon%|%A_Startup%|%A_StartupCommon%|%A_Temp%|
-GUIVARS= PostWait|PreWait|Localize|SCONLY|EXEONLY|BOTHSRCH|ADDGAME|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_ProfB|GAME_DirB|SOURCE_DirB|SOURCE_DirectoryT|REMSRC|Keyboard_MapB|Player1_TempB|Player2_TempB|MediaCenter_ProfB|MultiMonitor_Tool|MM_ToolB|MM_Game_CfgB|MM_MediaCenter_CfgB|BGM_ProgB|BGP_DataB|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS|SELALLBUT|SELNONEBUT
+GUIVARS= ASADMIN|PostWait|PreWait|Localize|SCONLY|EXEONLY|BOTHSRCH|ADDGAME|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_ProfB|GAME_DirB|SOURCE_DirB|SOURCE_DirectoryT|REMSRC|Keyboard_MapB|Player1_TempB|Player2_TempB|MediaCenter_ProfB|MultiMonitor_Tool|MM_ToolB|MM_Game_CfgB|MM_MediaCenter_CfgB|BGM_ProgB|BGP_DataB|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS|SELALLBUT|SELNONEBUT
 STDVARS= SOURCE_DirectoryT|SOURCE_Directory|KeyBoard_Mapper|MediaCenter_Profile|Player1_Template|Player2_Template|MultiMonitor_Tool|MM_MEDIACENTER_Config|MM_Game_Config|BorderLess_Gaming_Program|BorderLess_Gaming_Database|extapp|Game_Directory|Game_Profiles|RJDB_Location|Source_Directory|Mapper_Extension|1_Pre|2_Pre|3_Pre|1_Post|2_Post|3_Post|switchcmd|switchback
 DDTA= <$This_prog$><Monitor><Mapper>
 DDTB= <Monitor><$This_prog$><Mapper>
@@ -110,6 +110,7 @@ if (CREFLD = 1)
 		cfgenbl=
 		joyenbl=
 		lnkenbl=
+		admnenabl= 
 	}
 ovrwrchk=
 updtchk= checked
@@ -126,6 +127,10 @@ if (GMJOY = 1)
 	{
 		joyget= checked
 	}
+if (ASADMIN = 1)
+	{
+		admnget= checked
+	}	
 if (GMLNK = 1)
 	{
 		lnkget= checked
@@ -191,14 +196,14 @@ Gui, Add, Button, x241 y8 w45 h15 vREINDEX gREINDEX %repopbut%,re-index
 Gui, Font, Bold
 Gui, Add, Button, x241 y24 w45 h25 vPOPULATE gPOPULATE,GO>
 Gui, Font, Normal
-Gui, Add, Radio, x30 y32 vSCONLY gSCONLY, Lnk Only
-Gui, Add, Radio, x95 y32 vEXEONLY gEXEONLY checked, Exe Only
-Gui, Add, Radio, x175 y32 vBOTHSRCH gBOTHSRCH, Exe+Lnk
+Gui, Add, Radio, x30 y32 vSCONLY gSCONLY hidden, Lnk Only
+Gui, Add, Radio, x95 y32 vEXEONLY gEXEONLY checked, Exe`,Cmd`,Bat
+Gui, Add, Radio, x175 y32 vBOTHSRCH gBOTHSRCH hidden, Exe+Lnk
 Gui, Font, Bold
 Gui, Add, Button, x18 y588 h16 w16 vRESET gRESET,R
 Gui, Font, Normal
 Gui, Add, Checkbox, x40 y14 h14 vKILLCHK gKILLCHK checked,Kill-List
-Gui, Add, Checkbox, x100 y14 h14 vINCLALTS gINCLALTS,Alts
+Gui, Add, Checkbox, x100 y14 h14 vINCLALTS gINCLALTS hidden,Alts
 Gui, Add, Checkbox, x140 y14 h14 vLocalize gLocalize,Localize
 
 Gui, Font, Bold
@@ -218,6 +223,7 @@ Gui, Add, Text, x84 y110 h14,<Shortcut Output Directory>
 GUi, Add, Checkbox, x36 y132 h14 vCREFLD gCREFLD %fldrget% %fldrenbl%, Folders
 GUi, Add, Checkbox, x40 y152 h14 vGMCONF gGMCONF %cfgget% %cfgenbl%,Cfg
 GUi, Add, Checkbox, x96 y152 h14 vGMJOY gGMJOY %Joyget% %joyenbl%,Joy
+GUi, Add, Checkbox, x188 y152 h14 vASADMIN gASADMIN %admnget% %admnenabl%,As_Admin
 GUi, Add, Checkbox, x144 y152 vGMLNK gGMLNK %lnkget% %lnkenbl%,Lnk
 Gui, Add, Radio, x95 y132 vOVERWRT gUPDTSC %ovrwrchk%, Overwrite
 Gui, Add, Radio, x168 y132 vUPDTSC gOVERWRT %updtchk%, Update
@@ -230,55 +236,55 @@ Gui, Add, Text,  x64 y185 w222 h14,<Game Profiles Directory>
 Gui, Font, Bold
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y224 w36 h21 vKeyboard_MapB gKeyboard_MapB,KBM
+Gui, Add, Button, x17 y224 w36 h21 vKeyboard_MapB gKeyboard_MapB,KBM
 Gui, Add, Text,  x64 y224 w222 h14 vKeyboard_MapperT Disabled Right,"<%Keyboard_MapperT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y238 w222 h14,<Keyboard Mapper Program>
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y256 w36 h21 vPlayer1_TempB gPlayer1_TempB,PL1
+Gui, Add, Button, x21 y256 w35 h19 vPlayer1_TempB gPlayer1_TempB,PL1
 Gui, Add, Text,  x64 y256 w222 h14 vPlayer1_TemplateT Disabled Right,"<%Player1_TemplateT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y270 w222 h14,.....Template Profile for Player 1>
 Gui, Font, Bold
 
-Gui, Add, Button, x20 y288 w36 h21 vPlayer2_TempB gPlayer2_TempB,PL2
+Gui, Add, Button, x21 y288 w36 h19 vPlayer2_TempB gPlayer2_TempB,PL2
 Gui, Add, Text,  x64 y288 w222 h14 vPlayer2_TemplateT Disabled Right,"<%Player2_TemplateT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y302 w222 h14,.....Template Profile for Player 2>
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y320 w36 h21 vMediaCenter_ProfB gMediaCenter_ProfB,MCP
+Gui, Add, Button, x21 y320 w36 h19 vMediaCenter_ProfB gMediaCenter_ProfB,MCP
 Gui, Add, Text,  x64 y320 w222 h14 vMediaCenter_ProfileT Disabled Right,"<%MediaCenter_ProfileT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y334 w222 h14,.....Template Profile for MediaCenter/Desktop>
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y352 w36 h21 vMM_ToolB gMM_ToolB,MMT
+Gui, Add, Button, x17 y352 w36 h21 vMM_ToolB gMM_ToolB,MMT
 Gui, Add, Text,  x64 y354 w222 h14 vMultiMonitor_ToolT Disabled Right,"<%MultiMonitor_ToolT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y368 w222 h14,<Multimonitor Program>
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y384 w36 h21 vMM_Game_CfgB gMM_Game_CfgB,GMC
+Gui, Add, Button, x21 y384 w35 h19 vMM_Game_CfgB gMM_Game_CfgB,GMC
 Gui, Add, Text,  x64 y384 w222 h14 vMM_Game_ConfigT Disabled Right,"<%MM_Game_ConfigT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y398 w222 h14,.....Gaming Configuration File>
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y416 w36 h21 vMM_MediaCenter_CfgB gMM_MediaCenter_CfgB,DMC
+Gui, Add, Button, x21 y416 w35 h19 vMM_MediaCenter_CfgB gMM_MediaCenter_CfgB,DMC
 Gui, Add, Text,  x64 y416 w222 h14 vMM_MediaCenter_ConfigT Disabled Right,"<%MM_MediaCenter_ConfigT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y430 w234 h14,.....MediaCenter/Desktop Configuration File>
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y448 w36 h21 vBGM_ProgB gBGM_ProgB,BGP
+Gui, Add, Button, x17 y448 w36 h21 vBGM_ProgB gBGM_ProgB,BGP
 Gui, Add, Text,  x64 y448 w222 h14 vBorderless_Gaming_ProgramT Disabled Right,"<%Borderless_Gaming_ProgramT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y462 w222 h14,<Borderless Gaming Program>
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y480 w36 h21 vBGP_DataB gBGP_DataB,BGD
+Gui, Add, Button, x21 y480 w35 h19 vBGP_DataB gBGP_DataB,BGD
 Gui, Add, Text, x64 y480 w222 h14 vBorderless_Gaming_DatabaseT Disabled Right,"<%Borderless_Gaming_DatabaseT%"
 Gui, Font, Normal
 Gui, Add, Text, x64 y494 w222 h14,.....Borderless Gaming Database>
@@ -575,8 +581,11 @@ if instr(Keyboard_Mappern,"Xpadder")
 		keyboard_Mappern= %home%\xpadder_!.cmd
 		JMAP= Xpadder
 		xpadder_executable=%xpadtmp%
+		if (ASADMIN = 1)
+			{
+				RegWrite, REG_SZ, HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers, %Xpadder_executable%, ~ RUNASADMIN
+			}
 	}
-
 if instr(Keyboard_Mappern,"Antimicro")
 	{
 		gosub, RECREATEAMICRO
@@ -595,6 +604,10 @@ if instr(Keyboard_Mappern,"Antimicro")
 		keyboard_Mappern= %home%\Antimicro_!.cmd
 		antimicro_executable=%keyboard_Mapper%
 		JMAP= antimicro
+		if (ASADMIN = 1)
+			{
+				RegWrite, REG_SZ, HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers, %antimicro_executable%, ~ RUNASADMIN
+			}
 	}
 Player1_Template= %home%\Player1.%mapper_extension%
 Player2_Template= %home%\Player1.%mapper_extension%
@@ -1751,6 +1764,12 @@ gui,submit,nohide
 iniwrite,%GMJOY%,%RJDB_CONFIG%,CONFIG,GMJOY
 return
 
+
+ASADMIN:
+gui,submit,nohide
+iniwrite,%ASADMIN%,%RJDB_CONFIG%,CONFIG,ASADMIN
+return
+
 GMLNK:
 gui,submit,nohide
 iniwrite,%GMLNK%,%RJDB_CONFIG%,CONFIG,GMLNK
@@ -2072,6 +2091,7 @@ Loop,parse,GUIVARS,|
 	}
 
 guicontrolget,CREFLD,,CREFLD
+guicontrolget,ASADMIN,,ASADMIN
 guicontrolget,GMJOY,,GMJOY
 guicontrolget,GMCONF,,GMCONF
 guicontrolget,OVERWRT,,OVERWRT
@@ -2648,7 +2668,11 @@ Loop,%fullstn0%
 								if (!fileexist(linktarget)&&(renum = "")&&(SETALTSALL = 1))
 										{
 											FileCreateShortcut, %RJDB_LOCATION%\bin\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%linkproxy%`"%OutArgs%, %refname%, %OutTarget%,, %IconNumber%, %OutRunState%
-										}
+										}	
+							}
+						if (ASADMIN = 1)
+							{
+								RegWrite, REG_SZ, HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers, %linkproxy%, ~ RUNASADMIN
 							}
                         if (GMCONF = 1)
                             {
@@ -2874,6 +2898,10 @@ Loop,%fullstn0%
 			}
 	}
 SB_SetText("Shortcuts Created")
+if (ASADMIN = 1)
+	{
+		RegWrite, REG_SZ, HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers, %binhome%\RJ_LinkRunner.exe, ~ RUNASADMIN
+	}
 Loop,parse,GUIVARS,|
 	{
 		guicontrol,enable,%A_LoopField%
