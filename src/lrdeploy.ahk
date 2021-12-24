@@ -1530,19 +1530,18 @@ return
 
 SelSRC:
 gui,submit,nohide
-SB_SetText("Usually the current directory")
+SB_SetText("Usually the working project directory")
 CONTPARAM9= 
 GetSrc:
-FileSelectFolder, SKELT,*%home% ,1,Select The Source Directory
+FileSelectFolder, SKELT,*%home% ,1,Select The project Directory
 if (SKELT = "")
 	{
 		CONTPARAM9= 
-		guicontrol,,txtBLD,(not set) Source Directory
+		guicontrol,,txtBLD,(not set) project Directory
 		inidelete,%home%\skopt.cfg,GLOBAL,Source_Directory
 		return
 	}
-splitpath,SKELT,SKELTFN
-Loop, %SKELTFN%\src\Setup.ahk
+Loop, %SKELT%\src\Setup.ahk
 	{
 		skelexists= 1
 	}

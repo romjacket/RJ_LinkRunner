@@ -4,8 +4,8 @@ SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
 
-RELEASE= 2021-12-07 4:59 PM
-VERSION= 0.99.10.07
+RELEASE= 2021-12-24 6:57 AM
+VERSION= 0.99.03.01
 home= %A_ScriptDir%
 Splitpath,A_ScriptDir,tstidir,tstipth
 if ((tstidir = "src")or(tstidir = "bin")or(tstidir = "binaries"))
@@ -65,6 +65,7 @@ repopbut= hidden
 fileread,unlike,%source%\unlike.set
 fileread,unselect,%source%\unsel.set
 fileread,absol,%source%\absol.set
+fileread,rabsol,%source%\rabsol.set
 if fileexist(home . "\" . "continue.db")
 	{
 		repopbut=
@@ -88,7 +89,8 @@ dralbet= c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|
 GogQuery= GOG|G.O.G|GOG Games
 GenQuery= Games|juegos|spellen|Spiele|Jeux|Giochi
 AllQuery:= GogQuery . | . "Origin" . "|" . "Epic Games" . steamhome
-undir= |%A_WinDir%|%A_Programfiles%|%A_Programs%|%A_AppDataCommon%|%A_AppData%|%A_Desktop%|%A_DesktopCommon%|%A_StartMenu%|%A_StartMenuCommon%|%A_Startup%|%A_StartupCommon%|%A_Temp%|
+undira= |%A_WinDir%|%A_Programfiles%|%A_Programs%|%A_AppDataCommon%|%A_AppData%|%A_Desktop%|%A_DesktopCommon%|%A_StartMenu%|%A_StartMenuCommon%|%A_Startup%|%A_StartupCommon%|%A_Temp%|
+undirs= %undira%
 GUIVARS= ASADMIN|PostWait|PreWait|Localize|SCONLY|EXEONLY|BOTHSRCH|ADDGAME|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_ProfB|GAME_DirB|SOURCE_DirB|SOURCE_DirectoryT|REMSRC|Keyboard_MapB|Player1_TempB|Player2_TempB|MediaCenter_ProfB|MultiMonitor_Tool|MM_ToolB|MM_Game_CfgB|MM_MediaCenter_CfgB|BGM_ProgB|BGP_DataB|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS|SELALLBUT|SELNONEBUT
 STDVARS= SOURCE_DirectoryT|SOURCE_Directory|KeyBoard_Mapper|MediaCenter_Profile|Player1_Template|Player2_Template|MultiMonitor_Tool|MM_MEDIACENTER_Config|MM_Game_Config|BorderLess_Gaming_Program|BorderLess_Gaming_Database|extapp|Game_Directory|Game_Profiles|RJDB_Location|Source_Directory|Mapper_Extension|1_Pre|2_Pre|3_Pre|1_Post|2_Post|3_Post|switchcmd|switchback
 DDTA= <$This_prog$><Monitor><Mapper>
@@ -1903,12 +1905,29 @@ Loop,parse,SOURCE_DIRECTORY,|
 									{
 										continue
 									}
-								if ((filtn = A_LoopField) or (FileName = A_LoopField))
+								if instr(simploc,A_LoopField)
+									{
+										omitd.= filenm . "|" . "|" . simploc . "`n"
+										excl= 1
+										break
+									}
+							}
+						if (excl = 1)
+							{
+								continue
+							}
+						Loop,parse,rabsol,`r`n
+							{
+								if (A_LoopField = "")
+									{
+										continue
+									}
+								if ((FileNM = A_LoopField) or (filtn = A_LoopField))
 									{
 										omitd.= filenm . "|" . simploc . "`n"
 										excl= 1
 										break
-									}
+									}	
 								if instr(simploc,A_LoopField)
 									{
 										lvachk=
@@ -1916,10 +1935,6 @@ Loop,parse,SOURCE_DIRECTORY,|
 										fileappend,%simpath%,%home%\simpth.db
 										goto,Chkcon
 									}
-							}
-						if (excl = 1)
-							{
-								continue
 							}
 						PostDirChk:
 						if ((A_LoopFileExt = "lnk")or(A_LoopFileExt = "_lnk_"))
@@ -2194,9 +2209,10 @@ Loop,%fullstn0%
 				gosub, CleanVar
 				gmnamet= |%invarx%|
 				gmnamedx= |%gmnamet%|
-				if instr(exclfls,gmnamedx)
+				if (instr(exclfls,gmnamedx)or instr(exclfls,gmnamex))
 					{
 						gmnamex= %gmnamex%!
+						;msgbox,,, %gmnamex%
 					}
 				gmname= %gmnamex%
 				cursrc=
@@ -2212,13 +2228,15 @@ Loop,%fullstn0%
 								break
 							}
 					}
+				PARENTSOURCE=
 				IF (cursrc = "")
 					{
-						continue
+						PARENTSOURCE= 1
+						cursrc= %outdir%
 					}
 				tlevel= %outdir%
 				cursrp=|
-				stringreplace,undirs,undir,|%cursrc%|,,
+				stringreplace,undirs,undira,|%cursrc%|,,
 				Stringreplace,gfnamex,outdir,%cursrc%\,,All
 
 				realpth= \%gfnamex%\
@@ -2246,16 +2264,14 @@ Loop,%fullstn0%
 					}
 				stringreplace,pthchk,pthchk,%cursrc%,\,All
 				exlist.= "?" . cursrc . "?" . "|"
-
-
 				ExtID := FileExt
 				IconNumber:= 0
-
 				redpth= %outdir%
 				exlthis= |%gmnamex%|
 				if instr(exclfls,gmnamedx)
 					{
 						gmnamex= %gmnamex%!
+						;msgbox,,, %gmnamex%
 					}
 				if (topdirec = gmnamed)
 					{
@@ -2267,7 +2283,6 @@ Loop,%fullstn0%
 					}
 				topreduc=
 				gmnameo= %gmnamed%
-
 				TOPREDUC:
 				stringlen,gmat,gmnamed
 				gmat+=1
@@ -2281,14 +2296,12 @@ Loop,%fullstn0%
 					{
 						gmnamed= %gmnameo%
 					}
-
 				if instr(exclfls,gmnamedvx)
 					{
 						tmppath= %redpth%
 						splitpath,tmppath,gmnamek,curpthk
 						curpthn= |%curpth%|
 						curpthd= %curpth%\
-						;;msgbox,,,%prnmx%`ng=%gmnamedvx%`nt=%tlevel%`nc=%curpth%`nex=%gfnamex%`nrem=%gmat%`nmat=%mattop%`nml=%mattlen%`ndic=%topdirec%
 						if (instr(undirs,curpthn)&& !instr(undirs,curpthd))
 							{
 								tlevel= %redpth%
@@ -2309,15 +2322,14 @@ Loop,%fullstn0%
 						invar= %gmnamek%
 						gosub, CleanVar
 						topdir= %invarx%
-
 						if (!instr(topdir,gmnamed)or(mattlen < 5))
 							{
 								gmnamed= %gmnamek%
 							}
 						goto, topreduc
 					}
-
 				TOPOUT:
+				;msgbox,,,%prnmx%`ng=%gmnamedvx%`nt=%tlevel%`nc=%curpth%`nex=%gfnamex%`nrem=%gmat%`nmat=%mattop%`nml=%mattlen%`ndic=%topdirec%`nredpth=%redpth%
 				invar= %gmnamed%
 				gosub, CleanVar
 				gmnamecm= %invarx%
@@ -2326,7 +2338,10 @@ Loop,%fullstn0%
 				invar= %gmnamex%
 				gosub, CleanVar
 				gmnamfcm= %invarx%
-
+				if (PARENTSOURCE = 1)
+					{
+						cursrc= %redpth%
+					}
 				stringlen,orilen,gmnamfcm
 				if (instr(topdir,mattop) && (mattlen > 5))
 					{
@@ -2342,7 +2357,6 @@ Loop,%fullstn0%
 					{
 						gmnamed= %nameOverride%
 					}
-				;;msgbox,,,%gmnamed%`nd=%topdirec%`n%orilen%`nmat=%mattop%`nml=%mattlen%
 				priority:= 0
 				if (topdirec = gmnamed)
 					{
