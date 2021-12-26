@@ -340,6 +340,7 @@ if (Mapper > 0)
 		Joycnt= %joycount%
 		if (JMap = "joytokey")
 			{
+				player2t:= A_Space . "" . Game_profiles . "\" . gmnamex . ""
 				process,close,.exe
 				sleep,600
 			}
@@ -355,6 +356,7 @@ if (Mapper > 0)
 				process,close,antimicro.exe
 				sleep,600
 			}
+		;msgbox,,,%keyboard_mapper% "%player1%"%player2T%
 		ToolTip, %joycnt% Joysticks found
 		Run,%Keyboard_Mapper% "%player1%"%player2t%%player3t%%player4t%,,hide,kbmp
 		if (Logging = 1)
@@ -961,12 +963,12 @@ player1= %This_Profile%\%gmnamex%.%mapper_extension%
 FileCopy,%Player1_Template%,%player1%,
 player2= %This_Profile%\%gmnamex%_2.%mapper_extension%
 FileCopy,%Player2_Template%,%player2%,
-Filecopy,%home%\Game.cfg,%This_Profile%\Game.cfg
-Filecopy,%home%\Desktop.cfg,%This_Profile%\Desktop.cfg
+Filecopy,%home%\GameMonitors.mon,%This_Profile%\GameMonitors.mon
+Filecopy,%home%\DesktopMonitors.mon,%This_Profile%\DesktopMonitors.mon
 Filecopy,%home%\Mediacenter.%mapper_extension%,%This_Profile%\Mediacenter.%mapper_extension%
 FileCopy,%home%\RJDB.ini,%This_Profile%\Game.ini
-iniwrite,%This_Profile%\Desktop.cfg,%Game_Profile%,GENERAL,MM_MEDIACENTER_Config
-iniwrite,%This_Profile%\Game.cfg,%Game_Profile%,GENERAL,MM_Game_Config
+iniwrite,%This_Profile%\DesktopMonitors.mon,%Game_Profile%,GENERAL,MM_MEDIACENTER_Config
+iniwrite,%This_Profile%\GameMonitors.mon,%Game_Profile%,GENERAL,MM_Game_Config
 iniwrite,%player1%,%Game_Profile%,GENERAL,Player1
 iniwrite,%player2%,%Game_Profile%,GENERAL,Player2
 iniwrite,%This_Profile%\MediaCenter.%mapper_extension%,%Game_Profile%,GENERAL,MediaCenter_Profile

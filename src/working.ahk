@@ -582,6 +582,8 @@ if ((xpadder_executable = xpadtmp)&& !fileexist(xpadder_executable))
 	{
 		xpadder_executable= %Xpadtmp%
 	}
+amicrotmp= %antimicro_executable%
+jtktmp= %Joytokey_executable%
 Xpadtmp= %Xpadder_executable%
 if instr(Keyboard_Mappern,"JoyToKey")
 	{
@@ -591,14 +593,14 @@ if instr(Keyboard_Mappern,"JoyToKey")
 		mapper_extension= cfg
 		tooltip,JoyToKey
 		FileDelete,%home%\joytokey_!.cmd
-        fileread,jtkcb,%source%\joytkey.set
+        fileread,jtkcb,%source%\joytk.set
 		splitpath,joytokey,jtkprg,jtkprgd
 		joytokeyini= %jtkprgd%\joytokey.ini
-		ifexist,%jtkprgd%\JoyToKey.iniWrite
+		ifexist,%jtkprgd%\JoyToKey.ini
 			{
 				joytokeyini= %jtkprgd%\JoyToKey.ini
 				}
-		ifexist,%A_MyDocuments%\JoyToKey\JoyToKey.iniWrite
+		ifexist,%A_MyDocuments%\JoyToKey\JoyToKey.ini
 			{
 				joytokeyini= %A_MyDocuments%\JoyToKey\JoyToKey.ini
 				}
@@ -608,7 +610,7 @@ if instr(Keyboard_Mappern,"JoyToKey")
 		keyboard_Mapper= %home%\joytokey_!.cmd
 		keyboard_Mappern= %home%\joytokey_!.cmd
 		JMAP= JoyToKey
-		joytokey_executable=%jtktmp%
+		joytokey_executable=%Keyboard_MapperT%
 		if (ASADMIN = 1)
 			{
 				RegWrite, REG_SZ, HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers, %Xpadder_executable%, ~ RUNASADMIN
@@ -824,7 +826,7 @@ return
 MM_Game_CfgB:
 gui,submit,nohide
 guicontrolget,gmcfg,,MM_Game_ConfigT
-if (!fileexist(CFGDIR . "\" . "GameMonitors.cfg")or !fileexist(gmcfg))
+if (!fileexist(CFGDIR . "\" . "GameMonitors.mon")or !fileexist(gmcfg))
 	{
 		 msgbox,4,Setup,Setup the Multimonitor Tool now?
         ifmsgbox,yes
@@ -833,13 +835,13 @@ if (!fileexist(CFGDIR . "\" . "GameMonitors.cfg")or !fileexist(gmcfg))
 				setupmm= 1
             }
 	}
-if ((setupmm = "")or !fileexist(CFGDIR . "\" . "GameMonitors.cfg"))
+if ((setupmm = "")or !fileexist(CFGDIR . "\" . "GameMonitors.mon"))
 	{
-		FileSelectFile,MM_GAME_ConfigT,35,,Select File,*.cfg
+		FileSelectFile,MM_GAME_ConfigT,35,,Select File,*.cfg; *.mon
 		if ((MM_GAME_ConfigT <> "")&& !instr(MM_GAME_ConfigT,"<"))
 			{
 				MM_GAME_Config= %MM_GAME_ConfigT%
-				FileCopy,%MM_GAME_Config%,%home%\GameMonitors.cfg
+				FileCopy,%MM_GAME_Config%,%home%\GameMonitors.mon
 				iniwrite,%MM_GAME_Config%,%RJDB_Config%,GENERAL,MM_GAME_Config
 				iniwrite,2,%RJDB_Config%,GENERAL,MonitorMode
 				stringreplace,MM_GAME_ConfigT,MM_GAME_ConfigT,%A_Space%,`%,All
@@ -856,7 +858,7 @@ return
 MM_MediaCenter_CfgB:
 gui,submit,nohide
 guicontrolget,dtcfg,,MM_MediaCenter_ConfigT
-if (!fileexist(CFGDIR . "\" . "DesktopMonitors.cfg")or !fileexist(dtcfg))
+if (!fileexist(CFGDIR . "\" . "DesktopMonitors.mon")or !fileexist(dtcfg))
 	{
 		 msgbox,4,Setup,Setup the Multimonitor Tool now?
         ifmsgbox,yes
@@ -865,13 +867,13 @@ if (!fileexist(CFGDIR . "\" . "DesktopMonitors.cfg")or !fileexist(dtcfg))
 				setupmm= 1
             }
 	}
-if ((setupmm = "")or !fileexist(CFGDIR . "\" . "DesktopMonitors.cfg"))
+if ((setupmm = "")or !fileexist(CFGDIR . "\" . "DesktopMonitors.mon"))
 	{
-		FileSelectFile,MM_MediaCenter_ConfigT,35,,Select File,*.cfg
+		FileSelectFile,MM_MediaCenter_ConfigT,35,,Select File,*.cfg;*.mon
 		if ((MM_MediaCenter_ConfigT <> "")&& !instr(MM_MediaCenter_ConfigT,"<"))
 			{
 				MM_MediaCenter_Config= %MM_MediaCenter_ConfigT%
-				FileCopy,%MM_MediaCenter_Config%,%home%\DesktopMonitors.cfg
+				FileCopy,%MM_MediaCenter_Config%,%home%\DesktopMonitors.mon
 				iniwrite,%MM_MediaCenter_Config%,%RJDB_Config%,GENERAL,MM_MediaCenter_Config
 				iniwrite,2,%RJDB_Config%,GENERAL,MonitorMode
 				stringreplace,MM_MediaCenter_ConfigT,MM_MediaCenter_ConfigT,%A_Space%,`%,All
@@ -1359,7 +1361,8 @@ fileread,jtktmp,%source%\joytk.set
 FileDelete,%home%\joytokey_!.cmd
 if fileexist(home . "\" . "\" . "bin" . "\" . "joytokey" . "\" . "joytokey.exe")
 	{
-		stringreplace,jtktmp,jtktmp,[JTKEY],%binhome%\joytokey\joytokey.exe,
+		stringreplace,jtktmp,jtktmp,[JOYTK],%binhome%\joytokey\joytokey.exe,
+		stringreplace,jtktmp,jtktmp,[JOYTKINI],%binhome%\joytokey\joytokey.ini,
 		fileappend,%jtktmp%,%home%\joytokey_!.cmd
 		joytokey_Executable= %binhome%\joytokey\joytokey.exe
 	}
@@ -1743,14 +1746,14 @@ MMSETUPD:
 Msgbox,,Default Desktop Config,Configure your monitor/s as you would have them for your`nMediaCenter or Desktop`nthen click "OK"
 ifmsgbox,OK
     {
-        FileMove,%home%\DesktopMonitors.cfg,%home%\DesktopMonitors.cfg.bak
-        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\DesktopMonitors.cfg`",%home%,hide
-        ifexist,%CFGDIR%\DesktopMonitors.cfg
+        FileMove,%home%\DesktopMonitors.mon,%home%\DesktopMonitors.mon.bak
+        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\DesktopMonitors.mon`",%home%,hide
+        ifexist,%CFGDIR%\DesktopMonitors.mon
             {
                 Msgbox,,Success,The current monitor configuration will be used for your Mediacenter or desktop
-                iniwrite,%CFGDIR%\DesktopMonitors.cfg,%RJDB_Config%,GENERAL,MM_MEDIACENTER_Config
-                iniwrite,/LoadConfig "%CFGDIR%\DesktopMonitors.cfg",%RJDB_Config%,CONFIG,switchback
-				stringreplace,MM_Mediacenter_ConfigT,%CFGDIR%\DesktopMonitors.cfg,%A_Space%,`%,All
+                iniwrite,%CFGDIR%\DesktopMonitors.mon,%RJDB_Config%,GENERAL,MM_MEDIACENTER_Config
+                iniwrite,/LoadConfig "%CFGDIR%\DesktopMonitors.mon",%RJDB_Config%,CONFIG,switchback
+				stringreplace,MM_Mediacenter_ConfigT,MM_Mediacenter_ConfigT,%A_Space%,#,All
 				guicontrol,,MM_Mediacenter_ConfigT,%MM_Mediacenter_ConfigT%
             }
            else {
@@ -1762,14 +1765,14 @@ MMSETUPG:
 Msgbox,,Default Game Config,Configure your monitor/s as you would have them for your`nGames or Emulators`nthen click "OK"
 ifmsgbox,OK
     {
-        FileMove,%home%\GameMonitors.cfg,%home%\GameMonitors.cfg.bak
-        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\GameMonitors.cfg`",%home%,hide
-        ifexist,%CFGDIR%\GameMonitors.cfg
+        FileMove,%home%\GameMonitors.mon,%home%\GameMonitors.mon.bak
+        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\GameMonitors.mon`",%home%,hide
+        ifexist,%CFGDIR%\GameMonitors.mon
             {
                 Msgbox,,Success,The current monitor configuration will be used for your Game/s or Emulator/s
-                iniwrite,%CFGDIR%\GameMonitors.cfg,%RJDB_Config%,GENERAL,MM_Game_Config
-                iniwrite,/LoadConfig "%CFGDIR%\GameMonitors.cfg",%RJDB_Config%,CONFIG,switchcmd
-				stringreplace,MM_Game_ConfigT,%CFGDIR%\GameMonitors.cfg,%A_Space%,`%,All
+                iniwrite,%CFGDIR%\GameMonitors.mon,%RJDB_Config%,GENERAL,MM_Game_Config
+                iniwrite,/LoadConfig "%CFGDIR%\GameMonitors.mon",%RJDB_Config%,CONFIG,switchcmd
+				stringreplace,MM_Game_ConfigT,MM_Game_ConfigT,%A_Space%,#,All
 				guicontrol,,MM_Game_ConfigT,%MM_Game_ConfigT%
 			}
 		   else {
@@ -2706,15 +2709,15 @@ Loop,%fullstn0%
 						sidn= %OUTDIR%
 					}
 				splitpath,sidn,sidnf,sidnpth
-				GMon= %subfldrep%%gmnamex%_GameMonitors.cfg
-				DMon= %subfldrep%%gmnamex%_DesktopMonitors.cfg
+				GMon= %subfldrep%%gmnamex%_GameMonitors.mon
+				DMon= %subfldrep%%gmnamex%_DesktopMonitors.mon
 				gamecfgn= %subfldrep%%gmnamex%.ini
 				if ((renum = 1)or(rn = ""))
 					{
 						FileCreateDir,%sidn%\alternates
 						subfldrep=
-						GMon= GameMonitors.cfg
-						DMon= DesktopMonitors.cfg
+						GMon= GameMonitors.mon
+						DMon= DesktopMonitors.mon
 						gamecfgn= Game.ini
 						gmnamex= %gmnamed%
 						FileMove,%sidn%\%gmnamed%.lnk,%sidn%\alternates\%gmnamed%_[0%poscntx%].lnk,1

@@ -1,0 +1,17 @@
+﻿[General]
+FileVersion=67
+NumberOfJoysticks=2
+NumberOfButtons=32
+DisplayMode=2
+UseDiagonalInput=0
+UsePOV8Way=0
+RepeatSameKeyInSequence=0
+Threshold=20
+Threshold2=20
+KeySendMode=0
+SoundFile=
+ImageFile=
+
+[Joystick 1]
+Button07=5, 1, 700
+
