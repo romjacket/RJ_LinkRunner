@@ -1,0 +1,9 @@
+set pro1=%1%
+set ProX=%2%
+if %ProX%" neq "" set proX= "%ProXProfile%\JoyToKey.ini"
+for /f "delims=" %a in ("pro1%") do (
+set proxn=%~dpna
+)
+if %ProX%" == "" set proXProfile= "[JOYTKINI]"&&set ProX=%proxn%
+copy /N "%proXProfile%" "%ProX%"
+start "" "[JOYTK]" -r %pro1%

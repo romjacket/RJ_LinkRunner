@@ -46,6 +46,11 @@ if (GetKeyState("Alt")&&(scextn = "exe"))
 	}
 ;;LinkOptions= 
 inif= %home%\RJDB.ini
+scpini= %scpath%\Game.ini
+if fileexist(scpini)
+	{
+		inif= %scpini%
+	}
 READINI:
 sect= GENERAL|JOYSTICKS
 Loop,parse,sect,|
@@ -74,8 +79,7 @@ if (MULTIMONITOR_TOOL <> "")
 	{
 		splitpath,multimonitor_tool,mmtof,mmpath
 	}
-	
-Loop,4
+Loop, 4
 	{
 		stringleft,dhf,LinkOptions,1
 		if ((dhf = A_Space)or(dhf = A_Tab))
@@ -178,7 +182,13 @@ if (FindName = 1)
 	}
 if (Game_Profile = "")
 	{
-		Game_Profile= %GAME_PROFILES%\%gmnamex%\game.ini
+		Game_Profile= %scpath%\Game.ini
+		Game_Profiles= %scpath%
+		ifnotexist,%game_profile%
+			{
+				Game_Profile= %GAME_PROFILES%\%gmnamex%\game.ini
+				Game_Profiles= %Game_Profiles%\%gmnamex%
+				}
 	}
 if (fileexist(Game_Profile)&&(gbar <> 1))
 	{
@@ -328,6 +338,11 @@ if (Mapper > 0)
 				iniwrite,%PlayerVX%,%inif%,GENERAL,Player%JoyCount%
 			}
 		Joycnt= %joycount%
+		if (JMap = "joytokey")
+			{
+				process,close,.exe
+				sleep,600
+			}
 		if (JMap = "xpadder")
 			{
 				process,close,xpadder.exe
@@ -603,10 +618,15 @@ if (Mapper > 0)
 								mediacenter_profile_%JoyCount%n= "%MEDIACENTER_PROFILE_N%"
 								mediacenter_profile_%JoyCount%t:=  A_Space . "" . MEDIACENTER_PROFILE_N . ""				
 							}		
+						if (JMap = "JoyToKey")
+							{
+								mediacenter_profile_%JoyCount%n= "%MEDIACENTER_PROFILE_N%"
+								mediacenter_profile_%JoyCount%t:=  A_Space . "" . MEDIACENTER_PROFILE_N . "" . A_Space "" . GAME_PROFILES . "\" . GMNAMEX . "" 
+							}
 						if (JMap = "xpadder")
 							{
 								mediacenter_profile_%JoyCount%n= "%MEDIACENTER_PROFILE_N%"
-								mediacenter_profile_%JoyCount%t:=  A_Space . "" . MEDIACENTER_PROFILE_N . "/M" . ""				
+								mediacenter_profile_%JoyCount%t:=  A_Space . "" . MEDIACENTER_PROFILE_N . ""				
 							}
 					}
 			}
@@ -691,7 +711,18 @@ if (Mapper > 0)
 											if (JMap = "xpadder")
 												{
 													mediacenter_profile_%P_LoopInd%n= "%mcmnm%"
-													mediacenter_profile_%P_LoopInd%t:=  A_Space . "" . mcmnm . "/M" . ""				
+													mediacenter_profile_%P_LoopInd%t:=  A_Space . "" . mcmnm . ""				
+												}		
+											if (JMap = "joytokey")
+												{
+													if (A_index = 1)
+														{
+															mediacenter_profile_%P_LoopInd%n= "%mcmnm%"
+															mediacenter_profile_%P_LoopInd%t:=  A_Space . "" . mcmnm . ""	. A_Space . "" . GAME_PROFILES . "\" . GMNAMEX . "" 
+														}
+													else {
+														continue
+														}	
 												}
 											break
 										}
@@ -707,10 +738,22 @@ if (Mapper > 0)
 											mediacenter_profile_%P_LoopInd%n= "%mcmnm%"
 											mediacenter_profile_%P_LoopInd%t:=  A_Space . "" . mcmnm . ""				
 										}		
+									if (JMap = "JoyToKey")
+										{
+											if (A_Index = 1)
+												{
+													mediacenter_profile_%P_LoopInd%n= "%mcmnm%"
+													mediacenter_profile_%P_LoopInd%t:=  A_Space . "" . GAMEPROFILES . "\" . GMNAMEX . ""				
+													}
+
+												else {
+													continue
+													}	
+										}			
 									if (JMap = "xpadder")
 										{
 											mediacenter_profile_%P_LoopInd%n= "%mcmnm%"
-											mediacenter_profile_%P_LoopInd%t:=  A_Space . "" . mcmnm . "/M" . ""				
+											mediacenter_profile_%P_LoopInd%t:=  A_Space . "" . mcmnm . ""				
 										}	
 									if (Logging = 1)
 										{
@@ -1037,77 +1080,3 @@ joyGetName(ID) {
 		return "failed"
 	return StrGet(&caps+4, "UTF-16")
 }	
-/*
-
-AmicroTest:
-Tooltip, :::Evaluating Joysticks:::
-process,close,antimicro.exe
-Run, %unload%,%mapperp%,hide
-sleep, 600
-retrycmdb:
-process,close,antimicro.exe
-testoutn+=1
-splitpath,antimicro_executable,mapperx,mapperp
-retrnj= "%Antimicro_executable%" -l
-testout:= CmdRet(retrnj)
-Sleep,600
-Joycount= 
-if ((testout = "")&&(testoutn < 3))
-	{
-		goto, retrycmdb
-	}
-Loop,parse,testout,`n`r
-	{
-		if (A_LoopField = "")
-			{
-				continue
-			}
-		ifinstring,A_LoopField,Game Controller: Yes
-			{
-				joycount+=1
-			}
-	}
-Tooltip, %Joycount% Joysticks Detected	
-return	
-
-if ((Mapper <> "")or(mperl <> 0))
-	{
-		testin:= CmdRet(retrnj)
-			Loop,parse,testin,`n`r
-			{
-				if (A_LoopReadLine = "")
-					{
-						continue
-					}
-				ifinstring,A_LoopReadLine,Game Controller: Yes
-					{
-						joycnt+=1
-					}
-			}
-		
-		if ((joycnt > joycount)&&(joycnt > 1)or(joycount >1))
-			{
-				stringreplace,MEDIACENTER_PROFILEN,MEDIACENTER_PROFILE,.xpadderprofile,,All
-				stringreplace,MEDIACENTER_PROFILEN,MEDIACENTER_PROFILEN,.gamecontroller.amgp,,All
-				splitpath,MEDIACENTER_Profilen,mcnm,mcntp,mcnxtn,mcntrn
-				MEDIACENTER_PROFILE_N= %GAME_PROFILES%\%GMNAMEX%\%MEDIACENTER_Profilen%_2.%Mapper_Extension% 
-				MEDIACENTER_PROFILE_2T:= A_Space . "" . MediaCenter_Profile_N . ""
-				if (player2 = "")
-					{
-						player2= %GAME_PROFILES%\%GMNAMEX%\%GMNAMEX%_2.%Mapper_Extension%
-					}
-				if (mediacenter_profile_2 = "")
-					{
-						filecopy,Desktop.set,%mediacenter_profile_N%
-					}
-				ifnotexist,%mediacenter_profile_2%
-					{
-						filecopy,Desktop.set,%mediacenter_profile_N%
-					}	
-				ifnotexist,%player2%
-					{
-						FILECOPY,%Player2_Template%,%Player2%
-					}
-			}
-*/
-	

@@ -4,8 +4,8 @@ SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
 
-RELEASE= 2021-12-24 6:57 AM
-VERSION= 0.99.03.01
+RELEASE= 2021-12-25 9:50 PM
+VERSION= 0.99.03.07
 home= %A_ScriptDir%
 Splitpath,A_ScriptDir,tstidir,tstipth
 if ((tstidir = "src")or(tstidir = "bin")or(tstidir = "binaries"))
@@ -73,7 +73,7 @@ if fileexist(home . "\" . "continue.db")
 	}
 fileread,exclfls,%source%\exclfnms.set
 filextns= exe|lnk
-remotebins= _BorderlessGaming_|_Antimicro_|_Xpadder_|_MultiMonitorTool_|_SetSoundDevice_
+remotebins= _BorderlessGaming_|_Antimicro_|_Joy2Key_|_Xpadder_|_MultiMonitorTool_|_SetSoundDevice_
 MENU_X:= A_GuiX*(A_ScreenDPI/96)
 MENU_Y:= A_GuiY*(A_ScreenDPI/96)
 reduced= |_Data|Assets|alt|shipping|Data|ThirdParty|engine|App|steam|steamworks|script|nocd|Tool|trainer|
@@ -83,7 +83,7 @@ prioraa= |win64|x64|64bit|64bits|64|x8664|bin64|bin64bit|windowsx64|windows64|bi
 priorbb= |win32|32bit|32bits|x8632|x86|x8632bit|32|windows32|windows32|bin32|windowsx86|bin32bit|binx86|bin32|exex86|exe32|binariesx86|binaries32|binariesx86|
 ProgramFilesX86 := A_ProgramFiles . (A_PtrSize=8 ? " (x86)" : "")
 progdirs= %A_ProgramFiles%|%ProgramW6432%|%ProgramFilesX86%|%A_MyDocuments%|
-remProgdirs= Program Files|Program Files (x86)|ProgramData|%A_username%
+remProgdirs= Program Files|Program Files (x86)|ProgramData|C:\users\%A_username%
 steamhome= Steam\SteamApps\common
 dralbet= c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|
 GogQuery= GOG|G.O.G|GOG Games
@@ -525,10 +525,16 @@ gui,submit,nohide
 kbmdefloc= %home%
 xpadtmp=
 Antimtmp=
-if fileexist(Programfilesx86 . "\" . "Xpadder" . "\" . "Xpadder.exe")
+jtktmp=
+if fileexist(Programfilesx86 . "\" . "joytokey" . "\" . "joytokey.exe")
 	{
-		kbmdefloc= %programfilesx86%\Xpadder
-		Xpadtmp= %kbmdefloc%\Xpadder.exe
+		kbmdefloc= %programfilesx86%\joytokey
+		jtktmp= %kbmdefloc%\joytokey.exe
+	}
+if fileexist(Programfilesx86 . "\" . "JoyToKey" . "\" . "JoyToKey.exe")
+	{
+		kbmdefloc= %programfilesx86%\JoyToKey
+		jtktmp= %kbmdefloc%\JoyToKey.exe
 	}
 if fileexist(Programfilesx86 . "\" . "Antimicro" . "\" . "Antimicro.exe")
 	{
@@ -540,6 +546,11 @@ if fileexist(binhome . "\" . "Xpadder" . "\" . "Xpadder.exe")
 		kbmdefloc= %binhome%\Xpadder
 		Xpadtmp= %kbmdefloc%\Xpadder.exe
 	}
+if fileexist(binhome . "\" . "JoyToKey" . "\" . "JoyToKey.exe")
+	{
+		kbmdefloc= %binhome%\JoyToKey
+		jtktmp= %kbmdefloc%\JoyToKey.exe
+	}
 if fileexist(binhome . "\" . "Antimicro" . "\" . "Antimicro.exe")
 	{
 		kbmdefloc= %binhome%\Antimicro
@@ -547,7 +558,7 @@ if fileexist(binhome . "\" . "Antimicro" . "\" . "Antimicro.exe")
 	}
 if (dchk = "")
 	{
-		FileSelectFile,Keyboard_MapperT,35,%kbmdefloc%,Select File,xpadder.exe; antimicro.exe
+		FileSelectFile,Keyboard_MapperT,35,%kbmdefloc%,Select File,xpadder.exe; antimicro.exe; JoyToKey.exe
 		;
 	}
 if ((Keyboard_MapperT <> "")&& !instr(Keyboard_MapperT,"<"))
@@ -563,11 +574,46 @@ if ((antimicro_executable = Antimtmp)&& !fileexist(antimicro_executable))
 	{
 		antimicro_executable= %Antimtmp%
 	}
+if ((joytokey_executable = jtktmp)&& !fileexist(joytk_executable))
+	{
+		joytokey_executable= %jtktmp%
+	}
 if ((xpadder_executable = xpadtmp)&& !fileexist(xpadder_executable))
 	{
 		xpadder_executable= %Xpadtmp%
 	}
 Xpadtmp= %Xpadder_executable%
+if instr(Keyboard_Mappern,"JoyToKey")
+	{
+		gosub, RECREATEJOYTK
+		Mapper= 1
+		iniwrite,JoyToKey,%RJDB_Config%,JOYSTICKS,Jmap
+		mapper_extension= cfg
+		tooltip,JoyToKey
+		FileDelete,%home%\joytokey_!.cmd
+        fileread,jtkcb,%source%\joytkey.set
+		splitpath,joytokey,jtkprg,jtkprgd
+		joytokeyini= %jtkprgd%\joytokey.ini
+		ifexist,%jtkprgd%\JoyToKey.iniWrite
+			{
+				joytokeyini= %jtkprgd%\JoyToKey.ini
+				}
+		ifexist,%A_MyDocuments%\JoyToKey\JoyToKey.iniWrite
+			{
+				joytokeyini= %A_MyDocuments%\JoyToKey\JoyToKey.ini
+				}
+        stringreplace,jtkcb,jtkcb,[JOYTKINI],%joytokeyini%,All
+        stringreplace,jtkcb,jtkcb,[JOYTK],%Keyboard_Mappern%,All
+        FileAppend,%jtkcb%,%home%\joytokey_!.cmd
+		keyboard_Mapper= %home%\joytokey_!.cmd
+		keyboard_Mappern= %home%\joytokey_!.cmd
+		JMAP= JoyToKey
+		joytokey_executable=%jtktmp%
+		if (ASADMIN = 1)
+			{
+				RegWrite, REG_SZ, HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers, %Xpadder_executable%, ~ RUNASADMIN
+			}
+	}
 if instr(Keyboard_Mappern,"Xpadder")
 	{
 		gosub, RECREATEXPAD
@@ -631,6 +677,7 @@ iniwrite,%home%\Player2.%mapper_extension%,%RJDB_CONFIG%,GENERAL,Player2_Templat
 iniwrite,%home%\Mediacenter.%mapper_extension%,%RJDB_CONFIG%,GENERAL,MediaCenter_Profile_Template
 iniwrite,%xpadtmp%,%RJDB_Config%,GENERAL,Xpadder_executable
 iniwrite,%Antimtmp%,%RJDB_Config%,GENERAL,Antimicro_executable
+iniwrite,%jtktmp%,%RJDB_Config%,GENERAL,joytokey_executable
 stringreplace,Keyboard_MapperT,Keyboard_MapperT,%A_Space%,`%,All
 guicontrol,,Keyboard_MapperT,%Keyboard_MapperT%
 guicontrol,,Player1_TemplateT,%Player2_TemplateT%
@@ -777,7 +824,7 @@ return
 MM_Game_CfgB:
 gui,submit,nohide
 guicontrolget,gmcfg,,MM_Game_ConfigT
-if (!fileexist(CFGDIR . "\" . "Game.cfg")or !fileexist(gmcfg))
+if (!fileexist(CFGDIR . "\" . "GameMonitors.cfg")or !fileexist(gmcfg))
 	{
 		 msgbox,4,Setup,Setup the Multimonitor Tool now?
         ifmsgbox,yes
@@ -786,13 +833,13 @@ if (!fileexist(CFGDIR . "\" . "Game.cfg")or !fileexist(gmcfg))
 				setupmm= 1
             }
 	}
-if ((setupmm = "")or !fileexist(CFGDIR . "\" . "Game.cfg"))
+if ((setupmm = "")or !fileexist(CFGDIR . "\" . "GameMonitors.cfg"))
 	{
 		FileSelectFile,MM_GAME_ConfigT,35,,Select File,*.cfg
 		if ((MM_GAME_ConfigT <> "")&& !instr(MM_GAME_ConfigT,"<"))
 			{
 				MM_GAME_Config= %MM_GAME_ConfigT%
-				FileCopy,%MM_GAME_Config%,%home%\Game.cfg
+				FileCopy,%MM_GAME_Config%,%home%\GameMonitors.cfg
 				iniwrite,%MM_GAME_Config%,%RJDB_Config%,GENERAL,MM_GAME_Config
 				iniwrite,2,%RJDB_Config%,GENERAL,MonitorMode
 				stringreplace,MM_GAME_ConfigT,MM_GAME_ConfigT,%A_Space%,`%,All
@@ -809,7 +856,7 @@ return
 MM_MediaCenter_CfgB:
 gui,submit,nohide
 guicontrolget,dtcfg,,MM_MediaCenter_ConfigT
-if (!fileexist(CFGDIR . "\" . "Desktop.cfg")or !fileexist(dtcfg))
+if (!fileexist(CFGDIR . "\" . "DesktopMonitors.cfg")or !fileexist(dtcfg))
 	{
 		 msgbox,4,Setup,Setup the Multimonitor Tool now?
         ifmsgbox,yes
@@ -818,13 +865,13 @@ if (!fileexist(CFGDIR . "\" . "Desktop.cfg")or !fileexist(dtcfg))
 				setupmm= 1
             }
 	}
-if ((setupmm = "")or !fileexist(CFGDIR . "\" . "Desktop.cfg"))
+if ((setupmm = "")or !fileexist(CFGDIR . "\" . "DesktopMonitors.cfg"))
 	{
 		FileSelectFile,MM_MediaCenter_ConfigT,35,,Select File,*.cfg
 		if ((MM_MediaCenter_ConfigT <> "")&& !instr(MM_MediaCenter_ConfigT,"<"))
 			{
 				MM_MediaCenter_Config= %MM_MediaCenter_ConfigT%
-				FileCopy,%MM_MediaCenter_Config%,%home%\Desktop.cfg
+				FileCopy,%MM_MediaCenter_Config%,%home%\DesktopMonitors.cfg
 				iniwrite,%MM_MediaCenter_Config%,%RJDB_Config%,GENERAL,MM_MediaCenter_Config
 				iniwrite,2,%RJDB_Config%,GENERAL,MonitorMode
 				stringreplace,MM_MediaCenter_ConfigT,MM_MediaCenter_ConfigT,%A_Space%,`%,All
@@ -1258,6 +1305,7 @@ ifMsgbox,Yes
         resetting= 1
         filedelete,%home%\Antimicro_!.cmd
         filedelete,%home%\xpadder_!.cmd
+        filedelete,%home%\joytokey_!.cmd
         filedelete,%home%\MediaCenter.xpadderprofile
         filedelete,%home%\MediaCenter2.xpadderprofile
         filedelete,%home%\Player1.xpadderprofile
@@ -1266,6 +1314,10 @@ ifMsgbox,Yes
         filedelete,%home%\MediaCenter2.gamecontroller.amgp
         filedelete,%home%\Player1.gamecontroller.amgp
         filedelete,%home%\Player2.gamecontroller.amgp
+		filedelete,%home%\MediaCenter.cfg
+        filedelete,%home%\MediaCenter2.cfg
+        filedelete,%home%\Player1.cfg
+        filedelete,%home%\Player2.cfg
         goto,popgui
 		LV_Delete()
 		guicontrol,,SOURCE_DIRECTORYT,%SOURCE_Directory%
@@ -1299,6 +1351,17 @@ if fileexist(home . "\" . "\" . "bin" . "\" . "xpadder" . "\" . "Xpadder.exe")
 		stringreplace,xpadtmp,xpadtmp,[XPADR],%binhome%\xpadder\Xpadder.exe,
 		fileappend,%xpadtmp%,%home%\xpadder_!.cmd
 		Xpadder_Executable= %binhome%\xpadder\Xpadder.exe
+	}
+return
+
+INITJTK:
+fileread,jtktmp,%source%\joytk.set
+FileDelete,%home%\joytokey_!.cmd
+if fileexist(home . "\" . "\" . "bin" . "\" . "joytokey" . "\" . "joytokey.exe")
+	{
+		stringreplace,jtktmp,jtktmp,[JTKEY],%binhome%\joytokey\joytokey.exe,
+		fileappend,%jtktmp%,%home%\joytokey_!.cmd
+		joytokey_Executable= %binhome%\joytokey\joytokey.exe
 	}
 return
 
@@ -1582,6 +1645,24 @@ initz=
 guicontrol,,Source_DirectoryT,%Source_Directory%
 resetting=
 return
+RECREATEJOY2K:
+ifnotexist,%home%\Player1.cfg
+	{
+		filecopy,%source%\Jallgames.set,%home%\Player1.cfg
+	}
+ifnotexist,%home%\Player2.cfg
+	{
+		filecopy,%source%\Jallgames.set,%home%\Player2.cfg
+	}
+ifnotexist,%home%\Mediacenter.cfg
+	{
+		filecopy,%source%\JDesktop.set,%home%\MediaCenter.cfg
+	}
+ifnotexist,%home%\Mediacenter2.cfg
+	{
+		filecopy,%source%\JDesktop.set,%home%\MediaCenter2.cfg
+	}
+return
 
 RECREATEXPAD:
 ifnotexist,%home%\Player1.xpadderprofile
@@ -1600,6 +1681,30 @@ ifnotexist,%home%\Mediacenter2.xpadderprofile
 	{
 		filecopy,%source%\xDesktop.set,%home%\MediaCenter2.xpadderprofile
 	}
+return
+
+RECREATEJOYTK:
+ifnotexist,%home%\Player1.cfg
+    {
+        fileread,mctmp,%source%\jallgames.set
+        stringreplace,SCRIPTRV,CFGDIR,\,/,All
+        stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
+        FileAppend,%mctmp%,%home%\Player1.cfg
+    }
+ifnotexist,%home%\Player2.cfg
+    {
+        fileread,mctmp,%source%\jallgames.set
+        stringreplace,SCRIPTRV,CFGDIR,\,/,All
+        stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
+        FileAppend,%mctmp%,%home%\Player2.cfg
+    }
+ifnotexist,%home%\MediaCenter.cfg
+    {
+        fileread,mctmp,%source%\jDesktop.set
+        stringreplace,SCRIPTRV,CFGDIR,\,/,All
+        stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
+        FileAppend,%mctmp%,%home%\MediaCenter.cfg
+    }
 return
 
 RECREATEAMICRO:
@@ -1624,13 +1729,6 @@ ifnotexist,%home%\MediaCenter.gamecontroller.amgp
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,%home%\MediaCenter.gamecontroller.amgp
     }
-ifnotexist,%home%\%home%\MediaCenter.gamecontroller.amgp
-    {
-        fileread,mctmp,%source%\Desktop.set
-        stringreplace,SCRIPTRV,CFGDIR,\,/,All
-        stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
-        FileAppend,%mctmp%,%home%\MediaCenter2.gamecontroller.amgp
-    }
 return
 
 
@@ -1645,14 +1743,14 @@ MMSETUPD:
 Msgbox,,Default Desktop Config,Configure your monitor/s as you would have them for your`nMediaCenter or Desktop`nthen click "OK"
 ifmsgbox,OK
     {
-        FileMove,%home%\Desktop.cfg,%home%\Desktop.cfg.bak
-        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\Desktop.cfg`",%home%,hide
-        ifexist,%CFGDIR%\Desktop.cfg
+        FileMove,%home%\DesktopMonitors.cfg,%home%\DesktopMonitors.cfg.bak
+        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\DesktopMonitors.cfg`",%home%,hide
+        ifexist,%CFGDIR%\DesktopMonitors.cfg
             {
                 Msgbox,,Success,The current monitor configuration will be used for your Mediacenter or desktop
-                iniwrite,%CFGDIR%\Desktop.cfg,%RJDB_Config%,GENERAL,MM_MEDIACENTER_Config
-                iniwrite,/LoadConfig "%CFGDIR%\Desktop.cfg",%RJDB_Config%,CONFIG,switchback
-				stringreplace,MM_Mediacenter_ConfigT,%CFGDIR%\Desktop.cfg,%A_Space%,`%,All
+                iniwrite,%CFGDIR%\DesktopMonitors.cfg,%RJDB_Config%,GENERAL,MM_MEDIACENTER_Config
+                iniwrite,/LoadConfig "%CFGDIR%\DesktopMonitors.cfg",%RJDB_Config%,CONFIG,switchback
+				stringreplace,MM_Mediacenter_ConfigT,%CFGDIR%\DesktopMonitors.cfg,%A_Space%,`%,All
 				guicontrol,,MM_Mediacenter_ConfigT,%MM_Mediacenter_ConfigT%
             }
            else {
@@ -1664,14 +1762,14 @@ MMSETUPG:
 Msgbox,,Default Game Config,Configure your monitor/s as you would have them for your`nGames or Emulators`nthen click "OK"
 ifmsgbox,OK
     {
-        FileMove,%home%\Game.cfg,%home%\Game.cfg.bak
-        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\Game.cfg`",%home%,hide
-        ifexist,%CFGDIR%\Game.cfg
+        FileMove,%home%\GameMonitors.cfg,%home%\GameMonitors.cfg.bak
+        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\GameMonitors.cfg`",%home%,hide
+        ifexist,%CFGDIR%\GameMonitors.cfg
             {
                 Msgbox,,Success,The current monitor configuration will be used for your Game/s or Emulator/s
-                iniwrite,%CFGDIR%\Game.cfg,%RJDB_Config%,GENERAL,MM_Game_Config
-                iniwrite,/LoadConfig "%CFGDIR%\Game.cfg",%RJDB_Config%,CONFIG,switchcmd
-				stringreplace,MM_Game_ConfigT,%CFGDIR%\Game.cfg,%A_Space%,`%,All
+                iniwrite,%CFGDIR%\GameMonitors.cfg,%RJDB_Config%,GENERAL,MM_Game_Config
+                iniwrite,/LoadConfig "%CFGDIR%\GameMonitors.cfg",%RJDB_Config%,CONFIG,switchcmd
+				stringreplace,MM_Game_ConfigT,%CFGDIR%\GameMonitors.cfg,%A_Space%,`%,All
 				guicontrol,,MM_Game_ConfigT,%MM_Game_ConfigT%
 			}
 		   else {
@@ -2608,15 +2706,15 @@ Loop,%fullstn0%
 						sidn= %OUTDIR%
 					}
 				splitpath,sidn,sidnf,sidnpth
-				GMon= %subfldrep%%gmnamex%_Game.cfg
-				DMon= %subfldrep%%gmnamex%_Desktop.cfg
+				GMon= %subfldrep%%gmnamex%_GameMonitors.cfg
+				DMon= %subfldrep%%gmnamex%_DesktopMonitors.cfg
 				gamecfgn= %subfldrep%%gmnamex%.ini
 				if ((renum = 1)or(rn = ""))
 					{
 						FileCreateDir,%sidn%\alternates
 						subfldrep=
-						GMon= Game.cfg
-						DMon= Desktop.cfg
+						GMon= GameMonitors.cfg
+						DMon= DesktopMonitors.cfg
 						gamecfgn= Game.ini
 						gmnamex= %gmnamed%
 						FileMove,%sidn%\%gmnamed%.lnk,%sidn%\alternates\%gmnamed%_[0%poscntx%].lnk,1
@@ -2981,6 +3079,7 @@ if (butrclick = "Keyboard_MapB")
 	{
 		Menu,keymapd,Add,Antimicro,keymapdownload
 		Menu,keymapd, Add,Xpadder,keymapdownload
+		Menu,keymapd, Add,JoyToKey,keymapdownload
 	}
 if (butrclick = "MM_ToolB")
 	{
@@ -3024,6 +3123,20 @@ if (A_ThisMenuItem = "Antimicro")
 		gosub, BINGETS
 		gosub, DOWNLOADIT
 		keyboard_mapperT= %binhome%\Antimicro\Antimicro.exe
+	}
+if (A_ThisMenuItem = "DS4Windows")
+	{
+		curemote= _DS4Windows_
+		gosub, BINGETS
+		gosub, DOWNLOADIT
+		keyboard_mapperT= %binhome%\ds4windows\ds4windows.exe
+	}
+if (A_ThisMenuItem = "JoyToKey")
+	{
+		curemote= _JoyToKey_
+		gosub, BINGETS
+		gosub, DOWNLOADIT
+		keyboard_mapperT= %binhome%\JoyToKey\JoyToKey.exe
 	}
 if (A_ThisMenuItem = "Xpadder")
 	{
