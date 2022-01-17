@@ -4,8 +4,8 @@ SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
 
-RELEASE= 2021-12-26 3:09 AM
-VERSION= 0.99.03.010
+RELEASE= 2022-01-17 9:09 AM
+VERSION= 0.99.03.011
 home= %A_ScriptDir%
 Splitpath,A_ScriptDir,tstidir,tstipth
 if ((tstidir = "src")or(tstidir = "bin")or(tstidir = "binaries"))
@@ -73,7 +73,7 @@ if fileexist(home . "\" . "continue.db")
 	}
 fileread,exclfls,%source%\exclfnms.set
 filextns= exe|lnk
-remotebins= _BorderlessGaming_|_Antimicro_|_Joy2Key_|_Xpadder_|_MultiMonitorTool_|_SetSoundDevice_
+remotebins= _BorderlessGaming_|_Antimicro_|_Joy2Key_|_Xpadder_|_MultiMonitorTool_|_SetSoundDevice_|_SoundVolumeView_
 MENU_X:= A_GuiX*(A_ScreenDPI/96)
 MENU_Y:= A_GuiY*(A_ScreenDPI/96)
 reduced= |_Data|Assets|alt|shipping|Data|ThirdParty|engine|App|steam|steamworks|script|nocd|Tool|trainer|
@@ -145,9 +145,20 @@ if instr(1_PostT,"W<")
 	{
 		poststatus= checked
 	}
+Loop,files,%binhome%\*.exe,F
+  {
+	  if (A_LoopFileName = "soundVolumeView.exe")
+		{
+		  Menu,AddProgs,Add,soundVoumeView,SVV_Prog
+		}
+	  if (A_LoopFileName = "setsounddevice.exe")
+		{
+		  Menu,AddProgs,Add,setSoundDevice,SSD_Prog
+		}
+  }	
 Menu,RCLButton,Add,Reset ,ResetButs
 Menu,AddProgs,Add,Download,DownloadAddons
-Menu,UCLButton,Add,Download,DownloadButs
+Menu,UCLButton,Add,Download,DownloadButs_
 Menu,UCLButton,Add,Disable ,DisableButs
 Menu,DCLButton,Add,Delete ,DeleteButs
 Menu,UPDButton,Add,Update,UpdateRJLR
@@ -227,8 +238,8 @@ GUi, Add, Checkbox, x40 y152 h14 vGMCONF gGMCONF %cfgget% %cfgenbl%,Cfg
 GUi, Add, Checkbox, x96 y152 h14 vGMJOY gGMJOY %Joyget% %joyenbl%,Joy
 GUi, Add, Checkbox, x188 y152 h14 vASADMIN gASADMIN %admnget% %admnenabl%,As_Admin
 GUi, Add, Checkbox, x144 y152 vGMLNK gGMLNK %lnkget% %lnkenbl%,Lnk
-Gui, Add, Radio, x95 y132 vOVERWRT gUPDTSC %ovrwrchk%, Overwrite
-Gui, Add, Radio, x168 y132 vUPDTSC gOVERWRT %updtchk%, Update
+Gui, Add, Radio, x115 y132 vOVERWRT gUPDTSC %ovrwrchk%, Overwrite
+Gui, Add, Radio, x188 y132 vUPDTSC gOVERWRT %updtchk%, Update
 
 Gui, Font, Bold
 Gui, Add, Button, x21 y176 w36 h21 vGame_ProfB gGame_ProfB,GPD
@@ -740,11 +751,85 @@ return
 MM_ToolBDownload:
 return
 
+SVV_Prog:
+ADMNV=
+if (ASADMIN = 1)
+  {
+		ADMNV:= "/RunAsAdmin" . A_Space
+	  }
+if (butrclick = "POSTAPP")
+	{
+		MsgBox,4096,MediaCenter Speakers,Select Your MediaCenter's Speakers
+		fileappend,echo off`npushd "%binhome%"`nsetsounddevice %ADMNV%/setDefault "%sndvice%" all,%home%\MediaCenterAudio.cmd
+		gosub,DeviceReturn
+		POSTAPPF= %home%\MediaCenterAudio.cmd
+		gosub, POSTAPP
+		}
+if (butrclick = "PREAPP")
+	{
+		MsgBox,4096,Game Speakers,Select Your Game Speakers
+		gosub,DeviceReturn
+		fileappend,echo off`npushd "%binhome%"`nsetsounddevice %ADMNV%/setDefault "%sndvice%" all,%home%\GameAudio.cmd
+		PREAPPF= %home%\GameAudio.cmd
+		gosub, PREAPP
+		}
+return
+
+DeviceReturn:
+alir= devlist.cmd
+filedelete,cr.txt
+filedelete,%alir%
+fileappend,echo off`n,%alir%
+fileappend,for /f "tokens=1`,2`,3 delims=`," `%`%a in ('SoundVolumeView.exe /scomma') do if "`%`%~b" == "Device" for /f `%`%x in ("`%`%~c") do if "`%`%~x" == "Render" echo.`%`%~a `>`>cr.txt,devlist.cmd
+runwait,%alir%,,hide
+fileread,inff,cr.txt
+filedelete,%alir%
+filedelete,cr.txt
+vein= 
+Loop,parse,inff,`n`r
+	{
+		if (A_LoopField = "")
+			{
+				continue
+			}
+		vein+=1
+		ak%vein%= %A_loopField%
+		Menu,addonx,Add,%A_loopField%,VeinHC
+	}
+Menu, addonx, Show, %A_GuiX%, %A_GuiY%	
+return
+VeinHC:
+sndvice= %A_ThisMenuItem%
+return
+
 SSD_Prog:
 Run, %binhome%\ssd.exe,%binhome%,,
 return
 
 OtherDownloads:
+curemote= _soundVolumeView_
+gosub, BINGETS
+gosub, DOWNLOADIT
+flflt= %binhome%
+if (butrclick = "PREAPP")
+	{
+		gosub, SVV_Prog
+	}
+if (butrclick = "POSTAPP")
+	{
+		gosub, SVV_Prog
+	}
+
+Menu,AddProgs,Delete
+
+Loop,files,%binhome%\*.exe,F
+  {
+	  if (A_LoopFileName = "soundVolumeView.exe")
+		Menu,AddProgs,Add,soundVoumeView,SVV_Prog
+	  if (A_LoopFileName = "setsounddevice.exe")
+		Menu,AddProgs,Add,setSoundDevice,SSD_Prog
+	  }	
+Menu,AddProgs,Add,Download,DownloadAddons
 return
 AltDownloads:
 curemote= _SetSoundDevice_
@@ -760,6 +845,18 @@ if (butrclick = "POSTAPP")
 		gosub, POSTAPP
 	}
 gosub, SSD_Prog
+
+Menu,AddProgs,Delete
+
+Loop,files,%binhome%\*.exe,F
+  {
+	  if (A_LoopFileName = "soundVolumeView.exe")
+		Menu,AddProgs,Add,soundVoumeView,SVV_Prog
+	  if (A_LoopFileName = "setsounddevice.exe")
+		Menu,AddProgs,Add,setSoundDevice,SSD_Prog
+	  }	
+
+Menu,AddProgs,Add,Download,DownloadAddons	  
 SB_SetText("")
 return
 
@@ -768,13 +865,13 @@ Menu,addonp,Add
 Menu,addonp,DeleteAll
 if (butrclick = "PREAPP")
 	{
-		Menu,addonp,Add,SetSoundDevice,AltDownloads
-		Menu,addonp, Add,Others,OtherDownloads
+		Menu,addonp, Add,soundVolumeView,OtherDownloads
+		;Menu,addonp,Add,SetSoundDevice,AltDownloads
 	}
 if (butrclick = "POSTAPP")
 	{
-		Menu,addonp,Add,SetSoundDevice,AltDownloads
-		Menu,addonp, Add,Others,OtherDownloads
+		Menu,addonp, Add,soundVolumeView,OtherDownloads
+		;Menu,addonp,Add,SetSoundDevice,AltDownloads
 	}
 Menu,addonp,show
 return
@@ -813,7 +910,7 @@ if ((MultiMonitor_ToolT <> "")&& !instr(MultiMonitor_ToolT,"<"))
 	}
 if ((MM_Game_Config = "")or(MM_Mediacenter_Config = ""))
     {
-        msgbox,4,Setup,Setup the Multimonitor Tool now?
+        msgbox,4100,Setup,Setup the Multimonitor Tool now?
         ifmsgbox,yes
             {
                 gosub, MMSETUPD
@@ -828,7 +925,7 @@ gui,submit,nohide
 guicontrolget,gmcfg,,MM_Game_ConfigT
 if (!fileexist(CFGDIR . "\" . "GameMonitors.mon")or !fileexist(gmcfg))
 	{
-		 msgbox,4,Setup,Setup the Multimonitor Tool now?
+		 msgbox,4100,Setup,Setup the Multimonitor Tool now?
         ifmsgbox,yes
             {
                 gosub, MMSETUPG
@@ -860,7 +957,7 @@ gui,submit,nohide
 guicontrolget,dtcfg,,MM_MediaCenter_ConfigT
 if (!fileexist(CFGDIR . "\" . "DesktopMonitors.mon")or !fileexist(dtcfg))
 	{
-		 msgbox,4,Setup,Setup the Multimonitor Tool now?
+		 msgbox,4100,Setup,Setup the Multimonitor Tool now?
         ifmsgbox,yes
             {
                 gosub, MMSETUPD
@@ -950,7 +1047,14 @@ if (inn = A_SPace)
 	{
 		inn:= A_Space
 	}
+if (POSTAPPF <> "")
+  {
+	  POSTAPPT= %POSTAPPF%
+	  POSTAPPF= 
+	  goto, POSTAPPDEF
+	  }
 FileSelectFile,PostAPPT,35,%flflt%,Select File
+POSTAPPDEF:
 if (PostAPPT <> "")
 	{
 		PostAPP= %PostAPPT%
@@ -995,8 +1099,14 @@ if (inn = A_SPace)
 	{
 		inn:= A_Space
 	}
-
+if (PREAPPF <> "")
+  {
+	  PREAPPT= %PREAPPF%
+	  PREAPPF= 
+	  goto, PREAPPDEF
+	  }
 FileSelectFile,PREAPPT,35,%flflt%,Select File
+PREAPPDEF:
 if (PREAPPT <> "")
 	{
 		PREAPP= %PREAPPT%
@@ -1747,12 +1857,11 @@ Msgbox,,Default Desktop Config,Configure your monitor/s as you would have them f
 ifmsgbox,OK
     {
         FileMove,%home%\DesktopMonitors.mon,%home%\DesktopMonitors.mon.bak
-        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\DesktopMonitors.mon`",%home%,hide
+        RunWait, %multimonitor_tool% /SaveConfig "%CFGDIR%\DesktopMonitors.mon",%home%,hide
         ifexist,%CFGDIR%\DesktopMonitors.mon
             {
                 Msgbox,,Success,The current monitor configuration will be used for your Mediacenter or desktop
                 iniwrite,%CFGDIR%\DesktopMonitors.mon,%RJDB_Config%,GENERAL,MM_MEDIACENTER_Config
-                iniwrite,/LoadConfig "%CFGDIR%\DesktopMonitors.mon",%RJDB_Config%,CONFIG,switchback
 				stringreplace,MM_Mediacenter_ConfigT,MM_Mediacenter_ConfigT,%A_Space%,#,All
 				guicontrol,,MM_Mediacenter_ConfigT,%MM_Mediacenter_ConfigT%
             }
@@ -1766,12 +1875,11 @@ Msgbox,,Default Game Config,Configure your monitor/s as you would have them for 
 ifmsgbox,OK
     {
         FileMove,%home%\GameMonitors.mon,%home%\GameMonitors.mon.bak
-        RunWait, %multimonitor_tool% /SaveConfig `"%CFGDIR%\GameMonitors.mon`",%home%,hide
+        RunWait, %multimonitor_tool% /SaveConfig "%CFGDIR%\GameMonitors.mon",%home%,hide
         ifexist,%CFGDIR%\GameMonitors.mon
             {
                 Msgbox,,Success,The current monitor configuration will be used for your Game/s or Emulator/s
                 iniwrite,%CFGDIR%\GameMonitors.mon,%RJDB_Config%,GENERAL,MM_Game_Config
-                iniwrite,/LoadConfig "%CFGDIR%\GameMonitors.mon",%RJDB_Config%,CONFIG,switchcmd
 				stringreplace,MM_Game_ConfigT,MM_Game_ConfigT,%A_Space%,#,All
 				guicontrol,,MM_Game_ConfigT,%MM_Game_ConfigT%
 			}
@@ -2850,6 +2958,17 @@ Loop,%fullstn0%
                                                     {
 														Continue
                                                     }
+												if (instr(vb,"GameAudio.cmd")or instr(vb,"MediaCenterAudio.cmd"))
+												  {
+														stringsplit,eb,vb,<
+														splitpath,eb2,vb
+														filecopy,%vb%,%sidn%,%OVERWRT%
+                                                        if (OVERWRT = 1)
+                                                            {
+															  iniwrite,%eb1%<%sidn%\%vb%,%gamecfg%,%section%,%an1%
+															} 
+														CONTINUE	
+												  }
                                                 if ((krs = "")&&!instr(an1,"template"))
                                                     {
                                                         %an1%= %vb%
@@ -2950,20 +3069,24 @@ Loop,%fullstn0%
 											}
 									}
 							}
-						Filecopy,%Player2_Template%,%player2X%,%OVERWRT%
-						if ((errorlevel = 0)or fileexist(player2x))
+						if (MAPPER <> "Joy2Key")
 							{
-								if (OVERWRT = 1)
+								
+								Filecopy,%Player2_Template%,%player2X%,%OVERWRT%
+								if ((errorlevel = 0)or fileexist(player2x))
 									{
-										iniwrite,%player2x%,%GAMECFG%,GENERAL,Player2
-									}
-								else {
-										iniread,pkt2,%GAMECFG%,GENERAL,Player2
-										if ((pkt2 = "ERROR")or(pkt2 = ""))
+										if (OVERWRT = 1)
 											{
 												iniwrite,%player2x%,%GAMECFG%,GENERAL,Player2
 											}
-									}
+										else {
+												iniread,pkt2,%GAMECFG%,GENERAL,Player2
+												if ((pkt2 = "ERROR")or(pkt2 = ""))
+													{
+														iniwrite,%player2x%,%GAMECFG%,GENERAL,Player2
+													}
+											}
+							}
 							}
 						Filecopy,%MediaCenter_Profile_Template%,%MediaCenter_ProfileX%,%OVERWRT%
 						if ((errorlevel = 0)or fileexist(MediaCenter_ProfileX))
@@ -3348,6 +3471,11 @@ If A_GuiControlEvent RightClick
 	if A_GuiControl = Keyboard_MapB
 		{
 			Menu, UCLButton, Show, %MENU_X% %MENU_Y%
+			return
+		}
+	if A_GuiControl = POSTAPP
+		{
+			Menu,AddProgs,Show,%MENU_X% %MENU_Y%
 			return
 		}
 	if A_GuiControl = PREAPP
@@ -4092,3 +4220,44 @@ Class LV_InCellEdit {
       }
    }
 }
+CmdRet(sCmd, callBackFuncObj := "", encoding := "")
+	{
+	   static HANDLE_FLAG_INHERIT := 0x00000001, flags := HANDLE_FLAG_INHERIT
+			, STARTF_USESTDHANDLES := 0x100, CREATE_NO_WINDOW := 0x08000000
+			
+	   (encoding = "" && encoding := "cp" . DllCall("GetOEMCP", "UInt"))
+	   DllCall("CreatePipe", "PtrP", hPipeRead, "PtrP", hPipeWrite, "Ptr", 0, "UInt", 0)
+	   DllCall("SetHandleInformation", "Ptr", hPipeWrite, "UInt", flags, "UInt", HANDLE_FLAG_INHERIT)
+	   
+	   VarSetCapacity(STARTUPINFO , siSize :=    A_PtrSize*4 + 4*8 + A_PtrSize*5, 0)
+	   NumPut(siSize              , STARTUPINFO)
+	   NumPut(STARTF_USESTDHANDLES, STARTUPINFO, A_PtrSize*4 + 4*7)
+	   NumPut(hPipeWrite          , STARTUPINFO, A_PtrSize*4 + 4*8 + A_PtrSize*3)
+	   NumPut(hPipeWrite          , STARTUPINFO, A_PtrSize*4 + 4*8 + A_PtrSize*4)
+	   
+	   VarSetCapacity(PROCESS_INFORMATION, A_PtrSize*2 + 4*2, 0)
+
+	   if !DllCall("CreateProcess", "Ptr", 0, "Str", sCmd, "Ptr", 0, "Ptr", 0, "UInt", true, "UInt", CREATE_NO_WINDOW
+								  , "Ptr", 0, "Ptr", 0, "Ptr", &STARTUPINFO, "Ptr", &PROCESS_INFORMATION)
+	   {
+		  DllCall("CloseHandle", "Ptr", hPipeRead)
+		  DllCall("CloseHandle", "Ptr", hPipeWrite)
+		  throw "CreateProcess is failed"
+	   }
+	   DllCall("CloseHandle", "Ptr", hPipeWrite)
+	   VarSetCapacity(sTemp, 4096), nSize := 0
+	   while DllCall("ReadFile", "Ptr", hPipeRead, "Ptr", &sTemp, "UInt", 4096, "UIntP", nSize, "UInt", 0) {
+		  sOutput .= stdOut := StrGet(&sTemp, nSize, encoding)
+		  ( callBackFuncObj && callBackFuncObj.Call(stdOut) )
+	   }
+	   DllCall("CloseHandle", "Ptr", NumGet(PROCESS_INFORMATION))
+	   DllCall("CloseHandle", "Ptr", NumGet(PROCESS_INFORMATION, A_PtrSize))
+	   DllCall("CloseHandle", "Ptr", hPipeRead)
+	   Return sOutput
+	}
+joyGetName(ID) {
+	VarSetCapacity(caps, 728, 0)
+	if DllCall("winmm\joyGetDevCapsW", "uint", ID-1, "ptr", &caps, "uint", 728) != 0
+		return "failed"
+	return StrGet(&caps+4, "UTF-16")
+}	
