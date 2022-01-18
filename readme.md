@@ -1,7 +1,12 @@
-## Installation
-This Version:0.99.03.011
+## Use Case
 
-This Build: 2022-01-17 9:09 AM
+Filthy pirates who don't use steam/gog/epic/origin/etc... should be able to 
+manage their libraries too.
+
+## Installation
+This Version:0.99.03.012
+
+This Build: 2022-01-18 10:33 AM
 
 Run the installer or extract the binary to a location of your choice, **or** download and build and run the source files and executables.
 ```sh
@@ -42,6 +47,7 @@ rj_linkrunner
 ¦   +-- lrDeploy.set
 ¦   +-- newosk.ahk
 ¦   +-- NewOSK.ico
+¦   +-- rabsol.set
 ¦   +-- readme.set
 ¦   +-- repos.set
 ¦   +-- RJDB.set

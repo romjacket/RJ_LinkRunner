@@ -158,7 +158,7 @@ Loop,files,%binhome%\*.exe,F
   }	
 Menu,RCLButton,Add,Reset ,ResetButs
 Menu,AddProgs,Add,Download,DownloadAddons
-Menu,UCLButton,Add,Download,DownloadButs_
+Menu,UCLButton,Add,Download,DownloadButs
 Menu,UCLButton,Add,Disable ,DisableButs
 Menu,DCLButton,Add,Delete ,DeleteButs
 Menu,UPDButton,Add,Update,UpdateRJLR
@@ -199,7 +199,7 @@ Menu, MyContextMenu, Add, Toggle PST, ContextProperties
 Menu, MyContextMenu, Add,,
 Menu, MyContextMenu, Add, Clear from ListView, ContextClearRows
 ;Menu, MyContextMenu, Default, Open  ; Make "Open" a bold font to indicate that double-click does the same thing.
-Gui, Add, GroupBox, x16 y0 w280 h208 center, RJDB_Wizard
+Gui, Add, GroupBox, x16 y0 w280 h97 center, RJDB_Wizard
 
 Gui Add, GroupBox, x16 y205 w283 h146,
 Gui Add, GroupBox, x16 y345 w283 h103,
@@ -250,6 +250,7 @@ Gui, Font, Bold
 
 Gui, Font, Bold
 Gui, Add, Button, x17 y224 w36 h21 vKeyboard_MapB gKeyboard_MapB,KBM
+Gui Add, Button, x52 y224 w10 h21 vKBM_RC gKBM_RC, v
 Gui, Add, Text,  x64 y224 w222 h14 vKeyboard_MapperT Disabled Right,"<%Keyboard_MapperT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y238 w222 h14,<Keyboard Mapper Program>
@@ -274,6 +275,7 @@ Gui, Add, Text,  x64 y334 w222 h14,.....Template Profile for MediaCenter/Desktop
 
 Gui, Font, Bold
 Gui, Add, Button, x17 y352 w36 h21 vMM_ToolB gMM_ToolB,MMT
+Gui Add, Button, x53 y352 w10 h21 vMMT_RC gMMT_RC, v
 Gui, Add, Text,  x64 y354 w222 h14 vMultiMonitor_ToolT Disabled Right,"<%MultiMonitor_ToolT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y368 w222 h14,<Multimonitor Program>
@@ -292,6 +294,7 @@ Gui, Add, Text,  x64 y430 w234 h14,.....MediaCenter/Desktop Configuration File>
 
 Gui, Font, Bold
 Gui, Add, Button, x17 y448 w36 h21 vBGM_ProgB gBGM_ProgB,BGP
+Gui Add, Button, x53 y448 w10 h21 vBGM_RC gBGM_RC, v
 Gui, Add, Text,  x64 y448 w222 h14 vBorderless_Gaming_ProgramT Disabled Right,"<%Borderless_Gaming_ProgramT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y462 w222 h14,<Borderless Gaming Program>
@@ -303,7 +306,8 @@ Gui, Font, Normal
 Gui, Add, Text, x64 y494 w222 h14,.....Borderless Gaming Database>
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y512 w36 h21 vPREAPP gPREAPP ,PRE
+Gui, Add, Button, x18 y512 w36 h21 vPREAPP gPREAPP ,PRE
+Gui Add, Button, x52 y512 w10 h21 vPRE_RC gPRE_RC, v
 Gui, Font, Normal
 Gui, Add, Text, x60 y514 h12 vPRETNUM,1
 Gui, Add, DropDownList, x70 y512 w198 vPREDD gPREDD Right,%prelist%
@@ -313,7 +317,8 @@ Gui, Add, Text, x270 y535 h12,wait
 Gui, Add, Button, x285 y520 w14 h14 vDELPREAPP gDELPREAPP ,X
 
 Gui, Font, Bold
-Gui, Add, Button, x20 y550 w36 h21 vPOSTAPP gPOSTAPP,PST
+Gui, Add, Button, x18 y550 w36 h21 vPOSTAPP gPOSTAPP,PST
+Gui Add, Button, x52 y550 w10 h21 vPOST_RC gPOST_RC, v
 Gui, Font, Normal
 Gui, Add, Text, x60 y552 h12 vPOSTDNUM,1
 Gui, Add, DropDownList, x70 y552 w198 vPostDD gPostDD Right,%postlist%
@@ -3197,21 +3202,46 @@ ifexist,%save%
 SB_SetText("Update file not found")
 return
 
+BGM_RC:
+bgmrc=1
+Menu,UCLButton,Show,x53 y448
+bgmrc=
 return
+MMT_RC:
+mmtrc=1
+Menu,UCLButton,Show,x53 y352
+mmtrc=
+return
+PRE_RC:
+prerc=1
+Menu,AddProgs,Show,x52 y512
+prerc=
+return
+POST_RC:
+postrc=1
+Menu,AddProgs,Show,x52 y550
+postrc=
+return
+KBM_RC:
+kbmrc=1
+Menu,UCLBUtton,Show, x52 y224
+kbmrc=
+return
+
 DownloadButs:
 Menu,keymapd,Add
 Menu,keymapd,DeleteAll
-if (butrclick = "Keyboard_MapB")
+if ((butrclick = "Keyboard_MapB")or(kbmrc = 1))
 	{
 		Menu,keymapd,Add,Antimicro,keymapdownload
 		Menu,keymapd, Add,Xpadder,keymapdownload
 		Menu,keymapd, Add,JoyToKey,keymapdownload
 	}
-if (butrclick = "MM_ToolB")
+if ((butrclick = "MM_ToolB")or(mmtrc = 1))
 	{
 		Menu,keymapd,Add,MultiMonitorTool,MMdownload
 	}
-if (butrclick = "BGM_ProgB")
+if ((butrclick = "BGM_ProgB")or(bgmrc = 1))
 	{
 		Menu,keymapd,Add,Borderless Gaming,BGMdownload
 	}

@@ -1,3 +1,8 @@
+## Use Case
+
+Filthy pirates who don't use steam/gog/epic/origin/etc... should be able to 
+manage their libraries too.
+
 ## Installation
 This Version:[CURV]
 
@@ -42,6 +47,7 @@ rj_linkrunner
 ¦   +-- lrDeploy.set
 ¦   +-- newosk.ahk
 ¦   +-- NewOSK.ico
+¦   +-- rabsol.set
 ¦   +-- readme.set
 ¦   +-- repos.set
 ¦   +-- RJDB.set
