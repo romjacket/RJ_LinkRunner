@@ -4,8 +4,8 @@ SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
 
-RELEASE= 2022-01-18 10:33 AM
-VERSION= 0.99.03.012
+RELEASE= 2022-01-18 11:29 AM
+VERSION= 0.99.03.013
 home= %A_ScriptDir%
 Splitpath,A_ScriptDir,tstidir,tstipth
 if ((tstidir = "src")or(tstidir = "bin")or(tstidir = "binaries"))
@@ -777,7 +777,8 @@ if (butrclick = "PREAPP")
 		fileappend,echo off`npushd "%binhome%"`nsetsounddevice %ADMNV%/setDefault "%sndvice%" all,%home%\GameAudio.cmd
 		PREAPPF= %home%\GameAudio.cmd
 		gosub, PREAPP
-		}
+	}
+mmtrc=
 return
 
 DeviceReturn:
@@ -836,6 +837,7 @@ Loop,files,%binhome%\*.exe,F
 	  }	
 Menu,AddProgs,Add,Download,DownloadAddons
 return
+
 AltDownloads:
 curemote= _SetSoundDevice_
 gosub, BINGETS
@@ -859,10 +861,14 @@ Loop,files,%binhome%\*.exe,F
 		Menu,AddProgs,Add,soundVoumeView,SVV_Prog
 	  if (A_LoopFileName = "setsounddevice.exe")
 		Menu,AddProgs,Add,setSoundDevice,SSD_Prog
-	  }	
-
+  }
 Menu,AddProgs,Add,Download,DownloadAddons	  
 SB_SetText("")
+prerc=
+bgmrc=
+mmtrc=
+postrc=
+kbmrc=
 return
 
 DownloadAddons:
@@ -879,6 +885,11 @@ if (butrclick = "POSTAPP")
 		;Menu,addonp,Add,SetSoundDevice,AltDownloads
 	}
 Menu,addonp,show
+prerc=
+bgmrc=
+mmtrc=
+postrc=
+kbmrc=
 return
 
 MM_ToolBDisable:
@@ -3205,27 +3216,22 @@ return
 BGM_RC:
 bgmrc=1
 Menu,UCLButton,Show,x53 y448
-bgmrc=
 return
 MMT_RC:
 mmtrc=1
 Menu,UCLButton,Show,x53 y352
-mmtrc=
 return
 PRE_RC:
 prerc=1
 Menu,AddProgs,Show,x52 y512
-prerc=
 return
 POST_RC:
 postrc=1
 Menu,AddProgs,Show,x52 y550
-postrc=
 return
 KBM_RC:
 kbmrc=1
 Menu,UCLBUtton,Show, x52 y224
-kbmrc=
 return
 
 DownloadButs:
@@ -3246,6 +3252,11 @@ if ((butrclick = "BGM_ProgB")or(bgmrc = 1))
 		Menu,keymapd,Add,Borderless Gaming,BGMdownload
 	}
 Menu,keymapd,show
+prerc=
+bgmrc=
+mmtrc=
+postrc=
+kbmrc=
 goto,%butrclick%Download
 return
 
