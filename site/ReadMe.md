@@ -4,9 +4,9 @@ Filthy pirates who don't use steam/gog/epic/origin/etc... should be able to
 manage their libraries too.
 
 ## Installation
-This Version:0.99.03.013
+This Version:0.99.03.016
 
-This Build: 2022-01-18 11:29 AM
+This Build: 2022-01-18 11:41 PM
 
 Run the installer or extract the binary to a location of your choice, **or** download and build and run the source files and executables.
 ```sh

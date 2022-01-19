@@ -4,8 +4,8 @@ SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
 
-RELEASE= 2022-01-18 11:29 AM
-VERSION= 0.99.03.013
+RELEASE= 2022-01-18 11:41 PM
+VERSION= 0.99.03.016
 home= %A_ScriptDir%
 Splitpath,A_ScriptDir,tstidir,tstipth
 if ((tstidir = "src")or(tstidir = "bin")or(tstidir = "binaries"))
@@ -73,7 +73,7 @@ if fileexist(home . "\" . "continue.db")
 	}
 fileread,exclfls,%source%\exclfnms.set
 filextns= exe|lnk
-remotebins= _BorderlessGaming_|_Antimicro_|_Joy2Key_|_Xpadder_|_MultiMonitorTool_|_SetSoundDevice_|_SoundVolumeView_
+remotebins= _BorderlessGaming_|_Antimicro_|_JoyToKey_|_Xpadder_|_MultiMonitorTool_|_SetSoundDevice_|_SoundVolumeView_
 MENU_X:= A_GuiX*(A_ScreenDPI/96)
 MENU_Y:= A_GuiY*(A_ScreenDPI/96)
 reduced= |_Data|Assets|alt|shipping|Data|ThirdParty|engine|App|steam|steamworks|script|nocd|Tool|trainer|
@@ -1774,24 +1774,6 @@ initz=
 guicontrol,,Source_DirectoryT,%Source_Directory%
 resetting=
 return
-RECREATEJOY2K:
-ifnotexist,%home%\Player1.cfg
-	{
-		filecopy,%source%\Jallgames.set,%home%\Player1.cfg
-	}
-ifnotexist,%home%\Player2.cfg
-	{
-		filecopy,%source%\Jallgames.set,%home%\Player2.cfg
-	}
-ifnotexist,%home%\Mediacenter.cfg
-	{
-		filecopy,%source%\JDesktop.set,%home%\MediaCenter.cfg
-	}
-ifnotexist,%home%\Mediacenter2.cfg
-	{
-		filecopy,%source%\JDesktop.set,%home%\MediaCenter2.cfg
-	}
-return
 
 RECREATEXPAD:
 ifnotexist,%home%\Player1.xpadderprofile
@@ -1815,6 +1797,7 @@ return
 RECREATEJOYTK:
 ifnotexist,%home%\Player1.cfg
     {
+		filecopy,%source%\Jallgames.set,%home%\Player1.cfg
         fileread,mctmp,%source%\jallgames.set
         stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
@@ -1822,6 +1805,7 @@ ifnotexist,%home%\Player1.cfg
     }
 ifnotexist,%home%\Player2.cfg
     {
+		filecopy,%source%\Jallgames.set,%home%\Player2.cfg
         fileread,mctmp,%source%\jallgames.set
         stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
@@ -1829,6 +1813,8 @@ ifnotexist,%home%\Player2.cfg
     }
 ifnotexist,%home%\MediaCenter.cfg
     {
+		filecopy,%source%\JDesktop.set,%home%\MediaCenter.cfg
+		filecopy,%source%\JDesktop.set,%home%\MediaCenter2.cfg
         fileread,mctmp,%source%\jDesktop.set
         stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
@@ -2010,9 +1996,9 @@ omitd=
 filedelete,%home%\simpth.db
 filedelete,%home%\continue.db
 guicontrol,hide,REINDEX
+POPULATE:
 Gui,Listview,MyListView
 LV_Delete()
-POPULATE:
 if (!Fileexist(GAME_Directory)or !FileExist(Game_Profiles))
     {
         SB_SetText("Please Select Valid Directories")
@@ -2160,6 +2146,10 @@ Loop,parse,SOURCE_DIRECTORY,|
 										fileappend,%simpath%,%home%\simpth.db
 										goto,Chkcon
 									}
+							}
+						if (excl = 1)
+							{
+								continue
 							}
 						PostDirChk:
 						if ((A_LoopFileExt = "lnk")or(A_LoopFileExt = "_lnk_"))
@@ -3085,7 +3075,7 @@ Loop,%fullstn0%
 											}
 									}
 							}
-						if (MAPPER <> "Joy2Key")
+						if (MAPPER <> "JoyToKey")
 							{
 								
 								Filecopy,%Player2_Template%,%player2X%,%OVERWRT%
@@ -3215,21 +3205,26 @@ return
 
 BGM_RC:
 bgmrc=1
+butrclick=BGM_ProgB
 Menu,UCLButton,Show,x53 y448
 return
 MMT_RC:
+butrclick=MM_ToolB
 mmtrc=1
 Menu,UCLButton,Show,x53 y352
 return
 PRE_RC:
+butrclick=PREAPP
 prerc=1
 Menu,AddProgs,Show,x52 y512
 return
 POST_RC:
+butrclick=POSTAPP
 postrc=1
 Menu,AddProgs,Show,x52 y550
 return
 KBM_RC:
+butrclick=Keyboard_MapB
 kbmrc=1
 Menu,UCLBUtton,Show, x52 y224
 return
@@ -3372,7 +3367,7 @@ filecreateDir,%home%\downloaded
 save= %home%\downloaded\%binarcf%
 splitpath,save,savefile,savepath,savextn
 savef= "%save%"
-compltdwn:= % curemoteX
+compltdwn:= % curemote
 if (fileexist(save)&& (compltdwn = 1))
 	{
 		Msgbox,260,Redownload,Download the %binarcf% file again?`noriginal will be renamed ".bak",3
