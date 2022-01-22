@@ -98,6 +98,7 @@ kinit.exe
 klist.exe
 pipelist
 join.exe
+LAVFilter
 prefetch
 procdump
 produkey

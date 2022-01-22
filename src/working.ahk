@@ -145,6 +145,16 @@ if instr(1_PostT,"W<")
 	{
 		poststatus= checked
 	}
+if instr(JustAfterLaunch,"W<")
+	{
+		jalstatus= checked
+	}
+	
+if instr(JustBeforeExit,"W<")
+	{
+		jbestatus= checked
+	}
+	
 Loop,files,%binhome%\*.exe,F
   {
 	  if (A_LoopFileName = "soundVolumeView.exe")
@@ -167,9 +177,9 @@ Gui, Add, Button, x310 y8 vButtonClear gButtonClear hidden disabled, Clear List
 Gui, Add, Text, x380 y3 h12, Select
 Gui, Add, Button, x370 y16 vSELALLBUT gSELALLBUT hidden, All
 Gui, Add, Button, x390 y16 vSELNONEBUT gSELNONEBUT hidden, None
-Gui, Add, Button, x430 y10 h20 vADDGAME gADDGAME, ADD
-Gui, Add, Edit, x465 y12 w100,
-Gui, Add, Button, x565 y12 w14 h14,X
+Gui, Add, Button, x430 y10 h20 vADDGAME gADDGAME disabled, ADD
+Gui, Add, Edit, x465 y12 w100 disabled,
+Gui, Add, Button, x565 y12 w14 h14 disabled,X
 Gui, Font, Bold
 Gui, Add, Button, x590 y8 vButtonCreate gButtonCreate hidden disabled,CREATE
 Gui, Font, Normal
@@ -200,6 +210,7 @@ Menu, MyContextMenu, Add,,
 Menu, MyContextMenu, Add, Clear from ListView, ContextClearRows
 ;Menu, MyContextMenu, Default, Open  ; Make "Open" a bold font to indicate that double-click does the same thing.
 Gui, Add, GroupBox, x16 y0 w280 h97 center, RJDB_Wizard
+Gui, Add, GroupBox, x16 y91 w280 h120 center,
 
 Gui Add, GroupBox, x16 y205 w283 h146,
 Gui Add, GroupBox, x16 y345 w283 h103,
@@ -228,24 +239,24 @@ Gui, Add, Button, x271 y61 w15 h15 vREMSRC gREMSRC,X
 Gui, Add, Text, x73 y80 h14 vCURDP Right,<Game Exe/Lnk Source Directories>
 
 Gui, Font, Bold
-Gui, Add, Button, x24 y104 w36 h21 vGame_DirB gGame_DirB,OUT
-Gui, Add, Text, x64 y96 w222 h14 vGAME_DirectoryT Disabled Right,"<%GAME_DirectoryT%"
+Gui, Add, Button, x24 y108 w36 h21 vGame_DirB gGame_DirB,OUT
+Gui, Add, Text, x64 y100 w222 h14 vGAME_DirectoryT Disabled Right,"<%GAME_DirectoryT%"
 Gui, Font, Normal
-Gui, Add, Text, x84 y110 h14,<Shortcut Output Directory>
+Gui, Add, Text, x84 y114 h14,<Shortcut Output Directory>
 
-GUi, Add, Checkbox, x36 y132 h14 vCREFLD gCREFLD %fldrget% %fldrenbl%, Folders
-GUi, Add, Checkbox, x40 y152 h14 vGMCONF gGMCONF %cfgget% %cfgenbl%,Cfg
-GUi, Add, Checkbox, x96 y152 h14 vGMJOY gGMJOY %Joyget% %joyenbl%,Joy
-GUi, Add, Checkbox, x188 y152 h14 vASADMIN gASADMIN %admnget% %admnenabl%,As_Admin
-GUi, Add, Checkbox, x144 y152 vGMLNK gGMLNK %lnkget% %lnkenbl%,Lnk
-Gui, Add, Radio, x115 y132 vOVERWRT gUPDTSC %ovrwrchk%, Overwrite
-Gui, Add, Radio, x188 y132 vUPDTSC gOVERWRT %updtchk%, Update
+GUi, Add, Checkbox, x36 y137 h14 vCREFLD gCREFLD %fldrget% %fldrenbl%, Folders
+GUi, Add, Checkbox, x40 y157 h14 vGMCONF gGMCONF %cfgget% %cfgenbl%,Cfg
+GUi, Add, Checkbox, x96 y157 h14 vGMJOY gGMJOY %Joyget% %joyenbl%,Joy
+GUi, Add, Checkbox, x188 y157 h14 vASADMIN gASADMIN %admnget% %admnenabl%,As_Admin
+GUi, Add, Checkbox, x144 y157 vGMLNK gGMLNK %lnkget% %lnkenbl%,Lnk
+Gui, Add, Radio, x115 y137 vOVERWRT gUPDTSC %ovrwrchk%, Overwrite
+Gui, Add, Radio, x188 y137 vUPDTSC gOVERWRT %updtchk%, Update
 
 Gui, Font, Bold
-Gui, Add, Button, x21 y176 w36 h21 vGame_ProfB gGame_ProfB,GPD
-Gui, Add, Text, x64 y171 w222 h14 vGAME_ProfilesT Disabled Right,"<%GAME_ProfilesT%"
+Gui, Add, Button, x21 y180 w36 h21 vGame_ProfB gGame_ProfB,GPD
+Gui, Add, Text, x64 y175 w222 h14 vGAME_ProfilesT Disabled Right,"<%GAME_ProfilesT%"
 Gui, Font, Normal
-Gui, Add, Text,  x64 y185 w222 h14,<Game Profiles Directory>
+Gui, Add, Text,  x64 y189 w222 h14,<Game Profiles Directory>
 Gui, Font, Bold
 
 Gui, Font, Bold
@@ -291,41 +302,62 @@ Gui, Add, Button, x21 y416 w35 h19 vMM_MediaCenter_CfgB gMM_MediaCenter_CfgB,DMC
 Gui, Add, Text,  x64 y416 w222 h14 vMM_MediaCenter_ConfigT Disabled Right,"<%MM_MediaCenter_ConfigT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y430 w234 h14,.....MediaCenter/Desktop Configuration File>
-
+/*
 Gui, Font, Bold
 Gui, Add, Button, x17 y448 w36 h21 vBGM_ProgB gBGM_ProgB,BGP
 Gui Add, Button, x53 y448 w10 h21 vBGM_RC gBGM_RC, v
 Gui, Add, Text,  x64 y448 w222 h14 vBorderless_Gaming_ProgramT Disabled Right,"<%Borderless_Gaming_ProgramT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y462 w222 h14,<Borderless Gaming Program>
+*/
 
+Gui, Font, Bold
+Gui, Add, Button, x17 y448 w36 h21 vJAL_ProgB gJAL_ProgB,JAL
+Gui Add, Button, x53 y448 w10 h21 vJAL_RC gJAL_RC, v
+Gui, Add, Text,  x64 y448 w198 h14 vRunAfterLaunchT Disabled Right,"<%RunAfterLaunchT%"
+Gui, Font, Normal
+Gui, Add, Checkbox, x270 y448 w12 h12 vJALWait gJALWait %jbestatus%
+Gui, Add, Text,  x64 y462 w198 h14,.....Run After Launch>
+;Gui, Add, Button, x283 y202 w14 h14 vDELJAL gDELJAL ,X
+
+/*
 Gui, Font, Bold
 Gui, Add, Button, x21 y480 w35 h19 vBGP_DataB gBGP_DataB,BGD
 Gui, Add, Text, x64 y480 w222 h14 vBorderless_Gaming_DatabaseT Disabled Right,"<%Borderless_Gaming_DatabaseT%"
 Gui, Font, Normal
 Gui, Add, Text, x64 y494 w222 h14,.....Borderless Gaming Database>
+*/
 
 Gui, Font, Bold
-Gui, Add, Button, x18 y512 w36 h21 vPREAPP gPREAPP ,PRE
+Gui, Add, Button, x17 y480 w35 h19 vJBE_ProgB gJBE_ProgB,JBE
+Gui Add, Button, x53 y480 w10 h21 vJBE_RC gJBE_RC, v
+Gui, Add, Text, x64 y480 w198 h14 vJustBeforeExitT Disabled Right,"<%JustBeforeExitT%"
+Gui, Font, Normal
+Gui, Add, Checkbox, x270 y480 w12 h12 vJBEWait gJBEWait %jbestatus%
+Gui, Add, Text, x64 y494 w198 h14,<Just Before Exit>
+;Gui, Add, Button, x283 y484 w14 h14 vDELJBE gDELJBE ,X
+
+Gui, Font, Bold
+Gui, Add, Button, x17 y512 w36 h21 vPREAPP gPREAPP ,PRE
 Gui Add, Button, x52 y512 w10 h21 vPRE_RC gPRE_RC, v
 Gui, Font, Normal
 Gui, Add, Text, x60 y514 h12 vPRETNUM,1
 Gui, Add, DropDownList, x70 y512 w198 vPREDD gPREDD Right,%prelist%
 Gui, Add, Text, x64 y534 h12 w230 vPREDDT,<$This_Prog$><Monitor><Mapper><game.exe>
-Gui, Add, Checkbox, x270 y515 w12 h12 vPreWait gPreWait %prestatus%,
+Gui, Add, Checkbox, x270 y513 w12 h12 vPreWait gPreWait %prestatus%,
 Gui, Add, Text, x270 y535 h12,wait
-Gui, Add, Button, x285 y520 w14 h14 vDELPREAPP gDELPREAPP ,X
+Gui, Add, Button, x283 y520 w14 h14 vDELPREAPP gDELPREAPP ,X
 
 Gui, Font, Bold
-Gui, Add, Button, x18 y550 w36 h21 vPOSTAPP gPOSTAPP,PST
+Gui, Add, Button, x17 y550 w36 h21 vPOSTAPP gPOSTAPP,PST
 Gui Add, Button, x52 y550 w10 h21 vPOST_RC gPOST_RC, v
 Gui, Font, Normal
 Gui, Add, Text, x60 y552 h12 vPOSTDNUM,1
 Gui, Add, DropDownList, x70 y552 w198 vPostDD gPostDD Right,%postlist%
 Gui, Add, Text, x64 y574 h12 w230 vPOSTDDT,<game.exe><$This_Prog$><Mapper><Monitor>
-Gui, Add, Checkbox, x270 y555 w12 h12 vPostWait gPostWait %poststatus%
+Gui, Add, Checkbox, x270 y553 w12 h12 vPostWait gPostWait %poststatus%
 Gui, Add, Text, x270 y565 h12,
-Gui, Add, Button, x285 y557 w14 h14 vDELPOSTAPP gDELPOSTAPP ,X
+Gui, Add, Button, x283 y557 w14 h14 vDELPOSTAPP gDELPOSTAPP ,X
 
 
 Gui, Font, Bold
@@ -339,11 +371,12 @@ Gui, Add, Button, x20 y96 w36 h21 vRJDB_Location gRJDB_Location hidden disabled,
 Gui, Add, Text,  x64 y96 w222 h14 vRJDB_LocationT  hidden disabled Right,"<%RJDB_LocationT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y110 w222 h14  hidden disabled,<Application Directory>
-Gui, Add, Button, x240 y588 h14 w14 vOPNLOG gOPNLOG,O
-Gui, Add, Checkbox, x260 y588 h14 vEnableLogging gEnableLogging %loget%, Log
+Gui, Add, Button, x235 y588 h14 w14 vOPNLOG gOPNLOG,O
+Gui, Add, Checkbox, x255 y588 h14 vEnableLogging gEnableLogging %loget%, Log
 
+OnMessage(0x200, "WM_MOUSEMOVE")
 Gui, Add, StatusBar, x0 y546 w314 h28 vRJStatus, Status Bar
-Gui Show, w314 h625, RJ_Setup
+Gui Show, w314 h627, RJ_Setup
 /*
 Loop,parse,remotebins,|
 	{
@@ -359,7 +392,76 @@ Loop,parse,remotebins,|
 	}
 */
 SB_SetText("")
-
+ButtonClear_TT :="clears the current queued it"ems
+SELALLBUT_TT :="Selects all items in the current queue"
+SELNONEBUT_TT :="clears the selection of all items in the current queue"
+ADDGAME_TT :="Add a game with the file browser.`nrj_linkrunner will try to guess the appropriate name"
+ButtonCreate_TT :="creates profiles for selected items in the current queued"
+MyListView_TT :="The current queue"
+REINDEX_TT :="clears the queue and searches for games"
+POPULATE_TT :="Searches for games or loads the last queue"
+RESET_TT :="resets the rj_linkrunner application to default settings"
+KILLCHK_TT :="ancilary and executable-subprocess are terminated upon exiting the game"
+INCLALTS_TT :="Alternate versions of a game will be created as alternates in a subfolder of the profile."
+Localize_TT :="Sets the profile folder to`n the game's installation folder`n*     (not recommended)     *`n"
+SOURCE_DirB_TT :="Add a directory containing the root of game-installation/s."
+SOURCE_DirectoryT_TT :="the current source directory"
+REMSRC_TT :="remove the currently selected source directory"
+CURDP_TT :=""
+Game_DirB_TT :="The location where shortcuts will be created"
+GAME_DirectoryT_TT :="the current shortcut directory"
+CREFLD_TT :="Creates the profile folder"
+GMCONF_TT :="Creates the configuration files"
+GMJOY_TT :="creates the joystick profiles"
+ASADMIN_TT :="sets shortcuts and programs to run as the aministrator."
+GMLNK_TT :="creates the shortcuts"
+OVERWRT_TT :="overwrite and recreate settings"
+UPDTSC_TT :="creates new profile/configurations and updates profiles with any blank/unset values"
+Game_ProfB_TT :="Sets the directory where profiles will be created"
+GAME_ProfilesT_TT :="the profiles directory"
+Keyboard_MapB_TT :="Assigns the keymapper`n(antimicro/xpadder/joytokey)"
+KBM_RC_TT :="disable or download and assign a supported keymapper`n(antimicro/xpadder/joytokey)"
+Keyboard_MapperT_TT :="the current keyboard mapper`n(supported mappers are auto-scripted '~_!.cmd')"
+Player1_TempB_TT :="sets the keymapper's configuration-template file to be used for Player 1"
+Player1_TempB_TT :="sets the keymapper's configuration-template file to be used for Player 1"
+Player2_TemplateT_TT :="the keymapper's configuration-template file for Player 2"
+Player2_TemplateT_TT :="the keymapper's configuration-template file for Player 2"
+MediaCenter_ProfileT_TT :="the keymapper's configuration-template file for the Mediacenter/Frontend"
+MM_ToolB_TT :="Assigns the multimonitor executable"
+MMT_RC_TT :="disable or download and assign the multimonitor program"
+MultiMonitor_ToolT_TT :="the multimonitor program"
+MM_Game_CfgB_TT :="Select the multimonitor configuration template file used for games"
+MM_Game_ConfigT_TT :="the multimonitor game-configuration template file"
+MM_MediaCenter_CfgB_TT :="Select the multimonitor configuration template file used for the MediaCenter/Frontend"
+MM_MediaCenter_ConfigT_TT :="the MediaCenter/Frontend configuration template file"
+JAL_ProgB_TT :="Assign a program to run after the game is launched`n*    (good for trainers or executable-aware programs.)"
+JAL_RC_TT :="disable or download and assign a program after launch"
+RunAfterLaunchT_TT :="a program after launch"
+JBE_RC_TT :="disable or download and assign an executable  prior to termination "
+JBE_ProgB_TT :="Assign a program to run prior to executable termination"
+JustBeforeExitT_TT :="program to run prior to executable termination"
+PREAPP_TT :="Assign a program to run before the game is launched"
+PRE_RC_TT :="disable or download and Assign a program to run before the game is launched"
+PRETNUM_TT :=""
+JARWAIT_TT :="waits for the program to exit"
+JBEWAIT_TT :="waits for the program to exit"
+PREDD_TT :="the currently selected pre-program`n*  ( ><ThisProg>< )"
+PREDDT_TT :=""
+PreWait_TT :="Waits for the currently selected pre-program to exit"
+DELPREAPP_TT :="removes the currently selected pre-program"
+POSTAPP_TT :="Assign a program to run after the game has exited"
+POST_RC_TT :="disable or download and Assign a program to run after the game has exited"
+PostDD_TT :="the currently selected post-program`n*  ( ><ThisProg>< )"
+POSTDDT_TT :=""
+PostWait_TT :="Waits for the currently selected post-program to exit"
+DELPOSTAPP_TT :="removes the currently selected post-program"
+RJDB_Config_TT :=""
+RJDB_ConfigT_TT :=""
+RJDB_Location_TT :=""
+RJDB_LocationT_TT :=""
+OPNLOG_TT :="opens the log file for this program"
+EnableLogging_TT :="enables logging for this program and the rj_linkrunner.exe"
+RJStatus_TT :="feedback display for the program"
 Return
 
 
@@ -786,7 +888,7 @@ alir= devlist.cmd
 filedelete,cr.txt
 filedelete,%alir%
 fileappend,echo off`n,%alir%
-fileappend,for /f "tokens=1`,2`,3 delims=`," `%`%a in ('SoundVolumeView.exe /scomma') do if "`%`%~b" == "Device" for /f `%`%x in ("`%`%~c") do if "`%`%~x" == "Render" echo.`%`%~a `>`>cr.txt,devlist.cmd
+fileappend,for /f "tokens=1`,2`,3 delims=`," `%`%a in ('"%binhome%\SoundVolumeView.exe" /scomma') do if "`%`%~b" == "Device" for /f `%`%x in ("`%`%~c") do if "`%`%~x" == "Render" echo.`%`%~a `>`>cr.txt,devlist.cmd
 runwait,%alir%,,hide
 fileread,inff,cr.txt
 filedelete,%alir%
@@ -1012,9 +1114,9 @@ Guicontrol,,Borderless_Gaming_ProgramT,
 Guicontrol,,Borderless_Gaming_DatabaseT,
 return
 
-
 BGM_ProgB:
 gui,submit,nohide
+
 if (dchk = "")
 	{
 		FileSelectFile,Borderless_Gaming_ProgramT,3,Borderless Gaming,Select File,*.exe
@@ -1029,6 +1131,75 @@ if ((Borderless_Gaming_ProgramT <> "")&& !instr(Borderless_Gaming_ProgramT,"<"))
 	else {
 		stringreplace,Borderless_Gaming_ProgramT,Borderless_Gaming_ProgramT,%A_Space%,`%,All
 		guicontrol,,Borderless_Gaming_ProgramT,<Borderless_Gaming_Program
+	}
+return
+
+JBE_ProgB:
+gui,submit,nohide
+guicontrolget,JBEWait,,JBEWait
+if (dchk = "")
+	{
+		FileSelectFile,JustBeforeExitT,3,Before Termination,Select File,*.*
+	}
+if ((JustBeforeExitT <> "")&& !instr(JustBeforeExitT,"<"))
+	{
+		predl=<
+		if (instr(JustBeforeExitT,".cmd")or instr(JustAfterLaunch,".bat") or instr(JustAfterLaunch,".ps1")or instr(JustAfterLaunch,".psd"))
+			{
+				predl=0W<
+				JBEWait= 1
+			}
+		JustBeforeExit= %predl%%JustBeforeExitT%
+		iniwrite,%JustBeforeExit%,%RJDB_Config%,GENERAL,JustBeforeExit
+		stringreplace,JustBeforeExitT,JustBeforeExitT,%A_Space%,`%,All
+		guicontrol,,JustBeforeExitT,%JustBeforeExitT%
+	}
+	else {
+		stringreplace,JustBeforeExitT,JustBeforeExitT,%A_Space%,`%,All
+		guicontrol,,JustBeforeExitT,<JustBeforeExit
+	}
+guicontrol,,JBEWAIT,%JBEWAIT%
+return
+
+JBE_ProgBDisable:
+JustBeforeExit=
+JustBeforeExitT=
+iniwrite,%A_Space%,%RJDB_CONFIG%,GENERAL,JustBeforeExit
+guicontrol,,JustBeforeExitT,
+JBEWAIT=0
+guicontrol,,JBEWAIT,%JBEWAIT%
+return
+
+JAL_ProgBDisable:
+RunAfterLaunch=
+RunAfterLaunchT=
+iniwrite,%A_Space%,%RJDB_CONFIG%,GENERAL,RunAfterLaunch
+guicontrol,,RunAfterLaunchT,
+JALWAIT=0
+guicontrol,,JALWAIT,%JALWAIT%
+return
+
+JAL_ProgB:
+gui,submit,nohide
+if (dchk = "")
+	{
+		FileSelectFile,JustAfterLaunchT,3,After Launch,Select File,*.*
+	}
+if ((JustAfterLaunchT <> "")&& !instr(JustAfterLaunchT,"<"))
+	{
+		predl=<
+		if (instr(JustAfterLaunch,".cmd")or instr(JustAfterLaunch,".bat") or instr(JustAfterLaunch,".ps1")or instr(JustAfterLaunch,".psd"))
+			{
+				predl=0<
+			}
+		JustAfterLaunch= %predl%%JustAfterLaunchT%
+		iniwrite,%JustAfterLaunch%,%RJDB_Config%,GENERAL,JustAfterLaunch
+		stringreplace,JustAfterLaunchT,JustAfterLaunchT,%A_Space%,`%,All
+		guicontrol,,JustAfterLaunchT,%JustAfterLaunchT%
+	}
+	else {
+		stringreplace,JustAfterLaunchT,JustAfterLaunchT,%A_Space%,`%,All
+		guicontrol,,JustAfterLaunchT,<JustAfterLaunch
 	}
 return
 
@@ -1317,6 +1488,71 @@ Loop,3
 guicontrol,,PREDD,%PreList%
 return
 
+JALWait:
+gui,submit,nohide
+guicontrolget,JALWAIT,,JALWAIT
+JALtmp2=
+stringsplit,JALtmp,JustAfterLaunch,<
+JustAfterLaunch= %JALtmp2%
+jalop= %JALtmp1%
+stringreplace,jalop,jalop,W,,
+if (JALtmp2 = "")
+	{
+		jalop=
+		JustAfterLaunch= %JALtmp1%
+	}
+if ((JustAfterLaunch = "")or(JustAfterLaunch = "ERROR")or !fileexist(JustAfterLaunch))
+	{
+		if (JALWait = 1)
+			{
+				JALWait= 0
+				guicontrol,,JALWAIT,%JALWAIT%
+			}
+		SB_SetText("A program must be assigned")
+		return
+	}
+if (JALWAIT = 1)
+	{
+		JustAfterLaunch=%jalop%W<%JustAfterLaunch%
+	}
+else {
+		JustAfterLaunch=%jalop%<%JustAfterLaunch%
+	}
+iniwrite,%JustAfterLaunch%,%RJDB_Config%,GENERAL,JustAfterLaunch
+return
+
+JBEWait:
+gui,submit,nohide
+guicontrolget,JBEWAIT,,JBEWAIT
+jbetmp2=
+stringsplit,jbetmp,JustBeforeExit,<
+JustBeforeExit= %jbetmp2%
+jbeop= %jbetmp1%
+stringreplace,jbeop,jbeop,W,,
+if (jbetmp2 = "")
+	{
+		jbeop= 
+		JustBeforeExit= %jbetmp1%
+	}
+if ((JustBeforeExit = "")or(JustbeforeExit = "ERROR")or !fileexist(JustBeforeExit))
+	{
+		if (JBEWait = 1)
+			{
+				JBEWait= 0
+				guicontrol,,JBEWAIT,%JBEWAIT%
+			}
+		SB_SetText("A program must be assigned")
+		return
+	}
+if (JBEWAIT = 1)
+	{
+		JustBeforeExit=%jbeop%W<%JustBeforeExit%
+	}
+else {
+		JustBeforeExit=%jbeop%<%JustBeforeExit%
+	}
+iniwrite,%JustBeforeExit%,%RJDB_Config%,GENERAL,JustBeforeExit
+return
 
 postWAIT:
 postwl=
@@ -2203,7 +2439,7 @@ Loop,parse,SOURCE_DIRECTORY,|
 	}
 if (enablelogging = 1)
 	{
-fileappend,[OMITTED]`n%omitd%`n`n[RE-INCLUDED]`n,log.txt
+		fileappend,[OMITTED]`n%omitd%`n`n[RE-INCLUDED]`n,log.txt
 	}
 Loop,parse,simpnk,`r`n
 	{
@@ -2964,16 +3200,25 @@ Loop,%fullstn0%
                                                     {
 														Continue
                                                     }
-												if (instr(vb,"GameAudio.cmd")or instr(vb,"MediaCenterAudio.cmd"))
+												if (instr(vb,"GameAudio.cmd")or instr(vb,"MediaCenterAudio.cmd")or instr(vb,"_!.cmd"))
 												  {
+														eb2= 
 														stringsplit,eb,vb,<
-														splitpath,eb2,vb
-														filecopy,%vb%,%sidn%,%OVERWRT%
+														if (eb2 <> "")
+															{
+																splitpath,eb2,vb
+																eb1.= "<"
+															}
+															else {
+																	splitpath,eb1,vb
+																	eb1= 
+															}
+														filecopy,%home%\%vb%,%sidn%,%OVERWRT%
                                                         if (OVERWRT = 1)
                                                             {
-															  iniwrite,%eb1%<%sidn%\%vb%,%gamecfg%,%section%,%an1%
+															  iniwrite,%eb1%%sidn%\%vb%,%gamecfg%,%section%,%an1%
 															} 
-														CONTINUE	
+														CONTINUE
 												  }
                                                 if ((krs = "")&&!instr(an1,"template"))
                                                     {
@@ -3022,9 +3267,9 @@ Loop,%fullstn0%
 								GameProfs= %sidn%
 								iniwrite,%GameMon%,%gamecfg%,GENERAL,MM_Game_Config
 								killist:
+								klist=%tmpn%|
 								if (KILLCHK = 1)
 									{
-										klist=
 										;;msgbox,,,cur=%curpth%`ntl=%tlevel%`no=%outdir%`ng=%gfnamex%`nred=%redpth%`n
 										Loop,files,%tlevel%\*.exe,R
 											{
@@ -3047,13 +3292,10 @@ Loop,%fullstn0%
 														klist.= A_LoopFileName . "|"
 													}
 											}
-										if (klist <> "")
+										iniread,nklist,%gamecfg%,CONFIG,exe_list
+										if ((nklist = "")or(nklist = "ERROR")or(OVRWR = 1))
 											{
-												iniread,nklist,%gamecfg%,CONFIG,exe_list
-												if ((nklist = "")or(nklist = "ERROR")or(OVRWR = 1))
-													{
-														iniwrite,%klist%,%gamecfg%,CONFIG,exe_list
-													}
+												iniwrite,%klist%,%gamecfg%,CONFIG,exe_list
 											}
 									}
                             }
@@ -3202,7 +3444,16 @@ ifexist,%save%
 	}
 SB_SetText("Update file not found")
 return
-
+JAL_RC:
+jalrc=1
+butrclick=JAL_ProgB
+Menu,UCLButton,Show,x53 y448
+return
+JBE_RC:
+jberc=1
+butrclick=JBE_ProgB
+Menu,UCLButton,Show,x53 y448
+return
 BGM_RC:
 bgmrc=1
 butrclick=BGM_ProgB
@@ -3242,12 +3493,14 @@ if ((butrclick = "MM_ToolB")or(mmtrc = 1))
 	{
 		Menu,keymapd,Add,MultiMonitorTool,MMdownload
 	}
-if ((butrclick = "BGM_ProgB")or(bgmrc = 1))
+if ((butrclick = "BGM_ProgB")or(bgmrc = 1)or(jalrc = 1)or(butrclick = "JAL_ProgB")or(jberc = 1)or(butrclick = "JBE_ProgB"))
 	{
 		Menu,keymapd,Add,Borderless Gaming,BGMdownload
 	}
 Menu,keymapd,show
 prerc=
+jalrc=
+jberc=
 bgmrc=
 mmtrc=
 postrc=
@@ -3265,12 +3518,14 @@ dchk=
 SB_SetText("")
 return
 
+JAL_ProgBDownload:
+JBE_ProgBDownload:
 BGMdownload:
 curemote= _BorderlessGaming_
 gosub, BINGETS
 gosub, DOWNLOADIT
 Borderless_Gaming_Program= %binhome%\Borderless Gaming\borderless-gaming-portable.exe
-gosub, BGM_ProgB
+gosub, %butrclick%
 dchk=
 SB_SetText("")
 return
@@ -4297,3 +4552,27 @@ joyGetName(ID) {
 		return "failed"
 	return StrGet(&caps+4, "UTF-16")
 }	
+
+
+WM_MOUSEMOVE(){
+	static CurrControl, PrevControl, _TT
+	CurrControl := A_GuiControl
+	If (CurrControl <> PrevControl)
+		{
+			SetTimer, DisplayToolTip, -300
+			PrevControl := CurrControl
+		}
+	return
+
+	DisplayToolTip:
+	try
+			ToolTip % %CurrControl%_TT
+	catch
+			ToolTip
+	SetTimer, RemoveToolTip, -6000
+	return
+
+	RemoveToolTip:
+	ToolTip
+	return
+}

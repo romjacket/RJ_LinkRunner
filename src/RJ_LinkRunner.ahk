@@ -75,6 +75,7 @@ Loop,parse,sect,|
 					}
 			}
 	}
+	
 if (MULTIMONITOR_TOOL <> "")
 	{
 		splitpath,multimonitor_tool,mmtof,mmpath
@@ -188,6 +189,7 @@ if (Game_Profile = "")
 			{
 				Game_Profile= %GAME_PROFILES%\%gmnamex%\game.ini
 				Game_Profiles= %Game_Profiles%\%gmnamex%
+				
 				}
 	}
 if (fileexist(Game_Profile)&&(gbar <> 1))
@@ -206,9 +208,23 @@ else {
 }	
 
 
+PRERUNORDER=PRE_1|PRE_MON|PRE_MAP|PRE_2|PRE_3|BEGIN
 /*	
-
+PRERUNORDERPROC:
 */
+acwchk=
+Loop,parse,PRERUNORDER,|
+	{
+		if (A_Loopfield = "")
+			{
+				continue
+			}
+			gosub, %A_LoopField%
+		}
+return
+
+		
+PRE_1:		
 stringsplit,prestk,1_Pre,<
 stringright,lnky,prestk2,4
 runhow= 
@@ -226,15 +242,20 @@ if (prestk2 <> "")
 						runhow= Max
 					}
 			}
-		if instr(prestk1,"W")
+		if fileexist(prestk2)
 			{
-				RunWait,%prestk2%,%A_ScriptDir%,%runhow%,preapid
-				gosub,nonmres
+				if instr(prestk1,"W")
+					{
+						RunWait,%prestk2%,%A_ScriptDir%,%runhow%,preapid
+						gosub,nonmres
+					}
+				Run,%prestk2%,%A_ScriptDir%,,preapid	
+				iniwrite,%preapid%,%home%/rjpids.ini,1_Pre,pid
 			}
-		Run,%prestk2%,%A_ScriptDir%,,preapid	
-		iniwrite,%preapid%,%home%/rjpids.ini,1_Pre,pid
 	}
-acwchk=
+return	
+
+PRE_BGP:
 GMGDBCHK= %gmnamex%	
 Tooltip, Configuration Created`n:::running %gmnamx% preferences:::
 if (fileexist(Borderless_Gaming_Program)&&(Borderless_Gaming_Program <> ""))
@@ -242,10 +263,20 @@ if (fileexist(Borderless_Gaming_Program)&&(Borderless_Gaming_Program <> ""))
 		bgpon= 1
 		gosub, nonmres
 	}
+return
 
-pgmonchk:
+
+PRE_MON:
 if (MonitorMode > 0)
 	{
+		Tooltip,
+		WinGet, WindowList, List
+		Loop, %WindowList%
+			{
+				WinMinimize, % "ahk_id " . WindowList%A_Index%
+			}
+		Send {LCtrl Down}&{LAlt Down}&B	
+		Send {LCtrl Up}&{LAlt Up}
 		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(MM_Game_Config)&& fileexist(MM_MEDIACENTER_Config))
 			{
 				RunWait,%MultiMonitor_Tool% /LoadConfig "%MM_Game_Config%",%mmpath%,hide,mmpid
@@ -255,26 +286,60 @@ if (MonitorMode > 0)
 			}
 		iniwrite,%mmpid%,%curpidf%,MultiMonitor_Tool,pid
 	}
-Gui, Color, Black
-
-Gui, +ToolWindow -Caption +AlwaysOnTop
-
-Gui, show, x0 y0 w%A_ScreenWidth% h%A_ScreenHeight%, NA
 sleep, 1200
-Mapper_Extension:= % Mapper_Extension
+return
+
+
 
 ;regRead,curwlp,HKCU\Control Panel\Desktop, WallPaper
 ;regWrite, REG_SZ,HKCU\Control Panel\Desktop,WallPaper," "
 ;RunWait, Rundll32.exe user32.dll`, UpdatePerUserSystemParameters
 
-Tooltip,
-WinGet, WindowList, List
-Loop, %WindowList%
+PRE_JAL:
+stringsplit,prestk,JustAfterLaunch,<
+PRESA= %prestk1%
+jalprog= %prestk2%
+if (prestk2 = "")
 	{
-		WinMinimize, % "ahk_id " . WindowList%A_Index%
+		presA= 
+		jalprog= %prestk1%
 	}
-Send {LCtrl Down}&{LAlt Down}&B	
-Send {LCtrl Up}&{LAlt Up}
+stringright,lnky,jalprog,4
+runhow= 
+if (jalprog <> "")
+	{
+		if (lnky = ".lnk")
+			{
+				Filegetshortcut,%prestk2%,,,argm,,,,lsrst
+				if (lsrst = 7)
+					{
+						runhow= hide
+					}			
+				if (lsrst = 3)
+					{
+						runhow= Max
+					}
+			}
+		
+		if fileexist(prestk2)
+			{
+				if instr(presA,"0")
+					{
+						runhow= hide
+					}
+				if instr(presA,"W")
+					{
+						RunWait,%jalprog%,%A_ScriptDir%,%runhow%,jalpid
+						return
+						;goto, premapper
+					}
+				Run,%jalprog%,%A_ScriptDir%,%runhow%,jalpid
+				iniwrite,%jalpid%,%curpidf%,JustAfterLaunch,pid
+			}	
+	}
+return
+
+PRE_2:
 stringsplit,prestk,2_Pre,<
 stringright,lnky,prestk2,4
 runhow= 
@@ -292,15 +357,23 @@ if (prestk2 <> "")
 						runhow= Max
 					}
 			}
-		if instr(prestk1,"W")
+		if fileexist(prestk2)
 			{
-				RunWait,%prestk2%,%A_ScriptDir%,%runhow%,prebpid
-				goto, premapper
+				if instr(prestk1,"W")
+					{
+						RunWait,%prestk2%,%A_ScriptDir%,%runhow%,prebpid
+						;goto,postmapper
+						return
+					}
+				Run,%prestk2%,%A_ScriptDir%,%runhow%,prebpid
+				iniwrite,%prebpid%,%curpidf%,2_Pre,pid
 			}
-		Run,%prestk2%,%A_ScriptDir%,%runhow%,prebpid
-		iniwrite,%prebpid%,%curpidf%,2_Pre,pid
 	}
+return
+
+PRE_MAP:
 premapper:	
+Mapper_Extension:= % Mapper_Extension
 if (Mapper > 0)
 	{
 		ToolTip,Running %gmnamx% preferences`n:::Loading Joystick Configurations:::
@@ -416,10 +489,12 @@ if (Mapper > 0)
 					}
 			}
 	}
+return
+
+PRE_3:
 stringsplit,prestk,3_Pre,<
 stringright,lnky,prestk2,4
 runhow= 
-Gui, Destroy
 if (prestk2 <> "")
 	{
 		if (lnky = ".lnk")
@@ -434,14 +509,20 @@ if (prestk2 <> "")
 						runhow= Max
 					}
 			}
-		if instr(prestk1,"W")
+		if fileexist(prestk2)
 			{
-		RunWait,%prestk2%,%A_ScriptDir%,%runhow%,precpid
-				goto,begin
+				if instr(prestk1,"W")
+					{
+						RunWait,%prestk2%,%A_ScriptDir%,%runhow%,precpid
+						;goto,postmapper
+						return
+					}
+				Run,%prestk2%,%A_ScriptDir%,%runhow%,precpid
+				iniwrite,%precpid%,%curpidf%,3_Pre,pid
 			}
-		Run,%prestk2%,%A_ScriptDir%,%runhow%,precpid
-		iniwrite,%precpid%,%curpidf%,3_Pre,pid
-	}	
+	}
+return
+
 begin:
 ToolTip,Loading %gmnamex%
 if (nrx > 2)
@@ -455,70 +536,44 @@ Run, %plfp%%linkoptions%%plarg%,%pldr%,max UseErrorLevel,dcls
 nerlv= %errorlevel%
 Tooltip,
 Process, Exist, %bgmexe%
-goto, bgl
-if (instr(bgm,gmname)or instr(bgm,GMGDBCHK))
-	{
-		Run, %bgaming%,%BGMLOC%,,bgpid
-		iniwrite,%bgpid%,%curpidf%,Borderless_Gaming_Program,pid
-	}
-	
+
 bgl:	
 Tooltip, :::getting ancilary exes:::
 apchkn=
-if (exe_list <> "")
+appcheck:
+sleep, 1000
+Loop,parse,exe_list,|
 	{
-		appcheck:
-		sleep, 1000
-		Loop,parse,exe_list,|
+		apchkn+=1
+		if (A_LoopField = "")
 			{
-				apchkn+=1
-				if (A_LoopField = "")
-					{
-						continue
-					}
-				process,exist,%A_LoopField%
-				erahkpid= %errorlevel%
-				if (erahkpid <> 0)
-					{
-						break
-					}
-				if (apchkn > 10)
-					{
-						Tooltip,
-						goto,appcheck
-					}
+				continue
 			}
-		;;msgbox,,,%erahkpid% is closed`n%gmgdbchk% found`nnerlv=%nerlv%`ngii=%gii%`ndcls=%dcls%
-		Tooltip,
-		WinActivate
-		WinGetActiveTitle,GMGDBCHK
-		if ((GMGDBCHK <> gmname)&&(bgpon = 1))
+		process,exist,%A_LoopField%
+		erahkpid= %errorlevel%
+		if (erahkpid <> 0)
 			{
-				acwchk= 1
-				gosub,nonmres
-				acwchk= 
+				break
 			}
-		Tooltip,
-		BlockInput,Off
-		iniwrite,%erahkpid%,%curpidf%,Current_Game,pid
-		process,WaitClose, %erahkpid%
-		goto, appclosed	
+		if (apchkn > 10)
+			{
+				Tooltip,
+				goto,appcheck
+			}
 	}
+;;msgbox,,,%erahkpid% is closed`n%gmgdbchk% found`nnerlv=%nerlv%`ngii=%gii%`ndcls=%dcls%
 Tooltip,
-BlockInput,Off	
-		;;msgbox,,,%erahkpid% is closed`n%gmgdbchk% found`nnerlv=%nerlv%`ngii=%gii%`ndcls=%dcls%
-iniwrite,%dcls%,%curpidf%,Current_Game,pid
-WinWait, ahk_pid %dcls%
 WinActivate
-WinGetActiveTitle,GMGDBCHK
-if ((GMGDBCHK <> gmname)&&(bgpon = 1))
+WinHide, ahk_class Shell_TrayWnd
+WinHide, ahk_class Shell_SecondaryTrayWnd
+Tooltip,
+if (JustAfterLaunch <> "")
 	{
-		acwchk= 1
-		gosub,nonmres
-		acwchk= 
+		gosub, PRE_JAL
 	}
-Process,waitclose,%DCLS%
-
+BlockInput,Off
+iniwrite,%erahkpid%,%curpidf%,Current_Game,pid
+process,WaitClose, %erahkpid%	
 AppClosed:
 if ((nerlv = 1234)or(gii = 1))
 	{
@@ -556,10 +611,73 @@ givup:
 Tooltip,...Quitting...
 gii= 1
 Quitout:
+
 Blockinput,On
 Tooltip,Keyboard / Mouse are disabled`n:::Please be patient:::
-process,exist,%mapapp%
-mperl= %errorlevel%
+
+POSTRUNORDER=POST_JBE|LOGOUT|POST_1|POST_MON|POST_MAP|POST_2|POST_3
+/*	
+POSTRUNORDERPROC:
+*/
+acwchk=
+Loop,parse,POSTRUNORDER,|
+	{
+		if (A_Loopfield = "")
+			{
+				continue
+			}
+			gosub, %A_LoopField%
+		}
+WinShow, ahk_class Shell_TrayWnd
+WinShow, ahk_class Shell_SecondaryTrayWnd		
+ExitApp
+
+POST_JBE:
+Tooltip,shutting down game`n:::Writing Settings
+stringsplit,prestk,JustBeforeExit,<
+PRESA= %prestk1%
+jbeprog= %prestk2%
+if (prestk2 = "")
+	{
+		presA= 
+		jbeprog= %prestk1%
+	}
+stringright,lnky,jbeprog,4
+runhow= 
+if (jbeprog <> "")
+	{
+		if (lnky = ".lnk")
+			{
+				Filegetshortcut,%jbeprog%,,,argm,,,,lsrst
+				if (lsrst = 7)
+					{
+						runhow= hide
+					}			
+				if (lsrst = 3)
+					{
+						runhow= Max
+					}
+			}
+		if fileexist(jbeprog)
+			{
+				if instr(presA,"0")
+					{
+						runhow= hide
+					}
+				if instr(presA,"W")
+					{
+						RunWait,%jbeprog%,%A_ScriptDir%,%runhow%,jbepid
+						ToolTip,
+						;goto,LOGOUT
+						return
+					}
+				Run,%jbeprog%,%A_ScriptDir%,%runhow%,jbepid	
+				iniwrite,%jbepid%,%curpidf%,JustBeforeExit,pid
+			}
+	}
+return
+
+POST_1:
 stringsplit,prestk,1_Post,<
 stringright,lnky,prestk2,4
 runhow= 
@@ -577,14 +695,20 @@ if (prestk2 <> "")
 						runhow= Max
 					}
 			}
-		if instr(prestk1,"W")
+		if fileexist(prestk2)
 			{
-				RunWait,%prestk2%,%A_ScriptDir%,%runhow%,postapid
-				goto,postmapper
+				if instr(prestk1,"W")
+					{
+						RunWait,%prestk2%,%A_ScriptDir%,%runhow%,postapid
+						;goto,postmapper
+						return
+					}
+				Run,%prestk2%,%A_ScriptDir%,%runhow%,postapid
 			}
-		Run,%prestk2%,%A_ScriptDir%,%runhow%,postapid
 	}
-postmapper:	
+return
+
+POST_MAP:	
 if (Mapper > 0)
 	{
 		ToolTip,Please Be Patient`n:::Reloading Mediacenter/Desktop Profiles:::
@@ -778,23 +902,42 @@ if (Mapper > 0)
 				Sleep,500
 			}
 	}
-Tooltip,Reloading Profiles`n:::shutting down game:::
 
-process,close, %erahkpid%
-process,close, %dcls%
-process, close, %pfilef%
-if (exe_list <> "")
+Loop, 4
 	{
-		Loop,parse,exe_list,|
+		if (A_Index = 1)
 			{
-				process,close,%A_LoopField%
+				iniwrite,%MediaCenter_Profile%,%inif%,GENERAL,MediaCenter_Profile
+				continue
+			}
+		mcpn:= % MediaCenter_Profile%A_Index%	
+		if (mcpn <> "")
+			{
+				iniwrite,%mcpn%,%inif%,GENERAL,MediaCenter_Profile%A_Index%
 			}
 	}
+Loop,4
+	{
+		plyrn:= % Player%A_index%
+		if (plyrn <> "")
+			{
+				iniwrite,%plyrn%,%inif%,GENERAL,Player%A_Index%	
+			}
+	}
+
 if (Logging = 1)
 	{
-		fileappend,er=%erahkpid%`ndcls=%dcls%`npfile=%pfile%,%home%\log.txt
-	}
-Run, taskkill /f /im "%plnkn%*",,hide
+		FileAppend,Run="%plfp%[%linkoptions%|%plarg%]in%pldr%"`nkeyboard=|%Keyboard_Mapper% "%player1%"%player2t%%player3t%%player4t%|`njoycount1="%joycnt%"`n%Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%%MediaCenter_Profile_3t%%MediaCenter_Profile_4t%`njoycount2=%joucount%`n`n,%home%\log.txt
+	} 	
+iniwrite,%KeyBoard_Mapper%,%inif%,GENERAL,KeyBoard_Mapper
+iniwrite,%Jmap%,%inif%,JOYSTICKS,Jmap
+iniwrite,%Mapper_Extension%,%inif%,JOYSTICKS,Mapper_Extension
+iniwrite,%MAPPER%,%inif%,GENERAL,Mapper
+Tooltip,Reloading Profiles`n:::shutting down game:::
+return
+
+
+POST_2:
 stringsplit,prestk,2_Post,<
 stringright,lnky,prestk2,4
 runhow= 
@@ -812,16 +955,20 @@ if (prestk2 <> "")
 						runhow= Max
 					}
 			}
-		if instr(prestk1,"W")
+		if fileexist(prestk2)
 			{
-				RunWait,%prestk2%,%A_ScriptDir%,%runhow%,postbpid
-				goto,postmonitor
+				if instr(prestk1,"W")
+					{
+						RunWait,%prestk2%,%A_ScriptDir%,%runhow%,postBpid
+						;goto,postmapper
+						return
+					}
+				Run,%prestk2%,%A_ScriptDir%,%runhow%,postbpid
 			}
-		Run,%prestk2%,%A_ScriptDir%,%runhow%,postbpid	
 	}
-postmonitor:
-;regWrite, REG_SZ,HKCU\Control Panel\Desktop,WallPaper,%curwlp%
-;RunWait, Rundll32.exe user32.dll`, UpdatePerUserSystemParameters
+return
+
+POST_MON:
 if (MonitorMode > 0)
 	{
 		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(MM_Game_Config)&& fileexist(MM_MediaCenter_Config))
@@ -833,51 +980,17 @@ if (MonitorMode > 0)
 			Run, %Multimonitor_Tool%,%mmpath%,hide,dsplo
 		}	
 	}
-Tooltip,shutting down game`n:::Writing Settings
 iniwrite,%MONITORMODE%,%inif%,GENERAL,MonitorMode
 iniwrite,%disprogw%,%inif%,GENERAL,disprogw
-iniwrite,%MAPPER%,%inif%,GENERAL,Mapper
-iniwrite,%Game_Profile%,%inif%,GENERAL,Game_Profile
-iniwrite,%KeyBoard_Mapper%,%inif%,GENERAL,KeyBoard_Mapper
-Loop, 4
-	{
-		if (A_Index = 1)
-			{
-				iniwrite,%MediaCenter_Profile%,%inif%,GENERAL,MediaCenter_Profile
-				continue
-			}
-		mcpn:= % MediaCenter_Profile%A_Index%	
-		if (mcpn <> "")
-			{
-				iniwrite,%mcpn%,%inif%,GENERAL,MediaCenter_Profile%A_Index%
-			}
-	}
 iniwrite,%MM_MEDIACENTER_Config%,%inif%,GENERAL,MM_MEDIACENTER_Config
-iniwrite,%MM_Game_Config%,%inif%,GENERAL,MM_Game_Config
 iniwrite,%MultiMonitor_Tool%,%inif%,GENERAL,MultiMonitor_Tool
-iniwrite,%Game_Directory%,%inif%,GENERAL,Game_Directory
-Loop,4
-	{
-		plyrn:= % Player%A_index%
-		if (plyrn <> "")
-			{
-				iniwrite,%plyrn%,%inif%,GENERAL,Player%A_Index%	
-			}
-	}
-iniwrite,%Jmap%,%inif%,JOYSTICKS,Jmap
-iniwrite,%Mapper_Extension%,%inif%,JOYSTICKS,Mapper_Extension
 sleep, 1000
 WinGet, WindowList, List
 Loop, %WindowList%
 	{
 		WinRestore, % "ahk_id " . WindowList%A_Index%
 	}
-Process, exist, %bgmexe%
-	{
-		Process,close,bgpid
-		Process,close,%bgmexe%
-		Run,Taskkill /f /im %bgmexe%,,hide
-	}
+
 Process,close,dsplo
 Loop,20
 	{
@@ -886,6 +999,10 @@ Loop,20
 	}
 Send {LCtrl Down}&{LAlt Down}&K
 Send {LCtrl Up}&{LAlt Up}
+return
+
+
+POST_3:
 stringsplit,prestk,3_Post,<
 stringright,lnky,prestk2,4
 runhow= 
@@ -903,20 +1020,39 @@ if (prestk2 <> "")
 						runhow= Max
 					}
 			}
-		if instr(prestk1,"W")
+		if fileexist(prestk2)
 			{
-				RunWait,%prestk2%,%A_ScriptDir%,%runhow%,postcpid
-				ToolTip,
-				goto,loggingout
+				if instr(prestk1,"W")
+					{
+						RunWait,%prestk2%,%A_ScriptDir%,%runhow%,postcpid
+						;goto,postmapper
+						return
+					}
+				Run,%prestk2%,%A_ScriptDir%,%runhow%,postcpid
 			}
-		Run,%prestk2%,%A_ScriptDir%,%runhow%,postcpid	
 	}
-loggingout:	
+return
+
+
+LOGOUT:	
+process,close, %erahkpid%
+process,close, %dcls%
+process, close, %pfilef%
+
+if (exe_list <> "")
+	{
+		Loop,parse,exe_list,|
+			{
+				process,close,%A_LoopField%
+			}
+	}
+Run, taskkill /f /im "%plnkn%*",,hide
+
 if (Logging = 1)
 	{
-		FileAppend,Run="%plfp%[%linkoptions%|%plarg%]in%pldr%"`nkeyboard=|%Keyboard_Mapper% "%player1%"%player2t%%player3t%%player4t%|`njoycount1="%joycnt%"`n%Keyboard_Mapper% "%MediaCenter_Profile%"%MediaCenter_Profile_2t%%MediaCenter_Profile_3t%%MediaCenter_Profile_4t%`njoycount2=%joucount%`n`n,%home%\log.txt
+		fileappend,er=%erahkpid%`ndcls=%dcls%`npfile=%pfile%,%home%\log.txt
 	}
-ExitApp
+return
 
 nonmres:
 FileRead,bgm,%Borderless_Gaming_Database%
@@ -940,6 +1076,12 @@ if (instr(bgm,GMGDBCHK)&& fileexist(Borderless_Gaming_Program))or (instr(bgm,gmn
 	}
 return
 
+
+
+
+
+
+;;#####################################################################
 AltKey:
 Tooltip,!! AltKey Detected !!`nKeyboad/Mouse Disabled`n::Please Be Patient::`n
 SetupINIT:
@@ -975,6 +1117,7 @@ iniwrite,%This_Profile%\MediaCenter.%mapper_extension%,%Game_Profile%,GENERAL,Me
 FileCreateShortcut,%plink%,%This_Profile%\%gmnamex%.lnk,%scpath%, ,%gmnamex%,%plink%,,%iconnumber%
 FileCreateShortcut,%binhome%\RJ_LinkRunner.exe, %Game_Directory%\%gmnamex%.lnk,%scpath%, `"%This_Profile%\%gmname%.lnk`",%gmname%,%plink%,,%iconnumber%
 inif= %RJDB_Config%,%GAME_PROFILES%\game.ini
+iniwrite,%Game_Profile%,%inif%,GENERAL,Game_Profile
 Return	
 
 NameTuning:
@@ -1024,7 +1167,8 @@ if (instr(nogmnx,absgmx)or instr(nogmne,absgme))
 							{
 								gmnamex= %tempn%
 								gosub, nonmres
-								goto,pgmonchk
+								;goto,PRE_MON
+								return
 							}
 						splitpath,npfdir,,,,tempn
 						lnkft= 1
