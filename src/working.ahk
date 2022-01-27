@@ -91,7 +91,7 @@ GenQuery= Games|juegos|spellen|Spiele|Jeux|Giochi
 AllQuery:= GogQuery . | . "Origin" . "|" . "Epic Games" . steamhome
 undira= |%A_WinDir%|%A_Programfiles%|%A_Programs%|%A_AppDataCommon%|%A_AppData%|%A_Desktop%|%A_DesktopCommon%|%A_StartMenu%|%A_StartMenuCommon%|%A_Startup%|%A_StartupCommon%|%A_Temp%|
 undirs= %undira%
-GUIVARS= ASADMIN|PostWait|PreWait|Localize|SCONLY|EXEONLY|BOTHSRCH|ADDGAME|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_ProfB|GAME_DirB|SOURCE_DirB|SOURCE_DirectoryT|REMSRC|Keyboard_MapB|Player1_TempB|Player2_TempB|MediaCenter_ProfB|MultiMonitor_Tool|MM_ToolB|MM_Game_CfgB|MM_MediaCenter_CfgB|BGM_ProgB|BGP_DataB|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS|SELALLBUT|SELNONEBUT
+GUIVARS= ASADMIN|PostWait|PreWait|Localize|SCONLY|EXEONLY|BOTHSRCH|ADDGAME|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_ProfB|GAME_DirB|SOURCE_DirB|SOURCE_DirectoryT|REMSRC|Keyboard_MapB|Player1_TempB|Player2_TempB|MediaCenter_ProfB|MultiMonitor_Tool|MM_ToolB|MM_Game_CfgB|MM_MediaCenter_CfgB|BGM_ProgB|BGP_DataB|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS|SELALLBUT|SELNONEBUT|KBM_RC|MMT_RC|JAL_ProgB|JBE_ProgB|JBE_RC|JAL_RC|PRE_RC|POST_RC
 STDVARS= SOURCE_DirectoryT|SOURCE_Directory|KeyBoard_Mapper|MediaCenter_Profile|Player1_Template|Player2_Template|MultiMonitor_Tool|MM_MEDIACENTER_Config|MM_Game_Config|BorderLess_Gaming_Program|BorderLess_Gaming_Database|extapp|Game_Directory|Game_Profiles|RJDB_Location|Source_Directory|Mapper_Extension|1_Pre|2_Pre|3_Pre|1_Post|2_Post|3_Post|switchcmd|switchback
 DDTA= <$This_prog$><Monitor><Mapper>
 DDTB= <Monitor><$This_prog$><Mapper>
@@ -174,11 +174,11 @@ Menu,DCLButton,Add,Delete ,DeleteButs
 Menu,UPDButton,Add,Update,UpdateRJLR
 ; Create the ListView and its columns via Gui Add:
 Gui, Add, Button, x310 y8 vButtonClear gButtonClear hidden disabled, Clear List
-Gui, Add, Text, x380 y3 h12, Select
-Gui, Add, Button, x370 y16 vSELALLBUT gSELALLBUT hidden, All
-Gui, Add, Button, x390 y16 vSELNONEBUT gSELNONEBUT hidden, None
-Gui, Add, Button, x430 y10 h20 vADDGAME gADDGAME disabled, ADD
-Gui, Add, Edit, x465 y12 w100 disabled,
+Gui, Add, Text, x377 y8 h12, Check
+Gui, Add, Button, x420 y8 vSELALLBUT gSELALLBUT hidden, All
+Gui, Add, Button, x445 y8 vSELNONEBUT gSELNONEBUT hidden, None
+Gui, Add, Button, x490 y10 h20 vADDGAME gADDGAME disabled, ADD
+Gui, Add, Edit, x530 y12 w50 disabled,
 Gui, Add, Button, x565 y12 w14 h14 disabled,X
 Gui, Font, Bold
 Gui, Add, Button, x590 y8 vButtonCreate gButtonCreate hidden disabled,CREATE
@@ -855,6 +855,7 @@ if ((MediaCenter_ProfileT <> "")&& !instr(MediaCenter_ProfileT,"<"))
 		guicontrol,,MediaCenter_ProfileT,<MediaCenter_Profile_Template
 	}
 return
+
 MM_ToolBDownload:
 return
 
@@ -866,20 +867,29 @@ if (ASADMIN = 1)
 	  }
 if (butrclick = "POSTAPP")
 	{
-		MsgBox,4096,MediaCenter Speakers,Select Your MediaCenter's Speakers
-		fileappend,echo off`npushd "%binhome%"`nsetsounddevice %ADMNV%/setDefault "%sndvice%" all,%home%\MediaCenterAudio.cmd
+		MsgBox,4096,MediaCenter Speakers,Select Your MediaCenter's Speakers After Clicking "OK"
+		Loop,parse,GUIVARS,|
+			{
+				guicontrol,disable,%A_LoopField%
+			}
+			
+		fileappend,echo off`npushd "%binhome%"`n"%binhome%\soundvolumeView.exe" %ADMNV%/setDefault "%sndvice%" all`nexit /b,%home%\MediaCenterAudio.cmd
 		gosub,DeviceReturn
 		POSTAPPF= %home%\MediaCenterAudio.cmd
 		gosub, POSTAPP
-		}
+	}
 if (butrclick = "PREAPP")
 	{
-		MsgBox,4096,Game Speakers,Select Your Game Speakers
+		MsgBox,4096,Game Speakers,Select Your Game Speakers After Clicking "OK"
 		gosub,DeviceReturn
-		fileappend,echo off`npushd "%binhome%"`nsetsounddevice %ADMNV%/setDefault "%sndvice%" all,%home%\GameAudio.cmd
+		fileappend,echo off`npushd "%binhome%"`n"%binhome%\soundvolumeView.exe" %ADMNV%/setDefault "%sndvice%" all`nexit /b,%home%\GameAudio.cmd
 		PREAPPF= %home%\GameAudio.cmd
 		gosub, PREAPP
 	}
+Loop,parse,GUIVARS,|
+	{
+		guicontrol,enable,%A_LoopField%
+	}	
 mmtrc=
 return
 
@@ -888,7 +898,7 @@ alir= devlist.cmd
 filedelete,cr.txt
 filedelete,%alir%
 fileappend,echo off`n,%alir%
-fileappend,for /f "tokens=1`,2`,3 delims=`," `%`%a in ('"%binhome%\SoundVolumeView.exe" /scomma') do if "`%`%~b" == "Device" for /f `%`%x in ("`%`%~c") do if "`%`%~x" == "Render" echo.`%`%~a `>`>cr.txt,devlist.cmd
+fileappend,for /f "tokens=1`,2`,3 delims=`," `%`%a in ('"%binhome%\SoundVolumeView.exe" /scomma') do if "`%`%~b" == "Device" for /f `%`%x in ("`%`%~c") do if "`%`%~x" == "Render" echo.`%`%~a `>`>cr.txt`nexit /b,devlist.cmd
 runwait,%alir%,,hide
 fileread,inff,cr.txt
 filedelete,%alir%
@@ -2105,7 +2115,9 @@ ifmsgbox,OK
             }
            else {
             Msgbox,,Failure,The current monitor configuration could not be saved
+			return
            }
+SB_SetText("Monitor config saved")
     }
 return
 MMSETUPG:
@@ -2556,6 +2568,7 @@ Loop,parse,GUIVARS,|
 		guicontrol,disable,%A_LoopField%
 	}
 
+fileread,cmdtpp,%home%\src\cmdtemplate.set
 guicontrolget,CREFLD,,CREFLD
 guicontrolget,ASADMIN,,ASADMIN
 guicontrolget,GMJOY,,GMJOY
@@ -2780,11 +2793,9 @@ Loop,%fullstn0%
 						goto, topreduc
 					}
 				TOPOUT:
-				;msgbox,,,%prnmx%`ng=%gmnamedvx%`nt=%tlevel%`nc=%curpth%`nex=%gfnamex%`nrem=%gmat%`nmat=%mattop%`nml=%mattlen%`ndic=%topdirec%`nredpth=%redpth%
 				invar= %gmnamed%
 				gosub, CleanVar
 				gmnamecm= %invarx%
-
 				TOPFIN:
 				invar= %gmnamex%
 				gosub, CleanVar
@@ -2971,7 +2982,6 @@ Loop,%fullstn0%
 												stringleft,INNSK,GMMO2,3
 												stringupper,INNSK,INNSK,T
 												gmname:= .INNSG . INNSK
-
 											}
 										if (INNSJ = "")
 											{
@@ -3000,48 +3010,9 @@ Loop,%fullstn0%
 									{
 										gmnamex= %gmname%_[0%poscnt%]
 									}
-								/*
-								Loop,files,%GAME_PROFILES%\%GMNAMED%\*_More,D
-									{
-										kprt= _More
-										if instr(A_LoopFileName,kprt)
-											{
-												stringsplit,Subnumd,A_LoopFileName,_
-												subnumbr:= Subnumd1
-												newNumbr:= poscntx
-												if (subnumbr > poscntx)
-													{
-														newNumbr:= submumbr + 1
-													}
-												splitpath,A_LoopFileFullPath,substfld
-												substfldrc= %gmnamex%
-												subfldrep= %subnumbr%_More\
-												substfldrc= %subfldrep%%gmname%_[0%newNumbr%]
-												break
-											}
-									}
-								if ((renum = 1)&&(inclalts = 1))
-									{
-										gincrem= %substfld%\%gmname%_[0%subnumbr%]
-										filecopy, %GAME_PROFILES%\%GMNAMED%\%gincrem%game.ini,%GAME_PROFILES%\%GMNAMED%\%substfldrc%.ini,%OVERWRT%
-										filecopy, %GAME_PROFILES%\%GMNAMED%\game.ini,%GAME_PROFILES%\%GMNAMED%\%subfldrc%.ini,%OVERWRT%
-										filecopy, %GAME_PROFILES%\%GMNAMED%\%gmnamed%.lnk,%GAME_PROFILES%\%GMNAMED%\%substfldrc%.lnk,%OVERWRT%
-									}
-									else {
-											if (renum = "")or(subnumbr = 1)
-												{
-												newNumbr:= poscntx
-											}
-									}
-								AddMore= %GAME_PROFILES%\%GMNAMED%\%newNumbr%_More
-								FileMoveDir,%GAME_PROFILES%\%GMNAMED%\%subfldrep%,%AddMore%,R
-								msgbox,,,%errorlevel%`n%subfldrep%`n%addmore%
-								FileSetAttrib, +H,%AddMore%
-								*/
 							}
 						else {
 							subfldrep=
-							;gmnamex= %gmname%_[0%poscntx%]
 							if (INCLALTS = "")
 								{
 									gmnamex= %gmnamed%
@@ -3096,8 +3067,12 @@ Loop,%fullstn0%
 				if (GMLNK = 1)
 					{
 						prvv= %sidn%\%subfldrep%%gmnamex%.lnk
-						linktarget= %GAME_Directory%\%gmnamex%.lnk
-						linkproxy= %sidn%\%subfldrep%%gmnamex%.lnk
+						linktar= %GAME_Directory%\%gmnamex%.lnk
+						linktarget:= linktar . ".lnk"
+						linktargez:= linktar . ".cmd"
+						linkprox= %sidn%\%subfldrep%%gmnamex%
+						linkproxy:= linkprox . ".lnk"
+						linkproxz:= linkprox . ".cmd"
 						if ((OVERWRT = 1)&&(prnxtn = "lnk"))
 							{
 								if (!fileexist(linkproxy) or (renum = 1))
@@ -3131,9 +3106,9 @@ Loop,%fullstn0%
 										FileCreateShortcut, %RJDB_LOCATION%\bin\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%linkproxy%`"%OutArgs%, %refname%, %OutTarget%,, %IconNumber%, %OutRunState%
 									}
 								if (!fileexist(linktarget)&&(renum = "")&&(SETALTSALL = 1))
-										{
-											FileCreateShortcut, %RJDB_LOCATION%\bin\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%linkproxy%`"%OutArgs%, %refname%, %OutTarget%,, %IconNumber%, %OutRunState%
-										}	
+									{
+										FileCreateShortcut, %RJDB_LOCATION%\bin\RJ_LinkRunner.exe, %linktarget%, %OutDir%, `"%linkproxy%`"%OutArgs%, %refname%, %OutTarget%,, %IconNumber%, %OutRunState%
+									}
 							}
 						if (ASADMIN = 1)
 							{
@@ -3213,6 +3188,7 @@ Loop,%fullstn0%
 																	splitpath,eb1,vb
 																	eb1= 
 															}
+														%an1%= %vb%
 														filecopy,%home%\%vb%,%sidn%,%OVERWRT%
                                                         if (OVERWRT = 1)
                                                             {
@@ -3243,9 +3219,8 @@ Loop,%fullstn0%
 										iniwrite, %outdir%,%gamecfg%,GENERAL,Source_Directory
 										iniwrite, %gamecfg%,%gamecfg%,GENERAL,RJDB_Config
 									}
-
 								DeskMon= %sidn%\%subfldrep%%DMon%
-								if (dgovr <> "<")
+								if ((dgovr <> "<")&&(dgovr <> ""))
 									{
 										DeskMon= %dgovr%
 									}
@@ -3270,7 +3245,6 @@ Loop,%fullstn0%
 								klist=%tmpn%|
 								if (KILLCHK = 1)
 									{
-										;;msgbox,,,cur=%curpth%`ntl=%tlevel%`no=%outdir%`ng=%gfnamex%`nred=%redpth%`n
 										Loop,files,%tlevel%\*.exe,R
 											{
 												splitpath,A_LoopFileFullPath,tmpfn,tmpfd,,tmpfo
@@ -3293,11 +3267,12 @@ Loop,%fullstn0%
 													}
 											}
 										iniread,nklist,%gamecfg%,CONFIG,exe_list
-										if ((nklist = "")or(nklist = "ERROR")or(OVRWR = 1))
+										if ((nklist = "")or(nklist = "ERROR")or(OVERWRT = 1))
 											{
 												iniwrite,%klist%,%gamecfg%,CONFIG,exe_list
 											}
 									}
+									
                             }
 					}
 				if (GMJOY = 1)
@@ -3319,7 +3294,6 @@ Loop,%fullstn0%
 							}
 						if (MAPPER <> "JoyToKey")
 							{
-								
 								Filecopy,%Player2_Template%,%player2X%,%OVERWRT%
 								if ((errorlevel = 0)or fileexist(player2x))
 									{
@@ -3352,6 +3326,107 @@ Loop,%fullstn0%
 									}
 							}	
 					}
+				if (GMLNK = 1)
+					{
+						newcmd= %linkproxz%
+						if ((OVERWRT = 1)or(renum = 1))
+							{
+								stringreplace,cmdtmp,cmdtpp,[MonitorMode],%MonitorMode%
+								stringreplace,cmdtmp,cmdtmp,[multimonitor_tool],%multimonitor_tool%
+								stringreplace,cmdtmp,cmdtmp,[Mapper],%mapper%
+								stringreplace,cmdtmp,cmdtmp,[GAME_EXE],%prn%
+								Loop,3
+									{
+										prea2= 
+										npre:= % %A_Index%_Pre
+										npst:= % %A_Index%_Post
+										stringsplit,prea,npre,<
+										%A_Index%_PreW=""
+										if (prea2 <> "")
+											{
+												if instr(prea1,"W")
+													{
+														%A_Index%_PreW= /Wait ""
+													}
+												%A_Index%_Pre= %prea2%
+											}
+										prea2= 
+										stringsplit,prea,npst,<
+										%A_Index%_PostW=""
+										if (prea2 <> "")
+											{
+												if instr(prea1,"W")
+													{
+														%A_Index%_PostW= /Wait ""
+													}
+												%A_Index%_Post= %prea2%
+											}
+										}
+								prea2=
+								stringsplit,prea,JustBeforeExit,<
+								JBEW=""
+								if (prea2 <> "")
+									{
+										if instr(prea1,"W")
+											{
+												JBEW= /Wait ""
+											}
+										JustBeforeExit= %prea2%
+									}
+								prea2=
+								JALW=""
+								stringsplit,prea,JustAfterLaunch,<
+								if (prea2 <> "")
+									{
+										if instr(prea1,"W")
+											{
+												JALW= /Wait ""
+											}
+										JustAfterLaunch= %prea2%
+									}
+								stringreplace,cmdtmp,cmdtmp,[1_Pre],%1_Pre%
+								stringreplace,cmdtmp,cmdtmp,[1_PreW],%1_PreW%
+								stringreplace,cmdtmp,cmdtmp,[2_Pre],%2_Pre%
+								stringreplace,cmdtmp,cmdtmp,[2_PreW],%2_PreW%
+								stringreplace,cmdtmp,cmdtmp,[3_Pre],%3_Pre%
+								stringreplace,cmdtmp,cmdtmp,[3_PreW],%3_PreW%
+								stringreplace,cmdtmp,cmdtmp,[3_PostW],%3_PostW%
+								stringreplace,cmdtmp,cmdtmp,[3_Post],%3_Post%
+								stringreplace,cmdtmp,cmdtmp,[2_Post],%2_Post%
+								stringreplace,cmdtmp,cmdtmp,[2_PostW],%2_PostW%
+								stringreplace,cmdtmp,cmdtmp,[1_Post],%1_Post%
+								stringreplace,cmdtmp,cmdtmp,[1_PostW],%1_PostW%
+								stringreplace,cmdtmp,cmdtmp,[JustBeforeExit],%JustBeforeExit%
+								stringreplace,cmdtmp,cmdtmp,[JBEW],%JBEW%
+								stringreplace,cmdtmp,cmdtmp,[JustAfterLaunch],%JustAfterLaunch%
+								stringreplace,cmdtmp,cmdtmp,[JALW],%JALW%
+								stringreplace,cmdtmp,cmdtmp,[exelist],%klist%
+								stringreplace,cmdtmp,cmdtmp,[MultMonitor_tool],%MultMonitor_tool%
+								stringreplace,cmdtmp,cmdtmp,[keyboard_mapper],%keyboard_mapper%
+								stringreplace,cmdtmp,cmdtmp,[MM_Game_config],%GameMon%
+								stringreplace,cmdtmp,cmdtmp,[MM_MediaCenter_config],%DeskMon%
+								stringreplace,cmdtmp,cmdtmp,[MediaCenter_profile],%MediaCenter_ProfileX%
+								stringreplace,cmdtmp,cmdtmp,[Player1],%Player1x%
+								stringreplace,cmdtmp,cmdtmp,[Player2],%Player2x%
+								FileDelete,%linkproxz%
+							}
+						fileappend,%cmdtmp%,%newcmd%
+						if (renum = 1)
+							{
+								if fileexist(linktargez)
+									{
+										FileDelete,%linktargez%
+									}
+							}
+						if ((rn = "")or(renum = 1))
+							{
+								fileappend,%cmdtmp%,%linktargez%
+							}
+						if (!fileexist(linktargez)&&(renum = "")&&(SETALTSALL = 1))
+							{
+								fileappend,%cmdtmp%,%linktargez%
+							}
+					}
 			}
 		if ((kbmovr = "n") or (kbmovr = "0"))
 			{
@@ -3382,6 +3457,7 @@ Loop,%fullstn0%
 			{
 				iniwrite,%mcpovr%,%GAMECFG%,CONFIG,MediaCenter_Profile
 			}
+		
 	}
 SB_SetText("Shortcuts Created")
 if (ASADMIN = 1)
