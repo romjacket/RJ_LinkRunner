@@ -34,14 +34,14 @@ for /f "delims=" %%a in ("[GAME_EXE]") do (
 if exist "%A_Pre%" cmd /c start [1_PreW] "%A_Pre%"
 if "%Mapper%" == "" goto MONMODE
 if not exist "%keyboard_mapper%" goto MONMODE
-if exist "%player1%" "%keyboard_mapper%" "%player1%"%player2%
+if exist "%player1%" start "" "%keyboard_mapper%" "%player1%"%player2%
 
 :MONMODE
 if "%MONITORMODE%" == "" goto PRE2
 if "%MONITORMODE%" == "0" goto PRE2
 if not exist "%multimonitor_tool%" goto PRE2
 if not exist "%MM_Game_Config%"  goto PRE2
-"%multimonitor_tool%" /LoadConfig "%mm_Game_config%"
+ start "" "%multimonitor_tool%" /LoadConfig "%mm_Game_config%"
 
 :PRE2
 if exist "%B_Pre%" cmd /c start [2_PreW] "%B_Pre%"
@@ -68,7 +68,7 @@ popd
 if exist "%C_Post%" cmd /c start [3_PostW] "%C_Post%"
 if "%Mapper%" == "" goto POSTB2
 if not exist "%mediacenter_profile%" goto POST2
-if exist "%keyboard_mapper%" "%keyboard_mapper%" "%mediacenter_profile%"
+if exist "%keyboard_mapper%" start "" "%keyboard_mapper%" "%mediacenter_profile%"
 
 :POST2
 if exist "%B_Post%" cmd /c start [2_PostW] "%B_Post%"
@@ -76,10 +76,10 @@ if "%MONITORMODE%" == "" goto POST1
 if "%MONITORMODE%" == "0" goto POST1
 if not exist "%multimonitor_tool%" goto POST1
 if "%MM_Game_Config%" == "" set MM_Game_Config=GameMonitors.mon
-"%multimonitor_tool%" /SaveConfig "%mm_Game_config%"
+start "" "%multimonitor_tool%" /SaveConfig "%mm_Game_config%"
 for /f "delims=" %%a in ("[MM_MEDIACENTER_Config]") do set MM_MEDIACENTER_Config=%%~a
 if not exist "%MM_MediaCenter_Config%" goto POST1
-"%multimonitor_tool%" /LoadConfig "%mm_mediacenter_config%"
+start "" "%multimonitor_tool%" /LoadConfig "%mm_mediacenter_config%"
 
 :POST1
 if exist "%A_Post%" cmd /c start [1_PostW] "%A_Post%"

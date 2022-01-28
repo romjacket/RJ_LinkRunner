@@ -4,8 +4,8 @@ SetWorkingDir %A_ScriptDir%
 #SingleInstance Force
 #Persistent
 
-RELEASE= 2022-01-27 7:46 AM
-VERSION= 0.99.05.031
+RELEASE= 2022-01-28 8:45 AM
+VERSION= 0.99.25.031
 home= %A_ScriptDir%
 Splitpath,A_ScriptDir,tstidir,tstipth
 if ((tstidir = "src")or(tstidir = "bin")or(tstidir = "binaries"))
@@ -881,6 +881,10 @@ if (butrclick = "POSTAPP")
 if (butrclick = "PREAPP")
 	{
 		MsgBox,4096,Game Speakers,Select Your Game Speakers After Clicking "OK"
+		Loop,parse,GUIVARS,|
+			{
+				guicontrol,disable,%A_LoopField%
+			}
 		gosub,DeviceReturn
 		fileappend,echo off`npushd "%binhome%"`n"%binhome%\soundvolumeView.exe" %ADMNV%/setDefault "%sndvice%" all`nexit /b,%home%\GameAudio.cmd
 		PREAPPF= %home%\GameAudio.cmd
@@ -3067,7 +3071,7 @@ Loop,%fullstn0%
 				if (GMLNK = 1)
 					{
 						prvv= %sidn%\%subfldrep%%gmnamex%.lnk
-						linktar= %GAME_Directory%\%gmnamex%.lnk
+						linktar= %GAME_Directory%\%gmnamex%
 						linktarget:= linktar . ".lnk"
 						linktargez:= linktar . ".cmd"
 						linkprox= %sidn%\%subfldrep%%gmnamex%
@@ -3413,18 +3417,18 @@ Loop,%fullstn0%
 						fileappend,%cmdtmp%,%newcmd%
 						if (renum = 1)
 							{
-								if fileexist(linktargez)
+								if fileexist(linkproxz)
 									{
-										FileDelete,%linktargez%
+										FileDelete,%linkproxz%
 									}
 							}
 						if ((rn = "")or(renum = 1))
 							{
-								fileappend,%cmdtmp%,%linktargez%
+								fileappend,%cmdtmp%,%linkproxz%
 							}
-						if (!fileexist(linktargez)&&(renum = "")&&(SETALTSALL = 1))
+						if (!fileexist(linkproxz)&&(renum = "")&&(SETALTSALL = 1))
 							{
-								fileappend,%cmdtmp%,%linktargez%
+								fileappend,%cmdtmp%,%linkproxz%
 							}
 					}
 			}

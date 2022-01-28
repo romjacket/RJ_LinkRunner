@@ -35,7 +35,6 @@ FileInstall,C:\Users\romja\Programs\RJDB\site\img\Update.png,C:\Users\romja\Prog
 FileInstall,C:\Users\romja\Programs\RJDB\site\index.html,C:\Users\romja\Programs\RJDB\site\index.html,1
 FileInstall,C:\Users\romja\Programs\RJDB\src\build.ahk,C:\Users\romja\Programs\RJDB\src\build.ahk,1
 FileInstall,C:\Users\romja\Programs\RJDB\src\lrdeploy.ahk,C:\Users\romja\Programs\RJDB\src\lrdeploy.ahk,1
-FileInstall,C:\Users\romja\Programs\RJDB\src\msgbox2.ahk,C:\Users\romja\Programs\RJDB\src\msgbox2.ahk,1
 FileInstall,C:\Users\romja\Programs\RJDB\src\newosk.ahk,C:\Users\romja\Programs\RJDB\src\newosk.ahk,1
 FileInstall,C:\Users\romja\Programs\RJDB\src\RJ_LinkRunner.ahk,C:\Users\romja\Programs\RJDB\src\RJ_LinkRunner.ahk,1
 FileInstall,C:\Users\romja\Programs\RJDB\src\Setup.ahk,C:\Users\romja\Programs\RJDB\src\Setup.ahk,1
