@@ -189,7 +189,7 @@
             <button index="6">
                 <slots>
                     <slot>
-                        <path>[NEWOSK]/newosk.exe</path>
+                        <path>[NEWOSK]</path>
                         <mode>execute</mode>
                     </slot>
                 </slots>

@@ -41,7 +41,7 @@ if "%MONITORMODE%" == "" goto PRE2
 if "%MONITORMODE%" == "0" goto PRE2
 if not exist "%multimonitor_tool%" goto PRE2
 if not exist "%MM_Game_Config%"  goto PRE2
- start "" "%multimonitor_tool%" /LoadConfig "%mm_Game_config%"
+start "" "%multimonitor_tool%" /LoadConfig "%mm_Game_config%"
 
 :PRE2
 if exist "%B_Pre%" cmd /c start [2_PreW] "%B_Pre%"

@@ -154,7 +154,11 @@ if instr(JustBeforeExit,"W<")
 	{
 		jbestatus= checked
 	}
-	
+taskbarv= checked
+if (Hide_Taskbar = 0)
+	{
+		taskbarv= 	
+	}
 Loop,files,%binhome%\*.exe,F
   {
 	  if (A_LoopFileName = "soundVolumeView.exe")
@@ -172,7 +176,7 @@ Menu,UCLButton,Add,Download,DownloadButs
 Menu,UCLButton,Add,Disable ,DisableButs
 Menu,DCLButton,Add,Delete ,DeleteButs
 Menu,UPDButton,Add,Update,UpdateRJLR
-; Create the ListView and its columns via Gui Add:
+
 Gui, Add, Button, x310 y8 vButtonClear gButtonClear hidden disabled, Clear List
 Gui, Add, Text, x377 y8 h12, Check
 Gui, Add, Button, x420 y8 vSELALLBUT gSELALLBUT hidden, All
@@ -183,19 +187,15 @@ Gui, Add, Button, x565 y12 w14 h14 disabled,X
 Gui, Font, Bold
 Gui, Add, Button, x590 y8 vButtonCreate gButtonCreate hidden disabled,CREATE
 Gui, Font, Normal
-Gui, Add, ListView, r44 x310 y35 h560 w340 -Readonly vMyListView gMyListView hwndHLV1 AltSubmit Checked hidden,Name|Type|Directory/Location|Size (KB)|Name Override|KBM|P1|P2|McP|MMT|GM|DM|BGM|Pre|Pst
+Gui, Add, ListView, r44 x310 y35 h560 w340 -Readonly vMyListView gMyListView hwndHLV1 AltSubmit Checked hidden,Name|Type|Directory/Location|Size (KB)|Name Override|KBM|P1|P2|McP|MMT|GM|DM|JAL|JBE|Pre|Pst
 
-LV_ModifyCol(3, "Integer")  ; For sorting, indicate that the Size column is an integer.
-
-; Create an ImageList so that the ListView can display some icons:
+LV_ModifyCol(3, "Integer") 
 ImageListID1 := IL_Create(10)
-ImageListID2 := IL_Create(10, 10, true)  ; A list of large icons to go with the small ones.
+ImageListID2 := IL_Create(10, 10, true) 
 
-; Attach the ImageLists to the ListView so that it can later display the icons:
 LV_SetImageList(ImageListID1)
 LV_SetImageList(ImageListID2)
 
-; Create a popup menu to be used as the context menu:
 Menu, MyContextMenu, Add, Open in Explorer, ContextOpenFile
 Menu, MyContextMenu, Add, Toggle KBM, ContextProperties
 Menu, MyContextMenu, Add, Assign Player1 Template, ContextProperties
@@ -208,8 +208,8 @@ Menu, MyContextMenu, Add, Toggle PRE, ContextProperties
 Menu, MyContextMenu, Add, Toggle PST, ContextProperties
 Menu, MyContextMenu, Add,,
 Menu, MyContextMenu, Add, Clear from ListView, ContextClearRows
-;Menu, MyContextMenu, Default, Open  ; Make "Open" a bold font to indicate that double-click does the same thing.
-Gui, Add, GroupBox, x16 y0 w280 h97 center, RJDB_Wizard
+
+Gui, Add, GroupBox, x16 y0 w280 h97 center,
 Gui, Add, GroupBox, x16 y91 w280 h120 center,
 
 Gui Add, GroupBox, x16 y205 w283 h146,
@@ -226,13 +226,14 @@ Gui, Add, Radio, x175 y32 vBOTHSRCH gBOTHSRCH hidden, Exe+Lnk
 Gui, Font, Bold
 Gui, Add, Button, x18 y588 h16 w16 vRESET gRESET,R
 Gui, Font, Normal
-Gui, Add, Checkbox, x40 y14 h14 vKILLCHK gKILLCHK checked,Kill-List
+Gui, Add, Checkbox, x23 y14 w54 h14 vKILLCHK gKILLCHK checked,Kill-List
 Gui, Add, Checkbox, x100 y14 h14 vINCLALTS gINCLALTS hidden,Alts
-Gui, Add, Checkbox, x140 y14 h14 vLocalize gLocalize,Localize
+Gui, Add, Checkbox, x87 y14 w89 h14 vHide_Taskbar gHide_Taskbar %taskbarv%,Hide Taskbar
+Gui, Add, Checkbox, x180 y14 w61 h14 vLocalize gLocalize,Localize
 
 Gui, Font, Bold
 Gui, Add, Button, x24 y56 w36 h21 vSOURCE_DirB gSOURCE_DirB,SRC
-;;Gui, Add, Text,  x64 y192 w222 h14 vSOURCE_DirectoryT Disabled Right,"<%SOURCE_DirectoryT%"
+
 Gui, Font, Normal
 Gui, Add, DropDownList, x64 y56 w190 vSOURCE_DirectoryT gSOURCE_DirectoryDD,%SOURCE_Directory%
 Gui, Add, Button, x271 y61 w15 h15 vREMSRC gREMSRC,X
@@ -302,31 +303,15 @@ Gui, Add, Button, x21 y416 w35 h19 vMM_MediaCenter_CfgB gMM_MediaCenter_CfgB,DMC
 Gui, Add, Text,  x64 y416 w222 h14 vMM_MediaCenter_ConfigT Disabled Right,"<%MM_MediaCenter_ConfigT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y430 w234 h14,.....MediaCenter/Desktop Configuration File>
-/*
-Gui, Font, Bold
-Gui, Add, Button, x17 y448 w36 h21 vBGM_ProgB gBGM_ProgB,BGP
-Gui Add, Button, x53 y448 w10 h21 vBGM_RC gBGM_RC, v
-Gui, Add, Text,  x64 y448 w222 h14 vBorderless_Gaming_ProgramT Disabled Right,"<%Borderless_Gaming_ProgramT%"
-Gui, Font, Normal
-Gui, Add, Text,  x64 y462 w222 h14,<Borderless Gaming Program>
-*/
 
 Gui, Font, Bold
 Gui, Add, Button, x17 y448 w36 h21 vJAL_ProgB gJAL_ProgB,JAL
 Gui Add, Button, x53 y448 w10 h21 vJAL_RC gJAL_RC, v
-Gui, Add, Text,  x64 y448 w198 h14 vRunAfterLaunchT Disabled Right,"<%RunAfterLaunchT%"
+Gui, Add, Text,  x64 y448 w198 h14 vRunAfterLaunchT Disabled Right,"<%JustAfterLaunchT%"
 Gui, Font, Normal
 Gui, Add, Checkbox, x270 y448 w12 h12 vJALWait gJALWait %jbestatus%
-Gui, Add, Text,  x64 y462 w198 h14,.....Run After Launch>
-;Gui, Add, Button, x283 y202 w14 h14 vDELJAL gDELJAL ,X
+Gui, Add, Text,  x64 y462 w198 h14,<Run After Launch>
 
-/*
-Gui, Font, Bold
-Gui, Add, Button, x21 y480 w35 h19 vBGP_DataB gBGP_DataB,BGD
-Gui, Add, Text, x64 y480 w222 h14 vBorderless_Gaming_DatabaseT Disabled Right,"<%Borderless_Gaming_DatabaseT%"
-Gui, Font, Normal
-Gui, Add, Text, x64 y494 w222 h14,.....Borderless Gaming Database>
-*/
 
 Gui, Font, Bold
 Gui, Add, Button, x17 y480 w35 h19 vJBE_ProgB gJBE_ProgB,JBE
@@ -334,8 +319,7 @@ Gui Add, Button, x53 y480 w10 h21 vJBE_RC gJBE_RC, v
 Gui, Add, Text, x64 y480 w198 h14 vJustBeforeExitT Disabled Right,"<%JustBeforeExitT%"
 Gui, Font, Normal
 Gui, Add, Checkbox, x270 y480 w12 h12 vJBEWait gJBEWait %jbestatus%
-Gui, Add, Text, x64 y494 w198 h14,<Just Before Exit>
-;Gui, Add, Button, x283 y484 w14 h14 vDELJBE gDELJBE ,X
+Gui, Add, Text, x64 y494 w198 h14,<Run Before Exit>
 
 Gui, Font, Bold
 Gui, Add, Button, x17 y512 w36 h21 vPREAPP gPREAPP ,PRE
@@ -377,22 +361,10 @@ Gui, Add, Checkbox, x255 y588 h14 vEnableLogging gEnableLogging %loget%, Log
 OnMessage(0x200, "WM_MOUSEMOVE")
 Gui, Add, StatusBar, x0 y546 w314 h28 vRJStatus, Status Bar
 Gui Show, w314 h627, RJ_Setup
-/*
-Loop,parse,remotebins,|
-	{
-		curemote= %A_LoopField%
-		gosub, BINGETS
-		Loop,parse,exetfndsp,?
-			{
-				if !fileexist(binhome . "\" . A_LoopField)
-					{
-						gosub, DOWNLOADIT
-					}
-			}
-	}
-*/
+
 SB_SetText("")
 ButtonClear_TT :="clears the current queued it"ems
+Hide_TaskBar_TT :="Hides the windows taskbar while active"
 SELALLBUT_TT :="Selects all items in the current queue"
 SELNONEBUT_TT :="clears the selection of all items in the current queue"
 ADDGAME_TT :="Add a game with the file browser.`nrj_linkrunner will try to guess the appropriate name"
@@ -422,9 +394,9 @@ GAME_ProfilesT_TT :="the profiles directory"
 Keyboard_MapB_TT :="Assigns the keymapper`n(antimicro/xpadder/joytokey)"
 KBM_RC_TT :="disable or download and assign a supported keymapper`n(antimicro/xpadder/joytokey)"
 Keyboard_MapperT_TT :="the current keyboard mapper`n(supported mappers are auto-scripted '~_!.cmd')"
-Player1_TempB_TT :="sets the keymapper's configuration-template file to be used for Player 1"
-Player1_TempB_TT :="sets the keymapper's configuration-template file to be used for Player 1"
-Player2_TemplateT_TT :="the keymapper's configuration-template file for Player 2"
+Player1_TempB_TT :="sets the keymapper's configuration-template file for Player 1"
+Player1_TemplateT_TT :="the keymapper's configuration-template  for Player 1"
+Player2_TempB_TT :="sets the keymapper's configuration-template file for Player 2"
 Player2_TemplateT_TT :="the keymapper's configuration-template file for Player 2"
 MediaCenter_ProfileT_TT :="the keymapper's configuration-template file for the Mediacenter/Frontend"
 MM_ToolB_TT :="Assigns the multimonitor executable"
@@ -470,7 +442,6 @@ GuiEscape:
 GuiClose:
 ExitApp
 
-; End of the GUI section
 
 RJDB_Config:
 gui,submit,nohide
@@ -846,7 +817,6 @@ if ((MediaCenter_ProfileT <> "")&& !instr(MediaCenter_ProfileT,"<"))
 	{
 		MediaCenter_Profile_Template= %MediaCenter_ProfileT%
 		iniwrite,%MediaCenter_Profile_Template%,%RJDB_Config%,GENERAL,MediaCenter_Profile_Template
-		;iniwrite,%MediaCenter_Profile%,%RJDB_Config%,GENERAL,MediaCenter2_Profile
 		stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
 		guicontrol,,MediaCenter_ProfileT,%MediaCenter_ProfileT%
 	}
@@ -993,12 +963,10 @@ Menu,addonp,DeleteAll
 if (butrclick = "PREAPP")
 	{
 		Menu,addonp, Add,soundVolumeView,OtherDownloads
-		;Menu,addonp,Add,SetSoundDevice,AltDownloads
 	}
 if (butrclick = "POSTAPP")
 	{
 		Menu,addonp, Add,soundVolumeView,OtherDownloads
-		;Menu,addonp,Add,SetSoundDevice,AltDownloads
 	}
 Menu,addonp,show
 prerc=
@@ -1359,7 +1327,6 @@ Loop,parse,cftst,|
 				Srclist.= CURDP . "||"
 				continue
 			}
-			;stringreplace,Srclistd,Srclist,||,|,All
 		Srclist.= dkv . "|"
     }
 SOURCE_DIRECTORY= %SrcList%
@@ -2026,6 +1993,7 @@ resetting=
 return
 
 RECREATEXPAD:
+newoskfile= %binhome%\NewOSK.exe
 ifnotexist,%home%\Player1.xpadderprofile
 	{
 		filecopy,%source%\xallgames.set,%home%\Player1.xpadderprofile
@@ -2045,11 +2013,12 @@ ifnotexist,%home%\Mediacenter2.xpadderprofile
 return
 
 RECREATEJOYTK:
+newoskfile= %binhome%\NewOSK.exe
+stringreplace,SCRIPTRV,newoskfile,\,/,All
 ifnotexist,%home%\Player1.cfg
     {
 		filecopy,%source%\Jallgames.set,%home%\Player1.cfg
         fileread,mctmp,%source%\jallgames.set
-        stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,%home%\Player1.cfg
     }
@@ -2057,7 +2026,6 @@ ifnotexist,%home%\Player2.cfg
     {
 		filecopy,%source%\Jallgames.set,%home%\Player2.cfg
         fileread,mctmp,%source%\jallgames.set
-        stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,%home%\Player2.cfg
     }
@@ -2066,44 +2034,39 @@ ifnotexist,%home%\MediaCenter.cfg
 		filecopy,%source%\JDesktop.set,%home%\MediaCenter.cfg
 		filecopy,%source%\JDesktop.set,%home%\MediaCenter2.cfg
         fileread,mctmp,%source%\jDesktop.set
-        stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,%home%\MediaCenter.cfg
     }
 return
 
 RECREATEAMICRO:
+newoskfile= %binhome%\NewOSK.exe
+stringreplace,SCRIPTRV,newoskfile,\,/,All
 ifnotexist,%home%\Player1.gamecontroller.amgp
-    {
+	{
         fileread,mctmp,%source%\allgames.set
-        stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,%home%\Player1.gamecontroller.amgp
     }
 ifnotexist,%home%\Player2.gamecontroller.amgp
     {
         fileread,mctmp,%source%\allgames.set
-        stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,%home%\Player2.gamecontroller.amgp
     }
 ifnotexist,%home%\MediaCenter.gamecontroller.amgp
     {
         fileread,mctmp,%source%\Desktop.set
-        stringreplace,SCRIPTRV,CFGDIR,\,/,All
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,%home%\MediaCenter.gamecontroller.amgp
     }
 return
-
-
 UPDTSC:
 OVERWRT=
 return
 OVERWRT:
 OVERWRT= 1
 return
-
 MMSETUPD:
 Msgbox,,Default Desktop Config,Configure your monitor/s as you would have them for your`nMediaCenter or Desktop`nthen click "OK"
 ifmsgbox,OK
@@ -2195,7 +2158,7 @@ FileGetSize,filez,GameToAdd
 splitpath,GameToAdd,filenm,filepath,fileext
 SOURCEDLIST.= FileNM . "|" . FileExt . "|" . FilePath . "|" . filez . "|" . A_Space . "|" . 9999 . "|" . 9999 . "`n"
 Gui,ListView,MyListView
-LV_Add(lvachk,FileNM, FileExt, FilePath, filez,A_Space,9999,9999)
+LV_Add(lvachk,FileNM, FileExt, FilePath, filez,A_Space,"y","<","<","<","y","<","<","<","<","y","y")
 LV_ModifyCol()
 return
 
@@ -2239,6 +2202,10 @@ GMLNK:
 gui,submit,nohide
 iniwrite,%GMLNK%,%RJDB_CONFIG%,CONFIG,GMLNK
 return
+
+;;##########################################################################
+;;############################### POPULATION ###############################;;
+;;##########################################################################
 
 REINDEX:
 SOURCEDLIST=
@@ -2284,7 +2251,7 @@ if (SOURCEDLIST <> "")
 			{
 				stringsplit,rni,A_LoopField,|
 
-				LV_Add(lvachk,rni1, rni2, rni3,  rni4, A_Space,"y", "<", "<","<","y","<","<","y","y","y")
+				LV_Add(lvachk,rni1, rni2, rni3,  rni4, A_Space,"y", "<", "<","<","y","<","<","<","<","y","y")
 				fullist.= rni3 . "\" . rni1 . "|"
 			}
 		goto,REPOP
@@ -2316,7 +2283,7 @@ Loop,parse,SOURCE_DIRECTORY,|
 					{
 						excl=
 						lvachk= +Check
-						FileName := A_LoopFileFullPath  ; Must save it to a writable variable for use below.
+						FileName := A_LoopFileFullPath
 						filez:= A_LoopFileSizeKB
 						splitpath,FileName,FileNM,FilePath,FileExt,filtn
 						splitpath,FilePath,filpn,filpdir,,filpjn
@@ -2326,29 +2293,6 @@ Loop,parse,SOURCE_DIRECTORY,|
 						splitpath,trukpath,truknm,farpth
 						splitpath,farpth,farnm,
 
-						/*
-						if (filpn <> simpn)
-							{
-								xeinh=
-								sinc=
-								Loop,parse,simpdir,\
-									{
-										sinc+=1
-										if ((A_LoopField = ""))or((A_LoopField = simpn)&&(A_Index = 1))
-											{
-												continue
-											}
-										xeinh.= A_LoopField . "\"
-									}
-								if ((xeinh = "\")or(xeinh = ""))or((xein = simpn)&&(sinc > 1))
-									{
-										simploc= %filpn%\%FileNM%
-									}
-									else {
-										simploc= %xeinh%\%simpn%\%FileNM%
-									}
-							}
-						*/
 						simploc= %simpath%\%FileNM%
 						if (FilePath <> SCRLOOP)
 							{
@@ -2448,8 +2392,8 @@ Loop,parse,SOURCE_DIRECTORY,|
 								fullist.= A_LoopFileFullPath . "|"
 							}
 						Chkcon:
-						LV_Add(lvachk,FileNM, FileExt, FilePath,  filez, A_Space,"y","<","<","<","y","<","<","y","y","y")
-						SOURCEDLIST.= FileNM . "|" . FileExt . "|" . FilePath . "|" . filez . "|" . A_Space . "|" . "y" . "|" . "<" . "|" . "<" . "|" . "<" . "|" . "y" . "|" . "<" . "|" . "<" . "|" . "y" . "|" . "y" . "|" . "y" . "`n"
+						LV_Add(lvachk,FileNM, FileExt, FilePath,  filez, A_Space,"y","<","<","<","y","<","<","<","<","y","y")
+						SOURCEDLIST.= FileNM . "|" . FileExt . "|" . FilePath . "|" . filez . "|" . A_Space . "|" . "y" . "|" . "<" . "|" . "<" . "|" . "<" . "|" . "y" . "|" . "<" . "|" . "<" . "|" . "<" . "|" . "<" . "|" . "y" . "|" . "y" . "`n"
 					}
 			}
 	}
@@ -2490,8 +2434,8 @@ Loop,parse,simpnk,`r`n
 									{
 								fileappend,%fenx%|`n,log.txt
 									}
-								LV_Add(lvachk,fenf, fenxtn, fendir, 0, A_Space,"y","<","<","<","y","<","<","y","y","y")
-								SOURCEDLIST.= fenf . "|" . fenxtn . "|" fendir . "|" . 0 . "|" . A_Space . "|" . "y" . "|" . "<" . "|" . "<" . "|" . "<" . "|" . "y" . "|" . "<" . "|" . "<" . "|" . "y" . "|" . "y" . "|" . "y" . "`n"
+								LV_Add(lvachk,fenf, fenxtn, fendir, 0, A_Space,"y","<","<","<","y","<","<","<","<","y","y")
+								SOURCEDLIST.= fenf . "|" . fenxtn . "|" fendir . "|" . 0 . "|" . A_Space . "|" . "y" . "|" . "<" . "|" . "<" . "|" . "<" . "|" . "y" . "|" . "<" . "|" . "<" . "|" . "<" . "|" . "<" . "|" . "y" . "|" . "y" . "`n"
 								fullist.= fenx . "|"
 								break
 							}
@@ -2507,22 +2451,20 @@ Guicontrol,Show,SELALLBUT
 Guicontrol,Show,SELNONEBUT
 
 
-GuiControl, +Redraw, MyListView ; Re-enable redrawing (it was disabled above).
-LV_ModifyCol(1, 140) ; Make the Size column at little wider to reveal its header.
-LV_ModifyCol(2, 40) ; Make the Size column at little wider to reveal its header.
-LV_ModifyCol(3, 130) ; Make the Size column at little wider to reveal its header.
-LV_ModifyCol(4, 60) ; Make the Size column at little wider to reveal its header.
-LV_ModifyCol(5, 100) ; Make the Size column at little wider to reveal its header.
+GuiControl, +Redraw, MyListView 
+LV_ModifyCol(1, 140) 
+LV_ModifyCol(2, 40) 
+LV_ModifyCol(3, 130) 
+LV_ModifyCol(4, 60) 
+LV_ModifyCol(5, 100) 
 listView_autoSize:
-GUI, +LastFound ; activate GUI window
-totalWidth := 0 ; initialize ListView width variable
-	; get columns' widths
+GUI, +LastFound 
+totalWidth := 0 
 Loop % LV_GetCount("Column")
 	{
-		SendMessage, 4125, A_Index - 1, 0, SysListView321 ; 4125 is LVM_GETCOLUMNWIDTH.
+		SendMessage, 4125, A_Index - 1, 0, SysListView321
 		totalWidth := totalWidth + ErrorLevel
 	}
-; resize ListView control and GUI
 GuiControl, Move, MyListView, w500
 
 GUI, Show, AutoSize
@@ -2541,10 +2483,9 @@ KillToolTip:
    ToolTip
 Return
 
-GuiSize:  ; Expand or shrink the ListView in response to the user's resizing of the window.
-if (A_EventInfo = 1)  ; The window has been minimized. No action needed.
+GuiSize:
+if (A_EventInfo = 1)
     return
-; Otherwise, the window has been resized or maximized. Resize the ListView to match.
 GuiControl, Move, MyListView, % "W" . (A_GuiWidth - 320) . "H" . (A_GuiHeight - 65)
 return
 
@@ -2565,13 +2506,15 @@ if instr(outsan,"<")
 		outsan= <
 	}
 return
+;;#########################################################################################  
+;;###############################  SHORTCUT CREATION  #####################################:;
+;;#########################################################################################  
 ButtonCreate:
 SB_SetText("Creating Custom ShortCuts")
 Loop,parse,GUIVARS,|
 	{
 		guicontrol,disable,%A_LoopField%
 	}
-
 fileread,cmdtpp,%home%\src\cmdtemplate.set
 guicontrolget,CREFLD,,CREFLD
 guicontrolget,ASADMIN,,ASADMIN
@@ -2582,6 +2525,7 @@ guicontrolget,GMLNK,,GMLNK
 guicontrolget,Localize,,Localize
 guicontrolget,INCLALTS,,INCLALTS
 guicontrolget,KILLCHK,,KILLCHK
+guicontrolget,Hide_Taskbar,,Hide_Taskbar
 guicontrolget,EnableLogging,,EnableLogging
 complist:= LVGetCheckedItems("SysListView321","RJ_Setup")
 fullist= %complist%
@@ -2604,7 +2548,7 @@ Loop,%fullstn0%
 	{
 		nameOverride=
 		przn= % fullstn%A_Index%
-		if ((przn = "")or(przn = "?/>>>>>>>>>>"))
+		if ((przn = "")or(przn = "?/>>>>>>>>>>>"))
 			{
 				continue
 			}
@@ -2646,6 +2590,14 @@ Loop,%fullstn0%
 			{
 				dgovr= %prvn8%
 			}
+		if (prvn13 <> "<")
+			{
+				jlovr= %prvn9%
+			}
+		if (prvn14 <> "<")
+			{
+				jbovr= %prvn10%
+			}
 		splitpath,prn,tmpn,tmpth,tmpxtn,gmnamex
 		refname= %gmnamex%
 		if ((tmpxtn = "exe")or(tmpxtn = "bat")or(tmpxtn = "cmd")or(tmpxtn = "apk"))
@@ -2667,7 +2619,6 @@ Loop,%fullstn0%
 							}
 						if (outdir = A_Loopfield)
 							{
-								;;msgbox,,,found_root`n%prn%`n%outdir%`n%gmnamex%
 								outdir= %A_temp%\thin
 								filecreatedir,%outdir%
 								break
@@ -2680,7 +2631,6 @@ Loop,%fullstn0%
 				if (instr(exclfls,gmnamedx)or instr(exclfls,gmnamex))
 					{
 						gmnamex= %gmnamex%!
-						;msgbox,,, %gmnamex%
 					}
 				gmname= %gmnamex%
 				cursrc=
@@ -2739,7 +2689,6 @@ Loop,%fullstn0%
 				if instr(exclfls,gmnamedx)
 					{
 						gmnamex= %gmnamex%!
-						;msgbox,,, %gmnamex%
 					}
 				if (topdirec = gmnamed)
 					{
@@ -3491,9 +3440,14 @@ return
 Localize:
 gui,submit,NoHide
 guicontrolget,localize,,localize
+return
 
+Hide_Taskbar:
+gui,submit,nohide
+iniwrite,%Hide_Taskbar%,%RJDB_CONFIG%,GENERAL,Hide_Taskbar
 return
 ResetButs:
+gui,submit,nohide
 goto,%butrclick%Reset
 return
 DisableButs:
@@ -3648,15 +3602,15 @@ dchk=
 return
 
 ButtonClear:
-LV_Delete()  ; Clear the ListView, but keep icon cache intact for simplicity.
+LV_Delete()
 SOURCEDLIST=
 fileDelete,%home%\continue.db
 guicontrol,show,REINDEX
 return
 
 MyListView:
-FocusedRowNumber := LV_GetNext(0, "F")  ; Find the focused row.
-if not FocusedRowNumber  ; No row is focusedLV_GetText(nmFName, FocusedRowNumber, 1) ; Get the text of the first field.
+FocusedRowNumber := LV_GetNext(0, "F")
+if not FocusedRowNumber 
 LV_GetText(nmFDir, FocusedRowNumber, 3)
 LV_GetText(nmovr, FocusedRowNumber, 5)
 LV_GetText(kbmstat, FocusedRowNumber, 6)
@@ -3687,7 +3641,7 @@ If (A_GuiEvent == "F") {
 				SB_SetText("Booleans Only: 0`,off`,n`,1`,on`,or y")
 			}
 	}
-  if ((O.Col = 7)or(O.Col = 8)or(O.Col = 9)or(O.Col = 11)or(O.Col = 12))
+  if ((O.Col = 7)or(O.Col = 8)or(O.Col = 9)or(O.Col = 11)or(O.Col = 13)or(O.Col = 14)or(O.Col = 12))
 	{
 		;FileSelectFile,replathis,35,,Select File,*.*
 		SB_SetText("input an unquoted path to the file")
@@ -3718,19 +3672,7 @@ if (fileexist(save)&& (compltdwn = 1))
 	}
 DOWNBIN:
 SB_SetText("Downloading" "" binarcf "")
-/*
-if (curemote <> "originalBinary")
-	{
-		MsgBox,3,%curemote%,Would you like to Download %curemote%?`nThis can be selected later`n,5
-		ifmsgbox,OK
-			{
-				dwnrej=
-				goto, DWNCONFIRM
-			}
-		dwnrej= 1
-		return
-	}
-*/
+
 DWNCONFIRM:
 dwnrej=
 DownloadFile(URLFILE,save,False,True)
@@ -3860,22 +3802,19 @@ if A_GuiControl = BGM_ProgB
 			return
 		}
 
- ; Launched in response to a right-click or press of the Apps key.
-if (A_GuiControl != "MyListView")  ; Display the menu only for clicks inside the ListView.
+if (A_GuiControl != "MyListView")
     return
-; Show the menu at the provided coordinates, A_GuiX and A_GuiY. These should be used
-; because they provide correct coordinates even if the user pressed the Apps key:
+
 Menu, MyContextMenu, Show, %A_GuiX%, %A_GuiY%
 }
 return
 
-ContextOpenFile:  ; The user selected "Open" in the context menu.
-ContextProperties:  ; The user selected "Properties" in the context menu.
-; For simplicitly, operate upon only the focused row rather than all selected rows:
-FocusedRowNumber := LV_GetNext(0, "F")  ; Find the focused row.
-if not FocusedRowNumber  ; No row is focused.
+ContextOpenFile:  
+ContextProperties: 
+FocusedRowNumber := LV_GetNext(0, "F") 
+if not FocusedRowNumber 
     return
-LV_GetText(nmFName, FocusedRowNumber, 1) ; Get the text of the first field.
+LV_GetText(nmFName, FocusedRowNumber, 1) 
 LV_GetText(nmFDir, FocusedRowNumber, 3)
 LV_GetText(nmovr, FocusedRowNumber, 5)
 LV_GetText(kbmstat, FocusedRowNumber, 6)
@@ -3885,34 +3824,32 @@ LV_GetText(mcpstat, FocusedRowNumber, 9)
 LV_GetText(mmtstat, FocusedRowNumber, 10)
 LV_GetText(gmsstat, FocusedRowNumber, 11)
 LV_GetText(dmsstat, FocusedRowNumber, 12)
-LV_GetText(bgmtat, FocusedRowNumber, 13)
-LV_GetText(prestat, FocusedRowNumber, 14)
-LV_GetText(pststat, FocusedRowNumber, 15)
-if InStr(A_ThisMenuItem, "Open in Explorer")  ; User selected "Open" from the context menu.
+LV_GetText(jbetat, FocusedRowNumber, 13)
+LV_GetText(jaltat, FocusedRowNumber, 14)
+LV_GetText(prestat, FocusedRowNumber, 15)
+LV_GetText(pststat, FocusedRowNumber, 16)
+if InStr(A_ThisMenuItem, "Open in Explorer") 
 	{
 		Run, Explorer `"%nmfDir%`"
 	}
 
 	else {
-		;; Run Properties "%FileDir%\%FileName%",, UseErrorLevel
-	}  ; User selected "Properties" from the context menu.
+	} 
 if ErrorLevel
     {
 		;; MsgBox Could not perform requested action on "%FileDir%\%FileName%".
 	}
 return
 
-ContextClearRows:  ; The user selected "Clear" in the context menu.
-RowNumber := 0  ; This causes the first iteration to start the search at the top.
+ContextClearRows:
+RowNumber := 0 
 Loop
-{
-    ; Since deleting a row reduces the RowNumber of all other rows beneath it,
-    ; subtract 1 so that the search includes the same row number that was previously
-    ; found (in case adjacent rows are selected):
+	{
+
     RowNumber := LV_GetNext(RowNumber - 1)
-    if not RowNumber  ; The above returned zero, so there are no more selected rows.
+    if not RowNumber 
         break
-    LV_Delete(RowNumber)  ; Clear the row from the ListView.
+    LV_Delete(RowNumber)  
 }
 return
 
@@ -4027,7 +3964,7 @@ Extract2Folder(Zip, Dest="", jhFln="")
         Dest := A_ScriptDir . "\" . Dest
 
     fso := ComObjCreate("Scripting.FileSystemObject")
-    If Not fso.FolderExists(Dest) ;http://www.autohotkey.com/forum/viewtopic.php?p=402574
+    If Not fso.FolderExists(Dest)
 		{
 			fso.CreateFolder(Dest)
 		}
@@ -4044,105 +3981,84 @@ Extract2Folder(Zip, Dest="", jhFln="")
         AppObj.Namespace(Dest).CopyHere(FolderItemsObj, 4|16)
     }
 }
+CmdRet(sCmd, callBackFuncObj := "", encoding := ""){
+   static HANDLE_FLAG_INHERIT := 0x00000001, flags := HANDLE_FLAG_INHERIT
+		, STARTF_USESTDHANDLES := 0x100, CREATE_NO_WINDOW := 0x08000000
+		
+   (encoding = "" && encoding := "cp" . DllCall("GetOEMCP", "UInt"))
+   DllCall("CreatePipe", "PtrP", hPipeRead, "PtrP", hPipeWrite, "Ptr", 0, "UInt", 0)
+   DllCall("SetHandleInformation", "Ptr", hPipeWrite, "UInt", flags, "UInt", HANDLE_FLAG_INHERIT)
+   
+   VarSetCapacity(STARTUPINFO , siSize :=    A_PtrSize*4 + 4*8 + A_PtrSize*5, 0)
+   NumPut(siSize              , STARTUPINFO)
+   NumPut(STARTF_USESTDHANDLES, STARTUPINFO, A_PtrSize*4 + 4*7)
+   NumPut(hPipeWrite          , STARTUPINFO, A_PtrSize*4 + 4*8 + A_PtrSize*3)
+   NumPut(hPipeWrite          , STARTUPINFO, A_PtrSize*4 + 4*8 + A_PtrSize*4)
+   
+   VarSetCapacity(PROCESS_INFORMATION, A_PtrSize*2 + 4*2, 0)
 
+   if !DllCall("CreateProcess", "Ptr", 0, "Str", sCmd, "Ptr", 0, "Ptr", 0, "UInt", true, "UInt", CREATE_NO_WINDOW
+							  , "Ptr", 0, "Ptr", 0, "Ptr", &STARTUPINFO, "Ptr", &PROCESS_INFORMATION)
+   {
+	  DllCall("CloseHandle", "Ptr", hPipeRead)
+	  DllCall("CloseHandle", "Ptr", hPipeWrite)
+	  throw "CreateProcess is failed"
+   }
+   DllCall("CloseHandle", "Ptr", hPipeWrite)
+   VarSetCapacity(sTemp, 4096), nSize := 0
+   while DllCall("ReadFile", "Ptr", hPipeRead, "Ptr", &sTemp, "UInt", 4096, "UIntP", nSize, "UInt", 0) {
+	  sOutput .= stdOut := StrGet(&sTemp, nSize, encoding)
+	  ( callBackFuncObj && callBackFuncObj.Call(stdOut) )
+   }
+   DllCall("CloseHandle", "Ptr", NumGet(PROCESS_INFORMATION))
+   DllCall("CloseHandle", "Ptr", NumGet(PROCESS_INFORMATION, A_PtrSize))
+   DllCall("CloseHandle", "Ptr", hPipeRead)
+   Return sOutput
+}
+joyGetName(ID) {
+	VarSetCapacity(caps, 728, 0)
+	if DllCall("winmm\joyGetDevCapsW", "uint", ID-1, "ptr", &caps, "uint", 728) != 0
+		return "failed"
+	return StrGet(&caps+4, "UTF-16")
+}	
+WM_MOUSEMOVE() {
+	
+	static CurrControl, PrevControl, _TT
+	CurrControl := A_GuiControl
+	If (CurrControl <> PrevControl)
+		{
+			SetTimer, DisplayToolTip, -300
+			PrevControl := CurrControl
+		}
+	return
 
+	DisplayToolTip:
+	try
+			ToolTip % %CurrControl%_TT
+	catch
+			ToolTip
+	SetTimer, RemoveToolTip, -6000
+	return
 
-
-
- ; ======================================================================================================================
-; Namespace:      LV_InCellEdit
-; Function:       Support for in-cell ListView editing.
-; Tested with:    AHK 1.1.22.09 (1.1.20+ required)
-; Tested on:      Win 10 Pro (x64)
-; Change History: 1.2.02.00/2015-12-14/just me - Bug fix and support for centered columns.
-;                 1.2.01.00/2015-09-08/just me - Added EditUserFunc option.
-;                 1.2.00.00/2015-03-29/just me - New version based on AHK 1.1.20+ features.
-;                 1.1.04.00/2014-03-22/just me - Added method EditCell
-;                 1.1.03.00/2012-05-05/just me - Added back option BlankSubItem for method Attach
-;                 1.1.02.00/2012-05-01/just me - Added method SetColumns
-;                 1.1.01.00/2012-03-18/just me
-; ======================================================================================================================
-; CLASS LV_InCellEdit
-;
-; Unlike other in-cell editing scripts, this class is using the ListViews built-in edit control.
-; Advantage:
-;     You don't have to care about the font and the GUI, and most of the job can be done by handling common ListView
-;     notifications.
-; Disadvantage:
-;     I've still found no way to prevent the ListView from blanking out the first subitem of the row while editing
-;     another subitem. The only known workaround is to add a hidden first column.
-;
-; The class provides methods to restrict editing to certain columns, to directly start editing of a specified cell,
-; and to deactivate/activate the built-in message handler for WM_NOTIFY messages (see below).
-;
-; The message handler for WM_NOTIFY messages will be activated for the specified ListView whenever a new instance is
-; created. As long as the message handler is activated a double-click on any cell will show an Edit control within this
-; cell allowing to edit the current content. The default behavior for editing the first column by two subsequent single
-; clicks is disabled. You have to press "Esc" to cancel editing, otherwise the content of the Edit will be stored in
-; the current cell. ListViews must have the -ReadOnly option to be editable.
-;
-; While editing, "Esc", "Tab", "Shift+Tab", "Down", and "Up" keys are registered as hotkeys. "Esc" will cancel editing
-; without changing the value of the current cell. All other hotkeys will store the content of the edit in the current
-; cell and continue editing for the next (Tab), previous (Shift+Tab), upper (Up), or lower (Down) cell. You cannot use
-; the keys for other purposes while editing.
-;
-; All changes are stored in MyInstance.Changed. You may track the changes by triggering (A_GuiEvent == "F") in the
-; ListView's gLabel and checking MyInstance["Changed"] as shown in the sample scipt. If "True", MyInstance.Changed
-; contains an array of objects with keys "Row" (row number), "Col" (column number), and "Txt" (new content).
-; Changed is one of the two keys intended to be accessed directly from outside the class.
-;
-; If you want to temporarily disable in-cell editing call MyInstance.OnMessage(False). This must be done also before
-; you try to destroy the instance. To enable it again, call MyInstance.OnMessage().
-;
-; To avoid the loss of Gui events and messages the message handler might need to be 'critical'. This can be
-; achieved by setting the instance property 'Critical' to the required value (e.g. MyInstance.Critical := 100).
-; New instances default to 'Critical, Off'. Though sometimes needed, ListViews or the whole Gui may become
-; unresponsive under certain circumstances if Critical is set and the ListView has a g-label.
-; ======================================================================================================================
+	RemoveToolTip:
+	ToolTip
+	return
+}
 Class LV_InCellEdit {
-   ; Instance properties -----------------------------------------------------------------------------------------------
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; META FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; ===================================================================================================================
-   ; __New()         Creates a new LV_InCellEdit instance for the specified ListView.
-   ; Parameters:     HWND           -  ListView's HWND
-   ;                 Optional ------------------------------------------------------------------------------------------
-   ;                 HiddenCol1     -  ListView with hidden first column
-   ;                                   Values:  True / False
-   ;                                   Default: False
-   ;                 BlankSubItem   -  Blank out subitem's text while editing
-   ;                                   Values:  True / False
-   ;                                   Default: False
-   ;                 EditUserFunc   -  The name of a user-defined funtion to be called from
-   ;                                   LVN_BEGINEDITLABEL and LVN_ENDEDITLABEL.
-   ;                                   The function must accept at least 6 Parameters:
-   ;                                      State -  The state of the edit operation: BEGIN / END
-   ;                                      HLV   -  The handle to the ListView.
-   ;                                      HED   -  The handle to the edit control.
-   ;                                      Row   -  The row number of the edited item.
-   ;                                      Col   -  The column number of the edited item.
-   ;                                      Text  -  The edited item's text before / after editing.
-   ;                                   To avoid the loss of messages the function should return as soon as possible.
-   ; ===================================================================================================================
-   __New(HWND, HiddenCol1 := False, BlankSubItem := False, EditUserFunc := "") {
-      If (This.Base.Base.__Class) ; do not instantiate instances
+    __New(HWND, HiddenCol1 := False, BlankSubItem := False, EditUserFunc := "") {
+      If (This.Base.Base.__Class) 
          Return False
-      If This.Attached[HWND] ; HWND is already attached
+      If This.Attached[HWND] 
          Return False
-      If !DllCall("IsWindow", "Ptr", HWND) ; invalid HWND
+      If !DllCall("IsWindow", "Ptr", HWND)
          Return False
       VarSetCapacity(Class, 512, 0)
       DllCall("GetClassName", "Ptr", HWND, "Str", Class, "Int", 256)
-      If (Class <> "SysListView32") ; HWND doesn't belong to a ListView
+      If (Class <> "SysListView32") 
          Return False
       If (EditUserFunc <> "") && (Func(EditUserFunc).MaxParams < 6)
          Return False
-      ; ----------------------------------------------------------------------------------------------------------------
-      ; Set LVS_EX_DOUBLEBUFFER (0x010000) style to avoid drawing issues.
-      SendMessage, 0x1036, 0x010000, 0x010000, , % "ahk_id " . HWND ; LVM_SETEXTENDEDLISTVIEWSTYLE
+      SendMessage, 0x1036, 0x010000, 0x010000, , % "ahk_id " . HWND
       This.HWND := HWND
       This.HEDIT := 0
       This.Item := -1
@@ -4170,23 +4086,10 @@ Class LV_InCellEdit {
       This.OnMessage()
       This.Attached[HWND] := True
    }
-   ; ===================================================================================================================
    __Delete() {
       This.Attached.Remove(This.HWND, "")
       WinSet, Redraw, , % "ahk_id " . This.HWND
    }
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; PUBLIC INTERFACE ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; ===================================================================================================================
-   ; EditCell        Edit the specified cell, if possible.
-   ; Parameters:     Row   -  1-based row number
-   ;                 Col   -  1-based column number
-   ;                          Default: 0 - edit the first editable column
-   ; Return values:  True on success; otherwise False
-   ; ===================================================================================================================
    EditCell(Row, Col := 0) {
       If !This.HWND
          Return False
@@ -4215,12 +4118,6 @@ Class LV_InCellEdit {
       This.NM_DBLCLICK(&LPARAM)
       Return True
    }
-   ; ===================================================================================================================
-   ; SetColumns      Sets the columns you want to edit
-   ; Parameters:     ColNumbers* -  zero or more numbers of column which shall be editable. If entirely omitted,
-   ;                                the ListView will be reset to enable editing of all columns.
-   ; Return values:  True on success; otherwise False
-   ; ===================================================================================================================
    SetColumns(ColNumbers*) {
       If !This.HWND
          Return False
@@ -4239,74 +4136,50 @@ Class LV_InCellEdit {
       This["Columns"] := Indices
       Return True
    }
-   ; ===================================================================================================================
-   ; OnMessage       Activate / deactivate the message handler for WM_NOTIFY messages for this ListView
-   ; Parameters:     Apply    -  True / False
-   ;                             Default: True
-   ; Return Value:   Always True
-   ; ===================================================================================================================
-   OnMessage(Apply := True) {
+    OnMessage(Apply := True) {
       If !This.HWND
          Return False
       If (Apply) && !This.HasKey("NotifyFunc") {
          This.NotifyFunc := ObjBindMethod(This, "On_WM_NOTIFY")
-         OnMessage(0x004E, This.NotifyFunc) ; add the WM_NOTIFY message handler
+         OnMessage(0x004E, This.NotifyFunc)
       }
       Else If !(Apply) && This.HasKey("NotifyFunc") {
-         OnMessage(0x004E, This.NotifyFunc, 0) ; remove the WM_NOTIFY message handler
+         OnMessage(0x004E, This.NotifyFunc, 0)
          This.NotifyFunc := ""
          This.Remove("NotifyFunc")
       }
       WinSet, Redraw, , % "ahk_id " . This.HWND
       Return True
    }
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; PRIVATE PROPERTIES ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; Class properties --------------------------------------------------------------------------------------------------
    Static Attached := {}
    Static OSVersion := DllCall("GetVersion", "UChar")
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; PRIVATE METHODS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   ; -------------------------------------------------------------------------------------------------------------------
-   ; WM_COMMAND message handler for edit notifications
-   ; -------------------------------------------------------------------------------------------------------------------
+ 
    On_WM_COMMAND(W, L, M, H) {
-      ; LVM_GETSTRINGWIDTHW = 0x1057, LVM_GETSTRINGWIDTHA = 0x1011
       Critical, % This.Critical
       If (L = This.HEDIT) {
          N := (W >> 16)
-         If (N = 0x0400) || (N = 0x0300) || (N = 0x0100) { ; EN_UPDATE | EN_CHANGE | EN_SETFOCUS
-            If (N = 0x0100) ; EN_SETFOCUS
-               SendMessage, 0x00D3, 0x01, 0, , % "ahk_id " . L ; EM_SETMARGINS, EC_LEFTMARGIN
+         If (N = 0x0400) || (N = 0x0300) || (N = 0x0100) { 
+            If (N = 0x0100)
+               SendMessage, 0x00D3, 0x01, 0, , % "ahk_id " . L
             ControlGetText, EditText, , % "ahk_id " . L
             SendMessage, % (A_IsUnicode ? 0x1057 : 0x1011), 0, % &EditText, , % "ahk_id " . This.HWND
             EW := ErrorLevel + This.DW
             , EX := This.EX
             , EY := This.EY
-            , EH := This.EH + (This.OSVersion < 6 ? 3 : 0) ; add 3 for WinXP
+            , EH := This.EH + (This.OSVersion < 6 ? 3 : 0) 
             If (EW < This.MinW)
                EW := This.MinW
             If (EX + EW) > This.LR
                EW := This.LR - EX
             DllCall("SetWindowPos", "Ptr", L, "Ptr", 0, "Int", EX, "Int", EY, "Int", EW, "Int", EH, "UInt", 0x04)
-            If (N = 0x0400) ; EN_UPDATE
+            If (N = 0x0400) 
                Return 0
          }
       }
    }
-   ; -------------------------------------------------------------------------------------------------------------------
-   ; WM_HOTKEY message handler
-   ; -------------------------------------------------------------------------------------------------------------------
    On_WM_HOTKEY(W, L, M, H) {
-      ; LVM_CANCELEDITLABEL = 0x10B3, Hotkeys: 0x801B  (Esc -> cancel)
       If (H = This.HWND) {
-         If (W = 0x801B) { ; Esc
+         If (W = 0x801B) {
             This.Cancelled := True
             PostMessage, 0x10B3, 0, 0, , % "ahk_id " . H
          }
@@ -4319,98 +4192,80 @@ Class LV_InCellEdit {
          Return False
       }
    }
-   ; -------------------------------------------------------------------------------------------------------------------
-   ; WM_NOTIFY message handler
-   ; -------------------------------------------------------------------------------------------------------------------
    On_WM_NOTIFY(W, L) {
       Critical, % This.Critical
       If (H := NumGet(L + 0, 0, "UPtr") = This.HWND) {
          M := NumGet(L + (A_PtrSize * 2), 0, "Int")
-         ; BeginLabelEdit -------------------------------------------------------------------------------------------------
-         If (M = -175) || (M = -105) ; LVN_BEGINLABELEDITW || LVN_BEGINLABELEDITA
+         If (M = -175) || (M = -105)
             Return This.LVN_BEGINLABELEDIT(L)
-         ; EndLabelEdit ---------------------------------------------------------------------------------------------------
-         If (M = -176) || (M = -106) ; LVN_ENDLABELEDITW || LVN_ENDLABELEDITA
+         If (M = -176) || (M = -106)
             Return This.LVN_ENDLABELEDIT(L)
-         ; Double click ---------------------------------------------------------------------------------------------------
-         If (M = -3) ; NM_DBLCLICK
+         If (M = -3)
             This.NM_DBLCLICK(L)
       }
    }
-   ; -------------------------------------------------------------------------------------------------------------------
-   ; LVN_BEGINLABELEDIT notification
-   ; -------------------------------------------------------------------------------------------------------------------
    LVN_BEGINLABELEDIT(L) {
-      Static Indent := 4   ; indent of the Edit control, 4 seems to be reasonable for XP, Vista, and 7
+      Static Indent := 4
       If (This.Item = -1) || (This.SubItem = -1)
          Return True
       H := This.HWND
-      SendMessage, 0x1018, 0, 0, , % "ahk_id " . H ; LVM_GETEDITCONTROL
+      SendMessage, 0x1018, 0, 0, , % "ahk_id " . H 
       This.HEDIT := ErrorLevel
-      , VarSetCapacity(ItemText, 2048, 0) ; text buffer
-      , VarSetCapacity(LVITEM, 40 + (A_PtrSize * 5), 0) ; LVITEM structure
+      , VarSetCapacity(ItemText, 2048, 0)
+      , VarSetCapacity(LVITEM, 40 + (A_PtrSize * 5), 0)
       , NumPut(This.Item, LVITEM, 4, "Int")
       , NumPut(This.SubItem, LVITEM, 8, "Int")
-      , NumPut(&ItemText, LVITEM, 16 + A_PtrSize, "Ptr") ; pszText in LVITEM
-      , NumPut(1024 + 1, LVITEM, 16 + (A_PtrSize * 2), "Int") ; cchTextMax in LVITEM
+      , NumPut(&ItemText, LVITEM, 16 + A_PtrSize, "Ptr")
+      , NumPut(1024 + 1, LVITEM, 16 + (A_PtrSize * 2), "Int")
       SendMessage, % (A_IsUnicode ? 0x1073 : 0x102D), % This.Item, % &LVITEM, , % "ahk_id " . H ; LVM_GETITEMTEXT
       This.ItemText := StrGet(&ItemText, ErrorLevel)
 
-      ; Call the user function, if any
       If (This.EditUserFunc)
          This.EditUserFunc.Call("BEGIN", This.HWND, This.HEDIT, This.Item + 1, This.Subitem + 1, This.ItemText)
       SendMessage, 0x000C, 0, % &ItemText, , % "ahk_id " . This.HEDIT
       If (This.SubItem > 0) && (This.Blank) {
          Empty := ""
-         , NumPut(&Empty, LVITEM, 16 + A_PtrSize, "Ptr") ; pszText in LVITEM
-         , NumPut(0,LVITEM, 16 + (A_PtrSize * 2), "Int") ; cchTextMax in LVITEM
+         , NumPut(&Empty, LVITEM, 16 + A_PtrSize, "Ptr") 
+         , NumPut(0,LVITEM, 16 + (A_PtrSize * 2), "Int")
          SendMessage, % (A_IsUnicode ? 0x1074 : 0x102E), % This.Item, % &LVITEM, , % "ahk_id " . H ; LVM_SETITEMTEXT
       }
       VarSetCapacity(RECT, 16, 0)
       , NumPut(This.SubItem, RECT, 4, "Int")
-      SendMessage, 0x1038, This.Item, &RECT, , % "ahk_id " . H ; LVM_GETSUBITEMRECT
+      SendMessage, 0x1038, This.Item, &RECT, , % "ahk_id " . H 
       This.EX := NumGet(RECT, 0, "Int") + Indent
       , This.EY := NumGet(RECT, 4, "Int")
       If (This.OSVersion < 6)
-         This.EY -= 1 ; subtract 1 for WinXP
+         This.EY -= 1
       If (This.SubItem = 0) {
-         SendMessage, 0x101D, 0, 0, , % "ahk_id " . H ; LVM_GETCOLUMNWIDTH
+         SendMessage, 0x101D, 0, 0, , % "ahk_id " . H
          This.EW := ErrorLevel
       }
       Else
          This.EW := NumGet(RECT, 8, "Int") - NumGet(RECT, 0, "Int")
       This.EH := NumGet(RECT, 12, "Int") - NumGet(RECT, 4, "Int")
-      ; Check the column alignement
       VarSetCapacity(LVCOL, 56, 0)
-      , NumPut(1, LVCOL, "UInt") ; LVCF_FMT
-      SendMessage, % (A_IsUnicode ? 0x105F : 0x1019), % This.SubItem, % &LVCOL, , % "ahk_id " . H ; LVM_GETCOLUMN
-      If (NumGet(LVCOL, 4, "UInt") & 0x0002) { ; LVCFMT_CENTER
-         SendMessage, % (A_IsUnicode ? 0x1057 : 0x1011), 0, % &ItemText, , % "ahk_id " . This.HWND ; LVM_GETSTRINGWIDTH
+      , NumPut(1, LVCOL, "UInt")
+      SendMessage, % (A_IsUnicode ? 0x105F : 0x1019), % This.SubItem, % &LVCOL, , % "ahk_id " . H
+      If (NumGet(LVCOL, 4, "UInt") & 0x0002) {
+         SendMessage, % (A_IsUnicode ? 0x1057 : 0x1011), 0, % &ItemText, , % "ahk_id " . This.HWND
          EW := ErrorLevel + This.DW
          If (EW < This.MinW)
             EW := This.MinW
          If (EW < This.EW)
             This.EX += ((This.EW - EW) // 2) - Indent
       }
-      ; Register WM_COMMAND handler
       This.CommandFunc := ObjBindMethod(This, "On_WM_COMMAND")
       , OnMessage(0x0111, This.CommandFunc)
-      ; Register hotkeys
       If !(This.Next)
          This.RegisterHotkeys()
       This.Cancelled := False
       This.Next := False
       Return False
    }
-   ; -------------------------------------------------------------------------------------------------------------------
-   ; LVN_ENDLABELEDIT notification
-   ; -------------------------------------------------------------------------------------------------------------------
    LVN_ENDLABELEDIT(L) {
       H := This.HWND
-      ; Unregister WM_COMMAND handler
       OnMessage(0x0111, This.CommandFunc, 0)
       This.CommandFunc := ""
-      ; Unregister hotkeys
       If !(This.Next)
          This.RegisterHotkeys(False)
       ItemText := This.ItemText
@@ -4421,26 +4276,21 @@ Class LV_InCellEdit {
             This.Changed := []
          This.Changed.Insert({Row: This.Item + 1, Col: This.SubItem + 1, Txt: ItemText})
       }
-      ; Restore subitem's text if changed or blanked out
       If (ItemText <> This.ItemText) || ((This.SubItem > 0) && (This.Blank)) {
-         VarSetCapacity(LVITEM, 40 + (A_PtrSize * 5), 0) ; LVITEM structure
+         VarSetCapacity(LVITEM, 40 + (A_PtrSize * 5), 0)
          , NumPut(This.Item, LVITEM, 4, "Int")
          , NumPut(This.SubItem, LVITEM, 8, "Int")
-         , NumPut(&ItemText, LVITEM, 16 + A_PtrSize, "Ptr") ; pszText in LVITEM
-         SendMessage, % (A_IsUnicode ? 0x1074 : 0x102E), % This.Item, % &LVITEM, , % "ahk_id " . H ; LVM_SETITEMTEXT
+         , NumPut(&ItemText, LVITEM, 16 + A_PtrSize, "Ptr")
+         SendMessage, % (A_IsUnicode ? 0x1074 : 0x102E), % This.Item, % &LVITEM, , % "ahk_id " . H
       }
       If !(This.Next)
          This.Item := This.SubItem := -1
       This.Cancelled := False
       This.Next := False
-      ; Call the user function, if any
       If (This.EditUserFunc)
          This.EditUserFunc.Call("END", This.HWND, This.HEDIT, This.Item + 1, This.Subitem + 1, ItemText)
       Return False
    }
-   ; -------------------------------------------------------------------------------------------------------------------
-   ; NM_DBLCLICK notification
-   ; -------------------------------------------------------------------------------------------------------------------
    NM_DBLCLICK(L) {
       H := This.HWND
       This.Item := This.SubItem := -1
@@ -4467,7 +4317,7 @@ Class LV_InCellEdit {
             SendMessage, % (A_IsUnicode ? 0x1057 : 0x1011), 0, % "III", , % "ahk_id " . H ; LVM_GETSTRINGWIDTH
             This.DW := ErrorLevel
             , SBW := 0
-            If (Styles & 0x200000) ; WS_VSCROLL
+            If (Styles & 0x200000)
                SysGet, SBW, 2
             ControlGetPos, LX, LY, LW, , , % "ahk_id " . H
             This.LX := LX
@@ -4477,53 +4327,49 @@ Class LV_InCellEdit {
             , This.SW := SBW
             , VarSetCapacity(RECT, 16, 0)
             , NumPut(SubItem, RECT, 4, "Int")
-            SendMessage, 0x1038, %Item%, % &RECT, , % "ahk_id " . H ; LVM_GETSUBITEMRECT
+            SendMessage, 0x1038, %Item%, % &RECT, , % "ahk_id " . H
             X := NumGet(RECT, 0, "Int")
             If (SubItem = 0) {
-               SendMessage, 0x101D, 0, 0, , % "ahk_id " . H ; LVM_GETCOLUMNWIDTH
+               SendMessage, 0x101D, 0, 0, , % "ahk_id " . H
                W := ErrorLevel
             }
             Else
                W := NumGet(RECT, 8, "Int") - NumGet(RECT, 0, "Int")
             R := LW - (This.DX * 2) - SBW
             If (X < 0)
-               SendMessage, 0x1014, % X, 0, , % "ahk_id " . H ; LVM_SCROLL
+               SendMessage, 0x1014, % X, 0, , % "ahk_id " . H
             Else If ((X + W) > R)
-               SendMessage, 0x1014, % (X + W - R + This.DX), 0, , % "ahk_id " . H ; LVM_SCROLL
+               SendMessage, 0x1014, % (X + W - R + This.DX), 0, , % "ahk_id " . H
          }
-         PostMessage, % (A_IsUnicode ? 0x1076 : 0x1017), %Item%, 0, , % "ahk_id " . H ; LVM_EDITLABEL
+         PostMessage, % (A_IsUnicode ? 0x1076 : 0x1017), %Item%, 0, , % "ahk_id " . H
       }
       Return False
    }
-   ; -------------------------------------------------------------------------------------------------------------------
-   ; Next subItem
-   ; -------------------------------------------------------------------------------------------------------------------
+
    NextSubItem(K) {
-      ; Hotkeys: 0x8009 (Tab -> right), 0x8409 (Shift+Tab -> left), 0x8028  (Down -> down), 0x8026 (Up -> up)
-      ; Find the next subitem
       H := This.HWND
       Item := This.Item
       SubItem := This.SubItem
-      If (K = 0x8009) ; right
+      If (K = 0x8009)
          SubItem++
-      Else If (K = 0x8409) { ; left
+      Else If (K = 0x8409) {
          SubItem--
          If (SubItem = 0) && This.Skip0
             SubItem--
       }
-      Else If (K = 0x8028) ; down
+      Else If (K = 0x8028)
          Item++
-      Else If (K = 0x8026) ; up
+      Else If (K = 0x8026)
          Item--
-      IF (K = 0x8409) || (K = 0x8009) { ; left || right
+      IF (K = 0x8409) || (K = 0x8009) {
          If (This["Columns"]) {
             If (SubItem < This.Columns.MinIndex())
                SubItem := This.Columns.MaxIndex(), Item--
             Else If (SubItem > This.Columns.MaxIndex())
                SubItem := This.Columns.MinIndex(), Item++
-            Else {
+			   Else {
                While (This.Columns[SubItem] = "") {
-                  If (K = 0x8009) ; right
+                  If (K = 0x8009)
                      SubItem++
                   Else
                      SubItem--
@@ -4540,12 +4386,12 @@ Class LV_InCellEdit {
       Else If (Item < 0)
          Item := This.RowCount
       If (Item <> This.Item)
-         SendMessage, 0x1013, % Item, False, , % "ahk_id " . H ; LVM_ENSUREVISIBLE
+         SendMessage, 0x1013, % Item, False, , % "ahk_id " . H 
       VarSetCapacity(RECT, 16, 0), NumPut(SubItem, RECT, 4, "Int")
-      SendMessage, 0x1038, % Item, % &RECT, , % "ahk_id " . H ; LVM_GETSUBITEMRECT
+      SendMessage, 0x1038, % Item, % &RECT, , % "ahk_id " . H
       X := NumGet(RECT, 0, "Int"), Y := NumGet(RECT, 4, "Int")
       If (SubItem = 0) {
-         SendMessage, 0x101D, 0, 0, , % "ahk_id " . H ; LVM_GETCOLUMNWIDTH
+         SendMessage, 0x101D, 0, 0, , % "ahk_id " . H
          W := ErrorLevel
       }
       Else
@@ -4556,103 +4402,32 @@ Class LV_InCellEdit {
       Else If ((X + W) > R)
          S := X + W - R + This.DX
       If (S)
-         SendMessage, 0x1014, % S, 0, , % "ahk_id " . H ; LVM_SCROLL
+         SendMessage, 0x1014, % S, 0, , % "ahk_id " . H 
       Point := (X - S + (This.DX * 2)) + ((Y + (This.DY * 2)) << 16)
-      SendMessage, 0x0201, 0, % Point, , % "ahk_id " . H ; WM_LBUTTONDOWN
-      SendMessage, 0x0202, 0, % Point, , % "ahk_id " . H ; WM_LBUTTONUP
-      SendMessage, 0x0203, 0, % Point, , % "ahk_id " . H ; WM_LBUTTONDBLCLK
-      SendMessage, 0x0202, 0, % Point, , % "ahk_id " . H ; WM_LBUTTONUP
+      SendMessage, 0x0201, 0, % Point, , % "ahk_id " . H 
+      SendMessage, 0x0202, 0, % Point, , % "ahk_id " . H 
+      SendMessage, 0x0203, 0, % Point, , % "ahk_id " . H 
+      SendMessage, 0x0202, 0, % Point, , % "ahk_id " . H 
    }
-   ; -------------------------------------------------------------------------------------------------------------------
-   ; Register/UnRegister hotkeys
-   ; -------------------------------------------------------------------------------------------------------------------
    RegisterHotkeys(Register = True) {
-      ; WM_HOTKEY := 0x0312, MOD_SHIFT := 0x0004
-      ; Hotkeys: 0x801B  (Esc -> cancel, 0x8009 (Tab -> right), 0x8409 (Shift+Tab -> left)
-      ;          0x8028  (Down -> down), 0x8026 (Up -> up)
       H := This.HWND
-      If (Register) { ; Register
+      If (Register) {
          DllCall("RegisterHotKey", "Ptr", H, "Int", 0x801B, "UInt", 0, "UInt", 0x1B)
          , DllCall("RegisterHotKey", "Ptr", H, "Int", 0x8009, "UInt", 0, "UInt", 0x09)
          , DllCall("RegisterHotKey", "Ptr", H, "Int", 0x8409, "UInt", 4, "UInt", 0x09)
          , DllCall("RegisterHotKey", "Ptr", H, "Int", 0x8028, "UInt", 0, "UInt", 0x28)
          , DllCall("RegisterHotKey", "Ptr", H, "Int", 0x8026, "UInt", 0, "UInt", 0x26)
          , This.HotkeyFunc := ObjBindMethod(This, "On_WM_HOTKEY")
-         , OnMessage(0x0312, This.HotkeyFunc) ; WM_HOTKEY
+         , OnMessage(0x0312, This.HotkeyFunc)
       }
-      Else { ; Unregister
+      Else {
          DllCall("UnregisterHotKey", "Ptr", H, "Int", 0x801B)
          , DllCall("UnregisterHotKey", "Ptr", H, "Int", 0x8009)
          , DllCall("UnregisterHotKey", "Ptr", H, "Int", 0x8409)
          , DllCall("UnregisterHotKey", "Ptr", H, "Int", 0x8028)
          , DllCall("UnregisterHotKey", "Ptr", H, "Int", 0x8026)
-         , OnMessage(0x0312, This.HotkeyFunc, 0) ; WM_HOTKEY
+         , OnMessage(0x0312, This.HotkeyFunc, 0)
          , This.HotkeyFunc := ""
       }
    }
-}
-CmdRet(sCmd, callBackFuncObj := "", encoding := "")
-	{
-	   static HANDLE_FLAG_INHERIT := 0x00000001, flags := HANDLE_FLAG_INHERIT
-			, STARTF_USESTDHANDLES := 0x100, CREATE_NO_WINDOW := 0x08000000
-			
-	   (encoding = "" && encoding := "cp" . DllCall("GetOEMCP", "UInt"))
-	   DllCall("CreatePipe", "PtrP", hPipeRead, "PtrP", hPipeWrite, "Ptr", 0, "UInt", 0)
-	   DllCall("SetHandleInformation", "Ptr", hPipeWrite, "UInt", flags, "UInt", HANDLE_FLAG_INHERIT)
-	   
-	   VarSetCapacity(STARTUPINFO , siSize :=    A_PtrSize*4 + 4*8 + A_PtrSize*5, 0)
-	   NumPut(siSize              , STARTUPINFO)
-	   NumPut(STARTF_USESTDHANDLES, STARTUPINFO, A_PtrSize*4 + 4*7)
-	   NumPut(hPipeWrite          , STARTUPINFO, A_PtrSize*4 + 4*8 + A_PtrSize*3)
-	   NumPut(hPipeWrite          , STARTUPINFO, A_PtrSize*4 + 4*8 + A_PtrSize*4)
-	   
-	   VarSetCapacity(PROCESS_INFORMATION, A_PtrSize*2 + 4*2, 0)
-
-	   if !DllCall("CreateProcess", "Ptr", 0, "Str", sCmd, "Ptr", 0, "Ptr", 0, "UInt", true, "UInt", CREATE_NO_WINDOW
-								  , "Ptr", 0, "Ptr", 0, "Ptr", &STARTUPINFO, "Ptr", &PROCESS_INFORMATION)
-	   {
-		  DllCall("CloseHandle", "Ptr", hPipeRead)
-		  DllCall("CloseHandle", "Ptr", hPipeWrite)
-		  throw "CreateProcess is failed"
-	   }
-	   DllCall("CloseHandle", "Ptr", hPipeWrite)
-	   VarSetCapacity(sTemp, 4096), nSize := 0
-	   while DllCall("ReadFile", "Ptr", hPipeRead, "Ptr", &sTemp, "UInt", 4096, "UIntP", nSize, "UInt", 0) {
-		  sOutput .= stdOut := StrGet(&sTemp, nSize, encoding)
-		  ( callBackFuncObj && callBackFuncObj.Call(stdOut) )
-	   }
-	   DllCall("CloseHandle", "Ptr", NumGet(PROCESS_INFORMATION))
-	   DllCall("CloseHandle", "Ptr", NumGet(PROCESS_INFORMATION, A_PtrSize))
-	   DllCall("CloseHandle", "Ptr", hPipeRead)
-	   Return sOutput
-	}
-joyGetName(ID) {
-	VarSetCapacity(caps, 728, 0)
-	if DllCall("winmm\joyGetDevCapsW", "uint", ID-1, "ptr", &caps, "uint", 728) != 0
-		return "failed"
-	return StrGet(&caps+4, "UTF-16")
-}	
-
-
-WM_MOUSEMOVE(){
-	static CurrControl, PrevControl, _TT
-	CurrControl := A_GuiControl
-	If (CurrControl <> PrevControl)
-		{
-			SetTimer, DisplayToolTip, -300
-			PrevControl := CurrControl
-		}
-	return
-
-	DisplayToolTip:
-	try
-			ToolTip % %CurrControl%_TT
-	catch
-			ToolTip
-	SetTimer, RemoveToolTip, -6000
-	return
-
-	RemoveToolTip:
-	ToolTip
-	return
 }

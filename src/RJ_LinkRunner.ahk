@@ -277,7 +277,7 @@ if (MonitorMode > 0)
 			}
 		Send {LCtrl Down}&{LAlt Down}&B	
 		Send {LCtrl Up}&{LAlt Up}
-		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(MM_Game_Config)&& fileexist(MM_MEDIACENTER_Config))
+		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(MM_Game_Config))
 			{
 				RunWait,%MultiMonitor_Tool% /LoadConfig "%MM_Game_Config%",%mmpath%,hide,mmpid
 			}
@@ -396,7 +396,6 @@ if (Mapper > 0)
 						PlayerVX= 
 						player%A_Index%n=
 						player%A_Index%t=
-						;msgbox,,,% joypart%A_Index%
 						continue
 					}
 				joycount+= 1
@@ -429,7 +428,6 @@ if (Mapper > 0)
 				process,close,antimicro.exe
 				sleep,600
 			}
-		;msgbox,,,%keyboard_mapper% "%player1%"%player2T%
 		ToolTip, %joycnt% Joysticks found
 		Run,%Keyboard_Mapper% "%player1%"%player2t%%player3t%%player4t%,,hide,kbmp
 		if (Logging = 1)
@@ -561,11 +559,13 @@ Loop,parse,exe_list,|
 				goto,appcheck
 			}
 	}
-;;msgbox,,,%erahkpid% is closed`n%gmgdbchk% found`nnerlv=%nerlv%`ngii=%gii%`ndcls=%dcls%
 Tooltip,
 WinActivate
-WinHide, ahk_class Shell_TrayWnd
-WinHide, ahk_class Shell_SecondaryTrayWnd
+if (Hide_Taskbar <> 0)
+	{
+		WinHide, ahk_class Shell_TrayWnd
+		WinHide, ahk_class Shell_SecondaryTrayWnd
+	}
 Tooltip,
 if (JustAfterLaunch <> "")
 	{
@@ -628,8 +628,11 @@ Loop,parse,POSTRUNORDER,|
 			}
 			gosub, %A_LoopField%
 		}
-WinShow, ahk_class Shell_TrayWnd
-WinShow, ahk_class Shell_SecondaryTrayWnd		
+if (Hide_Taskbar <> 0)
+	{		
+		WinShow, ahk_class Shell_TrayWnd
+		WinShow, ahk_class Shell_SecondaryTrayWnd		
+	}
 ExitApp
 
 POST_JBE:
@@ -971,7 +974,7 @@ return
 POST_MON:
 if (MonitorMode > 0)
 	{
-		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(MM_Game_Config)&& fileexist(MM_MediaCenter_Config))
+		if (instr(MULTIMONITOR_TOOL,"multimonitortool")&& fileexist(MM_MediaCenter_Config))
 			{
 				Run, %MultiMonitor_Tool% /SaveConfig "%MM_Game_Config%",%mmpath%,hide,dsplo
 				Run, %MultiMonitor_Tool% /LoadConfig "%MM_MediaCenter_Config%",%mmpath%,hide,dsplo
