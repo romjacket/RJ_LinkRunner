@@ -30,9 +30,12 @@ FileInstall,C:\Users\romja\Programs\RJDB\site\img\Install.png,C:\Users\romja\Pro
 FileInstall,C:\Users\romja\Programs\RJDB\site\img\key.png,C:\Users\romja\Programs\RJDB\site\img\key.png,1
 FileInstall,C:\Users\romja\Programs\RJDB\site\img\keymapper.png,C:\Users\romja\Programs\RJDB\site\img\keymapper.png,1
 FileInstall,C:\Users\romja\Programs\RJDB\site\img\runas.png,C:\Users\romja\Programs\RJDB\site\img\runas.png,1
+FileInstall,C:\Users\romja\Programs\RJDB\site\img\Setup.png,C:\Users\romja\Programs\RJDB\site\img\Setup.png,1
 FileInstall,C:\Users\romja\Programs\RJDB\site\img\tip.png,C:\Users\romja\Programs\RJDB\site\img\tip.png,1
 FileInstall,C:\Users\romja\Programs\RJDB\site\img\Update.png,C:\Users\romja\Programs\RJDB\site\img\Update.png,1
 FileInstall,C:\Users\romja\Programs\RJDB\site\index.html,C:\Users\romja\Programs\RJDB\site\index.html,1
+FileInstall,C:\Users\romja\Programs\RJDB\site\Hermit-Regular.otf,C:\Users\romja\Programs\RJDB\site\Hermit-Regular.otf,1
+FileInstall,C:\Users\romja\Programs\RJDB\site\TruenoLt.otf,C:\Users\romja\Programs\RJDB\site\TruenoLt.otf,1
 FileInstall,C:\Users\romja\Programs\RJDB\src\build.ahk,C:\Users\romja\Programs\RJDB\src\build.ahk,1
 FileInstall,C:\Users\romja\Programs\RJDB\src\lrdeploy.ahk,C:\Users\romja\Programs\RJDB\src\lrdeploy.ahk,1
 FileInstall,C:\Users\romja\Programs\RJDB\src\newosk.ahk,C:\Users\romja\Programs\RJDB\src\newosk.ahk,1

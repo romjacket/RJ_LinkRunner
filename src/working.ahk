@@ -88,10 +88,10 @@ steamhome= Steam\SteamApps\common
 dralbet= c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|
 GogQuery= GOG|G.O.G|GOG Games
 GenQuery= Games|juegos|spellen|Spiele|Jeux|Giochi
-AllQuery:= GogQuery . | . "Origin" . "|" . "Epic Games" . steamhome
+AllQuery:= GogQuery . | . "Origin" . "|" . "Epic Games" . "|" . steamhome
 undira= |%A_WinDir%|%A_Programfiles%|%A_Programs%|%A_AppDataCommon%|%A_AppData%|%A_Desktop%|%A_DesktopCommon%|%A_StartMenu%|%A_StartMenuCommon%|%A_Startup%|%A_StartupCommon%|%A_Temp%|
 undirs= %undira%
-GUIVARS= ASADMIN|PostWait|PreWait|Localize|SCONLY|EXEONLY|BOTHSRCH|ADDGAME|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_ProfB|GAME_DirB|SOURCE_DirB|SOURCE_DirectoryT|REMSRC|Keyboard_MapB|Player1_TempB|Player2_TempB|MediaCenter_ProfB|MultiMonitor_Tool|MM_ToolB|MM_Game_CfgB|MM_MediaCenter_CfgB|BGM_ProgB|BGP_DataB|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS|SELALLBUT|SELNONEBUT|KBM_RC|MMT_RC|JAL_ProgB|JBE_ProgB|JBE_RC|JAL_RC|PRE_RC|POST_RC
+GUIVARS= ASADMIN|PostWait|PreWait|Localize|SCONLY|EXEONLY|BOTHSRCH|ADDGAME|ButtonClear|ButtonCreate|MyListView|CREFLD|GMCONF|GMJOY|GMLNK|UPDTSC|OVERWRT|POPULATE|RESET|EnableLogging|RJDB_Config|RJDB_Location|GAME_ProfB|GAME_DirB|SOURCE_DirB|SOURCE_DirectoryT|REMSRC|Keyboard_MapB|Player1_TempB|Player2_TempB|MediaCenter_ProfB|MultiMonitor_Tool|MM_ToolB|MM_Game_CfgB|MM_MediaCenter_CfgB|BGM_ProgB|BGP_DataB|PREAPP|PREDD|DELPREAPP|POSTAPP|PostDD|DELPOSTAPP|REINDEX|KILLCHK|INCLALTS|SELALLBUT|SELNONEBUT|KBM_RC|MMT_RC|JAL_ProgB|JBE_ProgB|JBE_RC|JAL_RC|PRE_RC|POST_RC|Hide_Taskbar
 STDVARS= SOURCE_DirectoryT|SOURCE_Directory|KeyBoard_Mapper|MediaCenter_Profile|Player1_Template|Player2_Template|MultiMonitor_Tool|MM_MEDIACENTER_Config|MM_Game_Config|BorderLess_Gaming_Program|BorderLess_Gaming_Database|extapp|Game_Directory|Game_Profiles|RJDB_Location|Source_Directory|Mapper_Extension|1_Pre|2_Pre|3_Pre|1_Post|2_Post|3_Post|switchcmd|switchback
 DDTA= <$This_prog$><Monitor><Mapper>
 DDTB= <Monitor><$This_prog$><Mapper>
@@ -190,9 +190,12 @@ Gui, Font, Normal
 Gui, Add, ListView, r44 x310 y35 h560 w340 -Readonly vMyListView gMyListView hwndHLV1 AltSubmit Checked hidden,Name|Type|Directory/Location|Size (KB)|Name Override|KBM|P1|P2|McP|MMT|GM|DM|JAL|JBE|Pre|Pst
 
 LV_ModifyCol(3, "Integer") 
+
+																  
 ImageListID1 := IL_Create(10)
 ImageListID2 := IL_Create(10, 10, true) 
 
+																			   
 LV_SetImageList(ImageListID1)
 LV_SetImageList(ImageListID2)
 
@@ -203,7 +206,10 @@ Menu, MyContextMenu, Add, Assign Player2 Template, ContextProperties
 Menu, MyContextMenu, Add, Toggle MMT, ContextProperties
 Menu, MyContextMenu, Add, Assign Game-Monitor Config, ContextProperties
 Menu, MyContextMenu, Add, Assign Desktop-Monitor Config, ContextProperties
-Menu, MyContextMenu, Add, Toggle BGM, ContextProperties
+
+Menu, MyContextMenu, Add, Toggle JAL, ContextProperties
+Menu, MyContextMenu, Add, Toggle JBE, ContextProperties
+													   
 Menu, MyContextMenu, Add, Toggle PRE, ContextProperties
 Menu, MyContextMenu, Add, Toggle PST, ContextProperties
 Menu, MyContextMenu, Add,,
@@ -221,15 +227,14 @@ Gui, Font, Bold
 Gui, Add, Button, x241 y24 w45 h25 vPOPULATE gPOPULATE,GO>
 Gui, Font, Normal
 Gui, Add, Radio, x30 y32 vSCONLY gSCONLY hidden, Lnk Only
-Gui, Add, Radio, x95 y32 vEXEONLY gEXEONLY checked, Exe`,Cmd`,Bat
+Gui, Add, Radio, x95 y32 vEXEONLY gEXEONLY checked hidden, Exe`,Cmd`,Bat
 Gui, Add, Radio, x175 y32 vBOTHSRCH gBOTHSRCH hidden, Exe+Lnk
+Gui, Add, Radio, x80 y17 vOVERWRT gUPDTSC %ovrwrchk%, Overwrite
+Gui, Add, Radio, x153 y17 vUPDTSC gOVERWRT %updtchk%, Update
 Gui, Font, Bold
 Gui, Add, Button, x18 y588 h16 w16 vRESET gRESET,R
 Gui, Font, Normal
-Gui, Add, Checkbox, x23 y14 w54 h14 vKILLCHK gKILLCHK checked,Kill-List
 Gui, Add, Checkbox, x100 y14 h14 vINCLALTS gINCLALTS hidden,Alts
-Gui, Add, Checkbox, x87 y14 w89 h14 vHide_Taskbar gHide_Taskbar %taskbarv%,Hide Taskbar
-Gui, Add, Checkbox, x180 y14 w61 h14 vLocalize gLocalize,Localize
 
 Gui, Font, Bold
 Gui, Add, Button, x24 y56 w36 h21 vSOURCE_DirB gSOURCE_DirB,SRC
@@ -248,17 +253,17 @@ Gui, Add, Text, x84 y114 h14,<Shortcut Output Directory>
 GUi, Add, Checkbox, x36 y137 h14 vCREFLD gCREFLD %fldrget% %fldrenbl%, Folders
 GUi, Add, Checkbox, x40 y157 h14 vGMCONF gGMCONF %cfgget% %cfgenbl%,Cfg
 GUi, Add, Checkbox, x96 y157 h14 vGMJOY gGMJOY %Joyget% %joyenbl%,Joy
-GUi, Add, Checkbox, x188 y157 h14 vASADMIN gASADMIN %admnget% %admnenabl%,As_Admin
+Gui, Add, Checkbox, x188 y137 w54 h14 vKILLCHK gKILLCHK checked,Kill-List
+GUi, Add, Checkbox, x188 y157 h14 vASADMIN gASADMIN %admnget% %admnenabl%,As Admin
 GUi, Add, Checkbox, x144 y157 vGMLNK gGMLNK %lnkget% %lnkenbl%,Lnk
-Gui, Add, Radio, x115 y137 vOVERWRT gUPDTSC %ovrwrchk%, Overwrite
-Gui, Add, Radio, x188 y137 vUPDTSC gOVERWRT %updtchk%, Update
+Gui, Add, Checkbox, x97 y137 w89 h14 vHide_Taskbar gHide_Taskbar %taskbarv%,Hide Taskbar
 
 Gui, Font, Bold
 Gui, Add, Button, x21 y180 w36 h21 vGame_ProfB gGame_ProfB,GPD
 Gui, Add, Text, x64 y175 w222 h14 vGAME_ProfilesT Disabled Right,"<%GAME_ProfilesT%"
 Gui, Font, Normal
-Gui, Add, Text,  x64 y189 w222 h14,<Game Profiles Directory>
-Gui, Font, Bold
+Gui, Add, Text,  x64 y189 w122 h14,<Game Profiles Directory>
+Gui, Add, Checkbox, x208 y189 w61 h14 vLocalize gLocalize right,Localize
 
 Gui, Font, Bold
 Gui, Add, Button, x17 y224 w36 h21 vKeyboard_MapB gKeyboard_MapB,KBM
@@ -303,13 +308,13 @@ Gui, Add, Button, x21 y416 w35 h19 vMM_MediaCenter_CfgB gMM_MediaCenter_CfgB,DMC
 Gui, Add, Text,  x64 y416 w222 h14 vMM_MediaCenter_ConfigT Disabled Right,"<%MM_MediaCenter_ConfigT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y430 w234 h14,.....MediaCenter/Desktop Configuration File>
-
+  
 Gui, Font, Bold
 Gui, Add, Button, x17 y448 w36 h21 vJAL_ProgB gJAL_ProgB,JAL
 Gui Add, Button, x53 y448 w10 h21 vJAL_RC gJAL_RC, v
 Gui, Add, Text,  x64 y448 w198 h14 vRunAfterLaunchT Disabled Right,"<%JustAfterLaunchT%"
 Gui, Font, Normal
-Gui, Add, Checkbox, x270 y448 w12 h12 vJALWait gJALWait %jbestatus%
+Gui, Add, Checkbox, x270 y450 w12 h14 vJALWait gJALWait %jalstatus%
 Gui, Add, Text,  x64 y462 w198 h14,<Run After Launch>
 
 
@@ -318,29 +323,28 @@ Gui, Add, Button, x17 y480 w35 h19 vJBE_ProgB gJBE_ProgB,JBE
 Gui Add, Button, x53 y480 w10 h21 vJBE_RC gJBE_RC, v
 Gui, Add, Text, x64 y480 w198 h14 vJustBeforeExitT Disabled Right,"<%JustBeforeExitT%"
 Gui, Font, Normal
-Gui, Add, Checkbox, x270 y480 w12 h12 vJBEWait gJBEWait %jbestatus%
-Gui, Add, Text, x64 y494 w198 h14,<Run Before Exit>
+Gui, Add, Checkbox, x270 y482 w12 h14 vJBEWait gJBEWait %jbestatus%
+Gui, Add, Text, x64 y494 w198 h14,<Run Before Exit>	   
 
 Gui, Font, Bold
 Gui, Add, Button, x17 y512 w36 h21 vPREAPP gPREAPP ,PRE
-Gui Add, Button, x52 y512 w10 h21 vPRE_RC gPRE_RC, v
+Gui Add, Button, x53 y512 w10 h21 vPRE_RC gPRE_RC, v
 Gui, Font, Normal
-Gui, Add, Text, x60 y514 h12 vPRETNUM,1
-Gui, Add, DropDownList, x70 y512 w198 vPREDD gPREDD Right,%prelist%
-Gui, Add, Text, x64 y534 h12 w230 vPREDDT,<$This_Prog$><Monitor><Mapper><game.exe>
-Gui, Add, Checkbox, x270 y513 w12 h12 vPreWait gPreWait %prestatus%,
-Gui, Add, Text, x270 y535 h12,wait
+Gui, Add, Text, x65 y514 h12 vPRETNUM,1
+Gui, Add, DropDownList, x75 y512 w193 vPREDD gPREDD Right,%prelist%
+Gui, Add, Text, x64 y534 h14 w230 vPREDDT,<$This_Prog$><Monitor><Mapper><game.exe>
+Gui, Add, Checkbox, x270 y515 w12 h14 vPreWait gPreWait %prestatus%,
+								  
 Gui, Add, Button, x283 y520 w14 h14 vDELPREAPP gDELPREAPP ,X
 
 Gui, Font, Bold
 Gui, Add, Button, x17 y550 w36 h21 vPOSTAPP gPOSTAPP,PST
-Gui Add, Button, x52 y550 w10 h21 vPOST_RC gPOST_RC, v
+Gui Add, Button, x53 y550 w10 h21 vPOST_RC gPOST_RC, v
 Gui, Font, Normal
-Gui, Add, Text, x60 y552 h12 vPOSTDNUM,1
-Gui, Add, DropDownList, x70 y552 w198 vPostDD gPostDD Right,%postlist%
-Gui, Add, Text, x64 y574 h12 w230 vPOSTDDT,<game.exe><$This_Prog$><Mapper><Monitor>
-Gui, Add, Checkbox, x270 y553 w12 h12 vPostWait gPostWait %poststatus%
-Gui, Add, Text, x270 y565 h12,
+Gui, Add, Text, x65 y552 h12 vPOSTDNUM,1
+Gui, Add, DropDownList, x75 y552 w193 vPostDD gPostDD Right,%postlist%
+Gui, Add, Text, x64 y574 h14 w230 vPOSTDDT,<game.exe><$This_Prog$><Mapper><Monitor>
+Gui, Add, Checkbox, x270 y555 w12 h14 vPostWait gPostWait %poststatus%
 Gui, Add, Button, x283 y557 w14 h14 vDELPOSTAPP gDELPOSTAPP ,X
 
 
@@ -355,15 +359,16 @@ Gui, Add, Button, x20 y96 w36 h21 vRJDB_Location gRJDB_Location hidden disabled,
 Gui, Add, Text,  x64 y96 w222 h14 vRJDB_LocationT  hidden disabled Right,"<%RJDB_LocationT%"
 Gui, Font, Normal
 Gui, Add, Text,  x64 y110 w222 h14  hidden disabled,<Application Directory>
-Gui, Add, Button, x235 y588 h14 w14 vOPNLOG gOPNLOG,O
-Gui, Add, Checkbox, x255 y588 h14 vEnableLogging gEnableLogging %loget%, Log
+Gui, Add, Button, x235 y592 h14 w14 vOPNLOG gOPNLOG,O
+Gui, Add, Checkbox, x255 y592 h14 vEnableLogging gEnableLogging %loget%, Log
 
 OnMessage(0x200, "WM_MOUSEMOVE")
 Gui, Add, StatusBar, x0 y546 w314 h28 vRJStatus, Status Bar
 Gui Show, w314 h627, RJ_Setup
 
+  
 SB_SetText("")
-ButtonClear_TT :="clears the current queued it"ems
+ButtonClear_TT :="clears the current queued it"
 Hide_TaskBar_TT :="Hides the windows taskbar while active"
 SELALLBUT_TT :="Selects all items in the current queue"
 SELNONEBUT_TT :="clears the selection of all items in the current queue"
@@ -398,6 +403,7 @@ Player1_TempB_TT :="sets the keymapper's configuration-template file for Player 
 Player1_TemplateT_TT :="the keymapper's configuration-template  for Player 1"
 Player2_TempB_TT :="sets the keymapper's configuration-template file for Player 2"
 Player2_TemplateT_TT :="the keymapper's configuration-template file for Player 2"
+																				 
 MediaCenter_ProfileT_TT :="the keymapper's configuration-template file for the Mediacenter/Frontend"
 MM_ToolB_TT :="Assigns the multimonitor executable"
 MMT_RC_TT :="disable or download and assign the multimonitor program"
@@ -442,6 +448,7 @@ GuiEscape:
 GuiClose:
 ExitApp
 
+						
 
 RJDB_Config:
 gui,submit,nohide
@@ -780,7 +787,7 @@ return
 
 Player1_TempB:
 gui,submit,nohide
-FileSelectFile,Player1_TemplateT,3,,Select File
+FileSelectFile,Player1_TemplateT,3,%home%,Select File
 if ((Player1_TemplateT <> "")&& !instr(Player1_TemplateT,"<"))
 	{
 		Player1_Template= %Player1_TemplateT%
@@ -796,7 +803,7 @@ return
 
 Player2_TempB:
 gui,submit,nohide
-FileSelectFile,Player2_TemplateT,3,,Select File
+FileSelectFile,Player2_TemplateT,3,%home%,Select File
 if ((Player2_TemplateT <> "")&& !instr(Player2_TemplateT,"<"))
 	{
 		Player2_Template= %Player2_TemplateT%
@@ -812,11 +819,12 @@ return
 
 MediaCenter_ProfB:
 gui,submit,nohide
-FileSelectFile,MediaCenter_ProfileT,3,,Select File
+FileSelectFile,MediaCenter_ProfileT,3,%home%,Select File
 if ((MediaCenter_ProfileT <> "")&& !instr(MediaCenter_ProfileT,"<"))
 	{
 		MediaCenter_Profile_Template= %MediaCenter_ProfileT%
 		iniwrite,%MediaCenter_Profile_Template%,%RJDB_Config%,GENERAL,MediaCenter_Profile_Template
+																			
 		stringreplace,MediaCenter_ProfileT,MediaCenter_ProfileT,%A_Space%,`%,All
 		guicontrol,,MediaCenter_ProfileT,%MediaCenter_ProfileT%
 	}
@@ -963,10 +971,12 @@ Menu,addonp,DeleteAll
 if (butrclick = "PREAPP")
 	{
 		Menu,addonp, Add,soundVolumeView,OtherDownloads
+											  
 	}
 if (butrclick = "POSTAPP")
 	{
 		Menu,addonp, Add,soundVolumeView,OtherDownloads
+											  
 	}
 Menu,addonp,show
 prerc=
@@ -995,7 +1005,7 @@ MM_ToolB:
 gui,submit,nohide
 if (dchk = "")
 	{
-		FileSelectFile,MultiMonitor_ToolT,3,,Select File,multimonitor*.exe
+		FileSelectFile,MultiMonitor_ToolT,3,%binhome%,Select File,multimonitor*.exe
 	}
 if ((MultiMonitor_ToolT <> "")&& !instr(MultiMonitor_ToolT,"<"))
 	{
@@ -1066,7 +1076,7 @@ if (!fileexist(CFGDIR . "\" . "DesktopMonitors.mon")or !fileexist(dtcfg))
 	}
 if ((setupmm = "")or !fileexist(CFGDIR . "\" . "DesktopMonitors.mon"))
 	{
-		FileSelectFile,MM_MediaCenter_ConfigT,35,,Select File,*.cfg;*.mon
+		FileSelectFile,MM_MediaCenter_ConfigT,35,%home%,Select File,*.cfg;*.mon
 		if ((MM_MediaCenter_ConfigT <> "")&& !instr(MM_MediaCenter_ConfigT,"<"))
 			{
 				MM_MediaCenter_Config= %MM_MediaCenter_ConfigT%
@@ -1101,7 +1111,7 @@ gui,submit,nohide
 
 if (dchk = "")
 	{
-		FileSelectFile,Borderless_Gaming_ProgramT,3,Borderless Gaming,Select File,*.exe
+		FileSelectFile,Borderless_Gaming_ProgramT,3,%binhome%,*.exe
 	}
 if ((Borderless_Gaming_ProgramT <> "")&& !instr(Borderless_Gaming_ProgramT,"<"))
 	{
@@ -1121,7 +1131,7 @@ gui,submit,nohide
 guicontrolget,JBEWait,,JBEWait
 if (dchk = "")
 	{
-		FileSelectFile,JustBeforeExitT,3,Before Termination,Select File,*.*
+		FileSelectFile,JustBeforeExitT,3,%home%,*.*
 	}
 if ((JustBeforeExitT <> "")&& !instr(JustBeforeExitT,"<"))
 	{
@@ -1327,6 +1337,7 @@ Loop,parse,cftst,|
 				Srclist.= CURDP . "||"
 				continue
 			}
+										   
 		Srclist.= dkv . "|"
     }
 SOURCE_DIRECTORY= %SrcList%
@@ -1722,11 +1733,100 @@ if fileexist(binhome . "\" . "Antimicro" . "\" . "antimicro.exe")
 	}
 return
 
+ReadLBF:
+fileread,stmocs,%finm%
+Loop,parse,stmocs,`r`n
+	{
+		if (A_LoopField = "")
+			{
+				continue
+			}
+		ifinstring,A_LoopField,"path"
+			{
+				stringsplit,fie,A_LoopField,"
+				;"
+				Loop,%fie0%
+					{
+							beb:= % fie%A_Index%
+							if instr(beb,":")
+								{
+									stringreplace,ALLCHK,beb,\\,\,All
+									if (fileexist(ALLCHK)&& !instr(CONCAT_ROOT,ALLCHK))
+											{
+												STMORG.= ALLCHK . "|"
+											}
+										break
+									}
+						
+						}
+				}
+	}
+Loop,parse,STMORG,|
+	{
+			kman= %A_LoopField%
+			Loop,files,%kman%\appmanifest*.vdf,R
+				{
+					krmi= %A_LoopFileName%
+					gosub,PASTM
+				}
+	}
+return
 
+PASTM:
+stringsplit,ebb,krmi,_.
+steamid= %ebb2%
+fileread,stmocs,%A_LoopFileFullPath%
+Loop,parse,stmocs,`r`n
+{
+	if (A_LoopField = "")
+		{
+			continue
+		}	
+	stringsplit,fie,A_LoopField,"
+	;"
+	Loop,%fie0%
+		{
+				fixf:= A_Index + 1
+				beb:= % fie%A_Index%
+				fii:= % fie%fixf%
+				if (beb = "installdir")
+					{
+						steamins= %fii% 
+						stinsd= %kman%\steamapps\common\%fii%
+						if (fileexist(stinsd)&& !instr(STMLKUP,stinsd))
+								{
+									STMLKUP.= ALLCHK . "|"
+								}
+					}
+				if (beb = "name")
+					{
+						insan= %fii%
+						gosub, sanitizer
+						stringreplace,clnname,outsan,\,-,All
+					}
+		}
+}
+fileappend,	%steamid%|%clnname%|%stinsd%|%steamins%`n,%home%\steam.db	
+return
 
 INITQUERY:
+FileDelete,%home%\steam.db
 CONCAT_ROOT=
 GENERIC_ROOT=
+RegRead, steamdir, HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Valve\Steam,InstallPath
+if fileExist(steamdir)
+	{
+			Loop,files,%steamdir%\*.vdf,R
+			{	
+				if (A_Loopfilename = "libraryfolders.vdf")
+					{
+						gosub, ReadLBF
+						break
+						}
+						
+				}
+	
+	}
 Loop,parse,dralbet,|
 	{
 		srchdrl= %A_LoopField%:
@@ -1757,13 +1857,24 @@ Loop,parse,dralbet,|
 	}
 
 STEAM_ROOT=
-Loop,parse,progdirs
+Loop,parse,dralbet
 	{
 		srclocd= %A_LoopField%
 		Loop,Files,%srclocd%,D
 			{
 				if instr(A_LoopFileName,"Steam")
 					{
+					kmin=
+						Loop,files,%A_LoopFileFullPath%\appmanifest*.vdf,F
+							{
+								krmi= %A__LoopFileName%
+								gosub, PASTM
+								kmin=1
+							}
+						if kmin = 1
+							{
+								goto, STMEND
+								}
 						Loop,files,%A_LoopFileFullPath%,D
 							{
 								if instr(A_LoopFileName,"apps")
@@ -1804,6 +1915,7 @@ Loop,parse,dralbet,|
 							}
 					}
 	}
+STMEND:
 
 
 GOGROOT=
@@ -2019,6 +2131,7 @@ ifnotexist,%home%\Player1.cfg
     {
 		filecopy,%source%\Jallgames.set,%home%\Player1.cfg
         fileread,mctmp,%source%\jallgames.set
+											 
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,%home%\Player1.cfg
     }
@@ -2026,6 +2139,7 @@ ifnotexist,%home%\Player2.cfg
     {
 		filecopy,%source%\Jallgames.set,%home%\Player2.cfg
         fileread,mctmp,%source%\jallgames.set
+											 
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,%home%\Player2.cfg
     }
@@ -2034,6 +2148,7 @@ ifnotexist,%home%\MediaCenter.cfg
 		filecopy,%source%\JDesktop.set,%home%\MediaCenter.cfg
 		filecopy,%source%\JDesktop.set,%home%\MediaCenter2.cfg
         fileread,mctmp,%source%\jDesktop.set
+											 
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,%home%\MediaCenter.cfg
     }
@@ -2045,28 +2160,34 @@ stringreplace,SCRIPTRV,newoskfile,\,/,All
 ifnotexist,%home%\Player1.gamecontroller.amgp
 	{
         fileread,mctmp,%source%\allgames.set
+											 
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,%home%\Player1.gamecontroller.amgp
     }
 ifnotexist,%home%\Player2.gamecontroller.amgp
     {
         fileread,mctmp,%source%\allgames.set
+											 
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,%home%\Player2.gamecontroller.amgp
     }
 ifnotexist,%home%\MediaCenter.gamecontroller.amgp
     {
         fileread,mctmp,%source%\Desktop.set
+											 
         stringreplace,mctmp,mctmp,[NEWOSK],%SCRIPTRV%,All
         FileAppend,%mctmp%,%home%\MediaCenter.gamecontroller.amgp
     }
 return
+
+
 UPDTSC:
 OVERWRT=
 return
 OVERWRT:
 OVERWRT= 1
 return
+
 MMSETUPD:
 Msgbox,,Default Desktop Config,Configure your monitor/s as you would have them for your`nMediaCenter or Desktop`nthen click "OK"
 ifmsgbox,OK
@@ -2292,7 +2413,6 @@ Loop,parse,SOURCE_DIRECTORY,|
 						splitpath,simpath,simpn,simpdir
 						splitpath,trukpath,truknm,farpth
 						splitpath,farpth,farnm,
-
 						simploc= %simpath%\%FileNM%
 						if (FilePath <> SCRLOOP)
 							{
@@ -2460,11 +2580,13 @@ LV_ModifyCol(5, 100)
 listView_autoSize:
 GUI, +LastFound 
 totalWidth := 0 
+					  
 Loop % LV_GetCount("Column")
 	{
 		SendMessage, 4125, A_Index - 1, 0, SysListView321
 		totalWidth := totalWidth + ErrorLevel
 	}
+								 
 GuiControl, Move, MyListView, w500
 
 GUI, Show, AutoSize
@@ -2486,6 +2608,7 @@ Return
 GuiSize:
 if (A_EventInfo = 1)
     return
+																					
 GuiControl, Move, MyListView, % "W" . (A_GuiWidth - 320) . "H" . (A_GuiHeight - 65)
 return
 
@@ -2515,6 +2638,7 @@ Loop,parse,GUIVARS,|
 	{
 		guicontrol,disable,%A_LoopField%
 	}
+
 fileread,cmdtpp,%home%\src\cmdtemplate.set
 guicontrolget,CREFLD,,CREFLD
 guicontrolget,ASADMIN,,ASADMIN
@@ -2619,6 +2743,7 @@ Loop,%fullstn0%
 							}
 						if (outdir = A_Loopfield)
 							{
+														 
 								outdir= %A_temp%\thin
 								filecreatedir,%outdir%
 								break
@@ -2631,6 +2756,7 @@ Loop,%fullstn0%
 				if (instr(exclfls,gmnamedx)or instr(exclfls,gmnamex))
 					{
 						gmnamex= %gmnamex%!
+						  
 					}
 				gmname= %gmnamex%
 				cursrc=
@@ -2689,6 +2815,7 @@ Loop,%fullstn0%
 				if instr(exclfls,gmnamedx)
 					{
 						gmnamex= %gmnamex%!
+						  
 					}
 				if (topdirec = gmnamed)
 					{
@@ -2746,6 +2873,7 @@ Loop,%fullstn0%
 						goto, topreduc
 					}
 				TOPOUT:
+																																				   
 				invar= %gmnamed%
 				gosub, CleanVar
 				gmnamecm= %invarx%
@@ -3198,6 +3326,7 @@ Loop,%fullstn0%
 								klist=%tmpn%|
 								if (KILLCHK = 1)
 									{
+																					   
 										Loop,files,%tlevel%\*.exe,R
 											{
 												splitpath,A_LoopFileFullPath,tmpfn,tmpfd,,tmpfo
@@ -3381,6 +3510,8 @@ Loop,%fullstn0%
 							}
 					}
 			}
+
+	
 		if ((kbmovr = "n") or (kbmovr = "0"))
 			{
 				iniwrite,0,%GAMECFG%,GENERAL,Mapper
@@ -3673,6 +3804,18 @@ if (fileexist(save)&& (compltdwn = 1))
 DOWNBIN:
 SB_SetText("Downloading" "" binarcf "")
 
+								 
+  
+																							
+			 
+	
+		   
+					
+	
+		   
+		
+  
+  
 DWNCONFIRM:
 dwnrej=
 DownloadFile(URLFILE,save,False,True)
@@ -3801,16 +3944,20 @@ if A_GuiControl = BGM_ProgB
 			Menu, UCLButton, Show, %MENU_X% %MENU_Y%
 			return
 		}
+		
 
+																  
 if (A_GuiControl != "MyListView")
     return
 
+																				 
 Menu, MyContextMenu, Show, %A_GuiX%, %A_GuiY%
 }
 return
 
 ContextOpenFile:  
 ContextProperties: 
+																				   
 FocusedRowNumber := LV_GetNext(0, "F") 
 if not FocusedRowNumber 
     return
@@ -3824,8 +3971,8 @@ LV_GetText(mcpstat, FocusedRowNumber, 9)
 LV_GetText(mmtstat, FocusedRowNumber, 10)
 LV_GetText(gmsstat, FocusedRowNumber, 11)
 LV_GetText(dmsstat, FocusedRowNumber, 12)
-LV_GetText(jbetat, FocusedRowNumber, 13)
-LV_GetText(jaltat, FocusedRowNumber, 14)
+LV_GetText(jaltat, FocusedRowNumber, 13)
+LV_GetText(jbetat, FocusedRowNumber, 14)
 LV_GetText(prestat, FocusedRowNumber, 15)
 LV_GetText(pststat, FocusedRowNumber, 16)
 if InStr(A_ThisMenuItem, "Open in Explorer") 
@@ -3834,6 +3981,7 @@ if InStr(A_ThisMenuItem, "Open in Explorer")
 	}
 
 	else {
+														  
 	} 
 if ErrorLevel
     {
@@ -3846,6 +3994,8 @@ RowNumber := 0
 Loop
 	{
 
+																					
+												 
     RowNumber := LV_GetNext(RowNumber - 1)
     if not RowNumber 
         break
@@ -4044,7 +4194,80 @@ WM_MOUSEMOVE() {
 	ToolTip
 	return
 }
+								  
+																						  
+																		   
+																						   
+																	  
+																								 
+																		
+											  
+																														
+					 
+ 
+																								
+			
+																													
+					
+			   
+																												  
+																				 
+ 
+																												   
+																							 
+ 
+																													
+																													   
+																													   
+																													
+																			
+ 
+																													  
+																													 
+																													  
+											
+ 
+																												  
+																												  
+																											
+																						 
+ 
+																													
+																				   
+ 
+																										   
+																											   
+																										  
+																							 
+																														
 Class LV_InCellEdit {
+																														
+																														
+																														
+																														
+																														
+																														
+																														
+																					 
+													  
+																														
+																		
+															
+													 
+																			 
+															
+													 
+																						   
+																			   
+																					  
+																							   
+																			  
+																				  
+																					 
+																						
+																								 
+																													
+																														
     __New(HWND, HiddenCol1 := False, BlankSubItem := False, EditUserFunc := "") {
       If (This.Base.Base.__Class) 
          Return False
@@ -4058,6 +4281,8 @@ Class LV_InCellEdit {
          Return False
       If (EditUserFunc <> "") && (Func(EditUserFunc).MaxParams < 6)
          Return False
+																														
+																		 
       SendMessage, 0x1036, 0x010000, 0x010000, , % "ahk_id " . HWND
       This.HWND := HWND
       This.HEDIT := 0
@@ -4086,10 +4311,23 @@ Class LV_InCellEdit {
       This.OnMessage()
       This.Attached[HWND] := True
    }
+																														
    __Delete() {
       This.Attached.Remove(This.HWND, "")
       WinSet, Redraw, , % "ahk_id " . This.HWND
    }
+																														
+																														
+																														
+																														
+																														
+																														
+														  
+												
+												   
+																		 
+													 
+																														
    EditCell(Row, Col := 0) {
       If !This.HWND
          Return False
@@ -4118,6 +4356,12 @@ Class LV_InCellEdit {
       This.NM_DBLCLICK(&LPARAM)
       Return True
    }
+																														
+													  
+																												
+																								
+													 
+																														
    SetColumns(ColNumbers*) {
       If !This.HWND
          Return False
@@ -4136,6 +4380,12 @@ Class LV_InCellEdit {
       This["Columns"] := Indices
       Return True
    }
+																														
+																									   
+											 
+											  
+								
+																														
     OnMessage(Apply := True) {
       If !This.HWND
          Return False
@@ -4151,10 +4401,24 @@ Class LV_InCellEdit {
       WinSet, Redraw, , % "ahk_id " . This.HWND
       Return True
    }
+																														
+																														
+																														
+																														
+																														
+																														
    Static Attached := {}
    Static OSVersion := DllCall("GetVersion", "UChar")
  
+																														
+																														
+																														
+																														
+																														
+													  
+																														
    On_WM_COMMAND(W, L, M, H) {
+																  
       Critical, % This.Critical
       If (L = This.HEDIT) {
          N := (W >> 16)
@@ -4177,7 +4441,11 @@ Class LV_InCellEdit {
          }
       }
    }
+																														
+							  
+																														
    On_WM_HOTKEY(W, L, M, H) {
+																	  
       If (H = This.HWND) {
          If (W = 0x801B) {
             This.Cancelled := True
@@ -4192,18 +4460,27 @@ Class LV_InCellEdit {
          Return False
       }
    }
+																														
+							  
+																														
    On_WM_NOTIFY(W, L) {
       Critical, % This.Critical
       If (H := NumGet(L + 0, 0, "UPtr") = This.HWND) {
          M := NumGet(L + (A_PtrSize * 2), 0, "Int")
+																														   
          If (M = -175) || (M = -105)
             Return This.LVN_BEGINLABELEDIT(L)
+																														   
          If (M = -176) || (M = -106)
             Return This.LVN_ENDLABELEDIT(L)
+																														   
          If (M = -3)
             This.NM_DBLCLICK(L)
       }
    }
+																														
+									
+																														
    LVN_BEGINLABELEDIT(L) {
       Static Indent := 4
       If (This.Item = -1) || (This.SubItem = -1)
@@ -4220,6 +4497,7 @@ Class LV_InCellEdit {
       SendMessage, % (A_IsUnicode ? 0x1073 : 0x102D), % This.Item, % &LVITEM, , % "ahk_id " . H ; LVM_GETITEMTEXT
       This.ItemText := StrGet(&ItemText, ErrorLevel)
 
+									  
       If (This.EditUserFunc)
          This.EditUserFunc.Call("BEGIN", This.HWND, This.HEDIT, This.Item + 1, This.Subitem + 1, This.ItemText)
       SendMessage, 0x000C, 0, % &ItemText, , % "ahk_id " . This.HEDIT
@@ -4243,6 +4521,7 @@ Class LV_InCellEdit {
       Else
          This.EW := NumGet(RECT, 8, "Int") - NumGet(RECT, 0, "Int")
       This.EH := NumGet(RECT, 12, "Int") - NumGet(RECT, 4, "Int")
+								   
       VarSetCapacity(LVCOL, 56, 0)
       , NumPut(1, LVCOL, "UInt")
       SendMessage, % (A_IsUnicode ? 0x105F : 0x1019), % This.SubItem, % &LVCOL, , % "ahk_id " . H
@@ -4254,18 +4533,25 @@ Class LV_InCellEdit {
          If (EW < This.EW)
             This.EX += ((This.EW - EW) // 2) - Indent
       }
+								   
       This.CommandFunc := ObjBindMethod(This, "On_WM_COMMAND")
       , OnMessage(0x0111, This.CommandFunc)
+						
       If !(This.Next)
          This.RegisterHotkeys()
       This.Cancelled := False
       This.Next := False
       Return False
    }
+																														
+								  
+																														
    LVN_ENDLABELEDIT(L) {
       H := This.HWND
+									 
       OnMessage(0x0111, This.CommandFunc, 0)
       This.CommandFunc := ""
+						  
       If !(This.Next)
          This.RegisterHotkeys(False)
       ItemText := This.ItemText
@@ -4276,6 +4562,7 @@ Class LV_InCellEdit {
             This.Changed := []
          This.Changed.Insert({Row: This.Item + 1, Col: This.SubItem + 1, Txt: ItemText})
       }
+														
       If (ItemText <> This.ItemText) || ((This.SubItem > 0) && (This.Blank)) {
          VarSetCapacity(LVITEM, 40 + (A_PtrSize * 5), 0)
          , NumPut(This.Item, LVITEM, 4, "Int")
@@ -4287,10 +4574,14 @@ Class LV_InCellEdit {
          This.Item := This.SubItem := -1
       This.Cancelled := False
       This.Next := False
+									  
       If (This.EditUserFunc)
          This.EditUserFunc.Call("END", This.HWND, This.HEDIT, This.Item + 1, This.Subitem + 1, ItemText)
       Return False
    }
+																														
+							 
+																														
    NM_DBLCLICK(L) {
       H := This.HWND
       This.Item := This.SubItem := -1
@@ -4346,7 +4637,11 @@ Class LV_InCellEdit {
       Return False
    }
 
+				 
+																														
    NextSubItem(K) {
+																											 
+							 
       H := This.HWND
       Item := This.Item
       SubItem := This.SubItem
@@ -4409,7 +4704,13 @@ Class LV_InCellEdit {
       SendMessage, 0x0203, 0, % Point, , % "ahk_id " . H 
       SendMessage, 0x0202, 0, % Point, , % "ahk_id " . H 
    }
+																														
+								
+																														
    RegisterHotkeys(Register = True) {
+												
+																						  
+														  
       H := This.HWND
       If (Register) {
          DllCall("RegisterHotKey", "Ptr", H, "Int", 0x801B, "UInt", 0, "UInt", 0x1B)
@@ -4431,3 +4732,68 @@ Class LV_InCellEdit {
       }
    }
 }
+												   
+  
+																		  
+																  
+
+																	 
+																					 
+																								  
+	
+																				 
+											 
+																
+																			  
+																			  
+	
+															 
+
+																												  
+																				 
+	 
+											
+											 
+								   
+	 
+											 
+										   
+																										 
+														
+													   
+	 
+															  
+																		 
+											
+				  
+  
+				
+							 
+																				 
+				 
+								 
+  
+
+
+			   
+									 
+							
+								
+   
+								 
+							 
+   
+	   
+
+				
+	
+							 
+	  
+		  
+							   
+	   
+
+			   
+		
+	   
+ 

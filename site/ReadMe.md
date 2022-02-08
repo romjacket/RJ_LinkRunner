@@ -1,12 +1,12 @@
 ## Use Case
 
-Filthy pirates who don't use steam/gog/epic/origin/etc... should be able to 
-manage their libraries too.
+Filthy pirates who don't use steam/gog/epic/origin/etc... should be able to manage their libraries too.
+
 
 ## Installation
 This Version:0.99.25.035
 
-This Build: 2022-02-03 8:51 PM
+This Build: 2022-02-07 7:25 PM
 
 Run the installer or extract the binary to a location of your choice, **or** download and build and run the source files and executables.
 ```sh
@@ -38,6 +38,7 @@ rj_linkrunner
 ¦   +-- amicro.set
 ¦   +-- build.ahk
 ¦   +-- Buildtools.set
+¦   +-- cmdtemplate.set
 ¦   +-- Desktop.set
 ¦   +-- exclfnms.set
 ¦   +-- exez.set
@@ -72,11 +73,13 @@ Setup (bin\Setup.exe) is fairly simple and the tool will index your drives for c
 
 Use the "SRC" button to add a folder/s where games have been installed. EG: C:\Games, or C:\Program Files
 
-Use the "OUT" button to set the location for the shortcuts.
+Use the "OUT" button to set the location for the shortcuts.z
 
 The "GPD" button will set the location where profile folders for each game will be kept.
 
 Right-Click on the buttons in the setup tool to download supported executables.
+
+![AsAdmin](https://romjacket.github.io/RJ_LinkRunner/img/Setup.png)
 
 ## Launching Games
 
@@ -87,3 +90,11 @@ It is not necessary, but best if RJ_LinkRunner.exe, antimicro.exe and xpadder.ex
 During gameplay you may create additional joystick profiles and any found within the game's jacket will be saved and reloaded for player 2/3/4, prioritizing the default profile-name eg: "Game Jacket".gamecontroller.amgp, and other "player#" monikers.)
 
 I've tested this on a variety of preconfigurations with a few hundred games and found that 99% of them are identified & launched properly without any adjustment whatsoever.
+
+## Building or compiling from source
+
+The lrdeploy.exe file will compile and deploy rj_linkrunner project source files and website to github.
+
+Included with the binary installer or portable version is 7za.exe and aria2c.exe, both of which are required for rj_linkrunner to operate properly.
+
+# Source Builder

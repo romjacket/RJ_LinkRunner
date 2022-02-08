@@ -98,6 +98,10 @@ kinit.exe
 klist.exe
 pipelist
 join.exe
+java
+javaw
+jre\
+remove
 LAVFilter
 prefetch
 procdump
@@ -127,6 +131,7 @@ unattend
 unexpand
 unins0
 uninst
+uninstall
 uniq
 unpack.exe
 UpdateHelper

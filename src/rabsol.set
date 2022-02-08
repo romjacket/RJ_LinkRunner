@@ -49,6 +49,10 @@ proxy
 PyCmd
 python
 qemu
+java
+javaw
+jre\
+remove
 Qsel.exe
 QuickSFV.exe
 rar
@@ -71,6 +75,7 @@ stats
 svc.exe
 tcpip
 Template
+unpack
 tool.exe
 Toolbox
 tsort.exe

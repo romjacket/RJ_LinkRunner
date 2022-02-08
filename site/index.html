@@ -32,9 +32,6 @@
                         <a href="#MONITORS" class="pk" data-smoothie>MONITORS</a>
                     </li>
 					<li>
-                        <a href="#BGM" class="pk" data-smoothie>BORDERLESS</a>
-                    </li>
-					<li>
                         <a href="#PREPOST" class="pk" data-smoothie>PRE/POST</a>
                     </li>
 					
@@ -170,18 +167,43 @@
                     <div align="left" id="outer">
                         <div id="inner" align="left">
                             <div>
-									<h3>Shortcuts</h3>
-
-									<p></p>
+									<h3>Profiles</h3>
+                                    <p>Each game is given a profile directory with it's name as the folder.</p>
+									<h3>Launchers</h3>
+                                    <p>Each game is given a launcher-shortcut which uses the RJ_Linkrunner program to load the settings for that game.</p>
+									 <ul class="accordion css-accordion" align="right">
+                            <li class="accordion-item">
+                                <input class="accordion-item-input" type="checkbox" name="accordion" id="item-profiles" />
+                                <label for="item-profiles" class="accordion-item-hd" align="right">↕ Usage Details<span class="accordion-item-hd-cta">&#9650;</span></label>
+                                <div class="accordion-item-bd">
+                                    <div id="detailsdiv" align="left">
+                                        <div>
+                                            <h4>Profile Directory</h4>
+                                             <h4>alternates/ </h4><p>alternate shortcuts to executables selected</p><br>
+                                            <h4> Game Name (.lnk) </h4><p>link to the game</p><br>
+                                             <h4>Game Name (.cmd) </h4><p>batch file to run the game with specified settings</p><br>
+                                             <h4>Game Name[_2-_4](.gamecontroller.amgp/.xpadder/.cfg) </h4><p>Player keympper config files</p><br>
+                                             <h4>Mediacenter(.gamecontroller.amgp/.xpadder/.cfg) </h4><p>Player keympper config files</p><br>
+                                             <h4>DesktopMonitors.mon </h4><p>Frontend/Mediacenter monitor configuration layout file</p><br>
+                                             <h4>GameMonitors.mon </h4><p>Monitor configuration layout file for the game</p><br>
+                                            <h4> Antimicro/xpadder/joytokey_!.cmd </h4><p>proxy script to launch the keymapper</p><br>
+                                            <h4> GameAudio.cmd <br>MediaCenterAudio.cmd</h4><p>Script to switch audio devices</p><br>
+                                             <h4>Game.ini </h4><p>Configuration file for RJ_LinkRunner</p><br>
+                                           
+                                            <h4>Mediacenter / Desktop</h4>
+                                            <p></p>
+                                            <h4>Saving Profiles</h4>
+                                            <p></p>
+                                            <br>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <br>
+                                </div>
+                            </li>
+                        </ul><p></p>
                             </div>
-                            <table>
-                                <tr>
-                                    <th>
-                                    </th>
-                                </tr>
-                            </table>
-                        
-                        </p>
+    
                         </div>
                     </div>
                 </div>
@@ -193,7 +215,9 @@
                         <h3><a>Antimicro</a></h3>
                         <p>Free and open sourced.  This is the preferred keymapper.</p>
 						<h3><a>Xpadder</a></h3>
-                        <p>The version available for download is the last "free version".  Xpadder is equally capable.</p>
+                        <p>The version available for download is the last "free version".  Xpadder is very versitile.</p>
+                        <h3><a>JoyToKey</a></h3>
+                        <p>Free and open sourced but with imited support through RJ_LinkRunner.</p>
                         <ul class="accordion css-accordion" align="right">
                             <li class="accordion-item">
                                 <input class="accordion-item-input" type="checkbox" name="accordion" id="item-keymappers" />
@@ -272,26 +296,25 @@
                 </div>
 				
 				 <div id="SectSeparate" align="center">
-                    <h1>[Borderless Windowed Mode]</h1>
+                    <h1>[Just After Lauch &amp; Just Before Exit]</h1>
                 </div>
                 <div align="left" id="outer">
                     <div id="inner">
-                        <h3><a>Borderless Gaming</a></h3>
-                        <p></p>
-						<h3><a>Windowed Borderless Gaming</a></h3>
-                        <p></p>
+                        <h3><a>Run After Lauch</a></h3>
+                        <p>This program will run after launching the game executable.<br>
+                            Executable-Aware programs such as trainers or mods can be set here.</p>
+                        <h3><a>Run Before Exit</a></h3>
+                        <p>This program will launch before the game is exited.<br>
+                             </p>
                         <ul class="accordion css-accordion" align="right">
                             <li class="accordion-item">
-                                <input class="accordion-item-input" type="checkbox" name="accordion" id="item-borderless" />
-                                <label for="item-borderless" class="accordion-item-hd" align="right">↕ BGM Details<span class="accordion-item-hd-cta">&#9650;</span></label>
+                                <input class="accordion-item-input" type="checkbox" name="accordion" id="item-just" />
+                                <label for="item-just" class="accordion-item-hd" align="right">↕ Just Details<span class="accordion-item-hd-cta">&#9650;</span></label>
                                 <div class="accordion-item-bd">
                                     <div id="detailsdiv" align="left">
                                         <div>
-                                            <h4>Databases</h4>
-                                            <p></p>
-                                            <h4>Integration</h4>
-                                            <p>########################################################################################################################################<br>
-                                            </p>
+                                            <h4>Options</h4>
+                                            <p>A checkbox to wait until the exectuable terminates</p>
                                         </div>
                                     </div>
                                     <br>
@@ -308,9 +331,9 @@
                 <div align="left" id="outer">
                     <div id="inner">
                         <h3><a>Pre-Run</a></h3>
-                        <p></p>
+                        <p>Pre-Run programs are applications or scripts which can be set to run prior to the game's execution.</p>
 						<h3><a>Post-Run</a></h3>
-                        <p></p>
+                        <p>Post-Run programs are applications or scripts which can be set to run after the game's termination.</p>
                         <ul class="accordion css-accordion" align="right">
                             <li class="accordion-item">
                                 <input class="accordion-item-input" type="checkbox" name="accordion" id="item-prepost" />
@@ -318,14 +341,14 @@
                                 <div class="accordion-item-bd">
                                     <div id="detailsdiv" align="left">
                                         <div>
+                                            <h4>Options</h4>
+                                            <p>A checkbox to wait until the exectuable terminates</p>
                                             <h4>Order</h4>
-                                            <p></p>
+                                            <p>The order of the pre or post application can be identified as $This Prog$ in the feedback line beneath the dropdown.</p>
                                             <h4>Integration</h4>
-                                            <p></p>
-                                            <h4>Per-Jacket</h4>
-                                            <p></p>
-                                            <p>########################################################################################################################################<br>
-                                            </p>
+                                            <p>SoundVolumeView can be downloaded and configured to create audio-configuration profiles.<br>
+                                            A dropdown is provided to select an audio device.<br></p>
+                                    
                                         </div>
                                     </div>
                                     <br>
@@ -357,7 +380,7 @@
                                                     <div id="detailsdiv" align="left">
                                                         <h8 class="tabItemHeading"></h8>
                                                         <div>
-                                                            <p><img alt="" height="27" src="img/key.png" width="24"><a href="https://www.paypal.me/romjacket/8.88">Toss a coin to your witcher</a></p>
+                                                            <p><img src="https://romjacket.github.io/img/key.png" alt="" height="27" width="24"><a href="https://www.paypal.me/romjacket/8.88">Toss a coin to your witcher</a></p>
                                                             <div id="HCB_comment_box">
                                                                 <a href="http://www.htmlcommentbox.com"></a>loading comments...</div>
                                                             <link rel="stylesheet" type="text/css" href="https://www.htmlcommentbox.com/static/skins/bootstrap/twitter-bootstrap.css?v=0" />
@@ -366,16 +389,16 @@
                                 </p>
                                 <footer>
                                     <h5>
-                                        <a href="http://github.com/romjacket" target="_blank"><img src="../img/github.png"></a>
-                                        <a href="http://reddit.com/u/romjacket" target="_blank"><img src="../img/reddit.png"></a>
-                                        <a href="https://www.youtube.com/channel/UC-7Z3ORO-pejhzfYSklZgOg?" target="_blank"><img src="../img/youtube.png"></a>
-                                        <a href="http://facebook.com/romjacket" target="_blank"><img src="../img/facebook.png"></a>
-                                        <a href="http://paypal.me/romjacket/8.88" target="_blank"><img src="../img/paypal.png"></a>
-                                        <a href="http://instagram.com/rom_jacket" target="_blank"><img src="../img/instagram.png"></a>
-                                        <a href="https://twitter.com/RomJacket" target="_blank"><img src="../img/twitter.png"></a>
-                                        <a href="https://discord.gg/HyebHhk" target="_blank"><img src="../img/discord.png" height="32px"></a>
-                                        <a href="mailto:romjacket@protonmail.com" target="_blank"><img src="../img/email.png"></a>
-                                        <a href="https://www.buymeacoffee.com/romjacket" target="_blank"><img src="../img/coffee.png"></a>
+                                        <a href="http://github.com/romjacket" target="_blank"><img src="https://romjacket.github.io/img/github.png"></a>
+                                        <a href="http://reddit.com/u/romjacket" target="_blank"><img src="https://romjacket.github.io/img/reddit.png"></a>
+                                        <a href="https://www.youtube.com/channel/UC-7Z3ORO-pejhzfYSklZgOg?" target="_blank"><img src="https://romjacket.github.io/img/youtube.png"></a>
+                                        <a href="http://facebook.com/romjacket" target="_blank"><img src="https://romjacket.github.io/img/facebook.png"></a>
+                                        <a href="http://paypal.me/romjacket/8.88" target="_blank"><img src="https://romjacket.github.io/img/paypal.png"></a>
+                                        <a href="http://instagram.com/rom_jacket" target="_blank"><img src="https://romjacket.github.io/img/instagram.png"></a>
+                                        <a href="https://twitter.com/RomJacket" target="_blank"><img src="https://romjacket.github.io/img/twitter.png"></a>
+                                        <a href="https://discord.gg/HyebHhk" target="_blank"><img src="https://romjacket.github.io/img/discord.png" height="32px"></a>
+                                        <a href="mailto:romjacket@protonmail.com" target="_blank"><img src="https://romjacket.github.io/img/email.png"></a>
+                                        <a href="https://www.buymeacoffee.com/romjacket" target="_blank"><img src="https://romjacket.github.io/img/coffee.png"></a>
                                     </h5>
                                 </footer>
 
@@ -554,12 +577,12 @@
     <style>
         @font-face {
             font-family: 'Hermit';
-            src: url('../Hermit-Regular.otf') format('opentype');
+            src: url('Hermit-Regular.otf') format('opentype');
         }
         
         @font-face {
             font-family: 'Trueno';
-            src: url('../TruenoLt.otf') format('opentype');
+            src: url('TruenoLt.otf') format('opentype');
         }
     </style>
     <style>
@@ -859,16 +882,6 @@
             color: rgb(222, 222, 255);
             text-shadow: 0px 0px 4px rgba(110, 110, 255, 0.83);
             transition: color .2s ease-in-out, text-shadow .5s ease-in-out;
-        }
-        
-        .tfnt {
-            font-family: 'Puzzle';
-            position: relative;
-            font-size: 7em;
-            font-weight: 700;
-            color: #ffffff;
-            text-shadow: 1px 1px 1px #919191, 1px 2px 1px #919191, 1px 3px 1px #919191, 1px 4px 1px #919191, 1px 5px 1px #919191, 1px 6px 1px #919191, 1px 7px 1px #919191, 1px 8px 1px #919191, 1px 9px 1px #919191, 1px 10px 1px #919191, 1px 18px 6px rgba(16, 16, 16, 0.6), 1px 22px 10px rgba(16, 16, 16, 0.3), 1px 25px 35px rgba(16, 16, 16, 0.3), 1px 30px 60px rgba(16, 16, 16, 0.5);
-            0px 60px rgba(16, 16, 16, 0.5);
         }
     </style>
 

@@ -19,7 +19,7 @@ if (A_Is64bitOS	= 0)
 		rpfsx86= %A_ProgramFiles%
 	}
 ifinstring,A_ProgramFiles,(x86)
-	{
+{
 		stringreplace,rpfs,A_ProgramFiles,%A_Space%(x86),,All
 	}
 home= %A_ScriptDir%
@@ -611,7 +611,7 @@ if (initchk = 1)
 		Gui Add, Text, x23 y290 w322 h14 vTxtSRC +Right, %_SKELD%
 		Gui Add, Button, x353 y285 w23 h23 vSelSRC gSelSRC, ...
 
-		Gui Add, Edit, x30 y310 w326 h21 vUVER gUVER, %_UPDTURL%
+Gui Add, Edit, x30 y310 w326 h21 vUVER gUVER, %_UPDTURL%
 		Gui Add, Edit, x30 y333 w326 h21 vUFLU gUFLU, %_UPDTFILE%
 		Gui Add, Edit, x30 y357 w326 h21 vIURL gIURL, %_GETIPADR%
 		Gui Add, Button, x10 y432 w51 h19 vIReset gIReset, reset_all
